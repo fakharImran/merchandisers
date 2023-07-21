@@ -79,9 +79,8 @@ button:focus,input:focus{
 }
 
 .tab_list_box {
-    width: 141px;
+    width: 50%;
 }
-
 .tab-content {
     width: 80%;
 }
@@ -185,8 +184,8 @@ button:focus,input:focus{
     color: #5C6972;
     display: flex;
     align-items: center;
-    gap: 19px;
-    /* padding-left: 40px; */
+    gap: 20px;
+    padding: 15px 5px;
 }
 
 .tab_list_box .nav-link:hover{
@@ -511,6 +510,17 @@ word-wrap: break-word
     background-color: #fff !important;
 }
 
-.tab_list_box{
-    margin: 1px auto;
+.tab_list_box {
+    /* margin: 1px auto; */
+    margin-left: 8%;
 }
+.max-width-20{
+    max-width: 20% !important;
+}
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .table{
+        overflow: scroll;
+    }
+}
+

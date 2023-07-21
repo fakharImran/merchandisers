@@ -44,6 +44,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-3 col-0 p-0"  style="
+                            width: 20%;
                             background: white;
                             box-shadow: 16px 16px 30px rgba(0, 0, 0, 0.02);
                             min-height: 100vh;
@@ -53,14 +54,14 @@
                             </div>
                             <div class="company_table d-flex align-items-start">
                                 <div class="tab_list_box tab_btn nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                  <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" onclick=" window.location.href = '{{ route('company.index') }}'" role="tab" aria-controls="v-pills-home" aria-selected="true"><img class="simple_one" src="{{asset('assets/images/company.png')}}"><img class="hover_one" src="{{asset('assets/images/company_hover.png')}}"> Company</button>
-                                  <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img class="simple_one" src="{{asset('assets/images/user.png')}}"><img class="hover_one" src="{{asset('assets/images/user_hover.png')}}">User</button>
-                                  <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false"><img class="simple_one" src="{{asset('assets/images/shop.png')}}"><img class="hover_one" src="{{asset('assets/images/shop.png')}}">Store</button>
-                                  <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false"><img class="simple_one" src="{{asset('assets/images/product.png')}}"><img class="hover_one" src="{{asset('assets/images/product.png')}}">Product</button>
+                                  <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" onclick=" window.location.href = '{{ route('company.index') }}'" role="tab" aria-controls="v-pills-home" aria-selected="true"><img class="simple_one max-width-20" src="{{asset('assets/images/company.png')}}"><img class="hover_one  max-width-20" src="{{asset('assets/images/company_hover.png')}}"> Company</button>
+                                  <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img class="simple_one  max-width-20" src="{{asset('assets/images/user.png')}}"><img class="hover_one max-width-20" src="{{asset('assets/images/user_hover.png')}}">User</button>
+                                  <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false"><img class="simple_one max-width-20" src="{{asset('assets/images/shop.png')}}"><img class="hover_one  max-width-20" src="{{asset('assets/images/shop.png')}}">Store</button>
+                                  <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false"><img class="simple_one max-width-20" src="{{asset('assets/images/product.png')}}"><img class="hover_one max-width-20" src="{{asset('assets/images/product.png')}}">Product</button>
                                 </div>
                             </div>
                         </div>
-                        <div class=" col-md-9 col-12 p-0">
+                        <div class=" col-md-9 col-12 p-0" style="width: 80%;">
                             <nav class="navbar navbar-expand-md navbar-dark navbar-color " style="background-color: #1892C0;">
                                 <div class="container">
                                     <a class="navbar-brand" href="{{ url('/') }}">
