@@ -524,3 +524,34 @@ word-wrap: break-word
     }
 }
 
+
+.next-prev-icon-style{
+    height: fit-content;
+    align-self: center;
+}
+
+.clickable-element {
+    /* Add your element styles here */
+    /* padding: 10px; */
+    /* background-color: #f2f2f2; */
+    /* border: 1px solid #ddd; */
+    cursor: pointer; /* Set the cursor to a clickable icon */
+  }
+
+  .dropdown-menu {
+    min-width: 4rem !important;
+}
+
+div#customDataTable_info {
+    display: none;
+}
+
+div#customDataTable_paginate {
+    display: none;
+}
+div#customDataTable_length {
+    display: none;
+}
+div#customDataTable_filter {
+    display: none;
+}

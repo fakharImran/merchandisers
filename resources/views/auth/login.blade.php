@@ -80,7 +80,7 @@
 
                     
                         <div class="admin_logo text-center">
-                            <img class="img-fluid" src="assets/images/logo.png" style="max-width: 45%;">
+                            <img class="img-fluid" src="{{asset('assets/images/logo.png')}}" style="max-width: 45%;">
                         </div>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
