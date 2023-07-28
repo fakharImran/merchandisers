@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\CompanyUser;
 use App\Models\Company;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CompanyController extends Controller
+class CompanyUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,14 +16,16 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
-        $pageConfigs = ['pageSidebar' => 'company'];    
-        $companies= Company::select('*')->get();
-
+    {
+        $pageConfigs = ['pageSidebar' => 'user'];    
+        $users= CompanyUser::select('*')->get();        
+        
         // dd($companies);
         // $companies=json_decode($companies,true);
         // dd(json_decode($companies,true));
-        return view('admin.company.index', compact('companies'), ['pageConfigs' => $pageConfigs]);
+        // dd($users);
+        return view('admin.user.index', compact('users'), ['pageConfigs' => $pageConfigs]);
+        //
         //
     }
 
@@ -32,9 +36,11 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        $pageConfigs = ['pageSidebar' => 'company'];    
+        $pageConfigs = ['pageSidebar' => 'user'];    
 
-        return view('admin.company.create', ['pageConfigs' => $pageConfigs]);
+        $companies= Company::select('*')->get();
+        return view('admin.user.create', compact('companies'), ['pageConfigs' => $pageConfigs]);
+
         //
     }
 
@@ -46,18 +52,24 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-    
-        $tempCompany= new Company();
-        $tempCompany->company= $request->company_name;
-        $tempCompany->code= $request->company_code;
-        $tempCompany->save();
+        // dd($request->input());
+        $tempUser= new CompanyUser();
+        $tempUser->company= $request->company??null;
+        $tempUser->role= $request->role??null;
+        $tempUser->email= $request->email??null;
+        $tempUser->full_name= $request->full_name??null;
+        $tempUser->access_privilege= $request->access_privilege??null;
+        $tempUser->last_login_date_time= 'need set in DB';
+        $tempUser->password= $request->password??null;
+        $tempUser->confirm_password= $request->confirm_password??null;
+        $tempUser->save();
         // dd($tempCompany);
-        $companies= Company::select('*')->get();
-        $companies=json_decode($companies,true);
+        $users= CompanyUser::select('*')->get();        
+        // $companies=json_decode($companies,true);
         // dd($companies);
-        return redirect()->route('company.index');
-        // dd($request);
+        return redirect()->route('user.index');
 
+        // dd($request);
         //
     }
 
@@ -80,14 +92,13 @@ class CompanyController extends Controller
      */
     public function edit($target, $id)
     {
-        $pageConfigs = ['pageSidebar' => 'company'];    
+        $pageConfigs = ['pageSidebar' => 'user'];    
 
         // dd($id);
-        $companyData= Company::select()->where('id',$id)->get();
-        // dd($companyData);
-        $compData= json_decode($companyData,true);
-        $company=$compData[0];
-        return view('admin.company.edit', compact('company', 'id'), ['pageConfigs' => $pageConfigs]);
+        $companies= Company::select('*')->get();
+        $user= CompanyUser::select()->where('id',$id)->first();
+        // dd($uData);
+        return view('admin.user.edit', compact('user', 'id','companies'), ['pageConfigs' => $pageConfigs]);
         
 
         //
@@ -104,9 +115,10 @@ class CompanyController extends Controller
     {
         // $companyData= Company::select()->where('id',$id)->get();
         // dd($request->input());
-        $query =  Company::where('id', $id)->update(['company'=>$request->company_name, 'code' =>$request->company_code]);
+        $loginNeedToSet= 'need to reset in db';
+        $query =  CompanyUser::where('id', $id)->update(['company'=>$request->company, 'role' =>$request->role, 'email' =>$request->email, 'full_name' =>$request->full_name, 'access_privilege' =>$request->access_privilege, 'last_login_date_time' =>$loginNeedToSet, 'password' =>$request->password, 'confirm_password' =>$request->confirm_password]);
 
-        return redirect()->route('company.index');
+        return redirect()->route('user.index');
         //
     }
 
@@ -121,10 +133,10 @@ class CompanyController extends Controller
         // dd($id); 
         try {
             // Find the item with the given ID and delete it
-            $item = Company::find($id);
+            $item = CompanyUser::find($id);
             if ($item) {
                 $item->delete();
-                return redirect()->route('company.index');
+                return redirect()->route('user.index');
             } else {
                 return redirect()->back()->withErrors(['error' => 'Item not found']);
                 // return response()->json(['error' => 'Item not found']);

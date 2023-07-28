@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
+use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CompanyUserController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +19,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
-Route::get('/', function () {
-    // return view('welcome');
-    return view('auth.login');
-});
+Route::get('/',  [CompanyController::class, 'index'])->middleware('auth');
 
 Auth::routes();
 
@@ -40,6 +40,17 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 Route::resource('company', CompanyController::class)->middleware('auth');
 Route::get('company/edit/{target?}/{parameter?}', [CompanyController::class, 'edit'])->name('company-edit')->middleware('auth');
+//users
+Route::resource('user', CompanyUserController::class)->middleware('auth');
+Route::get('user/edit/{target?}/{parameter?}', [CompanyUserController::class, 'edit'])->name('user-edit')->middleware('auth');
+
+//stores
+Route::resource('store', StoreController::class)->middleware('auth');
+Route::get('store/edit/{target?}/{parameter?}', [StoreController::class, 'edit'])->name('store-edit')->middleware('auth');
+
+//products
+Route::resource('product', ProductController::class)->middleware('auth');
+Route::get('product/edit/{target?}/{parameter?}', [ProductController::class, 'edit'])->name('product-edit')->middleware('auth');
 
 // for forget password feature
 // Route::get('/forgot-password', function () {

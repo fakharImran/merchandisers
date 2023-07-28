@@ -48,13 +48,13 @@
 <div class="site-wrapper">
     <div class="admin_form">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+            <div class="row justify-content-center">
+                <div class="col-md-9">
                     <div class="admin_box">
 
                     
                         <div class="admin_logo text-center">
-                            <img class="img-fluid" src="{{asset('assets/images/logo.png')}}" style="max-width: 45%;">
+                            <img class="img-fluid" src="{{asset('assets/images/logo.png')}}" style="max-width: 70%;">
                         </div>
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">

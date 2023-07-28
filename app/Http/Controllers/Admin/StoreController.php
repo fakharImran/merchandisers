@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Company;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 
-class CompanyController extends Controller
+class StoreController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,15 +15,11 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
-        $pageConfigs = ['pageSidebar' => 'company'];    
-        $companies= Company::select('*')->get();
-
-        // dd($companies);
-        // $companies=json_decode($companies,true);
-        // dd(json_decode($companies,true));
-        return view('admin.company.index', compact('companies'), ['pageConfigs' => $pageConfigs]);
-        //
+    {
+        $pageConfigs = ['pageSidebar' => 'store'];    
+        $stores= Store::select('*')->get();        
+        
+        return view('admin.store.index', compact('stores'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
@@ -32,9 +29,11 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        $pageConfigs = ['pageSidebar' => 'company'];    
+        $pageConfigs = ['pageSidebar' => 'store'];    
 
-        return view('admin.company.create', ['pageConfigs' => $pageConfigs]);
+        $companies= Company::select('*')->get();
+        return view('admin.store.create', compact('companies'), ['pageConfigs' => $pageConfigs]);
+
         //
     }
 
@@ -46,18 +45,20 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-    
-        $tempCompany= new Company();
-        $tempCompany->company= $request->company_name;
-        $tempCompany->code= $request->company_code;
-        $tempCompany->save();
-        // dd($tempCompany);
-        $companies= Company::select('*')->get();
-        $companies=json_decode($companies,true);
-        // dd($companies);
-        return redirect()->route('company.index');
-        // dd($request);
+        // dd($request->input());
 
+        $tempUser= new Store();
+        $tempUser->company= $request->company??null;
+        $tempUser->name_of_store= $request->name_of_store??null;
+        $tempUser->location= $request->location??null;
+        $tempUser->parish= $request->parish??null;
+        $tempUser->channel= $request->channel??null;
+        $tempUser->save();
+        // dd($tempCompany);
+        // $stores= Store::select('*')->get();        
+        return redirect()->route('store.index');
+
+        // dd($request);
         //
     }
 
@@ -80,19 +81,17 @@ class CompanyController extends Controller
      */
     public function edit($target, $id)
     {
-        $pageConfigs = ['pageSidebar' => 'company'];    
+        $pageConfigs = ['pageSidebar' => 'store'];    
 
         // dd($id);
-        $companyData= Company::select()->where('id',$id)->get();
-        // dd($companyData);
-        $compData= json_decode($companyData,true);
-        $company=$compData[0];
-        return view('admin.company.edit', compact('company', 'id'), ['pageConfigs' => $pageConfigs]);
+        $companies= Company::select('*')->get();
+        $store= Store::select()->where('id',$id)->first();
+        // dd($uData);
+        return view('admin.store.edit', compact('store', 'id','companies'), ['pageConfigs' => $pageConfigs]);
         
 
         //
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -104,9 +103,9 @@ class CompanyController extends Controller
     {
         // $companyData= Company::select()->where('id',$id)->get();
         // dd($request->input());
-        $query =  Company::where('id', $id)->update(['company'=>$request->company_name, 'code' =>$request->company_code]);
+        $query =  Store::where('id', $id)->update(['company'=>$request->company, 'name_of_store' =>$request->name_of_store, 'location' =>$request->location, 'parish' =>$request->parish, 'channel' =>$request->channel]);
 
-        return redirect()->route('company.index');
+        return redirect()->route('store.index');
         //
     }
 
@@ -121,10 +120,10 @@ class CompanyController extends Controller
         // dd($id); 
         try {
             // Find the item with the given ID and delete it
-            $item = Company::find($id);
+            $item = Store::find($id);
             if ($item) {
                 $item->delete();
-                return redirect()->route('company.index');
+                return redirect()->route('store.index');
             } else {
                 return redirect()->back()->withErrors(['error' => 'Item not found']);
                 // return response()->json(['error' => 'Item not found']);

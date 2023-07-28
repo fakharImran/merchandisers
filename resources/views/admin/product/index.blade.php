@@ -107,7 +107,7 @@ function updatePaginationButtons() {
 //   }
 
   if (currentPage <= totalPages - 1) {
-    $paginationContainer.append(`- ${pageInfo.end} <img  class=" clickable-element next-prev-icon-style custom-page-btn next"  src="{{asset('assets/images/next.png')}}">`);
+    $paginationContainer.append(` ${pageInfo.end} <img  class=" clickable-element next-prev-icon-style custom-page-btn next"  src="{{asset('assets/images/next.png')}}">`);
   }
 
   $('.custom-page-btn').on('click', function() {
@@ -169,11 +169,12 @@ updatePaginationButtons();
 @endsection
 
 @section('content')
+
 <div class="container">
     
     <div class="row mb-5" style="   max-width: 99%; margin: 1px auto;">
         <div class="col-md-12 col-12">
-            <div class="Company" style="width: 100%; height: 100%; color: #2297C3; font-size: 22px; font-family: Inter; font-weight: 700; line-height: 39px; word-wrap: break-word">Company
+            <div class="Company" style="width: 100%; height: 100%; color: #2297C3; font-size: 22px; font-family: Inter; font-weight: 700; line-height: 39px; word-wrap: break-word">Products
             </div>
             
         </div>
@@ -192,14 +193,14 @@ updatePaginationButtons();
             <div class="table_btn_list">
 
                 <div class="add_btn">
-                    <a href="{{ route('company.create') }}"> <span>+</span>New</a>
+                    <a href="{{ route('product.create') }}"> <span>+</span>New</a>
                 </div>
                 <div class="select_field">
                     <select class="clickable-element" id="name-search">
                         <option class="text-secondary" value="">Select Company</option>
-                        @if($companies!=null)
-                        @foreach ($companies as $company)
-                            <option value="{{ $company['company'] }}">{{ $company['company'] }}</option>
+                        @if($products!=null)
+                        @foreach ($products as $product)
+                            <option value="{{ $product['company'] }}">{{ $product['company'] }}</option>
                         @endforeach
                         @endif
                     </select>
@@ -247,38 +248,43 @@ updatePaginationButtons();
             </div>
         </div>
         <div class="col-12" style="margin: 1px auto; ">
-            <table id="customDataTable" class="table  datatable table-bordered table-hover table-responsive nowrap" style="width:100%">
+            <table id="customDataTable" class="table  datatable table-bordered table-hover table-responsive  nowrap" style="width:100%">
                 <thead>
                     <tr>
                     <th class="thclass" scope="col">#</th>
                     <th class="thclass"  scope="col">Company</th>
-                    <th class="thclass"  scope="col">CompanyCode</th>
-                    <th class="thclass"  scope="col">DateModified</th>
-                    <th class="thclass"  scope="col">DateCreated</th>
+                    <th class="thclass"  scope="col">Category</th>
+                    <th class="thclass"  scope="col">Product Name</th>
+                    <th class="thclass"  scope="col">Product Number / SKU</th>
+                    <th class="thclass"  scope="col">Competitor Product Name</th>
+                    <th class="thclass"  scope="col">dateModified</th>
+                    <th class="thclass"  scope="col">dateCreated</th>
                     <th class="thclass"  scope="col">Action</th>
                     </tr>
-                </thead>
+                </thead> 
                 @php
                     $i=1;
                 @endphp
                 <tbody>
-                    @if($companies!=null)
-                    @foreach ($companies as $company)
+                    @if($products!=null)
+                    @foreach ($products as $product)
                         <tr>
                             <td class="tdclass">{{ $i}}</td>
-                            <td class="tdclass">{{ $company['company'] }}</td>
-                            <td class="tdclass">{{ $company['code'] }}</td>
-                            <td class="tdclass">{{ $company['updated_at'] }}</td>
-                            <td class="tdclass">{{ $company['created_at'] }}</td>
+                            <td class="tdclass">{{ $product['company'] }}</td>
+                            <td class="tdclass">{{ $product['category'] }}</td>
+                            <td class="tdclass">{{ $product['product_name'] }}</td>
+                            <td class="tdclass">{{ $product['product_number_sku'] }}</td>
+                            <td class="tdclass">{{ $product['competitor_product_name'] }}</td>
+                            <td class="tdclass">{{ $product['updated_at'] }}</td>
+                            <td class="tdclass">{{ $product['created_at'] }}</td>
                             <td class="tdclass">
-                                        
-                                <form action={{ route('company.destroy', $company['id']) }} method="post">
+                                <form action={{ route('product.destroy', $product['id']) }} method="post">
                                     @csrf
                                     @method('DELETE')
                                 
                                     <button class="submit" style="background: transparent;"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                     </button>
-                                    <a href="{{ route('company-edit',  [$i, $company['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
+                                    <a href="{{ route('product-edit',  [$i, $product['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
                                     </a>
                                 </form>
                             

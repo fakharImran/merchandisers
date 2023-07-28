@@ -31,3 +31,20 @@ return new class extends Migration
         Schema::dropIfExists('companies');
     }
 };
+
+
+// public function up()
+// {
+//     Schema::create('company_users', function (Blueprint $table) {
+//         $table->id();
+//         $table->String('company');
+//         $table->String('role');
+//         $table->String('email');
+//         $table->String('full_name');
+//         $table->String('access_privilege');
+//         $table->String('password');
+//         $table->String('confirm_password');
+//         $table->timestamps();
+//     });
+// }
+

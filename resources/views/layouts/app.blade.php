@@ -34,7 +34,7 @@
 <body>
     <div id="app">
         @guest
-            <main class="py-4">
+            <main class="">
                 @yield('content')
             </main>
         @else
@@ -54,10 +54,10 @@
                             </div>
                             <div class="company_table d-flex align-items-start">
                                 <div class="tab_list_box tab_btn nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                  <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" onclick=" window.location.href = '{{ route('company.index') }}'" role="tab" aria-controls="v-pills-home" aria-selected="true"><img class="simple_one max-width-20" src="{{asset('assets/images/company.png')}}"><img class="hover_one  max-width-20" src="{{asset('assets/images/company_hover.png')}}"> Company</button>
-                                  <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false"><img class="simple_one  max-width-20" src="{{asset('assets/images/user.png')}}"><img class="hover_one max-width-20" src="{{asset('assets/images/user_hover.png')}}">User</button>
-                                  <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false"><img class="simple_one max-width-20" src="{{asset('assets/images/shop.png')}}"><img class="hover_one  max-width-20" src="{{asset('assets/images/shop.png')}}">Store</button>
-                                  <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false"><img class="simple_one max-width-20" src="{{asset('assets/images/product.png')}}"><img class="hover_one max-width-20" src="{{asset('assets/images/product.png')}}">Product</button>
+                                  <button class="nav-link @if($pageConfigs['pageSidebar'] == 'company') active @endif" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" onclick=" window.location.href = '{{ route('company.index') }}'" role="tab" aria-controls="v-pills-home" aria-selected="true"><img class="simple_one max-width-20" src="{{asset('assets/images/company.png')}}"><img class="hover_one  max-width-20" src="{{asset('assets/images/company_hover.png')}}"> Company</button>
+                                  <button class="nav-link @if($pageConfigs['pageSidebar'] == 'user') active @endif" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" onclick=" window.location.href = '{{ route('user.index') }}' " role="tab" aria-controls="v-pills-profile" aria-selected="false"><img class="simple_one  max-width-20" src="{{asset('assets/images/user.png')}}"><img class="hover_one max-width-20" src="{{asset('assets/images/user_hover.png')}}">User</button>
+                                  <button class="nav-link @if($pageConfigs['pageSidebar'] == 'store') active @endif" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" onclick=" window.location.href = '{{ route('store.index') }}' " role="tab" aria-controls="v-pills-messages" aria-selected="false"><img class="simple_one max-width-20" src="{{asset('assets/images/shop.png')}}"><img class="hover_one  max-width-20" src="{{asset('assets/images/shop.png')}}">Store</button>
+                                  <button class="nav-link @if($pageConfigs['pageSidebar'] == 'product') active @endif" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" onclick=" window.location.href = '{{ route('product.index') }}' " role="tab" aria-controls="v-pills-settings" aria-selected="false"><img class="simple_one max-width-20" src="{{asset('assets/images/product.png')}}"><img class="hover_one max-width-20" src="{{asset('assets/images/product.png')}}">Product</button>
                                 </div>
                             </div>
                         </div>
