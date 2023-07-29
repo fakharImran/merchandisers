@@ -16,14 +16,14 @@ return new class extends Migration
         Schema::create('company_users', function (Blueprint $table) {
 
             $table->id();
-            $table->String('company_id');
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');;
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
-            $table->String('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->String('access_privilege');
-            $table->String('last_login_date_time');
+            $table->string('access_privilege');
+            $table->string('last_login_date_time');
             $table->timestamps();
         });
     }
