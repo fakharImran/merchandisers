@@ -38,19 +38,24 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-Route::resource('company', CompanyController::class)->middleware('auth');
-Route::get('company/edit/{target?}/{parameter?}', [CompanyController::class, 'edit'])->name('company-edit')->middleware('auth');
-//users
-Route::resource('user', CompanyUserController::class)->middleware('auth');
-Route::get('user/edit/{target?}/{parameter?}', [CompanyUserController::class, 'edit'])->name('user-edit')->middleware('auth');
+Route::group(['middleware' => ['auth']], function() {
+    
+    Route::resource('company', CompanyController::class);
+    Route::get('company/edit/{target?}/{parameter?}', [CompanyController::class, 'edit'])->name('company-edit');
+    //users
+    Route::resource('user', CompanyUserController::class);
+    Route::get('user/edit/{target?}/{parameter?}', [CompanyUserController::class, 'edit'])->name('user-edit');
 
-//stores
-Route::resource('store', StoreController::class)->middleware('auth');
-Route::get('store/edit/{target?}/{parameter?}', [StoreController::class, 'edit'])->name('store-edit')->middleware('auth');
+    //stores
+    Route::resource('store', StoreController::class);
+    Route::get('store/edit/{target?}/{parameter?}', [StoreController::class, 'edit'])->name('store-edit');
 
-//products
-Route::resource('product', ProductController::class)->middleware('auth');
-Route::get('product/edit/{target?}/{parameter?}', [ProductController::class, 'edit'])->name('product-edit')->middleware('auth');
+    //products
+    Route::resource('product', ProductController::class);
+    Route::get('product/edit/{target?}/{parameter?}', [ProductController::class, 'edit'])->name('product-edit');
+
+});
+
 
 // for forget password feature
 // Route::get('/forgot-password', function () {

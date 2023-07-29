@@ -108,13 +108,21 @@
                                         </div>
                                         <div class="user_select_form">
                                           <select id="parish" name="parish" required>
-                                              <option value="">Select Parish</option>
-                                              <option value="Horace">Horace</option>
-                                              <option value="John">John</option>
-                                              <option value="Billing">Billing</option>
-                                              <option value="All Modules">All Modules</option>
-                                              <option value="Type Approval">Type Approval</option>
-                                              <option value="Maritime">Maritime</option>
+                                            <option value="">Select Parish</option>
+                                            <option value="Clarendon">Clarendon</option>
+                                            <option value="Hanover">Hanover</option>
+                                            <option value="Kingston">Kingston</option>
+                                            <option value="Manchester">Manchester</option>
+                                            <option value="Portland">Portland</option>
+                                            <option value="St. Andrew">St. Andrew</option>
+                                            <option value="St. Ann">St. Ann</option>
+                                            <option value="St. Catherine">St. Catherine</option>
+                                            <option value="St. Elizabeth">St. Elizabeth</option>
+                                            <option value="St. James">St. James</option>
+                                            <option value="St. Mary">St. Mary</option>
+                                            <option value="St. Thomas">St. Thomas</option>
+                                            <option value="Trelawny">Trelawny</option>
+                                            <option value="Westmoreland">Westmoreland</option>
                                           </select>
                                       </div>
                                     </div>
@@ -125,9 +133,10 @@
                                     <div class="user_select_form">
                                       <select id="channel" name="channel">
                                           <option value="">Select Channel</option>
-                                          <option value="Activated">Activated</option>
-                                          <option value="Deactivated">Deactivated</option>
-                                          <option value="Deleted">Deleted</option>
+                                          <option value="Bar">Bar</option>
+                                          <option value="Pharmacy">Pharmacy</option>
+                                          <option value="Supermarket">Supermarket</option>
+                                          <option value="Wholesale">Wholesale</option>
                                       </select>
                                     </div>
                                 </div>

@@ -66,17 +66,19 @@
                                           <label>{{ __('Company') }}:</label>
                                       </div>
                                       <div class="user_select_form">
-                                        <select id="company" name="company">
+                                        <select id="company" class="select2" name="company_id">
                                             <option value="">Select Company</option>
                                             @if($companies!=null)
-                                            @foreach($companies as $company)
-                                            {{-- <option {{($company['company']==this->$company['company'])?'selected':""}} value="{{$company['company']}}">{{$company['company']}}</option> --}}
-                                            <option {{ $company['company'] == $user['company'] ? 'selected' : '' }} value="{{ $company['company'] }}">{{ $company['company'] }}</option>
-                                            {{-- <option value="{{$company['company']}}">{{$company['company']}}</option> --}}
-
+                                            @foreach($companies as $comp)
+                                            <option {{ $comp['id'] == $companyUser['company_id'] ? 'selected' : '' }} value="{{$comp['id']}}">{{$comp['company']}}</option>
                                             @endforeach
                                             @endif
                                         </select>
+                                        @error('company_id')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                        @enderror
                                     </div>
                                   </div>
                                   <div class="user_form_content">
@@ -84,13 +86,17 @@
                                         <label>{{ __('Role') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="role" name="role">
-                                          <option>Select Role</option>
-                                          <option  {{($user['role']=='Merchandiser')? "selected":""}} value="Merchandiser">Merchandiser</option>
-                                          <option  {{($user['role']=='Manager')? "selected":""}} value="Manager">Manager</option>
-                                          <option  {{($user['role']=='Merchandiser & Manager')? "selected":""}} value="Merchandiser & Manager">Merchandiser & Manager</option>
-                                      </select>
-                                  </div>
+                                        <select id="roles" class="select2" name="roles[]" multiple="multiple">
+                                            @foreach ($roles as $role)
+                                                <option {{ in_array($role, $userRole)? "selected":""}} value="{{$role}}">{{$role}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('roles')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
+                                    </div>
                                 </div>
 
                                 <div class="user_form_content">
@@ -111,8 +117,8 @@
                                         <label>{{ __('Full Name') }}:</label>
                                     </div>
                                     <div class="user_input_form">
-                                        <input type="text" value="{{$user['full_name']}}"  class="form-control" id="full_name" name="full_name" required autocomplete="full_name" autofocus  placeholder="Full Name">
-                                      @error('full_name')
+                                        <input type="text" value="{{$user['name']}}"  class="form-control" id="name" name="name" required autocomplete="name" autofocus  placeholder="Full Name">
+                                      @error('name')
                                           <span class="invalid-feedback" role="alert">
                                               <strong>{{ $message }}</strong>
                                           </span>
@@ -124,12 +130,16 @@
                                         <label>{{ __('Access Privileges') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="access_privilege" name="access_privilege">
+                                      <select id="access_privilege" class="select2"  name="access_privilege">
                                           <option>Select Access Privileges</option>
-                                          <option {{($user['access_privilege']=='Merchandiser')? "selected":""}}  value="Merchandiser">Merchandiser</option>
-                                          <option  {{($user['access_privilege']=='Manager')? "selected":""}} value="Manager">Manager</option>
-                                          <option   {{($user['access_privilege']=='Merchandiser & Manager')? "selected":""}} value="Merchandiser & Manager">Merchandiser & Manager</option>
+                                          <option {{($companyUser['access_privilege']=='Active')? "selected":""}}  value="Active">Active</option>
+                                          <option  {{($companyUser['access_privilege']=='Deactivated')? "selected":""}} value="Deactivated">Deactivated</option>
                                       </select>
+                                      @error('access_privilege')
+                                      <span class="invalid-feedback" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                  @enderror
                                   </div>
                                 </div>
                                 <br>
@@ -142,7 +152,7 @@
                                         <label>{{ __('Password') }}:</label>
                                     </div>
                                     <div class="user_input_form">
-                                        <input id="password" value="{{$user['password']}}" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required  placeholder="Password">
+                                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required  placeholder="Password">
 
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
@@ -156,7 +166,7 @@
                                         <label>{{ __('Confirm Password') }}:</label>
                                     </div>
                                     <div class="user_input_form">
-                                        <input id="password-confirm"  value="{{$user['confirm_password']}}"  type="password" class="form-control" name="confirm_password" required autocomplete="confirm-password">
+                                        <input id="password-confirm"  type="password" class="form-control" name="confirm-password" required autocomplete="confirm-password">
 
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
@@ -196,7 +206,11 @@
         </div>
     </div>
 </div>
-
+<script>
+    $(document).ready(function() {
+    $('.select2').select2();
+});
+    </script>
 
 
 @endsection

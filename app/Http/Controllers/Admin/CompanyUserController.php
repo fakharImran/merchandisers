@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\CompanyUser;
+use App\Models\User;
 use App\Models\Company;
 
+use App\Models\CompanyUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class CompanyUserController extends Controller
 {
@@ -18,15 +22,8 @@ class CompanyUserController extends Controller
     public function index()
     {
         $pageConfigs = ['pageSidebar' => 'user'];    
-        $users= CompanyUser::select('*')->get();        
-        
-        // dd($companies);
-        // $companies=json_decode($companies,true);
-        // dd(json_decode($companies,true));
-        // dd($users);
+        $users= CompanyUser::select('*')->get();  
         return view('admin.user.index', compact('users'), ['pageConfigs' => $pageConfigs]);
-        //
-        //
     }
 
     /**
@@ -37,11 +34,9 @@ class CompanyUserController extends Controller
     public function create()
     {
         $pageConfigs = ['pageSidebar' => 'user'];    
-
+        $roles = Role::pluck('name','name')->except('admin');
         $companies= Company::select('*')->get();
-        return view('admin.user.create', compact('companies'), ['pageConfigs' => $pageConfigs]);
-
-        //
+        return view('admin.user.create', compact('companies', 'roles'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
@@ -52,25 +47,28 @@ class CompanyUserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->input());
+        $this->validate($request, [
+            'company_id' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|same:confirm-password',
+            'roles' => 'required',
+            'access_privilege' => 'required'
+        ]);
+
+        $input = $request->only(['name', 'email', 'password'] );
+        $input['password'] = Hash::make($input['password']);
+    
+        $user = User::create($input);
+        $user->assignRole($request->input('roles'));
+        
         $tempUser= new CompanyUser();
-        $tempUser->company= $request->company??null;
-        $tempUser->role= $request->role??null;
-        $tempUser->email= $request->email??null;
-        $tempUser->full_name= $request->full_name??null;
+        $tempUser->company_id= $request->company_id;
+        $tempUser->user_id=  $user->id;
         $tempUser->access_privilege= $request->access_privilege??null;
         $tempUser->last_login_date_time= 'need set in DB';
-        $tempUser->password= $request->password??null;
-        $tempUser->confirm_password= $request->confirm_password??null;
         $tempUser->save();
-        // dd($tempCompany);
-        $users= CompanyUser::select('*')->get();        
-        // $companies=json_decode($companies,true);
-        // dd($companies);
-        return redirect()->route('user.index');
-
-        // dd($request);
-        //
+        return redirect()->route('user.index')->with('success','User created successfully');
     }
 
     /**
@@ -92,16 +90,16 @@ class CompanyUserController extends Controller
      */
     public function edit($target, $id)
     {
-        $pageConfigs = ['pageSidebar' => 'user'];    
+        $pageConfigs = ['pageSidebar' => 'user'];   
 
-        // dd($id);
         $companies= Company::select('*')->get();
-        $user= CompanyUser::select()->where('id',$id)->first();
-        // dd($uData);
-        return view('admin.user.edit', compact('user', 'id','companies'), ['pageConfigs' => $pageConfigs]);
-        
+        $companyUser= CompanyUser::select()->where('id',$id)->first(); 
+        $company = $companyUser->company;
+        $roles = Role::pluck('name','name')->except('admin');
+        $user = $companyUser->user;
+        $userRole = $user->roles->pluck('name','name')->all();
 
-        //
+        return view('admin.user.edit', compact('user', 'userRole', 'roles','id', 'companyUser','company','companies'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
@@ -113,13 +111,36 @@ class CompanyUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $companyData= Company::select()->where('id',$id)->get();
-        // dd($request->input());
+        $companyUser = CompanyUser::where('id', $id)->first();
         $loginNeedToSet= 'need to reset in db';
-        $query =  CompanyUser::where('id', $id)->update(['company'=>$request->company, 'role' =>$request->role, 'email' =>$request->email, 'full_name' =>$request->full_name, 'access_privilege' =>$request->access_privilege, 'last_login_date_time' =>$loginNeedToSet, 'password' =>$request->password, 'confirm_password' =>$request->confirm_password]);
+        
+        $this->validate($request, [
+            'company_id' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$companyUser->user_id,
+            'password' => 'same:confirm-password',
+            'roles' => 'required',
+            'access_privilege' => 'required'
+        ]);
 
-        return redirect()->route('user.index');
-        //
+        $input = $request->only(['name', 'email', 'password'] );
+        if(!empty($input['password'])){ 
+            $input['password'] = Hash::make($input['password']);
+        }else{
+            $input = Arr::except($input,array('password'));    
+        }
+        $user = User::find($companyUser->user_id);
+        $user->update($input);
+        DB::table('model_has_roles')->where('model_id',$companyUser->user_id)->delete();
+        $user->assignRole($request->input('roles'));
+
+        $companyUser->company_id= $request->company_id;
+        $companyUser->user_id=  $user->id;
+        $companyUser->access_privilege= $request->access_privilege??null;
+        $companyUser->last_login_date_time= 'need set in DB';
+        $companyUser->save();
+
+        return redirect()->route('user.index')->with('success','User updated successfully');;
     }
 
     /**
@@ -130,7 +151,6 @@ class CompanyUserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        // dd($id); 
         try {
             // Find the item with the given ID and delete it
             $item = CompanyUser::find($id);

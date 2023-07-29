@@ -200,7 +200,7 @@ updatePaginationButtons();
                         <option class="text-secondary" value="">Select Company</option>
                         @if($users!=null)
                         @foreach ($users as $user)
-                            <option value="{{ $user['company'] }}">{{ $user['company'] }}</option>
+                            <option value="{{ $user->company->company }}">{{ $user->company->company }}</option>
                         @endforeach
                         @endif
                     </select>
@@ -271,10 +271,15 @@ updatePaginationButtons();
                     @foreach ($users as $user)
                         <tr>
                             <td class="tdclass">{{ $i}}</td>
-                            <td class="tdclass">{{ $user['company'] }}</td>
-                            <td class="tdclass">{{ $user['role'] }}</td>
-                            <td class="tdclass">{{ $user['email'] }}</td>
-                            <td class="tdclass">{{ $user['full_name'] }}</td>
+                            <td class="tdclass">{{ $user->company->company }}</td>
+                           
+                            <td class="tdclass">
+                              @foreach( $user->user->getRoleNames() as $role)
+                                <label class="badge text-bg-success">{{ $role }}</label><br>
+                              @endforeach
+                            </td>
+                            <td class="tdclass">{{ $user->user->email }}</td>
+                            <td class="tdclass">{{ $user->user->name }}</td>
                             <td class="tdclass">{{ $user['access_privilege'] }}</td>
                             <td class="tdclass">{{ $user['last_login_date_time'] }}</td>
                             <td class="tdclass">{{ $user['updated_at'] }}</td>

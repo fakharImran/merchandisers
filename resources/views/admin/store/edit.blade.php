@@ -110,14 +110,23 @@
                                         </div>
                                         <div class="user_select_form">
                                           <select id="parish" name="parish" required>
-                                              <option  {{($store['parish']=='')? "selected":""}} value="">Select Parish</option>
-                                              <option  {{($store['parish']=='Horace')? "selected":""}} value="Horace">Horace</option>
-                                              <option  {{($store['parish']=='John')? "selected":""}} value="John">John</option>
-                                              <option  {{($store['parish']=='Billing')? "selected":""}} value="Billing">Billing</option>
-                                              <option  {{($store['parish']=='All Modules')? "selected":""}} value="All Modules">All Modules</option>
-                                              <option  {{($store['parish']=='Type Approval')? "selected":""}} value="Type Approval">Type Approval</option>
-                                              <option  {{($store['parish']=='Maritime')? "selected":""}} value="Maritime">Maritime</option>
+                                            <option {{($store['parish']=='')? "selected":""}} value="">Select Parish</option>
+                                            <option {{($store['parish']=='Clarendon')? "selected":""}} value="Clarendon">Clarendon</option>
+                                            <option {{($store['parish']=='Hanover')? "selected":""}} value="Hanover">Hanover</option>
+                                            <option {{($store['parish']=='Kingston')? "selected":""}} value="Kingston">Kingston</option>
+                                            <option {{($store['parish']=='Manchester')? "selected":""}} value="Manchester">Manchester</option>
+                                            <option {{($store['parish']=='Portland')? "selected":""}} value="Portland">Portland</option>
+                                            <option {{($store['parish']=='St. Andrew')? "selected":""}} value="St. Andrew">St. Andrew</option>
+                                            <option {{($store['parish']=='St. Ann')? "selected":""}} value="St. Ann">St. Ann</option>
+                                            <option {{($store['parish']=='St. Catherine')? "selected":""}} value="St. Catherine">St. Catherine</option>
+                                            <option {{($store['parish']=='St. Elizabeth')? "selected":""}} value="St. Elizabeth">St. Elizabeth</option>
+                                            <option {{($store['parish']=='St. James')? "selected":""}} value="St. James">St. James</option>
+                                            <option {{($store['parish']=='St. Mary')? "selected":""}} value="St. Mary">St. Mary</option>
+                                            <option {{($store['parish']=='St. Thomas')? "selected":""}} value="St. Thomas">St. Thomas</option>
+                                            <option {{($store['parish']=='Trelawny')? "selected":""}} value="Trelawny">Trelawny</option>
+                                            <option {{($store['parish']=='Westmoreland')? "selected":""}} value="Westmoreland">Westmoreland</option>
                                           </select>
+
                                       </div>
                                     </div>
                                 <div class="user_form_content">
@@ -126,10 +135,11 @@
                                     </div>
                                     <div class="user_select_form">
                                       <select id="channel" name="channel">
-                                          <option {{($store['channel']=='')? "selected":""}} value="">Select Channel</option>
-                                          <option {{($store['channel']=='Activated')? "selected":""}} value="Activated">Activated</option>
-                                          <option {{($store['channel']=='Deactivated')? "selected":""}} value="Deactivated">Deactivated</option>
-                                          <option {{($store['channel']=='Deleted')? "selected":""}} value="Deleted">Deleted</option>
+                                        <option {{($store['channel']=='')? "selected":""}} value="">Select Channel</option>
+                                        <option {{($store['channel']=='Bar')? "selected":""}} value="Bar">Bar</option>
+                                        <option {{($store['channel']=='Pharmacy')? "selected":""}} value="Pharmacy">Pharmacy</option>
+                                        <option {{($store['channel']=='Supermarket')? "selected":""}} value="Supermarket">Supermarket</option>
+                                        <option {{($store['channel']=='Wholesale')? "selected":""}} value="Wholesale">Wholesale</option>
                                       </select>
                                     </div>
                                 </div>

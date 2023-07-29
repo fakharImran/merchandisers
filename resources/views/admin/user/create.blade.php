@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 {{-- 
 <form action="{{ route('company.store') }}" method="POST">
     @csrf
@@ -65,14 +66,19 @@
                                           <label>{{ __('Company') }}:</label>
                                       </div>
                                       <div class="user_select_form">
-                                        <select id="company" name="company">
+                                        <select id="company" class="select2 form-control" name="company_id">
                                             <option value="">Select Company</option>
                                             @if($companies!=null)
                                             @foreach($companies as $company)
-                                            <option value="{{$company['company']}}">{{$company['company']}}</option>
+                                            <option value="{{$company['id']}}">{{$company['company']}}</option>
                                             @endforeach
                                             @endif
                                         </select>
+                                        @error('company_id')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
                                     </div>
                                   </div>
                                   <div class="user_form_content">
@@ -80,12 +86,16 @@
                                         <label>{{ __('Role') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="role" name="role">
-                                          <option>Select Role</option>
-                                          <option value="Merchandiser">Merchandiser</option>
-                                          <option value="Manager">Manager</option>
-                                          <option value="Merchandiser & Manager">Merchandiser & Manager</option>
+                                      <select id="roles" class="select2 form-control" name="roles[]" multiple="multiple">
+                                        @foreach ($roles as $role)
+                                          <option value="{{$role}}">{{$role}}</option>
+                                        @endforeach
                                       </select>
+                                      @error('roles')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
                                   </div>
                                 </div>
 
@@ -94,7 +104,7 @@
                                         <label>{{ __('Email Address') }}:</label>
                                     </div>
                                     <div class="user_input_form">
-                                      <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email"  placeholder="Enter email">
+                                      <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" autocomplete="email" placeholder="Enter email">
                                       @error('email')
                                           <span class="invalid-feedback" role="alert">
                                               <strong>{{ $message }}</strong>
@@ -107,8 +117,8 @@
                                         <label>{{ __('Full Name') }}:</label>
                                     </div>
                                     <div class="user_input_form">
-                                        <input type="text"  class="form-control" id="full_name" name="full_name" required autocomplete="full_name" autofocus  placeholder="Full Name">
-                                      @error('full_name')
+                                        <input type="text"  class="form-control" id="full_name" name="name" required autocomplete="name"   placeholder="Full Name">
+                                      @error('name')
                                           <span class="invalid-feedback" role="alert">
                                               <strong>{{ $message }}</strong>
                                           </span>
@@ -120,12 +130,16 @@
                                         <label>{{ __('Access Privileges') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="access_privilege" name="access_privilege">
+                                      <select id="access_privilege" class="select2 form-control"  name="access_privilege">
                                           <option>Select Access Privileges</option>
-                                          <option value="Merchandiser">Merchandiser</option>
-                                          <option value="Manager">Manager</option>
-                                          <option value="Merchandiser & Manager">Merchandiser & Manager</option>
+                                          <option value="Active">Active</option>
+                                          <option value="Deactivated">Deactivated</option>
                                       </select>
+                                      @error('access_privilege')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
                                   </div>
                                 </div>
                                 <br>
@@ -152,9 +166,9 @@
                                         <label>{{ __('Confirm Password') }}:</label>
                                     </div>
                                     <div class="user_input_form">
-                                        <input id="password-confirm" type="password" class="form-control" name="confirm_password" required autocomplete="confirm-password">
+                                        <input id="password-confirm" type="password" class="form-control" name="confirm-password" required autocomplete="confirm-password">
 
-                                        @error('password')
+                                        @error('confirm-password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -192,7 +206,11 @@
         </div>
     </div>
 </div>
-
+    <script>
+    $(document).ready(function() {
+    $('.select2').select2();
+});
+    </script>
 
 
 @endsection
