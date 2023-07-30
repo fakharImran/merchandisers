@@ -66,8 +66,8 @@
                                           <label>{{ __('Company') }}:</label>
                                       </div>
                                       <div class="user_select_form">
-                                        <select id="company" name="company" required>
-                                            <option value="">Select Company</option>
+                                        <select id="company" name="company" class="form-select" required>
+                                            <option value selected disabled>Select Company</option>
                                             @if($companies!=null)
                                             @foreach($companies as $company)
                                             <option value="{{$company['company']}}">{{$company['company']}}</option>
@@ -82,24 +82,24 @@
                                     </div>
                                     <div class="user_input_form">
                                         <input type="text" required  class="form-control" id="name_of_store" name="name_of_store" required autocomplete="name_of_store" autofocus  placeholder="">
-                                    @error('name_of_store')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                        @error('name_of_store')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
-                                </div>
+                                  </div>
                                     <div class="user_form_content">
                                         <div class="label">
                                             <label>{{ __('Location') }}:</label>
                                         </div>
                                         <div class="user_input_form">
                                             <input type="text" required class="form-control" id="location" name="location" required autocomplete="location" autofocus  placeholder="">
-                                        @error('location')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                            @error('location')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="user_form_content">
@@ -107,8 +107,8 @@
                                             <label>{{ __('Parish') }}:</label>
                                         </div>
                                         <div class="user_select_form">
-                                          <select id="parish" name="parish" required>
-                                            <option value="">Select Parish</option>
+                                          <select id="parish" name="parish" class="form-select" required>
+                                            <option value selected disabled>Select Parish</option>
                                             <option value="Clarendon">Clarendon</option>
                                             <option value="Hanover">Hanover</option>
                                             <option value="Kingston">Kingston</option>
@@ -124,43 +124,51 @@
                                             <option value="Trelawny">Trelawny</option>
                                             <option value="Westmoreland">Westmoreland</option>
                                           </select>
+                                            @error('parish')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
                                       </div>
                                     </div>
                                 <div class="user_form_content">
                                     <div class="label">
-                                        <label>{{ __('Access Privileges') }}:</label>
+                                        <label>{{ __('Channel') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="channel" name="channel">
-                                          <option value="">Select Channel</option>
+                                      <select id="channel" class="form-select" name="channel" required>
+                                          <option value disabled selected>Select Channel</option>
                                           <option value="Bar">Bar</option>
                                           <option value="Pharmacy">Pharmacy</option>
                                           <option value="Supermarket">Supermarket</option>
                                           <option value="Wholesale">Wholesale</option>
                                       </select>
+                                      @error('channel')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                       @enderror
                                     </div>
                                 </div>
                                 
-                                  <div class="user_btn_list">
-                                      <div class="user_btn text-secondary" >
-                                          <div class="user_btn_style"> <img src="{{asset('assets/images/save.png')}}"> Save Changes</div>
-                                      </div>
-  
-                                      <div class="user_btn">
-                                        <div  class="user_btn_style">
-                                         <img src="{{asset('assets/images/next.png')}}" alt="->"> <button   type="submit" class="submit">Submit</button>
-                                          
-                                        </div>
-                                      </div>
-  
-                                      <div class="user_btn  text-secondary" >
-                                          <div class="user_btn_style"> <img src="{{asset('assets/images/del_user.png')}}"> Delete User</div>
-                                      </div>
-  
-                                      <div class="user_btn" onclick="window.history.go(-1); return false;" >
-                                          <div  class="user_btn_style" > <img src="{{asset('assets/images/close.png')}}"> Close</div>
-                                      </div>
-                                  </div>
+                                <div class="user_btn_list">
+                                    <div class="user_btn text-secondary" >
+                                        <div class="user_btn_style"> <img src="{{asset('assets/images/save.png')}}"> Save Changes</div>
+                                    </div>
+                                    <div class="user_btn myborder">
+                                      <button type="submit" class=" user_btn_style submit ">
+                                       <img src="{{asset('assets/images/next.png')}}" alt="->"> Submit
+                                      </button>
+                                    </div>
+
+                                    <div class="user_btn  text-secondary" >
+                                        <div class="user_btn_style"> <img src="{{asset('assets/images/del_user.png')}}"> Delete User</div>
+                                    </div>
+
+                                    <div class="user_btn myborder" onclick="window.history.go(-1); return false;" >
+                                        <button  class="user_btn_style submit" > <img src="{{asset('assets/images/close.png')}}"> Close</button>
+                                    </div>
+                                </div>
                               </div>
                           </div>
 

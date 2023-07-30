@@ -128,4 +128,20 @@ class ProductController extends Controller
             return response()->json(['error' => 'Something went wrong while deleting the item']);
         }
     }
+    public function delete( $id) {
+         // dd($id); 
+         try {
+            // Find the item with the given ID and delete it
+            $item = Product::find($id);
+            if ($item) {
+                $item->delete();
+                return redirect()->route('product.index');
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Item not found']);
+                // return response()->json(['error' => 'Item not found']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong while deleting the item']);
+        }
+  }
 }

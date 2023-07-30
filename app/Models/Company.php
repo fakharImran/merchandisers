@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\CompanyUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Company extends Model
 {
@@ -19,6 +20,6 @@ class Company extends Model
      */
     public function companyUsers(): HasMany
     {
-        return $this->hasMany(CompanyUser::class);
+        return $this->hasMany(CompanyUser::class,  'company_id');
     }
 }

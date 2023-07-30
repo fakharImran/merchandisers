@@ -86,20 +86,18 @@
                                       <div class="user_btn text-secondary" >
                                           <div class="user_btn_style"> <img src="{{asset('assets/images/save.png')}}"> Save Changes</div>
                                       </div>
-  
-                                      <div class="user_btn">
-                                        <div  class="user_btn_style">
-                                         <img src="{{asset('assets/images/next.png')}}" alt="->"> <button   type="submit" class="submit">Submit</button>
-                                          
-                                        </div>
+                                      <div class="user_btn myborder">
+                                        <button type="submit" class=" user_btn_style submit ">
+                                         <img src="{{asset('assets/images/next.png')}}" alt="->"> Submit
+                                        </button>
                                       </div>
   
                                       <div class="user_btn  text-secondary" >
                                           <div class="user_btn_style"> <img src="{{asset('assets/images/del_user.png')}}"> Delete User</div>
                                       </div>
   
-                                      <div class="user_btn" onclick="window.history.go(-1); return false;" >
-                                          <div  class="user_btn_style" > <img src="{{asset('assets/images/close.png')}}"> Close</div>
+                                      <div class="user_btn myborder" onclick="window.history.go(-1); return false;" >
+                                          <button  class="user_btn_style submit" > <img src="{{asset('assets/images/close.png')}}"> Close</button>
                                       </div>
                                   </div>
                               </div>

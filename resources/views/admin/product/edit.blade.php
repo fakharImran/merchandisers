@@ -67,14 +67,19 @@
                                           <label>{{ __('Company') }}:</label>
                                       </div>
                                       <div class="user_select_form">
-                                        <select id="company" name="company" required>
-                                            <option value="">Select Company</option>
+                                        <select id="company" name="company" class="form-select"  required>
+                                            <option value disabled>Select Company</option>
                                             @if($companies!=null)
                                             @foreach($companies as $company)
                                             <option {{ $company['company'] == $product['company'] ? 'selected' : '' }} value="{{$company['company']}}">{{$company['company']}}</option>
                                             @endforeach
                                             @endif
                                         </select>
+                                        @error('company')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                   </div>
                                   <div class="user_form_content">
@@ -82,12 +87,12 @@
                                         <label>{{ __('Category') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                        <select id="category" name="category" required>
-                                            <option>Select Category</option>
-                                            <option {{($product['category']=='Merchandiser')? 'selected' : ''}} value="Merchandiser">Merchandiser</option>
-                                            <option  {{($product['category']=='Manager')? 'selected' : ''}}  value="Manager">Manager</option>
-                                            <option  {{($product['category']=='Merchandiser & Manager')? 'selected' : ''}}  value="Merchandiser & Manager">Merchandiser & Manager</option>
-                                        </select>
+                                        <input type="text" required  class="form-control" id="category" name="category" required autocomplete="category" autofocus value="{{$product['category']}}"  placeholder="">
+                                        @error('category')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                 </div>
                                   <div class="user_form_content">
@@ -96,11 +101,11 @@
                                     </div>
                                     <div class="user_input_form">
                                         <input type="text" required value="{{$product['product_name']}}" class="form-control" id="product_name" name="product_name" required autocomplete="product_name" autofocus  placeholder="">
-                                    @error('product_name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                        @error('product_name')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                 </div>
                                     <div class="user_form_content">
@@ -109,11 +114,11 @@
                                         </div>
                                         <div class="user_input_form">
                                             <input type="text" required class="form-control" value="{{$product['product_number_sku']}}" id="product_number_sku" name="product_number_sku" required autocomplete="product_number_sku" autofocus  placeholder="">
-                                        @error('product_number_sku')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                            @error('product_number_sku')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="user_form_content">
@@ -122,33 +127,34 @@
                                         </div>
                                         <div class="user_input_form">
                                             <input type="text" required class="form-control" value="{{$product['competitor_product_name']}}" id="competitor_product_name" name="competitor_product_name" autocomplete="competitor_product_name" autofocus  placeholder="">
-                                        @error('competitor_product_name')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                            @error('competitor_product_name')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
-                                  <div class="user_btn_list">
-                                      <div class="user_btn text-secondary" >
-                                          <div class="user_btn_style"> <img src="{{asset('assets/images/save.png')}}"> Save Changes</div>
-                                      </div>
-  
-                                      <div class="user_btn">
-                                        <div  class="user_btn_style">
-                                         <img src="{{asset('assets/images/next.png')}}" alt="->"> <button   type="submit" class="submit">Submit</button>
-                                          
+                                    <div class="user_btn_list">
+                                        <div class="user_btn myborder">
+                                            <button type="submit" class=" user_btn_style submit ">
+                                             <img src="{{asset('assets/images/save.png')}}" alt="->"> Save Changes
+                                            </button>
+                                        </div>
+                                        <div class="user_btn  text-secondary">
+                                            <div  class="user_btn_style">
+                                             <img src="{{asset('assets/images/next.png')}}" alt="->"> Submit
+                                            </div>
+                                        </div>
+                                        <div class="user_btn  myborder" >
+                                            <a href="{{ route('product-delete',   $company['id']) }}" class="user_btn_style" style="color: black; border:none;" >
+                                            <img src="{{asset('assets/images/del_user.png')}}"> Delete User
+                                            
+                                            </a>
+                                        </div>
+                                        <div class="user_btn myborder" onclick="window.history.go(-1); return false;" >
+                                            <button  class="user_btn_style submit" > <img src="{{asset('assets/images/close.png')}}"> Close</button>
                                         </div>
                                       </div>
-  
-                                      <div class="user_btn  text-secondary" >
-                                          <div class="user_btn_style"> <img src="{{asset('assets/images/del_user.png')}}"> Delete User</div>
-                                      </div>
-  
-                                      <div class="user_btn" onclick="window.history.go(-1); return false;" >
-                                          <div  class="user_btn_style" > <img src="{{asset('assets/images/close.png')}}"> Close</div>
-                                      </div>
-                                  </div>
                               </div>
                           </div>
 

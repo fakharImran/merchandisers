@@ -268,15 +268,23 @@ updatePaginationButtons();
                             <td class="tdclass">{{ $i}}</td>
                             <td class="tdclass">{{ $company['company'] }}</td>
                             <td class="tdclass">{{ $company['code'] }}</td>
-                            <td class="tdclass">{{ $company['updated_at'] }}</td>
-                            <td class="tdclass">{{ $company['created_at'] }}</td>
+                            @php
+                                $updatedTime = new DateTime($company['updated_at']);
+                                $createdTime = new DateTime($company['created_at']);
+                                
+                                // Format the DateTime object in 12-hour format
+                                $formattedUpdatedTime = $updatedTime->format("Y-m-d h:i:s A");
+                                $formattedCreatedTime = $createdTime->format("Y-m-d h:i:s A");
+                            @endphp
+                            <td class="tdclass">{{ $formattedUpdatedTime }}</td>
+                            <td class="tdclass">{{ $formattedCreatedTime }}</td>
                             <td class="tdclass">
                                         
                                 <form action={{ route('company.destroy', $company['id']) }} method="post">
                                     @csrf
                                     @method('DELETE')
                                 
-                                    <button class="submit" style="background: transparent;"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                    <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                     </button>
                                     <a href="{{ route('company-edit',  [$i, $company['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
                                     </a>

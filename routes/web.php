@@ -42,17 +42,21 @@ Route::group(['middleware' => ['auth']], function() {
     
     Route::resource('company', CompanyController::class);
     Route::get('company/edit/{target?}/{parameter?}', [CompanyController::class, 'edit'])->name('company-edit');
+    Route::get('company/delete/{parameter?}', [CompanyController::class, 'delete'])->name('company-delete');
     //users
     Route::resource('user', CompanyUserController::class);
     Route::get('user/edit/{target?}/{parameter?}', [CompanyUserController::class, 'edit'])->name('user-edit');
+    Route::get('user/delete/{parameter?}', [CompanyUserController::class, 'delete'])->name('user-delete');
 
     //stores
     Route::resource('store', StoreController::class);
     Route::get('store/edit/{target?}/{parameter?}', [StoreController::class, 'edit'])->name('store-edit');
+    Route::get('store/delete/{parameter?}', [StoreController::class, 'delete'])->name('store-delete');
 
     //products
     Route::resource('product', ProductController::class);
     Route::get('product/edit/{target?}/{parameter?}', [ProductController::class, 'edit'])->name('product-edit');
+    Route::get('product/delete/{parameter?}', [ProductController::class, 'delete'])->name('product-delete');
 
 });
 

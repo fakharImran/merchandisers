@@ -66,8 +66,8 @@
                                           <label>{{ __('Company') }}:</label>
                                       </div>
                                       <div class="user_select_form">
-                                        <select id="company" class="select2 form-control" name="company_id">
-                                            <option value="">Select Company</option>
+                                        <select id="company" class="form-select " name="company_id">
+                                            <option value disabled selected>Select Company</option>
                                             @if($companies!=null)
                                             @foreach($companies as $company)
                                             <option value="{{$company['id']}}">{{$company['company']}}</option>
@@ -81,12 +81,14 @@
                                       @enderror
                                     </div>
                                   </div>
+                                  
+                                  
                                   <div class="user_form_content">
                                     <div class="label">
                                         <label>{{ __('Role') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="roles" class="select2 form-control" name="roles[]" multiple="multiple">
+                                      <select id="roles" class="select2 form-select" name="roles[]" multiple >
                                         @foreach ($roles as $role)
                                           <option value="{{$role}}">{{$role}}</option>
                                         @endforeach
@@ -96,8 +98,9 @@
                                               <strong>{{ $message }}</strong>
                                           </span>
                                       @enderror
+                                    </div>
+                                  
                                   </div>
-                                </div>
 
                                 <div class="user_form_content">
                                     <div class="label">
@@ -130,17 +133,17 @@
                                         <label>{{ __('Access Privileges') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="access_privilege" class="select2 form-control"  name="access_privilege">
-                                          <option>Select Access Privileges</option>
-                                          <option value="Active">Active</option>
-                                          <option value="Deactivated">Deactivated</option>
-                                      </select>
-                                      @error('access_privilege')
-                                          <span class="invalid-feedback" role="alert">
-                                              <strong>{{ $message }}</strong>
-                                          </span>
-                                      @enderror
-                                  </div>
+                                        <select id="access_privilege" class="form-select "  name="access_privilege">
+                                            <option value disabled selected>Select Access Privileges</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Deactivated">Deactivated</option>
+                                        </select>
+                                        @error('access_privilege')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <br>
                                 <br>
@@ -176,26 +179,24 @@
                                     </div>
                                 </div>
 
-                                  <div class="user_btn_list">
-                                      <div class="user_btn text-secondary" >
-                                          <div class="user_btn_style"> <img src="{{asset('assets/images/save.png')}}"> Save Changes</div>
-                                      </div>
-  
-                                      <div class="user_btn">
-                                        <div  class="user_btn_style">
-                                         <img src="{{asset('assets/images/next.png')}}" alt="->"> <button   type="submit" class="submit">Submit</button>
-                                          
-                                        </div>
-                                      </div>
-  
-                                      <div class="user_btn  text-secondary" >
-                                          <div class="user_btn_style"> <img src="{{asset('assets/images/del_user.png')}}"> Delete User</div>
-                                      </div>
-  
-                                      <div class="user_btn" onclick="window.history.go(-1); return false;" >
-                                          <div  class="user_btn_style" > <img src="{{asset('assets/images/close.png')}}"> Close</div>
-                                      </div>
-                                  </div>
+                                <div class="user_btn_list">
+                                    <div class="user_btn text-secondary" >
+                                        <div class="user_btn_style"> <img src="{{asset('assets/images/save.png')}}"> Save Changes</div>
+                                    </div>
+                                    <div class="user_btn myborder">
+                                      <button type="submit" class=" user_btn_style submit  ">
+                                       <img src="{{asset('assets/images/next.png')}}" alt="->"> Submit
+                                      </button>
+                                    </div>
+
+                                    <div class="user_btn  text-secondary" >
+                                        <div class="user_btn_style"> <img src="{{asset('assets/images/del_user.png')}}"> Delete User</div>
+                                    </div>
+
+                                    <div class="user_btn myborder" onclick="window.history.go(-1); return false;" >
+                                        <button  class="user_btn_style submit" > <img src="{{asset('assets/images/close.png')}}"> Close</button>
+                                    </div>
+                                </div>
                               </div>
                           </div>
 
@@ -206,11 +207,9 @@
         </div>
     </div>
 </div>
-    <script>
+<script>
     $(document).ready(function() {
     $('.select2').select2();
 });
-    </script>
-
-
+</script>
 @endsection

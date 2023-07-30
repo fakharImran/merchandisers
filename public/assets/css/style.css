@@ -178,6 +178,8 @@ button:focus,input:focus{
     color: #42C940 !important;
     background-color: transparent !important;
     text-align: left !important;
+    border: 1px solid #cccccc63;
+box-shadow: 3px 3px #8888883d;
 }
 
 .tab_list_box .nav-link {
@@ -220,17 +222,20 @@ button:focus,input:focus{
     width: 80%;
 }
 .user_input_form input {
-    /* width: 100%;
-    border-radius: unset !important;
-    border: 1px solid #D9D9D9;
+    /* width: 100%; */
+    /* border-radius: unset !important; */
+    /* border: 1px solid #D9D9D9; */
     height: 40px;
-    padding: 0 20px; */
+    /* padding: 0 20px; */
 }
 
 .form-control{
     background-color: white !important;
+    border-radius: 0px !important;
 }
-
+.form-select {
+    background-color: white !important;
+}
 .badge{
     font-size: 12px !important;
 }
@@ -345,7 +350,7 @@ word-wrap: break-word
 .admin_email input {
     width: 100%;
     height: 45px;
-    border-radius: 50px;
+    border-radius: 50px !important;
     border: 1px solid #CED4DA;
     padding: 0 20px;
     color: #000;
@@ -568,3 +573,86 @@ div#customDataTable_filter {
 .navbar-brand{
     font-weight:900;
 }
+
+.delete-button{
+    background: transparent; 
+}
+.submit{
+    border: none;
+}
+.tab_list_box{
+    width: 83%;
+}
+.myborder{
+    border: 1px solid black !important;
+    border-radius: 25px !important;
+}
+span.select2-selection.select2-selection--multiple {
+    border-radius: 0px;
+    border: 1px solid #ccc;
+    height: 40px;
+}
+/* ul.select2-choices {
+    padding-right: 30px !important;
+}
+
+ul.select2-choices:after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 5px solid #333;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+} */
+
+
+.select2-container--default .select2-selection--multiple:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    border-color: #888 transparent transparent transparent;
+    border-style: solid;
+    border-width: 5px 4px 0 4px;
+    height: 0;
+    right: 17px;
+    margin-left: -4px;
+    margin-top: -2px;
+    top: 42%;
+    width: 0;
+    cursor: pointer;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    /* display: inline-block; */
+    padding: 3.1px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.select2-container--open .select2-selection--multiple:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    border-color: #888 transparent transparent transparent;
+    border-style: solid;
+    border-width: 5px 4px 0 4px;
+    height: 0;
+    right: 17px;
+    margin-left: -4px;
+    margin-top: -2px;
+    top: 52%;
+    width: 0;
+    cursor: pointer;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    /* display: inline-block; */
+    padding: 3.1px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+
+
+
+
+}
+

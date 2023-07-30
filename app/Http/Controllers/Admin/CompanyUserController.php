@@ -22,7 +22,7 @@ class CompanyUserController extends Controller
     public function index()
     {
         $pageConfigs = ['pageSidebar' => 'user'];    
-        $users= CompanyUser::select('*')->get();  
+        $users= CompanyUser::select('*')->get();
         return view('admin.user.index', compact('users'), ['pageConfigs' => $pageConfigs]);
     }
 
@@ -66,7 +66,7 @@ class CompanyUserController extends Controller
         $tempUser->company_id= $request->company_id;
         $tempUser->user_id=  $user->id;
         $tempUser->access_privilege= $request->access_privilege??null;
-        $tempUser->last_login_date_time= 'need set in DB';
+        $tempUser->last_login_date_time= 'NA';
         $tempUser->save();
         return redirect()->route('user.index')->with('success','User created successfully');
     }
@@ -98,7 +98,7 @@ class CompanyUserController extends Controller
         $roles = Role::pluck('name','name')->except('admin');
         $user = $companyUser->user;
         $userRole = $user->roles->pluck('name','name')->all();
-
+        
         return view('admin.user.edit', compact('user', 'userRole', 'roles','id', 'companyUser','company','companies'), ['pageConfigs' => $pageConfigs]);
     }
 
@@ -112,7 +112,7 @@ class CompanyUserController extends Controller
     public function update(Request $request, $id)
     {
         $companyUser = CompanyUser::where('id', $id)->first();
-        $loginNeedToSet= 'need to reset in db';
+        $loginNeedToSet= 'NA';
         
         $this->validate($request, [
             'company_id' => 'required',
@@ -137,7 +137,7 @@ class CompanyUserController extends Controller
         $companyUser->company_id= $request->company_id;
         $companyUser->user_id=  $user->id;
         $companyUser->access_privilege= $request->access_privilege??null;
-        $companyUser->last_login_date_time= 'need set in DB';
+        $companyUser->last_login_date_time= 'NA';
         $companyUser->save();
 
         return redirect()->route('user.index')->with('success','User updated successfully');;
@@ -165,4 +165,21 @@ class CompanyUserController extends Controller
             return response()->json(['error' => 'Something went wrong while deleting the item']);
         }
     }
+    public function delete( $id) {
+        // dd($id); 
+        try {
+            // Find the item with the given ID and delete it
+            $item = CompanyUser::find($id);
+            if ($item) {
+                $item->delete();
+                return redirect()->route('user.index');
+            } else {
+                return redirect()->back()->withErrors(['error' => 'Item not found']);
+                // return response()->json(['error' => 'Item not found']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong while deleting the item']);
+        }
+  }
+   
 }

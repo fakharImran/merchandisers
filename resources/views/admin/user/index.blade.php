@@ -187,7 +187,6 @@ updatePaginationButtons();
 
 
 
-
     <div class="row" style="    max-width: 99%; margin: 1px auto; font-size: 12px;">
         <div class="col-12">
             <div class="table_btn_list">
@@ -274,23 +273,33 @@ updatePaginationButtons();
                             <td class="tdclass">{{ $user->company->company }}</td>
                            
                             <td class="tdclass">
+                              @if($user->user !== null) 
                               @foreach( $user->user->getRoleNames() as $role)
                                 <label class="badge text-bg-success">{{ $role }}</label><br>
                               @endforeach
+                              @endif
                             </td>
-                            <td class="tdclass">{{ $user->user->email }}</td>
-                            <td class="tdclass">{{ $user->user->name }}</td>
+                            <td class="tdclass">{{ $user->user->email??'NA' }}</td>
+                            <td class="tdclass">{{ $user->user->name??'NA' }}</td>
                             <td class="tdclass">{{ $user['access_privilege'] }}</td>
                             <td class="tdclass">{{ $user['last_login_date_time'] }}</td>
-                            <td class="tdclass">{{ $user['updated_at'] }}</td>
-                            <td class="tdclass">{{ $user['created_at'] }}</td>
+                            @php
+                            $updatedTime = new DateTime($user['updated_at']);
+                            $createdTime = new DateTime($user['created_at']);
+                            
+                            // Format the DateTime object in 12-hour format
+                            $formattedUpdatedTime = $updatedTime->format("Y-m-d h:i:s A");
+                            $formattedCreatedTime = $createdTime->format("Y-m-d h:i:s A");
+                            @endphp
+                            <td class="tdclass">{{ $formattedUpdatedTime }}</td>
+                            <td class="tdclass">{{ $formattedCreatedTime }}</td>
                             <td class="tdclass">
                                         
                                 <form action={{ route('user.destroy', $user['id']) }} method="post">
                                     @csrf
                                     @method('DELETE')
                                 
-                                    <button class="submit" style="background: transparent;"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                    <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                     </button>
                                     <a href="{{ route('user-edit',  [$i, $user['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
                                     </a>

@@ -67,15 +67,20 @@
                                           <label>{{ __('Company') }}:</label>
                                       </div>
                                       <div class="user_select_form">
-                                        <select id="company" name="company" required>
-                                            <option value="">Select Company</option>
+                                        <select id="company" name="company" class="form-select" required>
+                                            <option value disabled>Select Company</option>
                                             @if($companies!=null)
-                                            @foreach($companies as $company)
+                                            @foreach($companies as $comp)
                                             {{-- <option value="{{$company['company']}}">{{$company['company']}}</option> --}}
-                                            <option {{ $company['company'] == $store['company'] ? 'selected' : '' }} value="{{ $store['company'] }}">{{ $store['company'] }}</option>
+                                            <option {{ $comp['company'] == $store['company'] ? 'selected' : '' }} value="{{ $comp['company'] }}">{{ $comp['company'] }}</option>
                                             @endforeach
                                             @endif
                                         </select>
+                                        @error('company')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                     </div>
                                   </div>
                                   <div class="user_form_content">
@@ -84,11 +89,11 @@
                                     </div>
                                     <div class="user_input_form">
                                         <input type="text" required value="{{$store['name_of_store']}}"  class="form-control" id="name_of_store" name="name_of_store" required autocomplete="name_of_store" autofocus  placeholder="">
-                                    @error('name_of_store')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                        @error('name_of_store')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
                                 </div>
                                     <div class="user_form_content">
@@ -109,8 +114,8 @@
                                             <label>{{ __('Parish') }}:</label>
                                         </div>
                                         <div class="user_select_form">
-                                          <select id="parish" name="parish" required>
-                                            <option {{($store['parish']=='')? "selected":""}} value="">Select Parish</option>
+                                          <select id="parish" name="parish" class="form-select" required>
+                                            <option {{($store['parish']=='')? "selected":""}} value disabled>Select Parish</option>
                                             <option {{($store['parish']=='Clarendon')? "selected":""}} value="Clarendon">Clarendon</option>
                                             <option {{($store['parish']=='Hanover')? "selected":""}} value="Hanover">Hanover</option>
                                             <option {{($store['parish']=='Kingston')? "selected":""}} value="Kingston">Kingston</option>
@@ -131,11 +136,11 @@
                                     </div>
                                 <div class="user_form_content">
                                     <div class="label">
-                                        <label>{{ __('Access Privileges') }}:</label>
+                                        <label>{{ __('Channel') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="channel" name="channel">
-                                        <option {{($store['channel']=='')? "selected":""}} value="">Select Channel</option>
+                                      <select id="channel" class="form-select" required name="channel">
+                                        <option {{($store['channel']=='')? "selected":""}} value disabled>Select Channel</option>
                                         <option {{($store['channel']=='Bar')? "selected":""}} value="Bar">Bar</option>
                                         <option {{($store['channel']=='Pharmacy')? "selected":""}} value="Pharmacy">Pharmacy</option>
                                         <option {{($store['channel']=='Supermarket')? "selected":""}} value="Supermarket">Supermarket</option>
@@ -143,26 +148,26 @@
                                       </select>
                                     </div>
                                 </div>
-                                
-                                  <div class="user_btn_list">
-                                      <div class="user_btn text-secondary" >
-                                          <div class="user_btn_style"> <img src="{{asset('assets/images/save.png')}}"> Save Changes</div>
-                                      </div>
-  
-                                      <div class="user_btn">
+                                <div class="user_btn_list">
+                                    <div class="user_btn myborder">
+                                        <button type="submit" class=" user_btn_style submit  ">
+                                         <img src="{{asset('assets/images/save.png')}}" alt="->"> Save Changes
+                                        </button>
+                                    </div>
+                                    <div class="user_btn  text-secondary">
                                         <div  class="user_btn_style">
-                                         <img src="{{asset('assets/images/next.png')}}" alt="->"> <button   type="submit" class="submit">Submit</button>
-                                          
+                                         <img src="{{asset('assets/images/next.png')}}" alt="->"> Submit
                                         </div>
-                                      </div>
-  
-                                      <div class="user_btn  text-secondary" >
-                                          <div class="user_btn_style"> <img src="{{asset('assets/images/del_user.png')}}"> Delete User</div>
-                                      </div>
-  
-                                      <div class="user_btn" onclick="window.history.go(-1); return false;" >
-                                          <div  class="user_btn_style" > <img src="{{asset('assets/images/close.png')}}"> Close</div>
-                                      </div>
+                                    </div>
+                                    <div class="user_btn  myborder" >
+                                        <a href="{{ route('store-delete',   $id) }}" class="user_btn_style"  style="color: black; border:none;" >
+                                        <img src="{{asset('assets/images/del_user.png')}}"> Delete User
+                                        
+                                        </a>
+                                    </div>
+                                    <div class="user_btn myborder" onclick="window.history.go(-1); return false;" >
+                                        <button  class="user_btn_style submit" > <img src="{{asset('assets/images/close.png')}}"> Close</button>
+                                    </div>
                                   </div>
                               </div>
                           </div>

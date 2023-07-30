@@ -275,14 +275,22 @@ updatePaginationButtons();
                             <td class="tdclass">{{ $product['product_name'] }}</td>
                             <td class="tdclass">{{ $product['product_number_sku'] }}</td>
                             <td class="tdclass">{{ $product['competitor_product_name'] }}</td>
-                            <td class="tdclass">{{ $product['updated_at'] }}</td>
-                            <td class="tdclass">{{ $product['created_at'] }}</td>
+                            @php
+                                $updatedTime = new DateTime($product['updated_at']);
+                                $createdTime = new DateTime($product['created_at']);
+                                
+                                // Format the DateTime object in 12-hour format
+                                $formattedUpdatedTime = $updatedTime->format("Y-m-d h:i:s A");
+                                $formattedCreatedTime = $createdTime->format("Y-m-d h:i:s A");
+                            @endphp
+                            <td class="tdclass">{{ $formattedUpdatedTime }}</td>
+                            <td class="tdclass">{{ $formattedCreatedTime }}</td>
                             <td class="tdclass">
                                 <form action={{ route('product.destroy', $product['id']) }} method="post">
                                     @csrf
                                     @method('DELETE')
                                 
-                                    <button class="submit" style="background: transparent;"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                    <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                     </button>
                                     <a href="{{ route('product-edit',  [$i, $product['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
                                     </a>
