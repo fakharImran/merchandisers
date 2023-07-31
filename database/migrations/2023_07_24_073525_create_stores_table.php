@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
-            $table->String('company');
+            // $table->String('company');
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+
             $table->String('name_of_store');
             $table->String('location');
             $table->String('parish');

@@ -67,11 +67,11 @@
                                           <label>{{ __('Company') }}:</label>
                                       </div>
                                       <div class="user_select_form">
-                                        <select id="company" name="company" class="form-select"  required>
+                                        <select id="company" name="company_id" class="form-select"  required>
                                             <option value disabled>Select Company</option>
                                             @if($companies!=null)
                                             @foreach($companies as $company)
-                                            <option {{ $company['company'] == $product['company'] ? 'selected' : '' }} value="{{$company['company']}}">{{$company['company']}}</option>
+                                            <option {{ $company['id'] == $product['company_id'] ? 'selected' : '' }} value="{{$company['id']}}">{{$company['company']}}</option>
                                             @endforeach
                                             @endif
                                         </select>

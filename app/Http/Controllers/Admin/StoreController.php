@@ -48,7 +48,7 @@ class StoreController extends Controller
         // dd($request->input());
 
         $tempUser= new Store();
-        $tempUser->company= $request->company??null;
+        $tempUser->company_id= $request->company_id??null;
         $tempUser->name_of_store= $request->name_of_store??null;
         $tempUser->location= $request->location??null;
         $tempUser->parish= $request->parish??null;
@@ -103,7 +103,7 @@ class StoreController extends Controller
     {
         // $companyData= Company::select()->where('id',$id)->get();
         // dd($request->input());
-        $query =  Store::where('id', $id)->update(['company'=>$request->company, 'name_of_store' =>$request->name_of_store, 'location' =>$request->location, 'parish' =>$request->parish, 'channel' =>$request->channel]);
+        $query =  Store::where('id', $id)->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'location' =>$request->location, 'parish' =>$request->parish, 'channel' =>$request->channel]);
 
         return redirect()->route('store.index');
         //

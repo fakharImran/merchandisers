@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->String('company');
+            // $table->String('company');
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+
             $table->String('category');
             $table->String('product_name');
             $table->String('product_number_sku');

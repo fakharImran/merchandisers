@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Store;
 use App\Models\Company;
+use App\Models\Product;
 use App\Models\CompanyUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -132,6 +134,14 @@ class CompanyController extends Controller
                         $companyUser = CompanyUser::find($companyUser['id']);
                         $companyUser->delete();
                     }
+                    foreach ($item->products as $product) {
+                        $prod = Product::find($product['id']);
+                        $prod->delete();
+                    }
+                    foreach ($item->stores as $store) {
+                        $stor = Store::find($store['id']);
+                        $stor->delete();
+                    }
                     session()->flash("success", "Company deleted successfully");
                 }
                 return redirect()->route('company.index');
@@ -156,6 +166,14 @@ class CompanyController extends Controller
                         $user->delete();
                         $companyUser = CompanyUser::find($companyUser['id']);
                         $companyUser->delete();
+                    }
+                    foreach ($item->products as $product) {
+                        $prod = Product::find($product['id']);
+                        $prod->delete();
+                    }
+                    foreach ($item->stores as $store) {
+                        $stor = Store::find($store['id']);
+                        $stor->delete();
                     }
                     session()->flash("success", "Company deleted successfully");
                 }

@@ -48,7 +48,7 @@ class ProductController extends Controller
         // dd($request->input());
 
         $tempProduct= new Product();
-        $tempProduct->company= $request->company??null;
+        $tempProduct->company_id= $request->company_id??null;
         $tempProduct->category= $request->category??null;
         $tempProduct->product_name= $request->product_name??null;
         $tempProduct->product_number_sku= $request->product_number_sku??null;
@@ -100,7 +100,7 @@ class ProductController extends Controller
     {
         // $companyData= Company::select()->where('id',$id)->get();
         // dd($request->input());
-        $query =  Product::where('id', $id)->update(['company'=>$request->company, 'category' =>$request->category, 'product_name' =>$request->product_name, 'product_number_sku' =>$request->product_number_sku, 'competitor_product_name' =>$request->competitor_product_name]);
+        $query =  Product::where('id', $id)->update(['company_id'=>$request->company_id, 'category' =>$request->category, 'product_name' =>$request->product_name, 'product_number_sku' =>$request->product_number_sku, 'competitor_product_name' =>$request->competitor_product_name]);
 
         return redirect()->route('product.index');
     }

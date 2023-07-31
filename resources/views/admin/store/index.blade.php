@@ -200,7 +200,7 @@ updatePaginationButtons();
                         <option class="text-secondary" value="">Select Company</option>
                         @if($stores!=null)
                         @foreach ($stores as $store)
-                            <option value="{{ $store['company'] }}">{{ $store['company'] }}</option>
+                            <option value="{{ $store->company->company }}">{{ $store->company->company }}</option>
                         @endforeach
                         @endif
                     </select>
@@ -270,7 +270,7 @@ updatePaginationButtons();
                     @foreach ($stores as $store)
                         <tr>
                             <td class="tdclass">{{ $i}}</td>
-                            <td class="tdclass">{{ $store['company'] }}</td>
+                            <td class="tdclass">{{ $store->company->company }}</td>
                             <td class="tdclass">{{ $store['name_of_store'] }}</td>
                             <td class="tdclass">{{ $store['location'] }}</td>
                             <td class="tdclass">{{ $store['parish'] }}</td>
