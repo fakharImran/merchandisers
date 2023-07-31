@@ -33,6 +33,10 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
   
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
     <div id="app">
@@ -56,10 +60,10 @@
                                 </div>
                                 <div class="company_table d-flex align-items-start">
                                     <div class="tab_list_box tab_btn nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    <button class="nav-link @if($pageConfigs['pageSidebar'] == 'company') active @endif" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" onclick=" window.location.href = '{{ route('company.index') }}'" role="tab" aria-controls="v-pills-home" aria-selected="true"><img class="simple_one max-width-20" src="{{asset('assets/images/company.png')}}"><img class="hover_one  max-width-20" src="{{asset('assets/images/company_hover.png')}}"> Company</button>
-                                    <button class="nav-link @if($pageConfigs['pageSidebar'] == 'user') active @endif" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" onclick=" window.location.href = '{{ route('user.index') }}' " role="tab" aria-controls="v-pills-profile" aria-selected="false"><img class="simple_one  max-width-20" src="{{asset('assets/images/user.png')}}"><img class="hover_one max-width-20" src="{{asset('assets/images/user_hover.png')}}">User</button>
-                                    <button class="nav-link @if($pageConfigs['pageSidebar'] == 'store') active @endif" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" onclick=" window.location.href = '{{ route('store.index') }}' " role="tab" aria-controls="v-pills-messages" aria-selected="false"><img class="simple_one max-width-20" src="{{asset('assets/images/shop.png')}}"><img class="hover_one  max-width-20" style="width:40px;" src="{{asset('assets/images/store_hover.png')}}">Store</button>
-                                    <button class="nav-link @if($pageConfigs['pageSidebar'] == 'product') active @endif" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" onclick=" window.location.href = '{{ route('product.index') }}' " role="tab" aria-controls="v-pills-settings" aria-selected="false"><img class="simple_one max-width-20" src="{{asset('assets/images/product.png')}}"><img class="hover_one max-width-20" style="width:40px;"x src="{{asset('assets/images/product_hover.png')}}">Product</button>
+                                    <button class="nav-link @if($pageConfigs['pageSidebar'] == 'company') active @endif" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" onclick=" window.location.href = '{{ route('company.index') }}'" role="tab" aria-controls="v-pills-home" aria-selected="true"><img class="simple_one max-width-10" src="{{asset('assets/images/company.png')}}"><img class="hover_one  max-width-10" src="{{asset('assets/images/company_hover.png')}}"> Company</button>
+                                    <button class="nav-link @if($pageConfigs['pageSidebar'] == 'user') active @endif" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" onclick=" window.location.href = '{{ route('user.index') }}' " role="tab" aria-controls="v-pills-profile" aria-selected="false"><img class="simple_one  max-width-10" src="{{asset('assets/images/user.png')}}"><img class="hover_one max-width-10" src="{{asset('assets/images/user_hover.png')}}">User</button>
+                                    <button class="nav-link @if($pageConfigs['pageSidebar'] == 'store') active @endif" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" onclick=" window.location.href = '{{ route('store.index') }}' " role="tab" aria-controls="v-pills-messages" aria-selected="false"><img class="simple_one max-width-10" src="{{asset('assets/images/shop.png')}}"><img class="hover_one  max-width-10" style="width:40px;" src="{{asset('assets/images/store_hover.png')}}">Store</button>
+                                    <button class="nav-link @if($pageConfigs['pageSidebar'] == 'product') active @endif" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" onclick=" window.location.href = '{{ route('product.index') }}' " role="tab" aria-controls="v-pills-settings" aria-selected="false"><img class="simple_one max-width-10" src="{{asset('assets/images/product.png')}}"><img class="hover_one max-width-10" style="width:40px;"x src="{{asset('assets/images/product_hover.png')}}">Product</button>
                                     </div>
                                 </div>
                             </div>

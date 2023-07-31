@@ -176,10 +176,11 @@ button:focus,input:focus{
 
 .tab_list_box  .nav-link.active {
     color: #42C940 !important;
-    background-color: transparent !important;
+    /* background-color: transparent !important; */
+    background-color: rgb(219 219 219 / 19%) !important;
     text-align: left !important;
     border: 1px solid #cccccc63;
-box-shadow: 3px 3px #8888883d;
+    /* box-shadow: 3px 3px #8888883d; */
 }
 
 .tab_list_box .nav-link {
@@ -192,7 +193,10 @@ box-shadow: 3px 3px #8888883d;
 }
 
 .tab_list_box .nav-link:hover{
-    color: #42C940;
+    color: black;
+    /* background-color: rgba(194, 194, 194, 0.192) !important; */
+    background-color: rgb(219 219 219 / 19%) !important;
+
 }
 
 .nav-link.active img.simple_one{
@@ -528,8 +532,8 @@ word-wrap: break-word
     /* margin: 1px auto; */
     margin-left: 8%;
 }
-.max-width-20{
-    max-width: 20% !important;
+.max-width-10{
+    max-width: 10% !important;
 }
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */
@@ -591,6 +595,7 @@ span.select2-selection.select2-selection--multiple {
     border-radius: 0px;
     border: 1px solid #ccc;
     height: 40px;
+    cursor: pointer !important;
 }
 /* ul.select2-choices {
     padding-right: 30px !important;
@@ -656,3 +661,31 @@ ul.select2-choices:after {
 
 }
 
+
+
+div {
+    position: relative;
+  }
+  
+  input[type="password"] {
+    padding-right: 25px; /* Add some padding on the right to make space for the eye icon */
+  }
+  
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-image: url('eye-icon.png'); /* Replace 'eye-icon.png' with your eye icon image path */
+    background-size: cover;
+    cursor: pointer;
+  }
+
+
+  input.select2-search__field {
+    padding-top: 5px !important;
+    padding-left: 16px !important;
+    color: #80808038 !important;
+}

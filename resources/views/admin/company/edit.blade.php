@@ -89,17 +89,17 @@
                                          <img src="{{asset('assets/images/save.png')}}" alt="->"> Save Changes
                                         </button>
                                     </div>
-                                    <div class="user_btn  text-secondary">
+                                    {{-- <div class="user_btn  text-secondary">
                                         <div  class="user_btn_style">
                                          <img src="{{asset('assets/images/next.png')}}" alt="->"> Submit
                                         </div>
-                                    </div>
-                                    <div class="user_btn mybordery" >
+                                    </div> --}}
+                                    {{-- <div class="user_btn mybordery" >
                                         <a href="{{ route('company-delete',   $company['id']) }}" class="user_btn_style"  style="color: black; border:none;" >
                                         <img src="{{asset('assets/images/del_user.png')}}"> Delete User
                                         
                                         </a>
-                                    </div>
+                                    </div> --}}
                                     <div class="user_btn myborder" onclick="window.history.go(-1); return false;" >
                                         <button  class="user_btn_style submit" > <img src="{{asset('assets/images/close.png')}}"> Close</button>
                                     </div>

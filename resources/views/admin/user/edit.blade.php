@@ -137,7 +137,7 @@
                                         <label>{{ __('Email Address') }}:</label>
                                     </div>
                                     <div class="user_input_form">
-                                      <input id="email" value="{{$user['email']}}" type="email" required class="form-control @error('email') is-invalid @enderror" name="email"  placeholder="Enter email">
+                                      <input id="email" value="{{$user['email']}}" type="email" required class="form-control @error('email') is-invalid @enderror" name="email"  >
                                       @error('email')
                                           <span class="invalid-feedback" role="alert">
                                               <strong>{{ $message }}</strong>
@@ -150,7 +150,7 @@
                                         <label>{{ __('Full Name') }}:</label>
                                     </div>
                                     <div class="user_input_form">
-                                        <input type="text" value="{{$user['name']}}"  class="form-control" id="name" name="name" required autocomplete="name" autofocus  placeholder="Full Name">
+                                        <input type="text" value="{{$user['name']}}"  class="form-control" id="name" name="name" required autocomplete="name" autofocus>
                                       @error('name')
                                           <span class="invalid-feedback" role="alert">
                                               <strong>{{ $message }}</strong>
@@ -186,7 +186,7 @@
                                     </div>
                                     <div class="user_input_form">
                                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required  placeholder="Password">
-
+                                        <span class="toggle-password  fa fa-eye" onclick="togglePasswordVisibility()"></span>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -200,7 +200,7 @@
                                     </div>
                                     <div class="user_input_form">
                                         <input id="password-confirm"  type="password" class="form-control" name="confirm-password" required autocomplete="confirm-password">
-
+                                        <span class="toggle-password  fa fa-eye" onclick="toggleConfirmPasswordVisibility()"></span>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -215,17 +215,17 @@
                                          <img src="{{asset('assets/images/save.png')}}" alt="->"> Save Changes
                                         </button>
                                     </div>
-                                    <div class="user_btn  text-secondary">
+                                    {{-- <div class="user_btn  text-secondary">
                                         <div  class="user_btn_style">
                                          <img src="{{asset('assets/images/next.png')}}" alt="->"> Submit
                                         </div>
-                                    </div>
-                                    <div class="user_btn myborder " >
+                                    </div> --}}
+                                    {{-- <div class="user_btn myborder " >
                                         <a href="{{ route('user-delete',   $id) }}" class="user_btn_style" style="color: black; border:none;"  >
                                         <img src="{{asset('assets/images/del_user.png')}}"> Delete User
                                         
                                         </a>
-                                    </div>
+                                    </div> --}}
                                     <div class="user_btn myborder" onclick="window.history.go(-1); return false;" >
                                         <button  class="user_btn_style submit" > <img src="{{asset('assets/images/close.png')}}"> Close</button>
                                     </div>
@@ -242,7 +242,26 @@
 </div>
 <script>
     $(document).ready(function() {
-    $('.select2').select2();
+    $('.select2').select2({
+        placeholder: 'Select Role',
+    });
 });
+
+function togglePasswordVisibility() {
+  var passwordField = document.getElementById('password');
+  if (passwordField.type === 'password') {
+    passwordField.type = 'text';
+  } else {
+    passwordField.type = 'password';
+  }
+}
+function toggleConfirmPasswordVisibility() {
+  var passwordField = document.getElementById('password-confirm');
+  if (passwordField.type === 'password') {
+    passwordField.type = 'text';
+  } else {
+    passwordField.type = 'password';
+  }
+}
 </script>
 @endsection
