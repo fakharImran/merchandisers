@@ -66,7 +66,7 @@ $(document).ready(function() {
   });
 
   // Custom search input for 'Name' column
-  $('#name-search').on('click', function() {
+  $('#name-search').on('change', function() {
     table.column(1).search(this.value).draw();
   });
 
