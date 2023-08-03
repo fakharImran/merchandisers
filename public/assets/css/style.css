@@ -689,3 +689,23 @@ div {
     padding-left: 16px !important;
     color: #80808038 !important;
 }
+.custom-file-upload {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  
+  .custom-file-upload input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+  }

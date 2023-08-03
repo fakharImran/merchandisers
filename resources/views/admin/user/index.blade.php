@@ -198,7 +198,7 @@ updatePaginationButtons();
                     <select class="clickable-element" id="name-search">
                         <option class="text-secondary" value="">Select Company</option>
                         @if($users!=null)
-                        @foreach ($users as $user)
+                        @foreach ($users->unique('company.company')->sort() as $user)
                             <option value="{{ $user->company->company }}">{{ $user->company->company }}</option>
                         @endforeach
                         @endif
@@ -286,7 +286,9 @@ updatePaginationButtons();
                             @php
                             $updatedTime = new DateTime($user['updated_at']);
                             $createdTime = new DateTime($user['created_at']);
-                            
+                            // $tempCreatedAt = $user['created_at']->timezone('America/New_York')->format('Y-m-d H:i:s A');
+                            // $temp = $user['created_at']->timezone('America/New_York')->format('Y-m-d H:i:s A');
+                            // dd($temp);
                             // Format the DateTime object in 12-hour format
                             $formattedUpdatedTime = $updatedTime->format("Y-m-d h:i:s A");
                             $formattedCreatedTime = $createdTime->format("Y-m-d h:i:s A");

@@ -199,7 +199,7 @@ updatePaginationButtons();
                     <select class="clickable-element" id="name-search">
                         <option class="text-secondary" value="">Select Company</option>
                         @if($products!=null)
-                        @foreach ($products as $product)
+                        @foreach ($products->unique('company.company')->sort() as $product)
                             <option value="{{ $product->company->company }}">{{ $product->company->company }}</option>
                         @endforeach
                         @endif

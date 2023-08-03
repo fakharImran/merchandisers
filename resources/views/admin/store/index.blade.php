@@ -184,9 +184,17 @@ updatePaginationButtons();
             </div>
         </div> --}}
     </div>
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
-
-
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 
     <div class="row" style="    max-width: 99%; margin: 1px auto; font-size: 12px;">
         <div class="col-12">
@@ -199,7 +207,7 @@ updatePaginationButtons();
                     <select class="clickable-element" id="name-search">
                         <option class="text-secondary" value="">Select Company</option>
                         @if($stores!=null)
-                        @foreach ($stores as $store)
+                        @foreach ($stores->unique('company.company')->sort()  as $store)
                             <option value="{{ $store->company->company }}">{{ $store->company->company }}</option>
                         @endforeach
                         @endif
@@ -234,7 +242,49 @@ updatePaginationButtons();
                 </div>
             
                 <div class="filter_btn clickable-element">
-                    <a href="#"><img src="assets/images/filter.png"> Filter </a>
+                  
+                  <a data-toggle="modal" data-target="#upload"><img src="assets/images/filter.png"> Upload </a>
+                  
+                  {{-- <a href="{{ route('import') }}" class="btn btn-primary" >Export File</a> --}}
+
+                </div>
+
+                <!-- Modal -->
+                <div id="upload" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      
+                      <div class="modal-header">
+                        <h4 class="modal-title">Upload Store</h4>
+                        {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
+
+                      </div>
+                      <div class="modal-body">
+                        <p>PLease select file to import store data.</p>
+                        <form action="{{ route('import') }}"
+                            method="POST"
+                            enctype="multipart/form-data">
+                          @csrf
+                          <input type="file" name="file"
+                                class="form-control">
+                          <br>
+                          <button class="btn btn-success">
+                                Upload
+                            </button>
+                          <a class="btn btn-warning"
+                            href="{{ route('export') }}">
+                                    Export User Data
+                            </a>
+                      </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
             
                 <div class="search_bar">

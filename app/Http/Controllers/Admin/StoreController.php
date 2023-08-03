@@ -3,9 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Store;
+use App\Models\Company;
+use App\Exports\ExportStore;
+use App\Imports\ImportStore;
+
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Company;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\StoreImport; // Replace with your actual import class
+
+
 
 class StoreController extends Controller
 {
@@ -148,4 +156,57 @@ class StoreController extends Controller
             return response()->json(['error' => 'Something went wrong while deleting the item']);
         }
   }
+
+
+// public function importFile(Request $request)
+// {
+//     $request->validate([
+//         'import_file' => 'required|mimes:csv,xls,xlsx'
+//     ]);
+
+//     $file = $request->file('import_file');
+
+//     try {
+//         Excel::import(new StoreImport, $file);
+//         return redirect()->back()->with('success', 'File imported successfully.');
+//     } catch (\Exception $e) {
+//         return redirect()->back()->with('error', 'Error importing file. Please check the format and try again.');
+//     }
+// }
+
+public function importView(Request $request){
+    return view('importFile');
+}
+
+public function import(Request $request){
+    // dd($request->all());
+    try {
+        // Validate the uploaded file before processing
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls|max:2048',
+        ]);
+
+        // Store the uploaded file
+        $filePath = $request->file('file')->store('files');
+
+        // Import the data from the Excel file using the ImportStore class
+        Excel::import(new ImportStore, $filePath);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'File imported successfully.');
+    } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        // Handle validation exceptions (e.g., invalid data in the Excel file)
+        return redirect()->back()->withErrors($e->errors())->withInput();
+    } catch (\Exception $e) {
+        // Handle other exceptions that occur during the import process
+        return redirect()->back()->with('error', 'Error occurred during file import: ' . $e->getMessage());
+    }
+}
+
+public function exportUsers(Request $request){
+    return Excel::download(new ExportStore, 'stores.xlsx');
+}
+
+
+
 }

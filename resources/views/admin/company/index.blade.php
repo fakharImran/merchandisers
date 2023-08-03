@@ -198,7 +198,7 @@ updatePaginationButtons();
                     <select class="clickable-element" id="name-search">
                         <option class="text-secondary" value="">Select Company</option>
                         @if($companies!=null)
-                        @foreach ($companies as $company)
+                        @foreach ($companies->unique('company')->sort() as $company)
                             <option value="{{ $company['company'] }}">{{ $company['company'] }}</option>
                         @endforeach
                         @endif
@@ -251,6 +251,7 @@ updatePaginationButtons();
                 <thead>
                     <tr>
                     <th class="thclass" scope="col">#</th>
+                    <th class="thclass"  scope="col">Company ID</th>
                     <th class="thclass"  scope="col">Company</th>
                     <th class="thclass"  scope="col">CompanyCode</th>
                     <th class="thclass"  scope="col">DateModified</th>
@@ -266,6 +267,7 @@ updatePaginationButtons();
                     @foreach ($companies as $company)
                         <tr>
                             <td class="tdclass">{{ $i}}</td>
+                            <td class="tdclass">{{ $company['id']}}</td>
                             <td class="tdclass">{{ $company['company'] }}</td>
                             <td class="tdclass">{{ $company['code'] }}</td>
                             @php

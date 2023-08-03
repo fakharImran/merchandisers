@@ -13,6 +13,8 @@ class CompanyUser extends Model
     use HasFactory;
     protected $table= 'company_users';
     protected $fillable= ['company_id', 'user_id' , 'access_privilege', 'last_login_date_time'];
+    public $timestamps = true;
+
     /**
      * Get the user that owns the CompanyUser
      *

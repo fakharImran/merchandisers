@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Admin\StoreController;
+use App\Http\Controllers\ExcelExportController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CompanyUserController;
@@ -52,6 +53,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('store', StoreController::class);
     Route::get('store/edit/{target?}/{parameter?}', [StoreController::class, 'edit'])->name('store-edit');
     Route::get('store/delete/{parameter?}', [StoreController::class, 'delete'])->name('store-delete');
+    Route::get('/export-excel', [ExcelExportController::class, 'export'])->name('export.excel');
 
     //products
     Route::resource('product', ProductController::class);
@@ -59,6 +61,16 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('product/delete/{parameter?}', [ProductController::class, 'delete'])->name('product-delete');
 
 });
+
+    Route::get('/file-import',[StoreController::class,
+            'importView'])->name('import-view');
+
+    Route::post('/import',[StoreController::class,
+            'import'])->name('import');
+
+    Route::get('/export-users',[StoreController::class,
+            'exportUsers'])->name('export');
+
 
 
 // for forget password feature

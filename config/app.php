@@ -200,8 +200,18 @@ return [
         
         Spatie\Permission\PermissionServiceProvider::class,
 
+        // for managing excel files import and export
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+       
+
     ],
 
+    'aliases' => [
+        'Excel' =>
+        Maatwebsite\Excel\Facades\Excel::class, ],
+        
+    
+    
     /*
     |--------------------------------------------------------------------------
     | Class Aliases
