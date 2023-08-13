@@ -110,19 +110,29 @@
                                         @enderror
                                     </div>
                                   </div> --}}
+                                  {{-- {{dd(count($user->roles))}} --}}
                                   <div class="user_form_content">
                                     <div class="label">
                                         <label>{{ __('Role') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="roles" class="select2 form-select" name="roles[]" multiple >
-                                        {{-- @foreach ($roles as $role)
-                                          <option value="{{$role}}">{{$role}}</option>
-                                        @endforeach --}}
+                                      {{-- <select id="roles" class="select2 form-select" name="roles[]" multiple >
                                         @foreach ($roles as $role)
                                             <option {{ in_array($role, $userRole)? "selected":""}} value="{{$role}}">{{$role}}</option>
                                         @endforeach
-                                      </select>
+                                      </select> --}}
+
+                                      <select id="roles" class="form-select " name="roles[]">
+                                        <option value disabled selected>Select Role</option>
+                                        <option value="merchandiser" @if($user->hasRole('merchandiser')) selected @endif>Merchandiser</option>
+                                        <option value="manager"  @if($user->hasRole('manager')) selected @endif>Manager</option>
+                                        @if($user->hasRole('merchandiser') && $user->hasRole('manager'))
+                                        <option value="Merchandiser & Manager" selected>Merchandiser & Manager</option>
+                                        @else
+                                        <option value="Merchandiser & Manager">Merchandiser & Manager</option>
+                                        @endif
+                                    </select>
+
                                       @error('roles')
                                           <span class="invalid-feedback" role="alert">
                                               <strong>{{ $message }}</strong>

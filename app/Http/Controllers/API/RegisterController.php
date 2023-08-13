@@ -2,14 +2,39 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Models\User;
+use App\Models\Company;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\API\BaseController as BaseController;
    
 class RegisterController extends BaseController
 {
+    private $token = "qwertyuiopasdfghjkl@#$$%";
+    //get companies list
+    public function getCompanies(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => [
+                    'required',
+                    Rule::in(['qwertyuiopasdfghjkl@#$$%'])
+                ]
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+        
+        $companies = Company::all();
+        if($companies)
+        {
+            return response()->json($companies, 200);
+        }
+        return $this->sendError('Data Not Exist.', ['error'=>'Data Not Exist']);
+       
+    }
     /**
      * Register api
      *
@@ -18,6 +43,7 @@ class RegisterController extends BaseController
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'company_id' => 'required',
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required',
@@ -27,13 +53,11 @@ class RegisterController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-   
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['name'] =  $user->name;
-   
         return $this->sendResponse($success, 'User register successfully.');
     }
    

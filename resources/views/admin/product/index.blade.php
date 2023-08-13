@@ -174,7 +174,7 @@ updatePaginationButtons();
     
     <div class="row mb-5" style="   max-width: 99%; margin: 1px auto;">
         <div class="col-md-12 col-12">
-            <div class="Company" style="width: 100%; height: 100%; color: #2297C3; font-size: 22px; font-family: Inter; font-weight: 700; line-height: 39px; word-wrap: break-word">Products
+            <div class="Company" >Products
             </div>
             
         </div>

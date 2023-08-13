@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Company;
 
+use App\Models\Company;
 use App\Models\CompanyUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CompanyUserController extends Controller
@@ -23,7 +25,16 @@ class CompanyUserController extends Controller
     {
         $pageConfigs = ['pageSidebar' => 'user'];    
         $users= CompanyUser::select('*')->get();
-        return view('admin.user.index', compact('users'), ['pageConfigs' => $pageConfigs]);
+        
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($users as $key => $companyUser) {
+            $companyUser->created_at = convertToTimeZone($companyUser->created_at, 'UTC', $userTimeZone);
+            $companyUser->updated_at = convertToTimeZone($companyUser->updated_at, 'UTC', $userTimeZone);
+        }
+
+        return view('admin.user.index', compact('users' ), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
@@ -34,6 +45,7 @@ class CompanyUserController extends Controller
     public function create()
     {
         $pageConfigs = ['pageSidebar' => 'user'];    
+
         $roles = Role::pluck('name','name')->except('admin');
         $companies= Company::select('*')->get();
         return view('admin.user.create', compact('companies', 'roles'), ['pageConfigs' => $pageConfigs]);
@@ -55,12 +67,22 @@ class CompanyUserController extends Controller
             'roles' => 'required',
             'access_privilege' => 'required'
         ]);
-
         $input = $request->only(['name', 'email', 'password'] );
         $input['password'] = Hash::make($input['password']);
     
+       
         $user = User::create($input);
-        $user->assignRole($request->input('roles'));
+        $tempRole=array();
+        if($request->input('roles')[0]=="Merchandiser & Manager")
+        {
+            $tempRole[0] = 'manager';
+            $tempRole[1] = 'merchandiser';
+            $user->assignRole($tempRole);
+        }
+        else
+        {
+            $user->assignRole($request->input('roles'));
+        }
         
         $tempUser= new CompanyUser();
         $tempUser->company_id= $request->company_id;
@@ -98,7 +120,6 @@ class CompanyUserController extends Controller
         $roles = Role::pluck('name','name')->except('admin');
         $user = $companyUser->user;
         $userRole = $user->roles->pluck('name','name')->all();
-        
         return view('admin.user.edit', compact('user', 'userRole', 'roles','id', 'companyUser','company','companies'), ['pageConfigs' => $pageConfigs]);
     }
 
@@ -132,7 +153,18 @@ class CompanyUserController extends Controller
         $user = User::find($companyUser->user_id);
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$companyUser->user_id)->delete();
-        $user->assignRole($request->input('roles'));
+
+        $tempRole=array();
+        if($request->input('roles')[0]=="Merchandiser & Manager")
+        {
+            $tempRole[0] = 'manager';
+            $tempRole[1] = 'merchandiser';
+            $user->assignRole($tempRole);
+        }
+        else
+        {
+            $user->assignRole($request->input('roles'));
+        }
 
         $companyUser->company_id= $request->company_id;
         $companyUser->user_id=  $user->id;
@@ -166,7 +198,6 @@ class CompanyUserController extends Controller
         }
     }
     public function delete( $id) {
-        // dd($id); 
         try {
             // Find the item with the given ID and delete it
             $item = CompanyUser::find($id);

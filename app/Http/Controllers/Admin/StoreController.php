@@ -10,6 +10,7 @@ use App\Imports\ImportStore;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StoreImport; // Replace with your actual import class
 
@@ -27,6 +28,14 @@ class StoreController extends Controller
         $pageConfigs = ['pageSidebar' => 'store'];    
         $stores= Store::select('*')->get();        
         
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($stores as $key => $store) {
+            $store->created_at = convertToTimeZone($store->created_at, 'UTC', $userTimeZone);
+            $store->updated_at = convertToTimeZone($store->updated_at, 'UTC', $userTimeZone);
+        }
+
         return view('admin.store.index', compact('stores'), ['pageConfigs' => $pageConfigs]);
     }
 
@@ -53,8 +62,6 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->input());
-
         $tempUser= new Store();
         $tempUser->company_id= $request->company_id??null;
         $tempUser->name_of_store= $request->name_of_store??null;
@@ -62,12 +69,7 @@ class StoreController extends Controller
         $tempUser->parish= $request->parish??null;
         $tempUser->channel= $request->channel??null;
         $tempUser->save();
-        // dd($tempCompany);
-        // $stores= Store::select('*')->get();        
         return redirect()->route('store.index');
-
-        // dd($request);
-        //
     }
 
     /**
@@ -91,14 +93,9 @@ class StoreController extends Controller
     {
         $pageConfigs = ['pageSidebar' => 'store'];    
 
-        // dd($id);
         $companies= Company::select('*')->get();
         $store= Store::select()->where('id',$id)->first();
-        // dd($uData);
         return view('admin.store.edit', compact('store', 'id','companies'), ['pageConfigs' => $pageConfigs]);
-        
-
-        //
     }
     /**
      * Update the specified resource in storage.
@@ -109,12 +106,9 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $companyData= Company::select()->where('id',$id)->get();
-        // dd($request->input());
         $query =  Store::where('id', $id)->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'location' =>$request->location, 'parish' =>$request->parish, 'channel' =>$request->channel]);
 
         return redirect()->route('store.index');
-        //
     }
 
     /**
@@ -125,7 +119,6 @@ class StoreController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        // dd($id); 
         try {
             // Find the item with the given ID and delete it
             $item = Store::find($id);
@@ -141,7 +134,6 @@ class StoreController extends Controller
         }
     }
     public function delete( $id) {
-        // dd($id); 
         try {
             // Find the item with the given ID and delete it
             $item = Store::find($id);
@@ -158,55 +150,51 @@ class StoreController extends Controller
   }
 
 
-// public function importFile(Request $request)
-// {
-//     $request->validate([
-//         'import_file' => 'required|mimes:csv,xls,xlsx'
-//     ]);
+    // public function importFile(Request $request)
+    // {
+    //     $request->validate([
+    //         'import_file' => 'required|mimes:csv,xls,xlsx'
+    //     ]);
 
-//     $file = $request->file('import_file');
+    //     $file = $request->file('import_file');
 
-//     try {
-//         Excel::import(new StoreImport, $file);
-//         return redirect()->back()->with('success', 'File imported successfully.');
-//     } catch (\Exception $e) {
-//         return redirect()->back()->with('error', 'Error importing file. Please check the format and try again.');
-//     }
-// }
+    //     try {
+    //         Excel::import(new StoreImport, $file);
+    //         return redirect()->back()->with('success', 'File imported successfully.');
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()->with('error', 'Error importing file. Please check the format and try again.');
+    //     }
+    // }
 
-public function importView(Request $request){
-    return view('importFile');
-}
-
-public function import(Request $request){
-    // dd($request->all());
-    try {
-        // Validate the uploaded file before processing
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls|max:2048',
-        ]);
-
-        // Store the uploaded file
-        $filePath = $request->file('file')->store('files');
-
-        // Import the data from the Excel file using the ImportStore class
-        Excel::import(new ImportStore, $filePath);
-
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'File imported successfully.');
-    } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-        // Handle validation exceptions (e.g., invalid data in the Excel file)
-        return redirect()->back()->withErrors($e->errors())->withInput();
-    } catch (\Exception $e) {
-        // Handle other exceptions that occur during the import process
-        return redirect()->back()->with('error', 'Error occurred during file import: ' . $e->getMessage());
+    public function importView(Request $request){
+        return view('importFile');
     }
-}
 
-public function exportUsers(Request $request){
-    return Excel::download(new ExportStore, 'stores.xlsx');
-}
+    public function import(Request $request){
+        try {
+            // Validate the uploaded file before processing
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls|max:2048',
+            ]);
 
+            // Store the uploaded file
+            $filePath = $request->file('file')->store('files');
 
+            // Import the data from the Excel file using the ImportStore class
+            Excel::import(new ImportStore, $filePath);
 
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'File imported successfully.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            // Handle validation exceptions (e.g., invalid data in the Excel file)
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            // Handle other exceptions that occur during the import process
+            return redirect()->back()->with('error', 'Error occurred during file import: ' . $e->getMessage());
+        }
+    }
+
+    public function exportUsers(Request $request){
+        return Excel::download(new ExportStore, 'stores.xlsx');
+    }
 }

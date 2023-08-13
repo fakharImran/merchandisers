@@ -166,6 +166,13 @@ updatePaginationButtons();
 
 });
 </script>
+{{-- <script>
+  function convertToUserLocalTime(utcTimestamp) {
+       var utcDate = new Date(utcTimestamp);
+       var localDate = new Date(utcDate.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
+       return localDate.toLocaleString();
+   }
+   </script> --}}
 @endsection
 
 @section('content')
@@ -174,7 +181,7 @@ updatePaginationButtons();
     
     <div class="row mb-5" style="   max-width: 99%; margin: 1px auto;">
         <div class="col-md-12 col-12">
-            <div class="Company" style="width: 100%; height: 100%; color: #2297C3; font-size: 22px; font-family: Inter; font-weight: 700; line-height: 39px; word-wrap: break-word">Users
+            <div class="Company" >Users
             </div>
             
         </div>
@@ -246,6 +253,7 @@ updatePaginationButtons();
                 </div>
             </div>
         </div>
+    
         <div class="col-12" style="margin: 1px auto; ">
             <table id="customDataTable" class="table  datatable table-bordered table-hover table-responsive  nowrap" style="width:100%">
                 <thead>
@@ -268,6 +276,7 @@ updatePaginationButtons();
                 <tbody>
                     @if($users!=null)
                     @foreach ($users as $user)
+                    {{-- <p>{{ convertToUserLocalTime($user['updated_at']) }}</p> --}}
                         <tr>
                             <td class="tdclass">{{ $i}}</td>
                             <td class="tdclass">{{ $user->company->company }}</td>
@@ -286,15 +295,14 @@ updatePaginationButtons();
                             @php
                             $updatedTime = new DateTime($user['updated_at']);
                             $createdTime = new DateTime($user['created_at']);
-                            // $tempCreatedAt = $user['created_at']->timezone('America/New_York')->format('Y-m-d H:i:s A');
-                            // $temp = $user['created_at']->timezone('America/New_York')->format('Y-m-d H:i:s A');
-                            // dd($temp);
+                            
                             // Format the DateTime object in 12-hour format
                             $formattedUpdatedTime = $updatedTime->format("Y-m-d h:i:s A");
                             $formattedCreatedTime = $createdTime->format("Y-m-d h:i:s A");
+                            
                             @endphp
-                            <td class="tdclass">{{ $formattedUpdatedTime }}</td>
-                            <td class="tdclass">{{ $formattedCreatedTime }}</td>
+                            <td class="tdclass changeTime">{{ $formattedUpdatedTime }}</td>
+                            <td class="tdclass changeTime">{{ $formattedCreatedTime }}</td>
                             <td class="tdclass">
                                         
                                 <form action={{ route('user.destroy', $user['id']) }} method="post">
@@ -319,9 +327,36 @@ updatePaginationButtons();
         </div>
     </div>
 </div>
+<!-- Your other HTML and Blade content -->
 
 <script>
-    
-    </script>
+  $(document).ready(function(){
+  var elements =  document.getElementsByClassName('changeTime');
+      // Get the UTC time from Laravel and create a new Date object
+    for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+
+      // console.log();
+      // alert("UTC " + element.innerHTML)
+      var utcTime = new Date(element.innerHTML);
+      // alert("Local " + utcTime)
+      // Get the client's timezone offset in minutes
+      var timezoneOffset = new Date().getTimezoneOffset();
+
+      // Calculate the client-side time by adding the offset to the UTC time
+      var clientTime = new Date(utcTime.getTime() + (timezoneOffset * 60000));
+
+      // var clientMachineTime = new Date(utcTime.getTime() + timezoneOffset*60000);
+
+      // Format the client time as you wish (example: YYYY-MM-DD hh:mm:ss)
+      var formattedTime = clientTime.toISOString().slice(0, 19).replace('T', ' ');
+
+      // Display the formatted client time on the page
+      console.log(clientTime, element.innerHTML.toLocaleString());
+      // element.innerHTML = formattedTime;
+    }
+      
+  });
+</script>
     
 @endsection

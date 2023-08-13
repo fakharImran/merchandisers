@@ -24,6 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('get-companies', [RegisterController::class, 'getCompanies']);
+
+
      
 Route::middleware('auth:sanctum')->group( function () {
     Route::resource('companies', CompanyController::class);

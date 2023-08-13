@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\CompanyUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -22,11 +23,15 @@ class CompanyController extends Controller
         $pageConfigs = ['pageSidebar' => 'company'];    
         $companies= Company::select('*')->get();
 
-        // dd($companies);
-        // $companies=json_decode($companies,true);
-        // dd(json_decode($companies,true));
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($companies as $key => $company) {
+            $company->created_at = convertToTimeZone($company->created_at, 'UTC', $userTimeZone);
+            $company->updated_at = convertToTimeZone($company->updated_at, 'UTC', $userTimeZone);
+        }
+
         return view('admin.company.index', compact('companies'), ['pageConfigs' => $pageConfigs]);
-        //
     }
 
     /**
@@ -55,14 +60,9 @@ class CompanyController extends Controller
         $tempCompany->company= $request->company_name;
         $tempCompany->code= $request->company_code;
         $tempCompany->save();
-        // dd($tempCompany);
         $companies= Company::select('*')->get();
         $companies=json_decode($companies,true);
-        // dd($companies);
         return redirect()->route('company.index');
-        // dd($request);
-
-        //
     }
 
     /**
@@ -86,15 +86,10 @@ class CompanyController extends Controller
     {
         $pageConfigs = ['pageSidebar' => 'company'];    
 
-        // dd($id);
         $companyData= Company::select()->where('id',$id)->get();
-        // dd($companyData);
         $compData= json_decode($companyData,true);
         $company=$compData[0];
         return view('admin.company.edit', compact('company', 'id'), ['pageConfigs' => $pageConfigs]);
-        
-
-        //
     }
 
     /**
@@ -106,12 +101,9 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $companyData= Company::select()->where('id',$id)->get();
-        // dd($request->input());
         $query =  Company::where('id', $id)->update(['company'=>$request->company_name, 'code' =>$request->company_code]);
 
         return redirect()->route('company.index');
-        //
     }
 
     /**
@@ -155,7 +147,6 @@ class CompanyController extends Controller
     }
 
     public function delete( $id) {
-          // dd($id); 
         try {
             // Find the item with the given ID and delete it
             $item = Company::find($id);

@@ -88,11 +88,17 @@
                                         <label>{{ __('Role') }}:</label>
                                     </div>
                                     <div class="user_select_form">
-                                      <select id="roles" class="select2 form-select" name="roles[]" multiple >
-                                        @foreach ($roles as $role)
-                                          <option value="{{$role}}">{{$role}}</option>
-                                        @endforeach
-                                      </select>
+                                        {{-- <select id="roles" class="select2 form-select" name="roles[]" multiple >
+                                            @foreach ($roles as $role)
+                                            <option value="{{$role}}">{{$role}}</option>
+                                            @endforeach
+                                      </select> --}}
+                                        <select id="roles" class="form-select " name="roles[]">
+                                            <option value disabled selected>Select Role</option>
+                                            <option value="merchandiser">Merchandiser</option>
+                                            <option value="manager">Manager</option>
+                                            <option value="Merchandiser & Manager">Merchandiser & Manager</option>
+                                        </select>
                                       @error('roles')
                                           <span class="invalid-feedback" role="alert">
                                               <strong>{{ $message }}</strong>
@@ -208,11 +214,15 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
-    $('.select2').select2({
-        placeholder: 'Select Role',
-    });
-});
+
+//     $(document).ready(function() {
+//     $('.select2').select2({
+//         placeholder: 'Select Role',
+//         minimumResultsForSearch: Infinity,
+//         allowClear: true
+//     });
+//     // $(".select2-search, .select2-focusser").remove();
+// });
 
 function togglePasswordVisibility() {
   var passwordField = document.getElementById('password');

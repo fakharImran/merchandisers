@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Company;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -18,7 +19,15 @@ class ProductController extends Controller
     {
         $pageConfigs = ['pageSidebar' => 'product'];    
         $products= Product::select('*')->get();        
-        // dd($products);
+
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($products as $key => $product) {
+            $product->created_at = convertToTimeZone($product->created_at, 'UTC', $userTimeZone);
+            $product->updated_at = convertToTimeZone($product->updated_at, 'UTC', $userTimeZone);
+        }
+
         return view('admin.product.index', compact('products'), ['pageConfigs' => $pageConfigs]);
     }
 
@@ -33,8 +42,6 @@ class ProductController extends Controller
 
         $companies= Company::select('*')->get();
         return view('admin.product.create', compact('companies'), ['pageConfigs' => $pageConfigs]);
-
-        //
     }
 
     /**
@@ -45,8 +52,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->input());
-
         $tempProduct= new Product();
         $tempProduct->company_id= $request->company_id??null;
         $tempProduct->category= $request->category??null;
@@ -54,8 +59,6 @@ class ProductController extends Controller
         $tempProduct->product_number_sku= $request->product_number_sku??null;
         $tempProduct->competitor_product_name= $request->competitor_product_name??null;
         $tempProduct->save();
-        // dd($tempProduct);
-        // $stores= Store::select('*')->get();        
         return redirect()->route('product.index');
     }
     /**
@@ -78,15 +81,9 @@ class ProductController extends Controller
     public function edit($target, $id)
     {
         $pageConfigs = ['pageSidebar' => 'product'];    
-
-        // dd($id);
         $companies= Company::select('*')->get();
         $product= Product::select()->where('id',$id)->first();
-        // dd($uData);
         return view('admin.product.edit', compact('product', 'id','companies'), ['pageConfigs' => $pageConfigs]);
-        
-
-        //
     }
 
     /**
@@ -98,8 +95,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $companyData= Company::select()->where('id',$id)->get();
-        // dd($request->input());
         $query =  Product::where('id', $id)->update(['company_id'=>$request->company_id, 'category' =>$request->category, 'product_name' =>$request->product_name, 'product_number_sku' =>$request->product_number_sku, 'competitor_product_name' =>$request->competitor_product_name]);
 
         return redirect()->route('product.index');
@@ -113,7 +108,6 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        // dd($id); 
         try {
             // Find the item with the given ID and delete it
             $item = Product::find($id);
@@ -129,7 +123,6 @@ class ProductController extends Controller
         }
     }
     public function delete( $id) {
-         // dd($id); 
          try {
             // Find the item with the given ID and delete it
             $item = Product::find($id);
