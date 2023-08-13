@@ -262,7 +262,7 @@ updatePaginationButtons();
 
                       </div>
                       <div class="modal-body">
-                        <p>PLease select file to import store data.</p>
+                        <p>Please select file to import store data.</p>
                         <form action="{{ route('import') }}"
                             method="POST"
                             enctype="multipart/form-data">
@@ -273,10 +273,10 @@ updatePaginationButtons();
                           <button class="btn btn-success">
                                 Upload
                             </button>
-                          <a class="btn btn-warning"
+                          {{-- <a class="btn btn-warning"
                             href="{{ route('export') }}">
                                     Export User Data
-                            </a>
+                            </a> --}}
                       </form>
                       </div>
                       <div class="modal-footer">
