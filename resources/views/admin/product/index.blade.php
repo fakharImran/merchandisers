@@ -234,8 +234,51 @@ updatePaginationButtons();
                 </div>
             
                 <div class="filter_btn clickable-element">
-                    <a href="#"><img src="assets/images/filter.png"> Filter </a>
+                  
+                  <a data-toggle="modal" data-target="#upload"><img src="assets/images/filter.png"> Upload </a>
+                  
+                  {{-- <a href="{{ route('import') }}" class="btn btn-primary" >Export File</a> --}}
+
                 </div>
+
+                <!-- Modal -->
+                <div id="upload" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      
+                      <div class="modal-header">
+                        <h4 class="modal-title">Upload Store</h4>
+                        {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
+
+                      </div>
+                      <div class="modal-body">
+                        <p>Please select file to import Product data.</p>
+                        <form action="{{ route('import-product') }}"
+                            method="POST"
+                            enctype="multipart/form-data">
+                          @csrf
+                          <input type="file" name="file"
+                                class="form-control" required>
+                          <br>
+                          <button class="btn btn-success">
+                                Upload
+                            </button>
+                          {{-- <a class="btn btn-warning"
+                            href="{{ route('export') }}">
+                                    Export User Data
+                            </a> --}}
+                      </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+            
             
                 <div class="search_bar">
                     <div class="search_field">

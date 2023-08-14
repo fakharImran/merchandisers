@@ -62,13 +62,21 @@ Route::group(['middleware' => ['auth']], function() {
 
 });
 
-    Route::get('/file-import',[StoreController::class,
-            'importView'])->name('import-view');
+    // Route::get('/file-import',[StoreController::class,
+    //         'importView'])->name('import-view');
 
     Route::post('/import',[StoreController::class,
             'import'])->name('import');
 
     Route::get('/export-users',[StoreController::class,
+            'exportUsers'])->name('export');
+
+            //product import ecport file
+            
+    Route::post('/importProduct',[ProductController::class,
+    'importProduct'])->name('import-product');
+
+    Route::get('/export-users',[ProductController::class,
             'exportUsers'])->name('export');
 
 

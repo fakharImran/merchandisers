@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Company;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Exports\ExportProduct;
+use App\Imports\ImportProduct;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -137,4 +140,40 @@ class ProductController extends Controller
             return response()->json(['error' => 'Something went wrong while deleting the item']);
         }
   }
+
+  
+  public function importView(Request $request){
+    return view('importFile');
+}
+
+public function importProduct(Request $request)
+{
+    try {
+        // Validate the uploaded file before processing
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls|max:2048',
+        ]);
+
+        // Store the uploaded file
+        $filePath = $request->file('file')->store('files');
+
+        // Import the data from the Excel file using the ImportStore class
+        Excel::import(new ImportProduct, $filePath);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'File imported successfully.');
+    } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        // Handle validation exceptions (e.g., invalid data in the Excel file)
+        return redirect()->back()->withErrors($e->errors())->withInput();
+    } catch (\Exception $e) {
+        // Handle other exceptions that occur during the import process
+        return redirect()->back()->with('error', 'Error occurred during file import: ' . $e->getMessage());
+    }
+}
+
+public function exportUsers(Request $request){
+    return Excel::download(new ExportProduct, 'product.xlsx');
+}
+
+
 }

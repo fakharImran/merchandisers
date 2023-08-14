@@ -268,7 +268,7 @@ updatePaginationButtons();
                             enctype="multipart/form-data">
                           @csrf
                           <input type="file" name="file"
-                                class="form-control">
+                                class="form-control" required>
                           <br>
                           <button class="btn btn-success">
                                 Upload

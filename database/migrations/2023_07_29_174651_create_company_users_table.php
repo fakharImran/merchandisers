@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->string('access_privilege');
-            $table->string('last_login_date_time');
+            $table->string('last_login_date_time')->nullable();
             $table->timestamps();
         });
     }

@@ -27,10 +27,10 @@ class StoreController extends Controller
     {
         $pageConfigs = ['pageSidebar' => 'store'];    
         $stores= Store::select('*')->get();        
+        // dd($stores);
         
         $currentUser = Auth::user();
         $userTimeZone  = $currentUser->time_zone;
-
         foreach ($stores as $key => $store) {
             $store->created_at = convertToTimeZone($store->created_at, 'UTC', $userTimeZone);
             $store->updated_at = convertToTimeZone($store->updated_at, 'UTC', $userTimeZone);

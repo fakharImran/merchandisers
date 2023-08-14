@@ -88,7 +88,7 @@ class CompanyUserController extends Controller
         $tempUser->company_id= $request->company_id;
         $tempUser->user_id=  $user->id;
         $tempUser->access_privilege= $request->access_privilege??null;
-        $tempUser->last_login_date_time= 'NA';
+        $tempUser->last_login_date_time= null;
         $tempUser->save();
         return redirect()->route('user.index')->with('success','User created successfully');
     }
