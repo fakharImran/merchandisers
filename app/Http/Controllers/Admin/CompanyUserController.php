@@ -32,6 +32,8 @@ class CompanyUserController extends Controller
         foreach ($users as $key => $companyUser) {
             $companyUser->created_at = convertToTimeZone($companyUser->created_at, 'UTC', $userTimeZone);
             $companyUser->updated_at = convertToTimeZone($companyUser->updated_at, 'UTC', $userTimeZone);
+            $companyUser->last_login_date_time = convertToTimeZone($companyUser->last_login_date_time, 'UTC', $userTimeZone);
+
         }
 
         return view('admin.user.index', compact('users' ), ['pageConfigs' => $pageConfigs]);
