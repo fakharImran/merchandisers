@@ -68,7 +68,7 @@ class RegisterController extends BaseController
         $tempUser->company_id= $request->company_id;
         $tempUser->user_id=  $user->id;
         $tempUser->access_privilege= 'Active';
-        $tempUser->last_login_date_time=  date("Y-m-d h:i");
+        $tempUser->last_login_date_time=  date("Y-m-d h:i:s A");
 
         $user->companyUser()->save($tempUser);
 
@@ -99,7 +99,7 @@ class RegisterController extends BaseController
                 $success['token'] = $user->createToken('api-token')->plainTextToken;
                 $success['name'] =  $user->name;
     
-                $user->companyUser->last_login_date_time =  date("Y-m-d h:i");
+                $user->companyUser->last_login_date_time =  date("Y-m-d h:i:s A");
                 //update last log in date time for user 
                 $user->companyUser->save();
     
