@@ -22,7 +22,11 @@ class ImportStore implements ToModel
                 'parish' => $row[3],
                 'channel' => $row[4],
             ]);
-    
+            
+            if($store==false)
+            {
+                dd("invalid");
+            }
             return $store;
         } catch (Throwable $e) {
             // Handle the exception, log or display an error message

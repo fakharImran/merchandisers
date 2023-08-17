@@ -67,7 +67,7 @@ $(document).ready(function() {
 
   // Custom search input for 'Name' column
   $('#name-search').on('change', function() {
-    table.column(1).search(this.value).draw();
+    table.column(2).search(this.value).draw();
   });
 
   $('#next').on('click', function() {
@@ -230,10 +230,6 @@ updatePaginationButtons();
                
                 <div class="refresh_btn clickable-element" onclick="window.location.reload();">
                     <a ><img src="assets/images/ref.png"> Refresh </a>
-                </div>
-            
-                <div class="filter_btn clickable-element">
-                    <a href="#"><img src="assets/images/filter.png"> Filter </a>
                 </div>
             
                 <div class="search_bar">

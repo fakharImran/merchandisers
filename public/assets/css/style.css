@@ -57,7 +57,7 @@ button:focus,input:focus{
 
 .logo_image {
     width: 100%;
-    padding: 30px 10px 30px;
+    padding: 20px 10px;
     text-align: center;
 }
 
@@ -189,7 +189,7 @@ button:focus,input:focus{
     display: flex;
     align-items: center;
     gap: 20px;
-    padding: 15px 5px;
+    padding: 15px 25px;
 }
 
 .tab_list_box .nav-link:hover{
@@ -530,7 +530,7 @@ word-wrap: break-word
 
 .tab_list_box {
     /* margin: 1px auto; */
-    margin-left: 8%;
+    /* margin-left: 8%; */
 }
 .max-width-10{
     max-width: 10% !important;
@@ -585,7 +585,7 @@ div#customDataTable_filter {
     border: none;
 }
 .tab_list_box{
-    width: 83%;
+    width: 100%;
 }
 .myborder{
     border: 1px solid black !important;

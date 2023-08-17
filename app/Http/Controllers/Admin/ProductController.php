@@ -7,9 +7,10 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Exports\ExportProduct;
 use App\Imports\ImportProduct;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class ProductController extends Controller
 {
@@ -162,12 +163,14 @@ public function importProduct(Request $request)
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'File imported successfully.');
-    } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+    } catch (ValidationException $e) {
         // Handle validation exceptions (e.g., invalid data in the Excel file)
         return redirect()->back()->withErrors($e->errors())->withInput();
-    } catch (\Exception $e) {
+    }  
+    catch (Exception $e) {
         // Handle other exceptions that occur during the import process
-        return redirect()->back()->with('error', 'Error occurred during file import: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Error occurred during file import please upload again with valid format.  '. $e->getMessage() );
+        // $e->getMessage()
     }
 }
 
