@@ -22,12 +22,11 @@ class ImportProduct implements ToModel
                 'product_number_sku' => $row[3],
                 'competitor_product_name' => $row[4],
             ]);
-    
+            
             return $product;
         } catch (Throwable $e) {
             // Handle the exception, log or display an error message
             // For example, you can log the error using `error_log` or use Laravel's logger: \Illuminate\Support\Facades\Log::error($e);
-    
             // Return null or throw a custom exception, depending on your needs
             return "fields are not matched";
         }

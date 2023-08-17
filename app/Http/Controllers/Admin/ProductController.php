@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Models\Company;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -163,13 +164,14 @@ public function importProduct(Request $request)
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'File imported successfully.');
-    } catch (ValidationException $e) {
+    } 
+    // catch (ValidationException $e) {
         // Handle validation exceptions (e.g., invalid data in the Excel file)
-        return redirect()->back()->withErrors($e->errors())->withInput();
-    }  
+        // return redirect()->back()->withErrors($e->errors())->withInput();
+    // }  
     catch (Exception $e) {
         // Handle other exceptions that occur during the import process
-        return redirect()->back()->with('error', 'Error occurred during file import please upload again with valid format.  '. $e->getMessage() );
+        return redirect()->back()->with('error', 'Error occurred during file import please upload again with valid format.  ');
         // $e->getMessage()
     }
 }
