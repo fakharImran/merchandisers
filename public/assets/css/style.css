@@ -179,7 +179,7 @@ button:focus,input:focus{
     /* background-color: transparent !important; */
     background-color: rgb(219 219 219 / 19%) !important;
     text-align: left !important;
-    border: 1px solid #cccccc63;
+    /* border: 1px solid #cccccc63; */
     /* box-shadow: 3px 3px #8888883d; */
 }
 
