@@ -89,7 +89,7 @@ class CompanyUserController extends Controller
         $tempUser= new CompanyUser();
         $tempUser->company_id= $request->company_id;
         $tempUser->user_id=  $user->id;
-        $tempUser->access_privilege= $request->access_privilege??null;
+        $tempUser->access_privilege= $request->access_privilege;
         $tempUser->last_login_date_time=  date("Y-m-d h:i:s A");
         $tempUser->save();
         return redirect()->route('user.index')->with('success','User created successfully');
@@ -170,8 +170,9 @@ class CompanyUserController extends Controller
 
         $companyUser->company_id= $request->company_id;
         $companyUser->user_id=  $user->id;
-        $companyUser->access_privilege= $request->access_privilege??null;
-        $companyUser->last_login_date_time= 'NA';
+        $companyUser->access_privilege= $request->access_privilege;
+        $companyUser->last_login_date_time=  date("Y-m-d h:i:s");
+
         $companyUser->save();
 
         return redirect()->route('user.index')->with('success','User updated successfully');;

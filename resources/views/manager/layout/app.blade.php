@@ -65,7 +65,7 @@
                                     <div class="logo_image">
                                         <img src="{{asset('assets/images/logo.png')}}">
                                     </div>
-                                    @include('layouts.sidebar')
+                                    @include('manager.layout.sidebar')
                                 </div>
                                 <div class=" col-md-9 col-12 p-0" style="width: 80%;">
                                     @include('layouts.header')
@@ -85,8 +85,9 @@
         @endif
     </div>
 
-{{-- <script src="assets/js/jquery.js"></script> --}}
-{{-- <script src="assets/js/bootstrap.min_.js"></script> --}}
-@yield("bottom_links")
+
+    {{-- <script src="assets/js/jquery.js"></script> --}}
+    {{-- <script src="assets/js/bootstrap.min_.js"></script> --}}
+    @yield("bottom_links")
 </body>
 </html>

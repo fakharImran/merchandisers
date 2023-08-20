@@ -43,5 +43,24 @@ class LoginController extends Controller
     {
         $user->update(['time_zone' => $request->input('userTimeZone')]);
         // Rest of the authentication logic
+        // Assuming your User model has a 'roles' relationship
+        $userRoles = $user->roles->pluck('name')->toArray();
+
+        // Define the mapping of roles to routes
+        $roleRoutes = [
+            'admin' => '/company',
+            'manager' => '/manager-dashboard',
+            'merchandiser' => '/user-dashboard',
+            // Add more roles and their corresponding routes as needed
+        ];
+
+        // Find the first matching role route
+        foreach ($userRoles as $role) {
+            if (array_key_exists($role, $roleRoutes)) {
+                return redirect($roleRoutes[$role]);
+            }
+        }
+
+        return redirect('/home'); // Fallback redirection if user has unknown roles
     }
 }

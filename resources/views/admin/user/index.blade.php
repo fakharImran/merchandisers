@@ -291,18 +291,20 @@ updatePaginationButtons();
                             <td class="tdclass">{{ $user->user->email??'NA' }}</td>
                             <td class="tdclass">{{ $user->user->name??'NA' }}</td>
                             <td class="tdclass">{{ $user['access_privilege'] }}</td>
-                            <td class="tdclass">{{ $user['last_login_date_time'] }}</td>
                             @php
                             $updatedTime = new DateTime($user['updated_at']);
                             $createdTime = new DateTime($user['created_at']);
+                            $lastLoginDateTime = new DateTime($user['last_login_date_time']);
                             
                             // Format the DateTime object in 12-hour format
                             $formattedUpdatedTime = $updatedTime->format("Y-m-d h:i:s A");
                             $formattedCreatedTime = $createdTime->format("Y-m-d h:i:s A");
+                            $formattedLastLoginDateTime = $lastLoginDateTime->format("Y-m-d h:i:s A");
                             
                             @endphp
-                            <td class="tdclass changeTime">{{ $formattedUpdatedTime }}</td>
-                            <td class="tdclass changeTime">{{ $formattedCreatedTime }}</td>
+                            <td class="tdclass">{{ $formattedLastLoginDateTime }}</td>
+                            <td class="tdclass">{{ $formattedUpdatedTime }}</td>
+                            <td class="tdclass">{{ $formattedCreatedTime }}</td>
                             <td class="tdclass">
                                         
                                 <form action={{ route('user.destroy', $user['id']) }} method="post">
@@ -329,34 +331,5 @@ updatePaginationButtons();
 </div>
 <!-- Your other HTML and Blade content -->
 
-<script>
-  $(document).ready(function(){
-  var elements =  document.getElementsByClassName('changeTime');
-      // Get the UTC time from Laravel and create a new Date object
-    for (let i = 0; i < elements.length; i++) {
-        const element = elements[i];
-
-      // console.log();
-      // alert("UTC " + element.innerHTML)
-      var utcTime = new Date(element.innerHTML);
-      // alert("Local " + utcTime)
-      // Get the client's timezone offset in minutes
-      var timezoneOffset = new Date().getTimezoneOffset();
-
-      // Calculate the client-side time by adding the offset to the UTC time
-      var clientTime = new Date(utcTime.getTime() + (timezoneOffset * 60000));
-
-      // var clientMachineTime = new Date(utcTime.getTime() + timezoneOffset*60000);
-
-      // Format the client time as you wish (example: YYYY-MM-DD hh:mm:ss)
-      var formattedTime = clientTime.toISOString().slice(0, 19).replace('T', ' ');
-
-      // Display the formatted client time on the page
-      console.log(clientTime, element.innerHTML.toLocaleString());
-      // element.innerHTML = formattedTime;
-    }
-      
-  });
-</script>
     
 @endsection

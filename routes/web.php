@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
@@ -8,6 +9,7 @@ use App\Http\Controllers\ExcelExportController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CompanyUserController;
+use App\Http\Controllers\Manager\DashboardController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +22,21 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
-Route::get('/',  [CompanyController::class, 'index'])->middleware('auth');
+Route::get('/',  function(){
+    $user = Auth::user();
+
+    // Redirect based on user role
+    switch ($user->role) {
+        case 'admin':
+            return redirect('/company');
+        case 'manager':
+            return redirect('/manager-dashboard');
+        case 'user':
+            return redirect('/user-dashboard');
+        default:
+            return redirect('/login'); // Handle unknown roles appropriately
+    }
+})->middleware('auth');
 
 Auth::routes();
 
@@ -39,7 +55,7 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth', 'role:admin']], function() {
     
     Route::resource('company', CompanyController::class);
     Route::get('company/edit/{target?}/{parameter?}', [CompanyController::class, 'edit'])->name('company-edit');
@@ -60,8 +76,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('product/edit/{target?}/{parameter?}', [ProductController::class, 'edit'])->name('product-edit');
     Route::get('product/delete/{parameter?}', [ProductController::class, 'delete'])->name('product-delete');
 
-});
-
     // Route::get('/file-import',[StoreController::class,
     //         'importView'])->name('import-view');
 
@@ -78,6 +92,17 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('/export-users',[ProductController::class,
             'exportUsers'])->name('export');
+            
+});
+
+
+Route::group(['middleware' => ['auth', 'role:manager']], function() {
+    
+    Route::get('/manager-dashboard', [DashboardController::class, 'index'])->name('manager-dashboard');
+    
+});
+
+    
 
 
 
