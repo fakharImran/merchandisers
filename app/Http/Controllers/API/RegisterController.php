@@ -102,6 +102,7 @@ class RegisterController extends BaseController
 
                 $success['token'] = $user->createToken('api-token')->plainTextToken;
                 $success['name'] =  $user->name;
+                $success['id'] =  $user->id;
                 $success['company'] = $user->companyUser->company;
     
                

@@ -43,5 +43,6 @@ class Company extends Model
     public function stores(): HasMany
     {
         return $this->hasMany(Store::class, 'company_id');
+        
     }
 }

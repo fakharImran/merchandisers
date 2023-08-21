@@ -22,7 +22,10 @@ class CompanyController extends Controller
     {   
         $pageConfigs = ['pageSidebar' => 'company'];    
         $companies= Company::select('*')->get();
-
+        
+        // $company = Company::select('*')->where('id', 1)->first();
+        // dd($company->stores);
+        
         $currentUser = Auth::user();
         $userTimeZone  = $currentUser->time_zone;
 

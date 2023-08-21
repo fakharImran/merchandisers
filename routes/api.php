@@ -7,6 +7,7 @@ use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\API\MerchandiserTimeSheetController;
 
 // 'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
 /*
@@ -32,5 +33,6 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset']);
 
      
 Route::middleware('auth:sanctum')->group( function () {
-    Route::resource('companies', CompanyController::class);
+    Route::apiResource('companies', CompanyController::class);
+    Route::apiResource('time-sheets', MerchandiserTimeSheetController::class);
 });
