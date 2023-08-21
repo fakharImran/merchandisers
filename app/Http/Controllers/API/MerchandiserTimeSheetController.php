@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\MerchandiserTimeSheet;
 use App\Http\Controllers\API\BaseController;
 
 class MerchandiserTimeSheetController extends BaseController
@@ -18,7 +19,15 @@ class MerchandiserTimeSheetController extends BaseController
     {
         $user = Auth::user();
         $stores = $user->companyUser->company->stores;
-        return $this->sendResponse($stores, 'Companys retrieved successfully.');
+        
+        $timeSheetStatus = $user->companyUser->timeSheets;
+        foreach ($timeSheetStatus as $key => $value) {
+            if($value->status != 'check-out'){
+                return $this->sendResponse([$value, $store], 'incomplete status in time sheet');
+
+            }
+        }
+        return $this->sendResponse($stores, 'please start your new time sheet');
 
     }
 
@@ -30,8 +39,39 @@ class MerchandiserTimeSheetController extends BaseController
      */
     public function store(Request $request)
     {
-        $myTitle = 'umer';
-        return $this->sendResponse($myTitle, 'User login successfully.');
+        $validator = Validator::make($request->all(), [
+            'gps_location'=>'required',
+            'store_id'=>'required',
+            'store_name'=>'required',
+            'store_manager'=>'required',
+            'store_location'=>'required',
+            'status'=>'required',
+            'date_time'=>'required',
+            'merchandiser_name'=>'required',
+            'merchandiser_id'=>'required',
+            'signature'=>'required',
+            'signature_time'=>'required',
+            'hours_worked'=>'required',
+
+        ]);
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+        MerchandiserTimeSheet::create($request->only(
+            'gps_location',
+            'store_id',
+            'store_name',
+            'store_manager',
+            'store_location',
+            'status',
+            'date_time',
+            'merchandiser_name',
+            'merchandiser_id',
+            'signature',
+            'signature_time',
+            'hours_worked', 
+        ));
+        return $this->sendResponse($myTitle, 'time sheet stored successfully.');
 
        
 
@@ -57,7 +97,45 @@ class MerchandiserTimeSheetController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        //
+        $timeSheet = MerchandiserTimeSheet::findOrFail($id);
+        if($timeSheet != null){
+            $validator = Validator::make($request->all(), [
+                'gps_location'=>'required',
+                'store_id'=>'required',
+                'store_name'=>'required',
+                'store_manager'=>'required',
+                'store_location'=>'required',
+                'status'=>'required',
+                'date_time'=>'required',
+                'merchandiser_name'=>'required',
+                'merchandiser_id'=>'required',
+                'signature'=>'required',
+                'signature_time'=>'required',
+                'hours_worked'=>'required',
+    
+            ]);
+            if($validator->fails()){
+                return $this->sendError('Validation Error.', $validator->errors());       
+            }
+            MerchandiserTimeSheet::update($request->only(
+                'gps_location',
+                'store_id',
+                'store_name',
+                'store_manager',
+                'store_location',
+                'status',
+                'date_time',
+                'merchandiser_name',
+                'merchandiser_id',
+                'signature',
+                'signature_time',
+                'hours_worked', 
+            ));
+            return $this->sendResponse($myTitle, 'time sheet updated successfully.');
+    
+        }
+        return $this->sendResponse('error', 'not found time sheet.');
+        
     }
 
     /**

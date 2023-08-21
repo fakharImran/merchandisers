@@ -36,11 +36,11 @@ class CompanyUser extends Model
         return $this->belongsTo(Company::class);
     }
     /**
-     * Get all of the timeSheet for the CompanyUser
+     * Get all of the timeSheets for the CompanyUser
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function timeSheet(): HasMany
+    public function timeSheets(): HasMany
     {
         return $this->hasMany(MerchandiserTimeSheet::class);
     }
