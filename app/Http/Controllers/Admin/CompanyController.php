@@ -58,7 +58,11 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-    
+        $this->validate($request, [
+            'company_name' => 'required',
+            'company_code' => 'required|regex:/\d{4}/'
+        ]);
+
         $tempCompany= new Company();
         $tempCompany->company= $request->company_name;
         $tempCompany->code= $request->company_code;

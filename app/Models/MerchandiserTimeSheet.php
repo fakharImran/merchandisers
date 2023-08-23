@@ -20,6 +20,7 @@ class MerchandiserTimeSheet extends Model
         'signature',
         'signature_time',
         'hours_worked',
+        'company_user_id'
         // Add other attributes here
     ];
 
@@ -30,7 +31,7 @@ class MerchandiserTimeSheet extends Model
      */
     public function companyUser(): BelongsTo
     {
-        return $this->belongsTo(CompanyUser::class);
+        return $this->belongsTo(CompanyUser::class, 'company_user_id');
     }
     // Define relationships, methods, or other configurations here
 }

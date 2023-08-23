@@ -22,7 +22,7 @@ class CompanyFactory extends Factory
     {
         return [
             'company' => fake()->name(),
-            'code' => fake()->unique()->randomNumber(4),
+            'code' => fake()->unique()->randomNumber(4,4),
         ];
     }
 }
