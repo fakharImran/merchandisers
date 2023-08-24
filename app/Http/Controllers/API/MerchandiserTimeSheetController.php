@@ -22,12 +22,12 @@ class MerchandiserTimeSheetController extends BaseController
         $stores = $user->companyUser->company->stores;
         
         $timeSheetStatus = $user->companyUser->timeSheets;
-        // foreach ($timeSheetStatus as $key => $value) {
-        //     if($value->status != 'check-out'){
-        //         return $this->sendResponse([$value, $store], 'incomplete status in time sheet');
+        foreach ($timeSheetStatus as $key => $value) {
+            if($value->status != 'check-out'){
+                return $this->sendResponse([$value, $stores], 'incomplete status in time sheet');
 
-        //     }
-        // }
+            }
+        }
         return $this->sendResponse($timeSheetStatus, 'please start your new time sheet');
 
     }
@@ -42,7 +42,8 @@ class MerchandiserTimeSheetController extends BaseController
     {
         
         $user = Auth::user();
-        $company_user_id = $user->companyUser->user_id;
+        $company_user_id = $user->companyUser->company_id;
+        // return $this->sendResponse($company_user_id, 'time sheet stored successfully.');
         
         $validator = Validator::make($request->all(), [
             'gps_location'=>'required',
