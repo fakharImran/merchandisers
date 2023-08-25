@@ -19,24 +19,16 @@ return new class extends Migration
             $table->unsignedBigInteger('company_user_id');
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
+            $table->string('gps_location');
+            $table->string('store_id');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
-            $table->string('gps_location')->nullable();
-            $table->string('store_id')->nullable();
-            $table->string('store_name')->nullable();
-            $table->string('store_manager')->nullable();
-            $table->string('store_location')->nullable();
-            $table->string('status')->nullable();
-            $table->string('date_time')->nullable();
-            $table->string('merchandiser_name')->nullable();
-            $table->string('merchandiser_id')->nullable();
+            $table->string('store_manager_id');
+            $table->foreign('store_manager_id')->references('id')->on('company_users')->onDelete('cascade');
+
             $table->string('signature')->nullable();
             $table->string('signature_time')->nullable();
             $table->string('hours_worked')->nullable();
-            // $table->unsignedBigInteger('company_id');
-            // $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-
-            // $table->unsignedBigInteger('user_id');
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
         

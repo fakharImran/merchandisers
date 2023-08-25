@@ -3,20 +3,16 @@
 namespace App\Models;
 
 use App\Models\CompanyUser;
+use App\Models\TimeSheetRecord;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MerchandiserTimeSheet extends Model
 {
     protected $fillable = [
         'gps_location',
         'store_id',
-        'store_name',
-        'store_manager',
-        'store_location',
-        'status',
-        'date_time',
-        'merchandiser_name',
-        'merchandiser_id',
+        'store_manager_id',
         'signature',
         'signature_time',
         'hours_worked',
@@ -32,6 +28,16 @@ class MerchandiserTimeSheet extends Model
     public function companyUser(): BelongsTo
     {
         return $this->belongsTo(CompanyUser::class, 'company_user_id');
+    }
+
+    /**
+     * Get all of the timeSheetRecords for the MerchandiserTimeSheet
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function timeSheetRecords(): HasMany
+    {
+        return $this->hasMany(TimeSheetRecord::class, 'time_sheet_id');
     }
     // Define relationships, methods, or other configurations here
 }
