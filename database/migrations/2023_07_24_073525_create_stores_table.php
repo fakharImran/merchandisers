@@ -34,6 +34,11 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('merchandiser_time_sheets', function (Blueprint $table) {
+            $table->dropForeign(['store_id']); // Drop foreign key constraint
+        });
+        Schema::dropIfExists('merchandiser_time_sheets');
+        
         Schema::dropIfExists('stores');
     }
 };

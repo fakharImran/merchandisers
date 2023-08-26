@@ -28,6 +28,21 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('stores', function (Blueprint $table) {
+            $table->dropForeign(['company_id']); // Drop foreign key constraint
+        });
+        Schema::dropIfExists('stores');
+
+        Schema::table('company_users', function (Blueprint $table) {
+            $table->dropForeign(['company_id']); // Drop foreign key constraint
+        });
+        Schema::dropIfExists('company_users');
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign(['company_id']); // Drop foreign key constraint
+        });
+        Schema::dropIfExists('products');
+
         Schema::dropIfExists('companies');
     }
 };
