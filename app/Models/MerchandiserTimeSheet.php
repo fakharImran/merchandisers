@@ -20,6 +20,7 @@ class MerchandiserTimeSheet extends Model
         // Add other attributes here
     ];
 
+    protected $table = 'merchandiser_time_sheets';
     /**
      * Get the companyUser that owns the MerchandiserTimeSheet
      *

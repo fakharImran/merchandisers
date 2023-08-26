@@ -14,14 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('merchandiser_time_sheets', function (Blueprint $table) {
-
             $table->id();
             $table->unsignedBigInteger('company_user_id');
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
             $table->string('gps_location');
+            
             $table->string('store_id');
-            // $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
             $table->string('store_manager_id');
             $table->foreign('store_manager_id')->references('id')->on('company_users')->onDelete('cascade');
@@ -31,7 +31,6 @@ return new class extends Migration
             $table->string('hours_worked')->nullable();
             $table->timestamps();
         });
-        
     }
 
     /**
