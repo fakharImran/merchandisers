@@ -19,11 +19,11 @@ return new class extends Migration
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
             $table->string('gps_location');
-            
-            $table->string('store_id');
+
+            $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
-            $table->string('store_manager_id');
+            $table->unsignedBigInteger('store_manager_id');
             $table->foreign('store_manager_id')->references('id')->on('company_users')->onDelete('cascade');
 
             $table->string('signature')->nullable();
