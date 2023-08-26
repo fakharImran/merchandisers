@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->string('gps_location');
             $table->string('store_id');
-            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
+            // $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
             $table->string('store_manager_id');
             $table->foreign('store_manager_id')->references('id')->on('company_users')->onDelete('cascade');
