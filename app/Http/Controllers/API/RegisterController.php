@@ -64,17 +64,48 @@ class RegisterController extends BaseController
         $merchandiserRole = Role::findByName('merchandiser');
         $user->assignRole($merchandiserRole);
         
-        $tempUser= new CompanyUser();
-        $tempUser->company_id= $request->company_id;
-        $tempUser->user_id=  $user->id;
-        $tempUser->access_privilege= 'Active';
-        $tempUser->last_login_date_time=  date("Y-m-d h:i:s A");
+        $companyUser= new CompanyUser();
+        $companyUser->company_id= $request->company_id;
+        $companyUser->user_id=  $user->id;
+        $companyUser->access_privilege= 'Inactive';
+        $companyUser->last_login_date_time=  date("Y-m-d h:i:s A");
 
-        $user->companyUser()->save($tempUser);
+        $user->companyUser()->save($companyUser);
 
         $success['token'] =  $user->createToken('api-token')->accessToken;
         $success['name'] =  $user->name;
+        $success['code'] =  $user->companyUser->company->code;
+        $success['company_id'] =  $user->companyUser->company->id;
+        $success['user_id'] =  $user->id;
         return $this->sendResponse($success, 'User register successfully.');
+    }
+
+    public function companyValidator(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'company_id' => 'required',
+            'code' => 'required',
+            'token' => [
+                'required',
+                Rule::in(['qwertyuiopasdfghjkl@#$$%'])
+            ]
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+        $user = User::findOrFail($request->user_id);
+        if(!$user){
+            return $this->sendError('User not found.');       
+        }
+        if($user->companyUser->company->id == $request->company_id && $request->code == $user->companyUser->company->code ){
+            $user->companyUser->access_privilege ='Active';
+            $user->companyUser->update();
+            $success['name'] =  $user->name;
+            return $this->sendResponse($success, 'User code register successfully.');
+        }
+        return $this->sendError('Code not found.');       
+
     }
    
     /**

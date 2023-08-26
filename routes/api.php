@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('register', [RegisterController::class, 'register']);
+Route::post('company-validation', [RegisterController::class, 'companyValidator']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('get-companies', [RegisterController::class, 'getCompanies']);
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
