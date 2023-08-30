@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CompanyUserController;
 use App\Http\Controllers\Manager\DashboardController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Admin\CustomerControllers\MerchandiserTimeSheetController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,18 +26,46 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 Route::get('/',  function(){
     $user = Auth::user();
 
-    // Redirect based on user role
-    switch ($user->role) {
-        case 'admin':
+if ($user) {
+    switch (true) {
+        case $user->roles->contains('name', 'admin'):
+            // User has an "admin" role
+            // Handle admin-specific actions
             return redirect('/company');
-        case 'manager':
+
+            break;
+
+        
+
+        case $user->roles->contains('name', 'manager'):
+            // User has a "manager" role
+            // Handle manager-specific actions
             return redirect('/manager-dashboard');
-        case 'user':
-            return redirect('/user-dashboard');
+
+            break;
+
+        case $user->roles->contains('name', 'merchandiser'):
+            // User has a "merchandiser" role
+            // Handle merchandiser-specific actions
+            return redirect()->route('logout');
+
+            break;
+
         default:
+            // User has other or no roles
+            // Handle other user roles or cases
             return redirect('/login'); // Handle unknown roles appropriately
+
+            break;
     }
-})->middleware('auth');
+} else {
+    // Handle the case where no user is authenticated
+    return redirect('/login'); // Handle unknown roles appropriately
+
+}
+
+    
+});
 
 Auth::routes();
 
@@ -99,6 +128,7 @@ Route::group(['middleware' => ['auth', 'role:admin']], function() {
 Route::group(['middleware' => ['auth', 'role:manager']], function() {
     
     Route::get('/manager-dashboard', [DashboardController::class, 'index'])->name('manager-dashboard');
+    Route::get('/merchandiser-time-sheet', [MerchandiserTimeSheetController::class, 'index'])->name('merchandiser-time-sheet');
     
 });
 

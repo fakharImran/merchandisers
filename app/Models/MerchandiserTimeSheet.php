@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class MerchandiserTimeSheet extends Model
 {
     protected $fillable = [
-        'gps_location',
         'store_id',
         'store_manager_id',
         'signature',

@@ -38,6 +38,35 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        // dd(Auth::user());
+        
+
+        // Define the mapping of roles to routes
+        if(Auth::user()){
+            $user = Auth::user();
+            // dd($user->role);
+
+            $userRoles = $user->roles->pluck('name')->toArray();
+
+            $roleRoutes = [
+                'admin' => '/company',
+                'manager' => '/manager-dashboard',
+                // 'merchandiser' => '/user-dashboard',
+                // Add more roles and their corresponding routes as needed
+            ];
+            foreach ($userRoles as $role) {
+                if (array_key_exists($role, $roleRoutes)) {
+                    $this->redirectTo = $roleRoutes[$role];
+                    // return redirect($roleRoutes[$role]);
+                }
+            }
+        }
+        else{
+            Auth::logout();
+            $this->redirectTo = '/login';
+
+        }
+
     }
     protected function authenticated(Request $request, $user)
     {
@@ -50,7 +79,7 @@ class LoginController extends Controller
         $roleRoutes = [
             'admin' => '/company',
             'manager' => '/manager-dashboard',
-            'merchandiser' => '/user-dashboard',
+            // 'merchandiser' => '/user-dashboard',
             // Add more roles and their corresponding routes as needed
         ];
 

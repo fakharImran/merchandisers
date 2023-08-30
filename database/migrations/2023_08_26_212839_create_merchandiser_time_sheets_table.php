@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('company_user_id');
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
-            $table->string('gps_location');
 
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
@@ -27,8 +26,7 @@ return new class extends Migration
             $table->foreign('store_manager_id')->references('id')->on('company_users')->onDelete('cascade');
 
             $table->string('signature')->nullable();
-            $table->string('signature_time')->nullable();
-            $table->string('hours_worked')->nullable();
+            $table->time('signature_time')->nullable();
             $table->timestamps();
         });
     }

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('time_sheet_id');
             $table->foreign('time_sheet_id')->references('id')->on('merchandiser_time_sheets')->onDelete('cascade');
+            
+            $table->string('gps_location');
 
             $table->string('status');
             $table->date('date');

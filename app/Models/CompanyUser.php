@@ -43,6 +43,6 @@ class CompanyUser extends Model
     public function timeSheets(): HasMany
     {
         // return $this->id;
-        return $this->hasMany(MerchandiserTimeSheet::class, "company_user_id", "user_id");
+        return $this->hasMany(MerchandiserTimeSheet::class, "company_user_id");
     }
 }

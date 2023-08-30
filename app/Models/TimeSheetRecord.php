@@ -11,7 +11,7 @@ class TimeSheetRecord extends Model
 {
     use HasFactory;
     protected $table= 'time_sheet_records';
-    protected $fillable= ['time_sheet_id', 'date', 'time', 'status'];
+    protected $fillable= ['time_sheet_id', 'date', 'time', 'status','gps_location'];
 
     /**
      * Get the timeSheet that owns the TimeSheetRecord

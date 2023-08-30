@@ -31,6 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
+    // protected $redirectTo = RouteServiceProvider::HOME;
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
@@ -75,5 +76,16 @@ class RegisterController extends Controller
         event(new Registered($user));
         return $user;
 
+    }
+    protected function authenticated(Request $request, $user)
+    {
+        // Find the first matching role route
+        foreach ($userRoles as $role) {
+            if (array_key_exists($role, $roleRoutes)) {
+                return redirect($roleRoutes[$role]);
+            }
+        }
+
+        return redirect('/home'); // Fallback redirection if user has unknown roles
     }
 }
