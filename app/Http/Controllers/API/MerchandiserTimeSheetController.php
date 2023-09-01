@@ -58,7 +58,7 @@ class MerchandiserTimeSheetController extends BaseController
             $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords;
             $recordsCount = count($records);
             if($records[$recordsCount-1]->status != 'check-out'){
-                return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1], 'stores'=>$stores, 'managerArray'=>$managersArray], 'incomplete status in time sheet');
+                return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1], 'stores'=>$storesArray, 'managerArray'=>$managersArray], 'incomplete status in time sheet');
             }
         }
 
@@ -184,6 +184,7 @@ class MerchandiserTimeSheetController extends BaseController
     public function update(Request $request, $id)
     {
         $timeSheet = MerchandiserTimeSheet::findOrFail($id);
+        
         if($timeSheet->timeSheetRecords->contains('status', 'check-out')==true){
             return $this->sendError('Validation Error.', 'You can not change status of this time sheet', 403);       
             // return response(['message'=>'You can not change status of this time sheet'],403 );
