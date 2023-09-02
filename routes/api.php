@@ -36,4 +36,5 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset']);
 Route::middleware('auth:sanctum')->group( function () {
     Route::apiResource('companies', CompanyController::class);
     Route::apiResource('time-sheets', MerchandiserTimeSheetController::class);
+    Route::post('time-sheets/check-out/{id}', [MerchandiserTimeSheetController::class, 'update']);
 });

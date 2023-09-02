@@ -26,7 +26,6 @@ return new class extends Migration
             $table->foreign('store_manager_id')->references('id')->on('company_users')->onDelete('cascade');
 
             $table->string('signature')->nullable();
-            $table->time('signature_time')->nullable();
             $table->timestamps();
         });
     }
