@@ -186,6 +186,7 @@ class MerchandiserTimeSheetController extends BaseController
     public function update(Request $request, $id)
     {
         $timeSheet = MerchandiserTimeSheet::findOrFail($id);
+        
         if($timeSheet->timeSheetRecords->contains('status', 'check-out')==true){
             return $this->sendError('Validation Error.', 'You can not change status of this time sheet', 403);       
             // return response(['message'=>'You can not change status of this time sheet'],403 );

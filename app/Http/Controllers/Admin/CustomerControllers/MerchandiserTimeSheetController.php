@@ -22,9 +22,11 @@ class MerchandiserTimeSheetController extends Controller
        
         $merchandiserArray = array();
         $compnay_users = $user->companyUser->company->companyUsers;
+        $stores= $user->companyUser->company->stores;
         foreach ($compnay_users as $key => $compnay_user) {
             $user = $compnay_user->user;
             $timeSheetArray=array();
+            $pendingTimeSheetArr=array();
             if ($user) {
                 $userRoles = $user->roles; // Retrieve all roles for the user
                 if ($userRoles->count() > 0) {
@@ -34,23 +36,33 @@ class MerchandiserTimeSheetController extends Controller
                             $time_sheets = $user->companyUser->timeSheets;
                             if($time_sheets && $time_sheets->count() > 0){
                                 foreach ($time_sheets as $key => $time_sheet) {
+
+                                    $checkoutFound = false; // Flag to check if "check-out" status is found
                                     foreach ($time_sheet->timeSheetRecords as $key => $timeSheetRecord) {
                                         if($timeSheetRecord->status=="check-out")
                                         {
                                             array_push($timeSheetArray, $time_sheet);
+                                            $checkoutFound = true;
+                                            break; // Break the loop if "check-out" status is found
                                         }
-                                        # code...
+                                    }
+                                    if (!$checkoutFound) {
+
+                                        if($time_sheet->timeSheetRecords->count() > 0)
+                                        {
+                                            array_push($pendingTimeSheetArr, $time_sheet);
+                                        }
                                     }
                                     # code...
                                 }
-                                array_push($merchandiserArray, ['id'=>$user->id,'name'=>$user->name, 'role'=>$roleName, 'time_sheets'=>$timeSheetArray]);
+                                array_push($merchandiserArray, ['id'=>$user->id,'name'=>$user->name, 'role'=>$roleName, 'time_sheets'=>$timeSheetArray, "pending_time_sheets"=>$pendingTimeSheetArr]);
                             }
                         }
                     }
                 }
             }
         }
-            //    dd($user);
+            //    dd($stores);
         // $data = MerchandiserTimeSheet::select('*')->
         // where('company_user_id',$user->id)->get();
         // ->groupBy('date')
@@ -67,7 +79,7 @@ class MerchandiserTimeSheetController extends Controller
 
         ];
             // dd($merchandiserArray);
-        return view('manager.merchandiserTimeSheet.index', compact('merchandiserArray'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.merchandiserTimeSheet.index', compact('merchandiserArray', 'stores'), ['pageConfigs' => $pageConfigs]);
 
         //
     }
