@@ -224,7 +224,7 @@
     </table>
 </div>
 
-<script src="{{ mix('/js/app.js') }}"></script>
+<script src="{{('/js/app.js') }}"></script>
 <script>
     $(document).ready(function () {
         $('#dataTable').DataTable({
