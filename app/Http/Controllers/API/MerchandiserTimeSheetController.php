@@ -30,26 +30,27 @@ class MerchandiserTimeSheetController extends BaseController
         $managersArray = array();
         $companyUsers = $user->companyUser->company->companyUsers;
         foreach ($companyUsers as $key => $companyUser) {
-            $managersStoresArray = array();
+            // $managersStoresArray = array();
             $user = $companyUser->user;
-            foreach ($companyUser->company->stores as $key => $store) {
-                array_push($managersStoresArray, ['id'=>$store->id, 'name'=>$store->name_of_store]);
-            }
+            // foreach ($companyUser->company->stores as $key => $store) {
+            //     array_push($managersStoresArray, ['id'=>$store->id, 'name'=>$store->name_of_store]);
+            // }
             if ($user) {
                 $userRoles = $user->roles; // Retrieve all roles for the user
                 if ($userRoles->count() > 0) {
                     foreach ($userRoles as $role) {
                         $roleName = $role->name;
                         if($roleName == 'manager'){
-                            array_push($managersArray, ['id'=>$user->id,'name'=>$user->name,'store_list'=>$managersStoresArray]);
+                            array_push($managersArray, ['id'=>$user->id,'name'=>$user->name]);
                         }
                     }
                 }
             }
         }
-        $user = Auth::user();
 
-        $timeSheets = $user->companyUser->timeSheets;
+        $currentUser = Auth::user();
+
+        $timeSheets = $currentUser->companyUser->timeSheets;
 
         //for edit the timesheet if the last visit is not checkout
         if ($timeSheets && count($timeSheets) > 0) 
@@ -58,7 +59,8 @@ class MerchandiserTimeSheetController extends BaseController
             $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords;
             $recordsCount = count($records);
             if($records[$recordsCount-1]->status != 'check-out'){
-                return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1], 'stores'=>$storesArray, 'managerArray'=>$managersArray], 'incomplete status in time sheet');
+                $timeSheet = $timeSheets[$numberTimeSheets-1];
+                return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'company_user_id'=> $timeSheet->company_user_id, 'store_id'=> $timeSheet->store_id, 'store_manager_id'=> $timeSheet->store_manager_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray, 'managerArray'=>$managersArray], 'incomplete status in time sheet');
             }
         }
 
@@ -202,8 +204,7 @@ class MerchandiserTimeSheetController extends BaseController
             // only run in case of checkout
             if($request->status == 'check-out'){
                 $validator = Validator::make($request->all(), [
-                    'signature'=>'required',
-                    'signature_time'=>'required',
+                    'signature' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
                 ]);
                 if($validator->fails()){
                     return $this->sendError('Validation Error.', $validator->errors());       
@@ -228,12 +229,18 @@ class MerchandiserTimeSheetController extends BaseController
 
             // only run in case of checkout
             if($request->status == 'check-out'){
-           
-                $updatedTimeSheet = $timeSheet->update($request->only(
-                    'signature',
-                    'signature_time',
-                ));  
-                return $this->sendResponse(['curr_user'=>Auth::user(), 'updated_time_sheet'=>$updatedTimeSheet, 'current_time_sheet_record'=>$timeSheetRecord, 'all_time_sheet_records'=>$timeSheet->timeSheetRecords], 'time sheet updated successfully.');
+                
+                $signature_path = $request->file('signature')->store('signatures', 'public');
+                
+                //process here
+
+                // $file = $request->file('signature');
+                // $imageName = time().'.'.$file->extension();
+                // $imagePath = public_path(). '/files/signatures/';
+                // $file->move($imagePath, $imageName);
+
+                $updatedTimeSheet = $timeSheet->update(['signature'=>$signature_path]);  
+                return $this->sendResponse(['curr_user'=>Auth::user(), 'updated_time_sheet'=>$updatedTimeSheet, 'current_time_sheet_record'=>$timeSheetRecord, 'all_time_sheet_records'=>$timeSheet->timeSheetRecords], 'time sheet check-out updated successfully.');
             }
 
             return $this->sendResponse(['curr_user'=>Auth::user(), 'time_sheet'=>$timeSheet, 'current_time_sheet_record'=>$timeSheetRecord, 'all_time_sheet_records'=>$timeSheet->timeSheetRecords], 'time sheet updated successfully.');

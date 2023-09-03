@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Store;
 use App\Models\CompanyUser;
 use App\Models\TimeSheetRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MerchandiserTimeSheet extends Model
 {
@@ -13,10 +15,7 @@ class MerchandiserTimeSheet extends Model
         'store_id',
         'store_manager_id',
         'signature',
-        'signature_time',
-        'hours_worked',
         'company_user_id'
-        // Add other attributes here
     ];
 
     protected $table = 'merchandiser_time_sheets';
@@ -40,4 +39,19 @@ class MerchandiserTimeSheet extends Model
         return $this->hasMany(TimeSheetRecord::class, 'time_sheet_id');
     }
     // Define relationships, methods, or other configurations here
+
+    /**
+     * Get the store that owns the MerchandiserTimeSheet
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
+
+    public function manager($id){
+        $user = User::findOrFail($id);
+        return $user;
+    }
 }
