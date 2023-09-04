@@ -105,9 +105,9 @@
                 {{-- {{dd($merchandiser['time_sheets'])}} --}}
                 @foreach ($merchandiser['time_sheets'] as $merchandiser_time_sheet)
 
+                
                     @php
                         $manager = $merchandiser_time_sheet->manager($merchandiser_time_sheet->store_manager_id);
-                        
 
                         $checkin_date_time = 'N/A';
                         $checkin_location = 'N/A';
@@ -152,6 +152,7 @@
                         
                         $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
 
+
                         // Check-out date and time
                         $checkoutDateTime = new DateTime($checkout_date_time); // Replace with your actual check-out date and time
 
@@ -174,11 +175,30 @@
 
                         <td>{{$merchandiser_time_sheet->store->name_of_store}}</td>
                         <td>{{$merchandiser_time_sheet->store->location}}</td>
-                        <td>{{$checkin_date_time}}</td>
+                        <td>
+                            @if($checkin_date_time!='N/A')
+                            {{Carbon\carbon::parse(strval($checkin_date_time))->format('d M Y h:m A')}}
+                            @endif
+                            </td>
                         <td>{{$checkin_location}}</td>
-                        <td>{{$break_date_time}}</td>
-                        <td>{{$lunch_date_time}}</td>
-                        <td>{{$checkout_date_time}}</td>
+                        <td>
+                            @if($break_date_time!='N/A')
+                            {{Carbon\carbon::parse(strval($break_date_time))->format('d M Y h:m A')}}
+                            @endif
+                        </td>
+                        <td>
+                            @if($lunch_date_time!='N/A')
+                            {{Carbon\carbon::parse(strval($lunch_date_time))->format('d M Y h:m A')}}
+                            @endif
+                        </td>
+                        <td>
+                            @if($checkout_date_time!='N/A')
+                            @php
+                                $checkout_time_converted= Carbon\carbon::parse(strval($checkout_date_time))->format('d M Y h:m A')
+                            @endphp
+                            {{$checkout_time_converted}}
+                            @endif
+                        </td>
                         <td>{{$checkout_location}}</td>
                         <td>{{$hoursWorked}} hrs, {{$minutesWorked}} mins</td>
                         {{-- <td>{{}}</td> --}}
@@ -204,7 +224,7 @@
                             
                                 if (file_exists($imagePath)) 
                                 {
-                                    echo "$checkout_date_time";
+                                    echo "$checkout_time_converted";
                                 } 
                                 else 
                                 {
