@@ -177,24 +177,24 @@
                         <td>{{$merchandiser_time_sheet->store->location}}</td>
                         <td>
                             @if($checkin_date_time!='N/A')
-                            {{Carbon\carbon::parse(strval($checkin_date_time))->format('d M Y h:m A')}}
+                            {{Carbon\carbon::parse(strval($checkin_date_time))->format('Y-m-d h:m A')}}
                             @endif
                             </td>
                         <td>{{$checkin_location}}</td>
                         <td>
                             @if($break_date_time!='N/A')
-                            {{Carbon\carbon::parse(strval($break_date_time))->format('d M Y h:m A')}}
+                            {{Carbon\carbon::parse(strval($break_date_time))->format('Y-m-d h:m A')}}
                             @endif
                         </td>
                         <td>
                             @if($lunch_date_time!='N/A')
-                            {{Carbon\carbon::parse(strval($lunch_date_time))->format('d M Y h:m A')}}
+                            {{Carbon\carbon::parse(strval($lunch_date_time))->format('Y-m-d h:m A')}}
                             @endif
                         </td>
                         <td>
                             @if($checkout_date_time!='N/A')
                             @php
-                                $checkout_time_converted= Carbon\carbon::parse(strval($checkout_date_time))->format('d M Y h:m A')
+                                $checkout_time_converted= Carbon\carbon::parse(strval($checkout_date_time))->format('Y-m-d h:m A')
                             @endphp
                             {{$checkout_time_converted}}
                             @endif
