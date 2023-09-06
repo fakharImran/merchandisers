@@ -1,8 +1,8 @@
 
 <!-- Add Contract Modal -->
 <div class="modal fade" id="pendingTimeSheet" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-md modal-dialog-centered modal-edit-user">
-    <div class="modal-content" style="width: 200%; height:100%;">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-edit-user">
+    <div class="modal-content" style="width: 100%; height:100%;">
       <div class="modal-header bg-transparent">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>

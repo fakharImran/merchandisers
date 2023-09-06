@@ -724,3 +724,50 @@ div {
     line-height: 39px; 
     word-wrap: break-word;
 }
+
+
+/* for merchandiser time sheet filter style */
+.form-label.filter {
+    color: #2297C3;
+    font-size: 15px;
+    font-family: Inter;
+    font-weight: 700;
+    line-height: 30px;
+    word-wrap: break-word;
+    margin-bottom: 1rem;
+}
+
+label.form-label.filter::after {
+    content: "";
+    height: 35px;
+    widows: 20px;
+    background-size: auto;
+    background-position: right;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background-size: contain;
+}
+label.form-label.filter.period::after{
+    background-image: url('/assets/images/manager/calendar.gif');
+}
+label.form-label.filter.store::after{
+    background-image: url('/assets/images/manager/store.gif');
+}
+label.form-label.filter.location::after{
+    background-image: url('/assets/images/manager/location.gif');
+}
+/* label.form-label.filter.merchandiser::after{
+    background-image: url('/assets/images/close.png');
+} */
+.form-control.filter {
+    border-radius: 30px !important;
+    padding: 10px;
+    text-align: center;
+    background-color: #f1f1f1!important;
+    font-size: revert;
+}

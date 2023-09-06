@@ -1,13 +1,28 @@
 @extends('manager.layout.app')
 
 @section("top_links")
+@vite(['resources/js/chart.js'])
+
+ <!-- Include jQuery UI for date picker -->
+ {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> --}}
+ {{-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+{{-- 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet"> --}}
 {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css"> --}}
 {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
 @endsection
 
 @section("bottom_links")
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    
+
 @endsection
 
 @section('content')
@@ -20,62 +35,91 @@
         background-color: #f7f7f7;
         color: #233D79;
     }
-    
+
+
+    /* Define a CSS class to apply the background image */
+
+
 </style>
-<div  class="d-flex align-items-center col-actions" style="   max-width: 99%; margin: 1px auto;">
-    <div class="col-md-03 col-03">
-        <div class="" >Period
+
+<div  class="row d-flex align-items-center col-actions" style="   max-width: 99%; margin: 1px auto;">
+    <div class="col-md-3 col-3 p-4">
+        
+        <div class="form-group" >
+            <label for="start_date" class="form-label filter period">Period</label>
+
+            {{-- <form id="date-form"> --}}
+                <input type="date" id="start_date" name="start_date" class="form-control filter" required>
+            
+                {{-- <input type="date" id="end_date" name="end_date" required> --}}
+            
+                {{-- <button type="button" id="submit-button">Submit</button> --}}
+            {{-- </form> --}}
+            
+            {{-- <div id="result-container"></div> --}}
+            
+        </div>
+    </div>
+
+
+    <div class="col-md-3 col-3 p-4">
+        <div class="form-group">
+            <label for="manager_store" class="form-label filter store">Select Store</label>
+            <select onclick="getData()" name="manager_store" class="form-control filter" id="manager_store">
+                <option value="" selected>--Select-- </option>
+                @foreach($stores as $store)
+                <option value="{{$store['id']}}">{{$store['name_of_store']}}</option>
+                @endforeach
+            </select>
+    
         </div>
         
     </div>
 
-
-    <div class="col-md-03 col-03">
-        <label for="">Select Store</label>
-        <select name="manager_store" id="manager_store">
-            <option value="" selected>--Select-- </option>
-            @foreach($stores as $store)
-            <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
-            @endforeach
-        </select>
-
-    </div>
-
-    <div class="col-md-03 col-03">
-        <label for="">Select Location</label>
-        <select name="manager_store_location" id="manager_store_location">
-            <option value="" selected>--Select-- </option>
-            @foreach($stores as $store)
-            <option value="{{$store['location']}}">{{$store['location']}}</option>
-            @endforeach
-        </select>
+    <div class="col-md-3 col-3 p-4">
+        <div class="form-group">
+            <label for="manager_store_location" class="form-label filter location">Select Location</label>
+            <select name="manager_store_location" class="form-control filter"  id="manager_store_location">
+                <option value="" selected>--Select-- </option>
+                @foreach($stores as $store)
+                <option value="{{$store['location']}}">{{$store['location']}}</option>
+                @endforeach
+            </select>
+        </div>
 
     </div>
 
     
-    <div class="col-md-03 col-03">
-        <label for="">Select Merchandiser</label>
-        <select name="merchandiser_name" id="merchandiser_name">
-            <option value="" selected>--Select-- </option>
-            @foreach($merchandiserArray as $merchandiser)
-            <option value="{{$merchandiser['name']}}">{{$merchandiser['name']}}</option>
-            @endforeach
-        </select>
+    <div class="col-md-3 col-3 p-4">
+        <div class="form-group">
+            <label for="merchandiser_name" class="form-label filter merchandiser">Select Merchandiser</label>
+            <select name="merchandiser_name" class="form-control filter"  id="merchandiser_name">
+                <option value="" selected>--Select-- </option>
+                @foreach($merchandiserArray as $merchandiser)
+                <option value="{{$merchandiser['name']}}">{{$merchandiser['name']}}</option>
+                @endforeach
+            </select>   
+        </div>
     </div>
 </div>
-<div style="width: 800px; margin: auto;">
+<div style="width: 1000px; margin: auto;">
     <canvas id="myChart"></canvas>
 </div>
             {{-- {{dd($merchandiserArray)}} --}}
-
-    <button
+<div class="row">
+    <div class="col-12">
+        <button
         class="btn btn-primary btn-sm edit-address"
+        style="float: right"
         type="button"
         data-bs-toggle="modal"
         data-bs-target="#pendingTimeSheet"
         >
         Pending Time Sheets
     </button>
+    </div>
+</div>
+    
 <div class="table-responsive mt-2" style="overflow: auto;">
 
     <table id="dataTable" style="border: 1px solid #ccc; min-width: 1580px; ">
@@ -100,6 +144,9 @@
             
            @php
                 $totalHourworked=0;
+                $chartDateArray = array();
+                $chartHoursArray = array();
+
            @endphp
             @foreach ($merchandiserArray as $merchandiser)
                 {{-- {{dd($merchandiser['time_sheets'])}} --}}
@@ -236,22 +283,157 @@
                     </tr>
 
                     {{-- {{dd('umer')}} --}}
+                    @php
+                        // array_push($chartDateArray ,Carbon\carbon::parse(strval($checkout_time_converted)));
+                        array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$totalHours] );
+                    @endphp
                 @endforeach
                 
             @endforeach
-            {{-- {{dd($totalHourworked)}} --}}
+            {{-- {{dd($chartDateArray, $chartHoursArray)}} --}}
         </tbody>
     </table>
 </div>
-
-<script src="{{('/js/app.js') }}"></script>
 <script>
-    $(document).ready(function () {
-        $('#dataTable').DataTable({
-            // Add any DataTable options you need here
+     var labels = [];
+    var data =  {{ Js::from($chartHoursArray) }};
+function formatDate(date) 
+{
+    // Define an array of month names
+    const monthNames = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    // Get the current month and day
+    const currentMonth = monthNames[date.getMonth()];
+    const currentDay = String(date.getDate()).padStart(2, '0');
+
+    // Create the formatted string
+    var formattedDate = `${currentMonth} ${currentDay}`;
+    return formattedDate;
+}
+function formatDateYMD(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+console.log('----------------------------------------');
+// create weekly dates
+const currentDate = new Date(); // Get the current date
+
+// Calculate the start date of the current week (Sunday)
+const currentWeekStartDate = new Date(currentDate);
+currentWeekStartDate.setDate(currentDate.getDate() - currentDate.getDay());
+
+// Initialize an array to store the previous 6 weeks
+const previousWeeks = [];
+// Calculate the start and end dates for each of the previous 6 weeks
+for (let i = 0; i < 6; i++) {
+  const startDate = new Date(currentWeekStartDate);
+  startDate.setDate(currentWeekStartDate.getDate() - 7 * i); // Subtract 7 days for each previous week
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6); // Add 6 days to get the end of the week
+  previousWeeks.push({ startDate, endDate });
+}
+console.log('**************************************************');
+//check the weeks arroding to their hours
+var workedHrs=0;
+var weekarray=[];
+previousWeeks.forEach(week =>{
+    data.forEach(element => {
+        chkDate=element['date'];
+        if(formatDateYMD(week.startDate)<=chkDate && formatDateYMD(week.endDate)>chkDate)
+        {
+            workedHrs+= element['hours'] ;
+            console.log("date for check is "+ chkDate+ ", now hours " +workedHrs);
+        }else{
+            console.log("date for check is "+ chkDate+ " <br> start date "+ formatDateYMD(week.startDate)+ "<br> end date "+ formatDateYMD(week.endDate));
+        }
+    });
+
+weekarray.push(workedHrs);
+workedHrs =0 ;
+});
+console.log('**************************************************');
+
+
+
+console.log(weekarray, 'working hours array weekly');
+console.log('Current Week Start Date:', currentWeekStartDate);
+console.log('Previous 6 Weeks:', previousWeeks);
+
+previousWeeks.forEach(function(element) {
+//   console.log(element.startDate);
+  element.startDate = formatDate(element.startDate);
+  element.endDate = formatDate(element.endDate);
+});
+console.log('Previous 6 Weeks:', previousWeeks);
+const previousWeeksArray = [];
+previousWeeks.forEach(function(element) {
+//   console.log(element.startDate);
+  previousWeeksArray.push(element.startDate + ' - ' + element.endDate);
+});
+console.log(previousWeeksArray);
+
+hoursWorked = weekarray.reverse();
+labels = previousWeeksArray.reverse();
+</script>
+
+
+<script>
+    // $(document).ready(function () {
+    //     $('#dataTable').DataTable({
+    //         // Add any DataTable options you need here
+    //     });
+    // });
+    
+</script>
+<script>
+
+    function getData() {
+        
+       
+    }
+
+    document.addEventListener("DOMContentLoaded", function () 
+    {
+        const selecedStore=document.getElementById('manager_store');
+       const selectMerchandiser=document.getElementById('merchandiser_name');
+       const selectStoreLocation=document.getElementById('manager_store_location');
+
+       selecedStore.addEventListener("change", function () 
+       {
+            const selectedOption = selecedStore.value;
+        
+            // Send an AJAX request
+            $.ajax({
+                    url: '/getData', // Replace with your Laravel route URL
+                    method: 'GET', // Use POST or GET as appropriate
+                    data: {
+                        value: selectedOption // Send the selected value to the server
+                    },
+                    success: function (response) {
+                        // Update the result div with the response from the server
+                        
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
         });
     });
-    
+
+
+    //     flatpickr('#startDate', {
+    //   enableTime: true,
+    //   allowInput: true,
+    //   dateFormat: "m/d/Y h:iK",
+    //   "plugins": [new rangePlugin({ input: "#endDate"})]
+    // });
 </script>
 @include('manager/merchandiserTimeSheet/pendingTimeSheets')
 
