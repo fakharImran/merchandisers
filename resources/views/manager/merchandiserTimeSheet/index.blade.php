@@ -14,15 +14,50 @@
 {{-- 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet"> --}}
-{{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css"> --}}
-{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 @endsection
 
 @section("bottom_links")
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     
+<script>
+    
+$(document).ready(function() {
+    var table = $('#datatable').DataTable({
+    // Add your custom options here
+    scrollX: true, // scroll horizontally
+    paging: true, // Enable pagination
+    searching: true, // Enable search bar
+    ordering: true, // Enable column sorting
+    lengthChange: true, // Show a dropdown for changing the number of records shown per page
+    pageLength: 10, // Set the default number of records shown per page to 10
+    dom: 'lBfrtip', // Define the layout of DataTable elements (optional)
+    buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
+    "pagingType": "full_numbers"
 
+    
+  });
+  // Custom search input for 'Name' column
+  $('#store-search').on('change', function() {
+
+    table.column(0).search(this.value).draw();
+    // changeGraph(this.value)
+
+  });
+  $('#location-search').on('change', function() {
+    table.column(1).search(this.value).draw();
+  });
+  $('#merchandiser-search').on('change', function() {
+    table.column(9).search(this.value).draw();
+  });
+});
+</script>
 @endsection
 
 @section('content')
@@ -64,11 +99,11 @@
 
     <div class="col-md-3 col-3 p-4">
         <div class="form-group">
-            <label for="manager_store" class="form-label filter store">Select Store</label>
-            <select onclick="getData()" name="manager_store" class="form-control filter" id="manager_store">
+            <label for="store-search" class="form-label filter store">Select Store</label>
+            <select name="store-search" class="form-control filter" id="store-search">
                 <option value="" selected>--Select-- </option>
                 @foreach($stores as $store)
-                <option value="{{$store['id']}}">{{$store['name_of_store']}}</option>
+                <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                 @endforeach
             </select>
     
@@ -78,8 +113,8 @@
 
     <div class="col-md-3 col-3 p-4">
         <div class="form-group">
-            <label for="manager_store_location" class="form-label filter location">Select Location</label>
-            <select name="manager_store_location" class="form-control filter"  id="manager_store_location">
+            <label for="location-search" class="form-label filter location">Select Location</label>
+            <select name="location-search" class="form-control filter"  id="location-search">
                 <option value="" selected>--Select-- </option>
                 @foreach($stores as $store)
                 <option value="{{$store['location']}}">{{$store['location']}}</option>
@@ -92,8 +127,8 @@
     
     <div class="col-md-3 col-3 p-4">
         <div class="form-group">
-            <label for="merchandiser_name" class="form-label filter merchandiser">Select Merchandiser</label>
-            <select name="merchandiser_name" class="form-control filter"  id="merchandiser_name">
+            <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
+            <select name="merchandiser-search" class="form-control filter"  id="merchandiser-search">
                 <option value="" selected>--Select-- </option>
                 @foreach($merchandiserArray as $merchandiser)
                 <option value="{{$merchandiser['name']}}">{{$merchandiser['name']}}</option>
@@ -121,23 +156,24 @@
 </div>
     
 <div class="table-responsive mt-2" style="overflow: auto;">
-
-    <table id="dataTable" style="border: 1px solid #ccc; min-width: 1580px; ">
+    {{-- <table id="customDataTable" class="table  datatable table-bordered table-hover table-responsive nowrap" style="width:100%"> --}}
+        {{-- table-responsive --}}
+    <table id="datatable" class="table table-sm  datatable table-bordered table-hover  nowrap" style="border: 1px solid #ccc; min-width: 1580px; ">
         <thead>
             <tr>
-                <th>Name of Store</th>
-                <th>Location</th>
-                <th>Check-in Time</th>
-                <th>Check-in GPS Location</th>
-                <th>Break Time</th>
-                <th>Lunch Time</th>
-                <th>Check-out Time</th>
-                <th>Check-out GPS Location</th>
-                <th>Hours Worked</th>
-                <th>Merchandiser</th>
-                <th>Store Manager</th>
-                <th>Signature</th>
-                <th>Time of Signature</th>
+                <th class="thclass" scope="col">Name of Store</th>
+                <th class="thclass" scope="col">Location</th>
+                <th class="thclass" scope="col">Check-in Time</th>
+                <th class="thclass" scope="col">Check-in GPS Location</th>
+                <th class="thclass" scope="col">Break Time</th>
+                <th class="thclass" scope="col">Lunch Time</th>
+                <th class="thclass" scope="col">Check-out Time</th>
+                <th class="thclass" scope="col">Check-out GPS Location</th>
+                <th class="thclass" scope="col">Hours Worked</th>
+                <th class="thclass" scope="col">Merchandiser</th>
+                <th class="thclass" scope="col">Store Manager</th>
+                <th class="thclass" scope="col">Signature</th>
+                <th class="thclass" scope="col">Time of Signature</th>
             </tr>
         </thead>
         <tbody>
@@ -220,25 +256,25 @@
                     @endphp         
                     <tr>
 
-                        <td>{{$merchandiser_time_sheet->store->name_of_store}}</td>
-                        <td>{{$merchandiser_time_sheet->store->location}}</td>
-                        <td>
+                        <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
+                        <td  class="tdclass">{{$merchandiser_time_sheet->store->location}}</td>
+                        <td  class="tdclass">
                             @if($checkin_date_time!='N/A')
                             {{Carbon\carbon::parse(strval($checkin_date_time))->format('Y-m-d h:m A')}}
                             @endif
                             </td>
-                        <td>{{$checkin_location}}</td>
-                        <td>
+                        <td  class="tdclass">{{$checkin_location}}</td>
+                        <td  class="tdclass">
                             @if($break_date_time!='N/A')
                             {{Carbon\carbon::parse(strval($break_date_time))->format('Y-m-d h:m A')}}
                             @endif
                         </td>
-                        <td>
+                        <td  class="tdclass">
                             @if($lunch_date_time!='N/A')
                             {{Carbon\carbon::parse(strval($lunch_date_time))->format('Y-m-d h:m A')}}
                             @endif
                         </td>
-                        <td>
+                        <td  class="tdclass">
                             @if($checkout_date_time!='N/A')
                             @php
                                 $checkout_time_converted= Carbon\carbon::parse(strval($checkout_date_time))->format('Y-m-d h:m A')
@@ -246,12 +282,12 @@
                             {{$checkout_time_converted}}
                             @endif
                         </td>
-                        <td>{{$checkout_location}}</td>
-                        <td>{{$hoursWorked}} hrs, {{$minutesWorked}} mins</td>
-                        {{-- <td>{{}}</td> --}}
-                        <td>{{$merchandiser['name']}}</td>
-                        <td>{{$manager->name}}</td>
-                        <td>
+                        <td  class="tdclass">{{$checkout_location}}</td>
+                        <td  class="tdclass">{{$hoursWorked}} hrs, {{$minutesWorked}} mins</td>
+                        {{-- <td  class="tdclass">{{}}</td> --}}
+                        <td  class="tdclass">{{$merchandiser['name']}}</td>
+                        <td  class="tdclass">{{$manager->name}}</td>
+                        <td  class="tdclass">
                             <?php
                                 $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
                             
@@ -265,7 +301,7 @@
                                 }
                             ?>    
                         </td>
-                        <td>
+                        <td  class="tdclass">
                             <?php
                                 $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
                             
@@ -297,6 +333,7 @@
 <script>
      var labels = [];
     var data =  {{ Js::from($chartHoursArray) }};
+
 function formatDate(date) 
 {
     // Define an array of month names
@@ -320,7 +357,7 @@ function formatDateYMD(date) {
   return `${year}-${month}-${day}`;
 }
 
-console.log('----------------------------------------');
+// console.log('----------------------------------------');
 // create weekly dates
 const currentDate = new Date(); // Get the current date
 
@@ -338,7 +375,7 @@ for (let i = 0; i < 6; i++) {
   endDate.setDate(startDate.getDate() + 6); // Add 6 days to get the end of the week
   previousWeeks.push({ startDate, endDate });
 }
-console.log('**************************************************');
+// console.log('**************************************************');
 //check the weeks arroding to their hours
 var workedHrs=0;
 var weekarray=[];
@@ -348,29 +385,29 @@ previousWeeks.forEach(week =>{
         if(formatDateYMD(week.startDate)<=chkDate && formatDateYMD(week.endDate)>chkDate)
         {
             workedHrs+= element['hours'] ;
-            console.log("date for check is "+ chkDate+ ", now hours " +workedHrs);
+            // console.log("date for check is "+ chkDate+ ", now hours " +workedHrs);
         }else{
-            console.log("date for check is "+ chkDate+ " <br> start date "+ formatDateYMD(week.startDate)+ "<br> end date "+ formatDateYMD(week.endDate));
+            // console.log("date for check is "+ chkDate+ " <br> start date "+ formatDateYMD(week.startDate)+ "<br> end date "+ formatDateYMD(week.endDate));
         }
     });
 
 weekarray.push(workedHrs);
 workedHrs =0 ;
 });
-console.log('**************************************************');
+// console.log('**************************************************');
 
 
 
-console.log(weekarray, 'working hours array weekly');
-console.log('Current Week Start Date:', currentWeekStartDate);
-console.log('Previous 6 Weeks:', previousWeeks);
+// console.log(weekarray, 'working hours array weekly');
+// console.log('Current Week Start Date:', currentWeekStartDate);
+// console.log('Previous 6 Weeks:', previousWeeks);
 
 previousWeeks.forEach(function(element) {
 //   console.log(element.startDate);
   element.startDate = formatDate(element.startDate);
   element.endDate = formatDate(element.endDate);
 });
-console.log('Previous 6 Weeks:', previousWeeks);
+// console.log('Previous 6 Weeks:', previousWeeks);
 const previousWeeksArray = [];
 previousWeeks.forEach(function(element) {
 //   console.log(element.startDate);
@@ -392,41 +429,6 @@ labels = previousWeeksArray.reverse();
     
 </script>
 <script>
-
-    function getData() {
-        
-       
-    }
-
-    document.addEventListener("DOMContentLoaded", function () 
-    {
-        const selecedStore=document.getElementById('manager_store');
-       const selectMerchandiser=document.getElementById('merchandiser_name');
-       const selectStoreLocation=document.getElementById('manager_store_location');
-
-       selecedStore.addEventListener("change", function () 
-       {
-            const selectedOption = selecedStore.value;
-        
-            // Send an AJAX request
-            $.ajax({
-                    url: '/getData', // Replace with your Laravel route URL
-                    method: 'GET', // Use POST or GET as appropriate
-                    data: {
-                        value: selectedOption // Send the selected value to the server
-                    },
-                    success: function (response) {
-                        // Update the result div with the response from the server
-                        
-                        console.log(response);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-        });
-    });
-
 
     //     flatpickr('#startDate', {
     //   enableTime: true,
