@@ -764,7 +764,7 @@ label.form-label.filter.location::after{
 /* label.form-label.filter.merchandiser::after{
     background-image: url('/assets/images/close.png');
 } */
-.form-control.filter {
+.form-control.filter, .form-select.filter {
     border-radius: 30px !important;
     padding: 10px;
     text-align: center;
