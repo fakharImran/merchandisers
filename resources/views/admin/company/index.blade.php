@@ -59,17 +59,14 @@ $(document).ready(function() {
 
     
   });
-//   $('.table_btn_list').appendTo(table.table().container());
 
   $('#customSearchInput').on('keyup', function() {
     table.search(this.value).draw();
   });
-
   // Custom search input for 'Name' column
   $('#name-search').on('change', function() {
     table.column(2).search(this.value).draw();
   });
-
   $('#next').on('click', function() {
       if (table.page() < table.pages() - 1) {
         customPagination(table.page() + 1);
@@ -81,51 +78,47 @@ $(document).ready(function() {
       }
    });
 
-
     
   var $paginationContainer = $('.custom-pagination');
 
-function goToPage(pageNumber) {
-  table.page(pageNumber).draw('page');
-  updatePaginationButtons();
-}
-
-function updatePaginationButtons() {
-  var currentPage = table.page();
-  var totalPages = table.page.info().pages;
-  var pageInfo = table.page.info();
-
-  $paginationContainer.empty();
-
-  if (currentPage >= 0) {
-    $paginationContainer.append(`<img class=" clickable-element next-prev-icon-style custom-page-btn prev" src="{{asset('assets/images/privious.png')}}"> ${pageInfo.start + 1} `);
+  function goToPage(pageNumber) {
+    table.page(pageNumber).draw('page');
+    updatePaginationButtons();
   }
 
-//   for (var i = 0; i < totalPages; i++) {
-//     var activeClass = currentPage === i ? 'active' : '';
-//     $paginationContainer.append('<button class="custom-page-btn ' + activeClass + '">' + (i + 1) + '</button>');
-//   }
+  function updatePaginationButtons() {
+    var currentPage = table.page();
+    var totalPages = table.page.info().pages;
+    var pageInfo = table.page.info();
 
-  if (currentPage <= totalPages - 1) {
-    $paginationContainer.append(`- ${pageInfo.end} <img  class=" clickable-element next-prev-icon-style custom-page-btn next"  src="{{asset('assets/images/next.png')}}">`);
-  }
+    $paginationContainer.empty();
 
-  $('.custom-page-btn').on('click', function() {
-    if ($(this).hasClass('prev')) {
-      goToPage(currentPage - 1);
-    } else if ($(this).hasClass('next')) {
-      goToPage(currentPage + 1);
-    } else {
-      goToPage(parseInt($(this).text()) - 1);
+    if (currentPage >= 0) {
+      $paginationContainer.append(`<img class=" clickable-element next-prev-icon-style custom-page-btn prev" src="{{asset('assets/images/privious.png')}}"> ${pageInfo.start + 1} `);
     }
-  });
-}
+    //   for (var i = 0; i < totalPages; i++) {
+    //     var activeClass = currentPage === i ? 'active' : '';
+    //     $paginationContainer.append('<button class="custom-page-btn ' + activeClass + '">' + (i + 1) + '</button>');
+    //   }
 
-updatePaginationButtons();
+    if (currentPage <= totalPages - 1) {
+      $paginationContainer.append(`- ${pageInfo.end} <img  class=" clickable-element next-prev-icon-style custom-page-btn next"  src="{{asset('assets/images/next.png')}}">`);
+    }
 
+    $('.custom-page-btn').on('click', function() {
+      if ($(this).hasClass('prev')) {
+        goToPage(currentPage - 1);
+      } else if ($(this).hasClass('next')) {
+        goToPage(currentPage + 1);
+      } else {
+        goToPage(parseInt($(this).text()) - 1);
+      }
+    });
+  }
 
+  updatePaginationButtons();
 
-    // Update the custom button text with the current page length
+  // Update the custom button text with the current page length
   $('.current_pages').text(table.page.len());
   
   // Handle custom button click (Dropdown item selection)
@@ -138,10 +131,6 @@ updatePaginationButtons();
     $('.current_pages').text(length);
   });
 
-
-
-
-
   function updateTableInfo() {
     var pageInfo = table.page.info();
     var infoText = `${pageInfo.recordsTotal} records in total`;
@@ -151,10 +140,8 @@ updatePaginationButtons();
     $('.custom-table-info').text(infoText);
     $('.start_page').text(startPage);
     $('.end_page').text(endPage);
-
-
   }
-//  `Showing ${pageInfo.start + 1} to ${pageInfo.end} of ${pageInfo.recordsTotal} entries`
+  //  `Showing ${pageInfo.start + 1} to ${pageInfo.end} of ${pageInfo.recordsTotal} entries`
   // Call the function to set the initial table information
   updateTableInfo();
 
@@ -162,8 +149,6 @@ updatePaginationButtons();
   table.on('page.dt', function() {
     updateTableInfo();
   });
-
-
 });
 </script>
 @endsection
@@ -183,9 +168,6 @@ updatePaginationButtons();
             </div>
         </div> --}}
     </div>
-
-
-
 
     <div class="row" style="    max-width: 99%; margin: 1px auto; font-size: 12px;">
         <div class="col-12">

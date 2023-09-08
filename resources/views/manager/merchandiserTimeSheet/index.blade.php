@@ -45,38 +45,79 @@
 
 
     $(document).ready(function() {
-        var table = $('#datatable').DataTable({
-        // Add your custom options here
-        scrollX: true, // scroll horizontally
-        paging: true, // Enable pagination
-        searching: true, // Enable search bar
-        ordering: true, // Enable column sorting
-        lengthChange: true, // Show a dropdown for changing the number of records shown per page
-        pageLength: 10, // Set the default number of records shown per page to 10
-        dom: 'lBfrtip', // Define the layout of DataTable elements (optional)
-        buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
-        "pagingType": "full_numbers"
-    });
-    // Custom search input for 'Name' column
-    $('#store-search').on('change', function() {
+        var table = $('#customDataTable').DataTable({
+            // Add your custom options here
+            scrollX: true, // scroll horizontally
+            paging: true, // Enable pagination
+            searching: true, // Enable search bar
+            ordering: true, // Enable column sorting
+            lengthChange: false, // Show a dropdown for changing the number of records shown per page
+            pageLength: 10, // Set the default number of records shown per page to 10
+            dom: 'lBfrtip', // Define the layout of DataTable elements (optional)
+            buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
+            "pagingType": "full_numbers"
+        });
+        // Custom search input for 'Name' column
+        $('#store-search').on('change', function() {
 
-        // Perform the search on the first column of the DataTable
-        var tempData = table.column(0).search(this.value).draw();
-        data = changeGraph(table);
-        console.log(data);
-        // convertingData();
-        // updateChart();
-    });
-    $('#location-search').on('change', function() {
-        table.column(1).search(this.value).draw();
-        data = changeGraph(table);
-        console.log(data);
-    });
-    $('#merchandiser-search').on('change', function() {
-        table.column(9).search(this.value).draw();
-        data = changeGraph(table);
-        console.log(data);
-    });
+            // Perform the search on the first column of the DataTable
+            var tempData = table.column(0).search(this.value).draw();
+            data = changeGraph(table);
+            console.log(data);
+        });
+        $('#location-search').on('change', function() {
+            table.column(1).search(this.value).draw();
+            data = changeGraph(table);
+            console.log(data);
+        });
+        $('#merchandiser-search').on('change', function() {
+            table.column(9).search(this.value).draw();
+            data = changeGraph(table);
+            console.log(data);
+        });
+        $('#period-search').on('change', function() {
+            console.log(this.value);
+            
+            if (this.value.includes('to')) {
+                const parts = this.value.split('to');
+                console.log('parts: ', parts);
+                
+
+                var start = parts[0].trim(); // Remove leading/trailing spaces
+                startDate = start.replace(/^\s+/, ''); // Remove the first space
+                startDate=new Date(startDate);
+                var startDate=formatDateYMD(startDate);
+                console.log("start date", startDate);
+
+
+                var end = parts[1].trim(); // Remove leading/trailing spaces
+                endDate = end.replace(/^\s+/, ''); // Remove the first space
+                endDate=new Date(endDate);
+                var endDate=formatDateYMD(endDate);
+                console.log("end date", endDate);
+
+
+                table.column(6).search('', true, false).draw(); // Clear previous search
+
+                var searchTerms = []; // Initialize an array to store search terms
+
+                table.column(6).data().each(function (value, index) {
+                    var rowDate = new Date(value);
+                    rowDate = formatDateYMD(rowDate);
+                    console.log(rowDate);
+
+                    if (startDate <= rowDate && rowDate <= endDate) {
+                        searchTerms.push(value); // Add valid dates to the array
+                    }
+                });
+
+                table.column(6).search(searchTerms.join('|'), true, false, true).draw(); // Join and apply search terms
+               
+            } else {
+                console.log("The substring 'to' does not exist in the original string.");
+            }
+          
+        });
     });
 </script>
 @endsection
@@ -85,7 +126,7 @@
 <style>
     td, th{
         border: 2px solid #ccc;
-        padding: 10px;
+        /* padding: 10px; */
     }
     th{
         background-color: #f7f7f7;
@@ -93,214 +134,221 @@
     }
     /* Define a CSS class to apply the background image */
 </style>
+<div class="container">
 
-<div  class="row d-flex align-items-center col-actions" style="   max-width: 99%; margin: 1px auto;">
-    <div class="col-md-3 col-3 p-4">
-        
-        <div class="form-group" >
-            <label for="start_date" class="form-label filter period">Period</label>
-                <input type="date" id="start_date" name="start_date" class="form-control filter" required>
+    <div  class="row d-flex align-items-center col-actions" style="   max-width: 99%; margin: 1px auto;">
+        <div class="col-md-3 col-3 p-4">
+            
+            <div class="form-group" >
+                <label for="period-search" class="form-label filter -search">Period</label>
+                <input type="text" id="period-search" value="Date Range" class=" form-control filter">
+            </div>
         </div>
-    </div>
-    <div class="col-md-3 col-3 p-4">
-        <div class="form-group">
-            <label for="store-search" class="form-label filter store">Select Store</label>
-            <select name="store-search" class=" filter form-select" id="store-search">
-                <option value="" selected>--Select-- </option>
-                @foreach($stores as $store)
-                <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3 col-3 p-4">
-        <div class="form-group">
-            <label for="location-search" class="form-label filter location">Select Location</label>
-            <select name="location-search" class=" filter form-select"  id="location-search">
-                <option value="" selected>--Select-- </option>
-                @foreach($stores as $store)
-                <option value="{{$store['location']}}">{{$store['location']}}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3 col-3 p-4">
-        <div class="form-group">
-            <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
-            <select name="merchandiser-search" class=" filter form-select"  id="merchandiser-search">
-                <option value="" selected>--Select-- </option>
-                @foreach($merchandiserArray as $merchandiser)
-                <option value="{{$merchandiser['name']}}">{{$merchandiser['name']}}</option>
-                @endforeach
-            </select>   
-        </div>
-    </div>
-</div>
-<div style="width: 1000px; margin: auto;">
-    <canvas id="myChart"></canvas>
-</div>
-<div class="row">
-    <div class="col-12">
-        <button
-        class="btn btn-primary btn-sm edit-address"
-        style="float: right"
-        type="button"
-        data-bs-toggle="modal"
-        data-bs-target="#pendingTimeSheet"
-        >
-        Pending Time Sheets
-    </button>
-    </div>
-</div>
-    
-<div class="table-responsive mt-2" style="overflow: auto;">
-        {{-- table-responsive --}}
-    <table id="datatable" class="table table-sm  datatable table-hover  nowrap" style="border: 1px solid #ccc; min-width: 1580px; ">
-        <thead>
-            <tr>
-                <th class="thclass" scope="col">Name of Store</th>
-                <th class="thclass" scope="col">Location</th>
-                <th class="thclass" scope="col">Check-in Time</th>
-                <th class="thclass" scope="col">Check-in GPS Location</th>
-                <th class="thclass" scope="col">Break Time</th>
-                <th class="thclass" scope="col">Lunch Time</th>
-                <th class="thclass" scope="col">Check-out Time</th>
-                <th class="thclass" scope="col">Check-out GPS Location</th>
-                <th class="thclass" scope="col">Hours Worked</th>
-                <th class="thclass" scope="col">Merchandiser</th>
-                <th class="thclass" scope="col">Store Manager</th>
-                <th class="thclass" scope="col">Signature</th>
-                <th class="thclass" scope="col">Time of Signature</th>
-            </tr>
-        </thead>
-        <tbody>
-           @php
-                $totalHourworked=0;
-                $chartDateArray = array();
-                $chartHoursArray = array();
-           @endphp
-            @foreach ($merchandiserArray as $merchandiser)
-                {{-- {{dd($merchandiser['time_sheets'])}} --}}
-                @foreach ($merchandiser['time_sheets'] as $merchandiser_time_sheet)
-                    @php
-                        $manager = $merchandiser_time_sheet->manager($merchandiser_time_sheet->store_manager_id);
-
-                        $checkin_date_time = 'N/A';
-                        $checkin_location = 'N/A';
-                        $lunch_date_time = 'N/A';
-                        $break_date_time = 'N/A';
-                        $checkout_date_time = 'N/A';
-                        $checkout_location = 'N/A';
-                    @endphp
-                    @foreach ($merchandiser_time_sheet->timeSheetRecords as $time_sheet_record)
-                    
-                        @switch($time_sheet_record->status)
-                            @case('check-in')
-                                @php
-                                    $checkin_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                    $checkin_location = $time_sheet_record->gps_location;
-                                @endphp
-                                @break
-                            @case('lunch')
-                                @php
-                                    $lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                @endphp
-                                @break
-                            @case('break')
-                                @php
-                                    $break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                @endphp
-                                @break
-                            @case('check-out')
-                                @php
-                                    $checkout_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                    $checkout_location = $time_sheet_record->gps_location;
-                                @endphp
-                                @break
-                            @default
-                        @endswitch
+        <div class="col-md-3 col-3 p-4">
+            <div class="form-group">
+                <label for="store-search" class="form-label filter store">Select Store</label>
+                <select name="store-search" class=" filter form-select" id="store-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($stores as $store)
+                    <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                     @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-4">
+            <div class="form-group">
+                <label for="location-search" class="form-label filter location">Select Location</label>
+                <select name="location-search" class=" filter form-select"  id="location-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($stores as $store)
+                    <option value="{{$store['location']}}">{{$store['location']}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-4">
+            <div class="form-group">
+                <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
+                <select name="merchandiser-search" class=" filter form-select"  id="merchandiser-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($merchandiserArray as $merchandiser)
+                    <option value="{{$merchandiser['name']}}">{{$merchandiser['name']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+    </div>
+    <div style="width: 800px; margin: auto;">
+        <canvas id="myChart"></canvas>
+    </div>
+    {{-- <div class="row">
+        <div class="col-12">
+            <button
+                class="btn btn-primary btn-sm edit-address"
+                style="float: right"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#pendingTimeSheet"
+                >
+                Pending Time Sheets
+            </button>
+        </div>
+    </div> --}}
+    <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
+        <div class="col-12">
+
+            <div class="table-responsive" >
+                    {{-- table-responsive --}}
+                    {{-- nowrap --}}
+                <table id="customDataTable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
+                    <thead>
+                        <tr>
+                            <th class="thclass" scope="col">Name of Store</th>
+                            <th class="thclass" scope="col">Location</th>
+                            <th class="thclass" scope="col">Check-in Time</th>
+                            <th class="thclass" scope="col">Check-in GPS Location</th>
+                            <th class="thclass" scope="col">Break Time</th>
+                            <th class="thclass" scope="col">Lunch Time</th>
+                            <th class="thclass" scope="col">Check-out Time</th>
+                            <th class="thclass" scope="col">Check-out GPS Location</th>
+                            <th class="thclass" scope="col">Hours Worked</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
+                            <th class="thclass" scope="col">Store Manager</th>
+                            <th class="thclass" scope="col">Signature</th>
+                            <th class="thclass" scope="col">Time of Signature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     @php
-                        
-                        $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
-                        // Check-out date and time
-                        $checkoutDateTime = new DateTime($checkout_date_time); // Replace with your actual check-out date and time
-                        // Calculate the difference
-                        $interval = $checkinDateTime->diff($checkoutDateTime);
-                        // Calculate the total hours
-                        $hoursWorked = $interval->days * 24 + $interval->h ;
-                        $minutesWorked = $interval->i ;
-                        $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
-                        $totalHourworked+= $totalHours;
-                    @endphp         
-                    <tr>
-                        <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
-                        <td  class="tdclass">{{$merchandiser_time_sheet->store->location}}</td>
-                        <td  class="tdclass">
-                            @if($checkin_date_time!='N/A')
-                            {{Carbon\carbon::parse(strval($checkin_date_time))->format('Y-m-d h:m A')}}
-                            @endif
-                            </td>
-                        <td  class="tdclass">{{$checkin_location}}</td>
-                        <td  class="tdclass">
-                            @if($break_date_time!='N/A')
-                            {{Carbon\carbon::parse(strval($break_date_time))->format('Y-m-d h:m A')}}
-                            @endif
-                        </td>
-                        <td  class="tdclass">
-                            @if($lunch_date_time!='N/A')
-                            {{Carbon\carbon::parse(strval($lunch_date_time))->format('Y-m-d h:m A')}}
-                            @endif
-                        </td>
-                        <td  class="tdclass">
-                            @if($checkout_date_time!='N/A')
-                            @php
-                                $checkout_time_converted= Carbon\carbon::parse(strval($checkout_date_time))->format('Y-m-d h:m A')
-                            @endphp
-                            {{$checkout_time_converted}}
-                            @endif
-                        </td>
-                        <td  class="tdclass">{{$checkout_location}}</td>
-                        <td  class="tdclass">{{$hoursWorked}} hrs, {{$minutesWorked}} mins</td>
-                        {{-- <td  class="tdclass">{{}}</td> --}}
-                        <td  class="tdclass">{{$merchandiser['name']}}</td>
-                        <td  class="tdclass">{{$manager->name}}</td>
-                        <td  class="tdclass">
-                            @php
-                                $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
-                                if (file_exists($imagePath)) 
-                                {
-                                    echo "<img width='100' src='" . asset('storage/' . $merchandiser_time_sheet->signature) . "' />";
-                                } 
-                                else 
-                                {
-                                    echo "N/A";
-                                }
-                            @endphp     
-                        </td>
-                        <td  class="tdclass">
-                            @php
-                                $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
-                            
-                                if (file_exists($imagePath)) 
-                                {
-                                    echo "$checkout_time_converted";
-                                } 
-                                else 
-                                {
-                                    echo "N/A";
-                                }
-                            @endphp   
-                        </td>
-                    </tr>
-                    @php
-                        array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$totalHours] );
+                            $totalHourworked=0;
+                            $chartDateArray = array();
+                            $chartHoursArray = array();
                     @endphp
-                @endforeach
-            @endforeach
-            {{-- {{dd($chartHoursArray)}} --}}
-        </tbody>
-    </table>
+                        @foreach ($merchandiserArray as $merchandiser)
+                            {{-- {{dd($merchandiser['time_sheets'])}} --}}
+                            @foreach ($merchandiser['time_sheets'] as $merchandiser_time_sheet)
+                                @php
+                                    $manager = $merchandiser_time_sheet->manager($merchandiser_time_sheet->store_manager_id);
+
+                                    $checkin_date_time = 'N/A';
+                                    $checkin_location = 'N/A';
+                                    $lunch_date_time = 'N/A';
+                                    $break_date_time = 'N/A';
+                                    $checkout_date_time = 'N/A';
+                                    $checkout_location = 'N/A';
+                                @endphp
+                                @foreach ($merchandiser_time_sheet->timeSheetRecords as $time_sheet_record)
+                                
+                                    @switch($time_sheet_record->status)
+                                        @case('check-in')
+                                            @php
+                                                $checkin_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $checkin_location = $time_sheet_record->gps_location;
+                                            @endphp
+                                            @break
+                                        @case('lunch')
+                                            @php
+                                                $lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            @endphp
+                                            @break
+                                        @case('break')
+                                            @php
+                                                $break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            @endphp
+                                            @break
+                                        @case('check-out')
+                                            @php
+                                                $checkout_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $checkout_location = $time_sheet_record->gps_location;
+                                            @endphp
+                                            @break
+                                        @default
+                                    @endswitch
+                                @endforeach
+                                @php
+                                    
+                                    $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
+                                    // Check-out date and time
+                                    $checkoutDateTime = new DateTime($checkout_date_time); // Replace with your actual check-out date and time
+                                    // Calculate the difference
+                                    $interval = $checkinDateTime->diff($checkoutDateTime);
+                                    // Calculate the total hours
+                                    $hoursWorked = $interval->days * 24 + $interval->h ;
+                                    $minutesWorked = $interval->i ;
+                                    $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
+                                    $totalHourworked+= $totalHours;
+                                @endphp         
+                                <tr>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->store->location}}</td>
+                                    <td  class="tdclass">
+                                        @if($checkin_date_time!='N/A')
+                                        {{Carbon\carbon::parse(strval($checkin_date_time))->format('Y-m-d h:m A')}}
+                                        @endif
+                                        </td>
+                                    <td  class="tdclass">{{$checkin_location}}</td>
+                                    <td  class="tdclass">
+                                        @if($break_date_time!='N/A')
+                                        {{Carbon\carbon::parse(strval($break_date_time))->format('Y-m-d h:m A')}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">
+                                        @if($lunch_date_time!='N/A')
+                                        {{Carbon\carbon::parse(strval($lunch_date_time))->format('Y-m-d h:m A')}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">
+                                        @if($checkout_date_time!='N/A')
+                                        @php
+                                            $checkout_time_converted= Carbon\carbon::parse(strval($checkout_date_time))->format('Y-m-d h:m A')
+                                        @endphp
+                                        {{$checkout_time_converted}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">{{$checkout_location}}</td>
+                                    <td  class="tdclass">{{$hoursWorked}} hrs, {{$minutesWorked}} mins</td>
+                                    {{-- <td  class="tdclass">{{}}</td> --}}
+                                    <td  class="tdclass">{{$merchandiser['name']}}</td>
+                                    <td  class="tdclass">{{$manager->name}}</td>
+                                    <td  class="tdclass">
+                                        @php
+                                            $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
+                                            if (file_exists($imagePath)) 
+                                            {
+                                                echo "<img width='100' src='" . asset('storage/' . $merchandiser_time_sheet->signature) . "' />";
+                                            } 
+                                            else 
+                                            {
+                                                echo "N/A";
+                                            }
+                                        @endphp     
+                                    </td>
+                                    <td  class="tdclass">
+                                        @php
+                                            $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
+                                        
+                                            if (file_exists($imagePath)) 
+                                            {
+                                                echo "$checkout_time_converted";
+                                            } 
+                                            else 
+                                            {
+                                                echo "N/A";
+                                            }
+                                        @endphp   
+                                    </td>
+                                </tr>
+                                @php
+                                    array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$totalHours] );
+                                @endphp
+                            @endforeach
+                        @endforeach
+                        {{-- {{dd($chartHoursArray)}} --}}
+                    </tbody>
+                </table>
+            </div>
+        </div>  
+    </div>
 </div>
 <script>
     var labels = [];
@@ -394,6 +442,17 @@
     convertingData(chartData);
 
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr("#period-search", {
+            dateFormat: "M d, Y",
+            altFormat: "F j, Y",
+            mode: "range",
+            });
+    });
+</script>
+ 
+
 
 @include('manager/merchandiserTimeSheet/pendingTimeSheets')
 
