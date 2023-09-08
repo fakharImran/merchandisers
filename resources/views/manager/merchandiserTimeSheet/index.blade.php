@@ -269,41 +269,55 @@
                                     
                                     $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
                                     // Check-out date and time
+                                    $timestamp = strtotime($checkin_date_time);
+                                    $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
                                     $checkoutDateTime = new DateTime($checkout_date_time); // Replace with your actual check-out date and time
                                     // Calculate the difference
+                                    $timestamp = strtotime($checkout_date_time);
+                                    $formatedCheckoutDateTime = date("Y-m-d h:i A", $timestamp);
+
+                                    $timestamp = strtotime($break_date_time);
+                                    $formatedBreakTime = date("Y-m-d h:i A", $timestamp);
+
+                                    $timestamp = strtotime($lunch_date_time);
+                                    $formatedLunchTime = date("Y-m-d h:i A", $timestamp);
+
                                     $interval = $checkinDateTime->diff($checkoutDateTime);
+                                    
                                     // Calculate the total hours
                                     $hoursWorked = $interval->days * 24 + $interval->h ;
                                     $minutesWorked = $interval->i ;
                                     $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
                                     $totalHourworked+= $totalHours;
+
+                                    // dd(
+                                    //    "chekin", $checkin_date_time, $formatedCheckinDateTime, "checkout",   $checkout_date_time, $formatedCheckoutDateTime, "break",
+                                    // $break_date_time, $formatedBreakTime, 'lunch' ,$lunch_date_time, $formatedLunchTime , $interval, $hoursWorked, $minutesWorked);
                                 @endphp         
                                 <tr>
                                     <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
                                     <td  class="tdclass">{{$merchandiser_time_sheet->store->location}}</td>
                                     <td  class="tdclass">
                                         @if($checkin_date_time!='N/A')
-                                        {{Carbon\carbon::parse(strval($checkin_date_time))->format('Y-m-d h:m A')}}
+                                        {{$formatedCheckinDateTime}}
                                         @endif
                                         </td>
                                     <td  class="tdclass">{{$checkin_location}}</td>
                                     <td  class="tdclass">
                                         @if($break_date_time!='N/A')
-                                        {{Carbon\carbon::parse(strval($break_date_time))->format('Y-m-d h:m A')}}
+                                        {{$formatedBreakTime}}
                                         @endif
                                     </td>
                                     <td  class="tdclass">
                                         @if($lunch_date_time!='N/A')
-                                        {{Carbon\carbon::parse(strval($lunch_date_time))->format('Y-m-d h:m A')}}
+                                        {{$formatedLunchTime}}
                                         @endif
                                     </td>
                                     <td  class="tdclass">
                                         @if($checkout_date_time!='N/A')
-                                        @php
-                                            $checkout_time_converted= Carbon\carbon::parse(strval($checkout_date_time))->format('Y-m-d h:m A')
-                                        @endphp
-                                        {{$checkout_time_converted}}
+                                           {{$formatedCheckoutDateTime}}
                                         @endif
+                                        
                                     </td>
                                     <td  class="tdclass">{{$checkout_location}}</td>
                                     <td  class="tdclass">{{$hoursWorked}} hrs, {{$minutesWorked}} mins</td>
@@ -329,7 +343,7 @@
                                         
                                             if (file_exists($imagePath)) 
                                             {
-                                                echo "$checkout_time_converted";
+                                                echo "$formatedCheckoutDateTime";
                                             } 
                                             else 
                                             {
@@ -339,7 +353,7 @@
                                     </td>
                                 </tr>
                                 @php
-                                    array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$totalHours] );
+                                    array_push($chartHoursArray ,['date'=>$formatedCheckoutDateTime ]);
                                 @endphp
                             @endforeach
                         @endforeach
