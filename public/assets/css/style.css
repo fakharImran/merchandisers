@@ -573,6 +573,9 @@ div#customDataTable_length {
 div#customDataTable_filter {
     display: none;
 }
+div#mechandiserDatatable_filter{
+    display: none;
+}
 
 .navbar-brand{
     font-weight:900;

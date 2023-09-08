@@ -45,7 +45,7 @@
 
 
     $(document).ready(function() {
-        var table = $('#customDataTable').DataTable({
+        var table = $('#mechandiserDatatable').DataTable({
             // Add your custom options here
             scrollX: true, // scroll horizontally
             paging: true, // Enable pagination
@@ -200,7 +200,7 @@
             <div class="table-responsive" >
                     {{-- table-responsive --}}
                     {{-- nowrap --}}
-                <table id="customDataTable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
+                <table id="mechandiserDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
                             <th class="thclass" scope="col">Name of Store</th>
