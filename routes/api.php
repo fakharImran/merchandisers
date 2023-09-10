@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\API\ResetPasswordController;
+use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\MerchandiserTimeSheetController;
 
 // 'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
@@ -29,8 +29,10 @@ Route::post('register', [RegisterController::class, 'register']);
 // Route::post('company-validation', [RegisterController::class, 'companyValidator']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('get-companies', [RegisterController::class, 'getCompanies']);
-Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
-Route::post('password/reset', [ResetPasswordController::class, 'reset']);
+// Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+// Route::post('password/reset', [ResetPasswordController::class, 'reset']);
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('reset-password', [ResetPasswordController::class, 'reset']);
 
      
 Route::middleware('auth:sanctum')->group( function () {

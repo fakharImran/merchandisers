@@ -27,26 +27,22 @@ class MerchandiserTimeSheetController extends BaseController
             array_push($storesArray, ['id'=>$store->id, 'name'=>$store->name_of_store, 'location'=>$store->location]);
         }
 
-        $managersArray = array();
-        $companyUsers = $user->companyUser->company->companyUsers;
-        foreach ($companyUsers as $key => $companyUser) {
-            // $managersStoresArray = array();
-            $user = $companyUser->user;
-            // foreach ($companyUser->company->stores as $key => $store) {
-            //     array_push($managersStoresArray, ['id'=>$store->id, 'name'=>$store->name_of_store]);
-            // }
-            if ($user) {
-                $userRoles = $user->roles; // Retrieve all roles for the user
-                if ($userRoles->count() > 0) {
-                    foreach ($userRoles as $role) {
-                        $roleName = $role->name;
-                        if($roleName == 'manager'){
-                            array_push($managersArray, ['id'=>$user->id,'name'=>$user->name]);
-                        }
-                    }
-                }
-            }
-        }
+        // $managersArray = array();
+        // $companyUsers = $user->companyUser->company->companyUsers;
+        // foreach ($companyUsers as $key => $companyUser) {
+        //     $user = $companyUser->user;
+        //     if ($user) {
+        //         $userRoles = $user->roles; // Retrieve all roles for the user
+        //         if ($userRoles->count() > 0) {
+        //             foreach ($userRoles as $role) {
+        //                 $roleName = $role->name;
+        //                 if($roleName == 'manager'){
+        //                     array_push($managersArray, ['id'=>$user->id,'name'=>$user->name]);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         $currentUser = Auth::user();
 
@@ -60,12 +56,12 @@ class MerchandiserTimeSheetController extends BaseController
             $recordsCount = count($records);
             if($records[$recordsCount-1]->status != 'check-out'){
                 $timeSheet = $timeSheets[$numberTimeSheets-1];
-                return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'company_user_id'=> $timeSheet->company_user_id, 'store_id'=> $timeSheet->store_id, 'store_manager_id'=> $timeSheet->store_manager_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray, 'managerArray'=>$managersArray], 'incomplete status in time sheet');
+                return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'company_user_id'=> $timeSheet->company_user_id, 'store_id'=> $timeSheet->store_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray], 'incomplete status in time sheet');
             }
         }
 
         // for create a new visit from frontend
-        return $this->sendResponse(['stores'=>$storesArray, 'managers'=>$managersArray], 'please start your new time sheet');
+        return $this->sendResponse(['stores'=>$storesArray], 'please start your new time sheet');
 
     }
 
@@ -80,18 +76,10 @@ class MerchandiserTimeSheetController extends BaseController
         $validator = Validator::make($request->all(), [
             'gps_location'=>'required',
             'store_id'=>'required',
-            // 'store_name'=>'required',
-            'store_manager_id'=>'required',
-            // 'store_location'=>'required',
+            'store_manager_name'=>'required',
             'status'=>'required',
             'date'=>'required',
             'time'=>'required',
-            // 'merchandiser_name'=>'required',
-            // 'merchandiser_id'=>'required',
-            // 'signature'=>'required',
-            // 'signature_time'=>'required',
-            // 'hours_worked'=>'required',
-
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
@@ -102,16 +90,11 @@ class MerchandiserTimeSheetController extends BaseController
         {
             return $this->sendError('Validation Error Store not exist.');       
         }
-        $manager= User::find($request->store_manager_id);
-        if(!$manager)
-        {
-            return $this->sendError('Validation Error Manager not exist.');       
-        }
 
         $user = Auth::user();
 
         $timeSheets = $user->companyUser->timeSheets;
-        //for edit the timesheet if the last visit is not checkout
+        //exception handler for the timesheet if the last visit is not checkout
         if ($timeSheets && count($timeSheets) > 0 ) {
             
             $numberTimeSheets = count($timeSheets);
@@ -123,41 +106,35 @@ class MerchandiserTimeSheetController extends BaseController
         }
 
         $company_user_id = $user->companyUser->id;
-        // return $this->sendResponse($company_user_id, 'time sheet stored successfully.');
-       
-       
-        
-// store method need to be correct
-            
         $store = Store::findOrFail($request->store_id);
-        if($company_user_id){
+        if($company_user_id && $store ){
            
             $storeArr= array_merge(
-                ['company_user_id'=>$company_user_id, 'store_name'=>$store->name_of_store, 'location'=>$store->location],
+                ['company_user_id'=>$company_user_id],
                 $request->only(
                     'store_id',
-                    'store_manager_id',
-                    // 'signature',
-                    // 'signature_time',
-                    // 'hours_worked'
-                ));
-                $dateString = $request->date;
-                $correctDateFormat = date('Y-m-d', strtotime($dateString));
+                    'store_manager_name',
+            ));
+            $dateString = $request->date;
+            $correctDateFormat = date('Y-m-d', strtotime($dateString));
 
-                $timeString = $request->time;
-                $correctTimeFormat = date('H:i:s', strtotime($timeString));
+            $timeString = $request->time;
+            $correctTimeFormat = date('H:i:s', strtotime($timeString));
 
-                $recordArray=[
-                    'date'=>$correctDateFormat,
-                    'time'=> $correctTimeFormat,
-                    'status'=> $request->status,
-                    'gps_location'=> $request->gps_location
+            $recordArray=[
+                'date'=>$correctDateFormat,
+                'time'=> $correctTimeFormat,
+                'status'=> $request->status,
+                'gps_location'=> $request->gps_location
 
-                ];
+            ];
             $merchandiserTimeSheet= MerchandiserTimeSheet::create($storeArr);
             $timesheetRecord= $merchandiserTimeSheet->timeSheetRecords()->create($recordArray);
             return $this->sendResponse(['current_store'=>$storeArr, 'timeSheetRecord'=>$timesheetRecord, 'timeSheet'=>$merchandiserTimeSheet], 'time sheet stored successfully.');
 
+        }
+        else{
+            return $this->sendError('Validation Error Store or Company not exist.');       
         }
 
         
@@ -186,12 +163,13 @@ class MerchandiserTimeSheetController extends BaseController
     public function update(Request $request, $id)
     {
         $timeSheet = MerchandiserTimeSheet::findOrFail($id);
-        
-        if($timeSheet->timeSheetRecords->contains('status', 'check-out')==true){
-            return $this->sendError('Validation Error.', 'You can not change status of this time sheet', 403);       
-            // return response(['message'=>'You can not change status of this time sheet'],403 );
-        }
         if($timeSheet != null){
+            //exception handler of the status is checkout so user need to store new timesheet
+            if($timeSheet->timeSheetRecords->contains('status', 'check-out')==true){
+                return $this->sendError('Validation Error.', 'You can not change status of this time sheet', 403);       
+            }
+
+            //for update the time sheet
             $validator = Validator::make($request->all(), [
                 'gps_location'=>'required',
                 'status'=>'required',
@@ -201,7 +179,7 @@ class MerchandiserTimeSheetController extends BaseController
             if($validator->fails()){
                 return $this->sendError('Validation Error.', $validator->errors());       
             }
-            // only run in case of checkout
+            // only run in case of checkout for check the signature valiation
             if($request->status == 'check-out'){
                 $validator = Validator::make($request->all(), [
                     'signature' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
@@ -227,18 +205,9 @@ class MerchandiserTimeSheetController extends BaseController
 
             $timeSheetRecord = $timeSheet->timeSheetRecords()->create($recordArray);
 
-            // only run in case of checkout
+            // only run in case of checkout to store signature image
             if($request->status == 'check-out'){
-                
                 $signature_path = $request->file('signature')->store('signatures', 'public');
-                
-                //process here
-
-                // $file = $request->file('signature');
-                // $imageName = time().'.'.$file->extension();
-                // $imagePath = public_path(). '/files/signatures/';
-                // $file->move($imagePath, $imageName);
-
                 $updatedTimeSheet = $timeSheet->update(['signature'=>$signature_path]);  
                 return $this->sendResponse(['curr_user'=>Auth::user(), 'updated_time_sheet'=>$updatedTimeSheet, 'current_time_sheet_record'=>$timeSheetRecord, 'all_time_sheet_records'=>$timeSheet->timeSheetRecords], 'time sheet check-out updated successfully.');
             }

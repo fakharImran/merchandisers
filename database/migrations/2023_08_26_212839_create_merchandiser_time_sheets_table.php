@@ -22,8 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
-            $table->unsignedBigInteger('store_manager_id');
-            $table->foreign('store_manager_id')->references('id')->on('company_users')->onDelete('cascade');
+            $table->string('store_manager_name');
 
             $table->string('signature')->nullable();
             $table->timestamps();

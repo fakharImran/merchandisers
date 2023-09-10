@@ -41,7 +41,7 @@
                         @foreach ($merchandiser['pending_time_sheets'] as $merchandiser_time_sheet)
         
                             @php
-                                $manager = $merchandiser_time_sheet->manager($merchandiser_time_sheet->store_manager_id);
+                                $manager = $merchandiser_time_sheet->store_manager_name;
                                 
         
                                 $checkin_date_time = 'N/A';

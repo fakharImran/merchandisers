@@ -13,7 +13,7 @@ class MerchandiserTimeSheet extends Model
 {
     protected $fillable = [
         'store_id',
-        'store_manager_id',
+        'store_manager_name',
         'signature',
         'company_user_id'
     ];
