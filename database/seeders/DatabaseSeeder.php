@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesAndPermissionsSeeder::class);
 
         // \App\Models\User::factory(10)->create();
-        Company::factory(101)->create();
+        // Company::factory(101)->create();
 
         // Create admin user
         $user = User::factory()->create([
