@@ -86,6 +86,11 @@ class LoginController extends Controller
         // Find the first matching role route
         foreach ($userRoles as $role) {
             if (array_key_exists($role, $roleRoutes)) {
+                if ($role != 'admin') {
+                    //update last login date and time
+                    $user->companyUser->last_login_date_time =  date("Y-m-d h:i:s A");
+                    $user->companyUser->save();
+                }
                 return redirect($roleRoutes[$role]);
             }
         }

@@ -14,7 +14,7 @@ class CompanyUser extends Model
 {
     use HasFactory;
     protected $table= 'company_users';
-    protected $fillable= ['company_id', 'user_id' , 'access_privilege', 'last_login_date_time'];
+    protected $fillable= ['company_id', 'user_id' , 'access_privilege', 'last_login_date_time', 'date_modified'];
     public $timestamps = true;
 
     /**

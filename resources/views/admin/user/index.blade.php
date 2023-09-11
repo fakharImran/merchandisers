@@ -265,8 +265,8 @@ updatePaginationButtons();
                     <th class="thclass"  scope="col">Full Name</th>
                     <th class="thclass"  scope="col">Access Privileges</th>
                     <th class="thclass"  scope="col">Last Login Date & Time</th>
-                    <th class="thclass"  scope="col">dateModified</th>
-                    <th class="thclass"  scope="col">dateCreated</th>
+                    <th class="thclass"  scope="col">Date Modified</th>
+                    <th class="thclass"  scope="col">Date Created</th>
                     <th class="thclass"  scope="col">Action</th>
                     </tr>
                 </thead>
@@ -292,14 +292,20 @@ updatePaginationButtons();
                             <td class="tdclass">{{ $user->user->name??'NA' }}</td>
                             <td class="tdclass">{{ $user['access_privilege'] }}</td>
                             @php
-                            $updatedTime = new DateTime($user['updated_at']);
+                            $updatedTime = new DateTime($user['date_modified']);
                             $createdTime = new DateTime($user['created_at']);
-                            $lastLoginDateTime = new DateTime($user['last_login_date_time']);
+                            if($user['last_login_date_time']!="")
+                            {
+                              $lastLoginDateTime = new DateTime($user['last_login_date_time']);
+                              $formattedLastLoginDateTime = $lastLoginDateTime->format("Y-m-d h:i:s A");
+                            }
+                            else {
+                                $formattedLastLoginDateTime="NA";
+                            }
                             
                             // Format the DateTime object in 12-hour format
                             $formattedUpdatedTime = $updatedTime->format("Y-m-d h:i:s A");
                             $formattedCreatedTime = $createdTime->format("Y-m-d h:i:s A");
-                            $formattedLastLoginDateTime = $lastLoginDateTime->format("Y-m-d h:i:s A");
                             
                             @endphp
                             <td class="tdclass">{{ $formattedLastLoginDateTime }}</td>

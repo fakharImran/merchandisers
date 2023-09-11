@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->string('access_privilege');
             $table->string('last_login_date_time')->nullable();
+            $table->string('date_modified')->nullable();
             $table->timestamps();
         });
     }

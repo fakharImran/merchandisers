@@ -70,10 +70,16 @@
                 <label for="store-search" class="form-label filter store">Select Store</label>
                 <select name="store-search" class=" filter form-select" id="store-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($stores as $store)
+                    @if($stores!=null)
+                    @foreach ($stores->unique('name_of_store')->sort() as $store)
                     <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                     @endforeach
+                    @endif
                 </select>
+
+                
+
+
             </div>
         </div>
         <div class="col-md-3 col-3 p-4">
@@ -81,9 +87,11 @@
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class=" filter form-select"  id="location-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($stores as $store)
+                    @if($stores!=null)
+                    @foreach ($stores->unique('location')->sort() as $store)
                     <option value="{{$store['location']}}">{{$store['location']}}</option>
                     @endforeach
+                    @endif
                 </select>
             </div>
         </div>

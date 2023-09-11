@@ -31,9 +31,10 @@ class CompanyUserController extends Controller
 
         foreach ($users as $key => $companyUser) {
             $companyUser->created_at = convertToTimeZone($companyUser->created_at, 'UTC', $userTimeZone);
-            $companyUser->updated_at = convertToTimeZone($companyUser->updated_at, 'UTC', $userTimeZone);
-            $companyUser->last_login_date_time = convertToTimeZone($companyUser->last_login_date_time, 'UTC', $userTimeZone);
-
+            $companyUser->date_modified = convertToTimeZone($companyUser->date_modified, 'UTC', $userTimeZone);
+            if($companyUser->last_login_date_time != ''){
+                $companyUser->last_login_date_time = convertToTimeZone($companyUser->last_login_date_time, 'UTC', $userTimeZone);
+            }
         }
 
         return view('admin.user.index', compact('users' ), ['pageConfigs' => $pageConfigs]);
@@ -61,6 +62,7 @@ class CompanyUserController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $this->validate($request, [
             'company_id' => 'required',
             'name' => 'required',
@@ -90,7 +92,9 @@ class CompanyUserController extends Controller
         $tempUser->company_id= $request->company_id;
         $tempUser->user_id=  $user->id;
         $tempUser->access_privilege= $request->access_privilege;
-        $tempUser->last_login_date_time=  date("Y-m-d h:i:s A");
+        $tempUser->last_login_date_time=  "";
+        $tempUser->date_modified=  date("Y-m-d h:i:s A");
+        // dd($tempUser);
         $tempUser->save();
         return redirect()->route('user.index')->with('success','User created successfully');
     }
@@ -171,7 +175,7 @@ class CompanyUserController extends Controller
         $companyUser->company_id= $request->company_id;
         $companyUser->user_id=  $user->id;
         $companyUser->access_privilege= $request->access_privilege;
-        $companyUser->last_login_date_time=  date("Y-m-d h:i:s");
+        $companyUser->date_modified=  date("Y-m-d h:i:s A");
 
         $companyUser->save();
 
