@@ -39,7 +39,7 @@
         <div class="col-md-3 col-3 p-4">
             
             <div class="form-group" >
-                <label for="period-search" class="form-label filter -search">Period</label>
+                <label for="period-search" class="form-label filter period filter-search">Period</label>
                 <input type="text" id="period-search" value="Date Range" class=" form-control filter">
             </div>
         </div>

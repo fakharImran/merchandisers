@@ -99,7 +99,7 @@
                                 <td>N/A</td>
                                 {{-- <td>{{}}</td> --}}
                                 <td>{{$merchandiser['name']}}</td>
-                                <td>{{$manager->name}}</td>
+                                <td>{{$manager}}</td>
                                 <td>N/A</td>
                                 <td>N/A</td>
                             </tr>

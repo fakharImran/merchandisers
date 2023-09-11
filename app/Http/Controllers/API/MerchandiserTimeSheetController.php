@@ -56,7 +56,7 @@ class MerchandiserTimeSheetController extends BaseController
             $recordsCount = count($records);
             if($records[$recordsCount-1]->status != 'check-out'){
                 $timeSheet = $timeSheets[$numberTimeSheets-1];
-                return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'company_user_id'=> $timeSheet->company_user_id, 'store_id'=> $timeSheet->store_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray], 'incomplete status in time sheet');
+                return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'store_manager_name'=>$timeSheet->store_manager_name, 'company_user_id'=> $timeSheet->company_user_id, 'store_id'=> $timeSheet->store_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray], 'incomplete status in time sheet');
             }
         }
 
