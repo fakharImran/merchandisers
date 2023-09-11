@@ -23,24 +23,64 @@ function formatDateYMD(date) {
 }
 // console.log('----------------------------------------');
 // create weekly dates
-function convertingData(data) {
-        
-    const currentDate = new Date(); // Get the current date
+function convertingData(data, startDate=0, endDate=0) {
 
-    // Calculate the start date of the current week (Sunday)
-    const currentWeekStartDate = new Date(currentDate);
-    currentWeekStartDate.setDate(currentDate.getDate() - currentDate.getDay());
-
+    console.log(startDate, endDate, 'start and end date');
     // Initialize an array to store the previous 6 weeks
     const previousWeeks = [];
-    // Calculate the start and end dates for each of the previous 6 weeks
-    for (let i = 0; i < 6; i++) {
-    const startDate = new Date(currentWeekStartDate);
-    startDate.setDate(currentWeekStartDate.getDate() - 7 * i); // Subtract 7 days for each previous week
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6); // Add 6 days to get the end of the week
-    previousWeeks.push({ startDate, endDate });
+
+    if(startDate==0 && endDate==0)   
+    { 
+        // Calculate the start date of the current week (Sunday)
+        const currentWeekStartDate = new Date();
+        currentWeekStartDate.setDate(currentWeekStartDate.getDate() - currentWeekStartDate.getDay());
+
+
+        // Calculate the start and end dates for each of the previous 6 weeks
+        for (let i = 0; i < 6; i++) {
+        startDate = new Date(currentWeekStartDate);
+        startDate.setDate(currentWeekStartDate.getDate() - 7 * i); // Subtract 7 days for each previous week
+        endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6); // Add 6 days to get the end of the week
+        previousWeeks.push({ startDate, endDate });
+        }
     }
+    else
+    {
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+        // startDate.setDate(startDate.getDate() - startDate.getDay());
+        startDate.setDate(startDate.getDate() - 7);
+        console.log(startDate, 'startDate');
+        let currentWeekStartDate = endDate; // Initialize with the provided end date
+        currentWeekStartDate.setDate(currentWeekStartDate.getDate() + currentWeekStartDate.getDay());
+
+        // Calculate the difference in milliseconds
+        const timeDifference = currentWeekStartDate.getTime() - startDate.getTime();
+        // Convert milliseconds to weeks (1 week = 7 days)
+        const weeks = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
+
+        console.log(weeks, 'weeks');
+
+        for (let i = 0; i <= weeks; i++) {
+          const weekEndDate = new Date(currentWeekStartDate);
+          weekEndDate.setDate(currentWeekStartDate.getDate() - 1); // Subtract 1 day to get the week's end date
+          const weekStartDate = new Date(weekEndDate);
+          weekStartDate.setDate(weekEndDate.getDate() - 6); // Subtract 6 days to get the start date
+      
+          console.log(weekStartDate >= startDate, startDate, weekStartDate, 'loop if check');
+          // Check if the week's start date is within the provided range
+          if (weekStartDate >= startDate) {
+            previousWeeks.push({ startDate: weekStartDate, endDate: weekEndDate });
+          }
+      
+          currentWeekStartDate = weekStartDate; // Set the next week's start date
+        }
+      
+        
+    }
+
+    console.log(previousWeeks, "chkinngng");
     // console.log('**************************************************');
     //check the weeks arroding to their hours
     var workedHrs=0;
@@ -222,7 +262,7 @@ var myChartJS= new Chart(
               table.column(6).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
               var convertedToChartData = changeGraph(table);
               console.log(convertedToChartData);
-              convertingData(convertedToChartData);
+              convertingData(convertedToChartData, startDate, endDate);
               myChartJS.data.labels = labels;
               myChartJS.data.datasets[0].data = hoursWorked;
               myChartJS.update(); 

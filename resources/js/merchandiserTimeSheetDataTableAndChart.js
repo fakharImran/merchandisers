@@ -77,6 +77,7 @@ function convertingData(data) {
     hoursWorked = weekarray.reverse();
     labels = previousWeeksArray.reverse();
 }
+convertingData(chartData);
 const data = {
     labels: labels,
     datasets: [{
@@ -117,7 +118,9 @@ var myChartJS= new Chart(
       });
       var colData = [];
       filteredData.forEach(element => {
-          const currentDate1 = new Date(element[6]);
+          const dateTime = element[6].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
+          const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
+
           var inputString = element[8];
           var regex = /(\d+).*?(\d+)/; // Regular expression to match the first integers before and after the comma
           var match = inputString.match(regex);

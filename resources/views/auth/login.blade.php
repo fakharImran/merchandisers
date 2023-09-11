@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="admin_email">
                                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password"  placeholder="password">
-
+                                        <span class="toggle-password fa fa-eye" style="right: 43px;" onclick="togglePasswordVisibility()"></span>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -145,5 +145,14 @@
 <script>
     var userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     document.getElementById('userTimeZone').value = userTimeZone;
+
+    function togglePasswordVisibility() {
+  var passwordField = document.getElementById('password');
+  if (passwordField.type === 'password') {
+    passwordField.type = 'text';
+  } else {
+    passwordField.type = 'password';
+  }
+}
 </script>
 @endsection
