@@ -270,5 +270,8 @@ var myChartJS= new Chart(
               console.log("The substring 'to' does not exist in the original string.");
           }
         
-      });
+        });
+        document.getElementById('clearDate').addEventListener('click', function () {
+            table.column(6).search('', true, false).draw(); // Clear previous search
+        });
   });
