@@ -25,6 +25,8 @@ function formatDateYMD(date) {
 // create weekly dates
 function convertingData(data, startDate=0, endDate=0) {
 
+    // console.log(data, 'dataaaaaaaaa');
+
     console.log(startDate, endDate, 'start and end date');
     // Initialize an array to store the previous 6 weeks
     const previousWeeks = [];
@@ -96,7 +98,7 @@ function convertingData(data, startDate=0, endDate=0) {
                 // console.log("date for check is "+ chkDate+ " <br> start date "+ formatDateYMD(week.startDate)+ "<br> end date "+ formatDateYMD(week.endDate));
             }
         });
-
+        // console.log('working hours', workedHrs);
     weekarray.push(workedHrs);
     workedHrs =0 ;
     });
@@ -118,6 +120,7 @@ function convertingData(data, startDate=0, endDate=0) {
     labels = previousWeeksArray.reverse();
 }
 convertingData(chartData);
+
 const data = {
     labels: labels,
     datasets: [{
@@ -161,13 +164,15 @@ var myChartJS= new Chart(
           const dateTime = element[6].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
           const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
 
-          var inputString = element[8];
+          var inputString = element[10];
+        //   console.log(inputString, "input stringgggg");
           var regex = /(\d+).*?(\d+)/; // Regular expression to match the first integers before and after the comma
           var match = inputString.match(regex);
           if (match) {
               var beforeComma = match[1]; // The first set of integers before the comma
               var afterComma = match[2]; // The first set of integers after the comma
               var Hours = (beforeComma*1) + (afterComma/60);
+            //   console.log(Hours, 'in change grph hoursss and match is ', match );
           } else {
               console.log('No match found.');
           }
@@ -215,7 +220,7 @@ var myChartJS= new Chart(
 
       });
       $('#merchandiser-search').on('change', function() {
-          table.column(9).search(this.value).draw();
+          table.column(11).search(this.value).draw();
           var convertedToChartData = changeGraph(table);
           console.log(convertedToChartData);
           convertingData(convertedToChartData);
@@ -243,7 +248,7 @@ var myChartJS= new Chart(
               var endDate=formatDateYMD(endDate);
               // console.log("end date", endDate);
 
-              table.column(6).search('', true, false).draw(); // Clear previous search
+              table.column(8).search('', true, false).draw(); // Clear previous search
 
               var searchTerms = []; // Initialize an array to store search terms
               function dateRange(startDate, endDate) {
@@ -259,7 +264,7 @@ var myChartJS= new Chart(
               }
               var dateList = dateRange(startDate, endDate);
               // console.log(dateList.join('|'), 'umerrrr');
-              table.column(6).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+              table.column(8).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
               var convertedToChartData = changeGraph(table);
               console.log(convertedToChartData);
               convertingData(convertedToChartData, startDate, endDate);
@@ -272,6 +277,6 @@ var myChartJS= new Chart(
         
         });
         document.getElementById('clearDate').addEventListener('click', function () {
-            table.column(6).search('', true, false).draw(); // Clear previous search
+            table.column(8).search('', true, false).draw(); // Clear previous search
         });
   });

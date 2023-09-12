@@ -136,8 +136,10 @@
                             <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Check-in Time</th>
                             <th class="thclass" scope="col">Check-in GPS Location</th>
-                            <th class="thclass" scope="col">Break Time</th>
-                            <th class="thclass" scope="col">Lunch Time</th>
+                            <th class="thclass" scope="col">Start Break Time</th>
+                            <th class="thclass" scope="col">End Break Time</th>
+                            <th class="thclass" scope="col">Start Lunch Time</th>
+                            <th class="thclass" scope="col">End Lunch Time</th>
                             <th class="thclass" scope="col">Check-out Time</th>
                             <th class="thclass" scope="col">Check-out GPS Location</th>
                             <th class="thclass" scope="col">Hours Worked</th>
@@ -161,8 +163,10 @@
                                     // dd($manager);
                                     $checkin_date_time = 'N/A';
                                     $checkin_location = 'N/A';
-                                    $lunch_date_time = 'N/A';
-                                    $break_date_time = 'N/A';
+                                    $start_lunch_date_time = 'N/A';
+                                    $end_lunch_date_time = 'N/A';
+                                    $start_break_date_time = 'N/A';
+                                    $end_break_date_time = 'N/A';
                                     $checkout_date_time = 'N/A';
                                     $checkout_location = 'N/A';
                                 @endphp
@@ -175,14 +179,24 @@
                                                 $checkin_location = $time_sheet_record->gps_location;
                                             @endphp
                                             @break
-                                        @case('lunch')
+                                        @case('start-lunch-time')
                                             @php
-                                                $lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
                                             @endphp
                                             @break
-                                        @case('break')
+                                        @case('end-lunch-time')
                                             @php
-                                                $break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $end_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            @endphp
+                                            @break
+                                        @case('start-break-time')
+                                            @php
+                                                $start_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            @endphp
+                                            @break
+                                        @case('end-break-time')
+                                            @php
+                                                $end_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
                                             @endphp
                                             @break
                                         @case('check-out')
@@ -201,29 +215,74 @@
                                     $timestamp = strtotime($checkin_date_time);
                                     $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
 
-                                    // Check-out date and time
-                                    $timestamp = strtotime($break_date_time);
-                                    $formatedBreakDateTime = date("Y-m-d h:i A", $timestamp);
+                                    $startBreakDateTime = new DateTime($start_break_date_time);
+                                    $endBreakDateTime = new DateTime($end_break_date_time);
 
+                                    $startLunchDateTime = new DateTime($start_lunch_date_time);
+                                    $endLunchDateTime = new DateTime($end_lunch_date_time);
 
-                                    $timestamp = strtotime($lunch_date_time);
-                                    $formatedLunchDateTime = date("Y-m-d h:i A", $timestamp);
+                                    $breakTimeInterval=$startBreakDateTime->diff($endBreakDateTime);
+                                    $LunchTimeInterval=$startLunchDateTime->diff($endLunchDateTime);
+                                    // dd($breakTimeInterval, $LunchTimeInterval);
+                                    // Calculate the total seconds in $breakTimeInterval and $LunchTimeInterval
+                                    $breakSeconds = $breakTimeInterval->s + $breakTimeInterval->i * 60 + $breakTimeInterval->h * 3600 + $breakTimeInterval->d * 86400;
+                                    $lunchSeconds = $LunchTimeInterval->s + $LunchTimeInterval->i * 60 + $LunchTimeInterval->h * 3600 + $LunchTimeInterval->d * 86400;
 
+                                    // Add the seconds together
+                                    $totalBreakLunchSeconds = $breakSeconds + $lunchSeconds;
+
+                                    // Create a new DateInterval object with the total seconds
+                                    // $resultInterval = new DateInterval('PT' . $totalBreakLunchSeconds . 'S');
+
+                                    // You can access the components of the resulting interval as needed
+                                    // $hours = $resultInterval->h; // Hours
+                                    // $minutes = $resultInterval->i; // Minutes
+                                    // $seconds = $resultInterval->s; // Seconds
+                                    // // Check-out date and time
+
+                                    $timestamp = strtotime($start_break_date_time);
+                                    $formatedStartBreakDateTime = date("Y-m-d h:i A", $timestamp);
+
+                                    $timestamp = strtotime($end_break_date_time);
+                                    $formatedEndBreakDateTime = date("Y-m-d h:i A", $timestamp);
+
+                                    $timestamp = strtotime($start_lunch_date_time);
+                                    $formatedStartLunchDateTime = date("Y-m-d h:i A", $timestamp);
+
+                                    $timestamp = strtotime($end_lunch_date_time);
+                                    $formatedEndLunchDateTime = date("Y-m-d h:i A", $timestamp);
 
 
 
                                     $checkoutDateTime = new DateTime($checkout_date_time); // Replace with your actual check-out date and time
+
                                     // Calculate the difference
                                     $timestamp = strtotime($checkout_date_time);
                                     $formatedCheckoutDateTime = date("Y-m-d h:i A", $timestamp);
-                                    $interval = $checkinDateTime->diff($checkoutDateTime);
-                                    
-                                    // Calculate the total hours
-                                    $hoursWorked = $interval->days * 24 + $interval->h ;
-                                    $minutesWorked = $interval->i ;
-                                    $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
-                                    $totalHourworked+= $totalHours;
 
+                                    //getting difference between checkin and checkout;
+                                    $interval = $checkinDateTime->diff($checkoutDateTime);
+                                        // dd($interval);
+                                    //here calculating total hours worked after subtracting break and lunch
+
+                                    $intervalSeconds = $interval->s + $interval->i * 60 + $interval->h * 3600 + $interval->d * 86400;
+                                    $intervalAfterBreakLunch= $intervalSeconds-$totalBreakLunchSeconds;
+                                    $resultIntervalAfterBreakLunch = new DateInterval('PT' . $intervalAfterBreakLunch . 'S');
+                                    // dd($resultIntervalAfterBreakLunch->h);
+
+                                    // Calculate hours and minutes
+                                    $tempHours = floor($intervalAfterBreakLunch / 3600); // 3600 seconds in an hour
+                                    $tempRemainingSeconds = $intervalAfterBreakLunch % 3600;
+                                    $tempMinutes = floor($tempRemainingSeconds / 60); 
+
+                                    // dd($interval, $checkinDateTime, $checkoutDateTime);
+                                    // Calculate the total hours
+                                    $hoursWorked = $tempHours;
+                                    $minutesWorked = $tempMinutes;
+                                    $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
+                                    // dd($totalHours);
+                                    $totalHourworked+= $totalHours;
+                                    // dd($hoursWorked);
                                     // dd(
                                     //     $checkin_date_time,  $checkout_date_time,
                                     // $formatedCheckinDateTime, $formatedCheckoutDateTime , $interval, $hoursWorked, $minutesWorked);
@@ -238,13 +297,23 @@
                                         </td>
                                     <td  class="tdclass">{{$checkin_location}}</td>
                                     <td  class="tdclass">
-                                        @if($break_date_time!='N/A')
-                                        {{$formatedBreakDateTime}}
+                                        @if($start_break_date_time!='N/A')
+                                        {{$formatedStartBreakDateTime}}
                                         @endif
                                     </td>
                                     <td  class="tdclass">
-                                        @if($lunch_date_time!='N/A')
-                                        {{$formatedLunchDateTime}}
+                                        @if($end_break_date_time!='N/A')
+                                        {{$formatedEndBreakDateTime}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">
+                                        @if($start_lunch_date_time!='N/A')
+                                        {{$formatedStartLunchDateTime}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">
+                                        @if($end_lunch_date_time!='N/A')
+                                        {{$formatedEndLunchDateTime}}
                                         @endif
                                     </td>
                                     <td  class="tdclass">
@@ -256,7 +325,7 @@
                                         @endif
                                     </td>
                                     <td  class="tdclass">{{$checkout_location}}</td>
-                                    <td  class="tdclass">{{$hoursWorked}} hrs, {{$minutesWorked}} mins</td>
+                                    <td  class="tdclass">{{$tempHours}} hrs, {{$tempMinutes}} mins</td>
                                     {{-- <td  class="tdclass">{{}}</td> --}}
                                     <td  class="tdclass">{{$merchandiser['name']}}</td>
                                     <td  class="tdclass">{{$manager}}</td>
@@ -304,7 +373,7 @@
 <script>
     var labels = [];
     var chartData =  {{ Js::from($chartHoursArray) }};
-    console.log(chartData);
+    console.log(chartData, "chart datwaaaaaa");
 </script>
 
 <script src="{{ asset('assets/js/merchandiserTimeSheetDataTableAndChart.js') }}"></script>
