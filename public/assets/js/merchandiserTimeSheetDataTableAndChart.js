@@ -27,7 +27,7 @@ function convertingData(data, startDate=0, endDate=0) {
 
     // console.log(data, 'dataaaaaaaaa');
 
-    console.log(startDate, endDate, 'start and end date');
+    // console.log(startDate, endDate, 'start and end date');
     // Initialize an array to store the previous 6 weeks
     const previousWeeks = [];
 
@@ -53,7 +53,7 @@ function convertingData(data, startDate=0, endDate=0) {
         endDate = new Date(endDate);
         // startDate.setDate(startDate.getDate() - startDate.getDay());
         startDate.setDate(startDate.getDate() - 7);
-        console.log(startDate, 'startDate');
+        // console.log(startDate, 'startDate');
         let currentWeekStartDate = endDate; // Initialize with the provided end date
         currentWeekStartDate.setDate(currentWeekStartDate.getDate() + currentWeekStartDate.getDay());
 
@@ -62,7 +62,7 @@ function convertingData(data, startDate=0, endDate=0) {
         // Convert milliseconds to weeks (1 week = 7 days)
         const weeks = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
 
-        console.log(weeks, 'weeks');
+        // console.log(weeks, 'weeks');
 
         for (let i = 0; i <= weeks; i++) {
           const weekEndDate = new Date(currentWeekStartDate);
@@ -70,7 +70,7 @@ function convertingData(data, startDate=0, endDate=0) {
           const weekStartDate = new Date(weekEndDate);
           weekStartDate.setDate(weekEndDate.getDate() - 6); // Subtract 6 days to get the start date
       
-          console.log(weekStartDate >= startDate, startDate, weekStartDate, 'loop if check');
+        //   console.log(weekStartDate >= startDate, startDate, weekStartDate, 'loop if check');
           // Check if the week's start date is within the provided range
           if (weekStartDate >= startDate) {
             previousWeeks.push({ startDate: weekStartDate, endDate: weekEndDate });
@@ -82,7 +82,7 @@ function convertingData(data, startDate=0, endDate=0) {
         
     }
 
-    console.log(previousWeeks, "chkinngng");
+    // console.log(previousWeeks, "chkinngng");
     // console.log('**************************************************');
     //check the weeks arroding to their hours
     var workedHrs=0;
@@ -114,7 +114,7 @@ function convertingData(data, startDate=0, endDate=0) {
     //   console.log(element.startDate);
     previousWeeksArray.push(element.startDate + ' - ' + element.endDate);
     });
-    console.log(previousWeeksArray);
+    // console.log(previousWeeksArray);
 
     hoursWorked = weekarray.reverse();
     labels = previousWeeksArray.reverse();
@@ -161,11 +161,12 @@ var myChartJS= new Chart(
       });
       var colData = [];
       filteredData.forEach(element => {
-          const dateTime = element[6].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
+        // console.log(element[6], 'element[6]');
+          const dateTime = element[2].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
           const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
 
           var inputString = element[10];
-        //   console.log(inputString, "input stringgggg");
+        //   console.log(inputString, "input stringgggg", 'current date', currentDate1);
           var regex = /(\d+).*?(\d+)/; // Regular expression to match the first integers before and after the comma
           var match = inputString.match(regex);
           if (match) {
@@ -177,6 +178,9 @@ var myChartJS= new Chart(
               console.log('No match found.');
           }
           colData.push({'date':formatDateYMD(currentDate1),'hours':Hours});
+
+
+        //   console.log(colData);
       });
       return colData;
   }
@@ -201,7 +205,7 @@ var myChartJS= new Chart(
           // Perform the search on the first column of the DataTable
           table.column(0).search(this.value).draw();
           var convertedToChartData = changeGraph(table);
-          console.log(convertedToChartData);
+          console.log(convertedToChartData,' at change graph    ');
           convertingData(convertedToChartData);
           myChartJS.data.labels = labels;
           myChartJS.data.datasets[0].data = hoursWorked;

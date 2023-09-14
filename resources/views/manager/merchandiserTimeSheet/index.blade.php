@@ -161,14 +161,14 @@
                                 @php
                                     $manager = $merchandiser_time_sheet->store_manager_name;
                                     // dd($manager);
-                                    $checkin_date_time = 'N/A';
-                                    $checkin_location = 'N/A';
-                                    $start_lunch_date_time = 'N/A';
-                                    $end_lunch_date_time = 'N/A';
-                                    $start_break_date_time = 'N/A';
-                                    $end_break_date_time = 'N/A';
-                                    $checkout_date_time = 'N/A';
-                                    $checkout_location = 'N/A';
+                                    $checkin_date_time = null;
+                                    $checkin_location = null;
+                                    $start_lunch_date_time = null;
+                                    $end_lunch_date_time = null;
+                                    $start_break_date_time = null;
+                                    $end_break_date_time = null;
+                                    $checkout_date_time = null;
+                                    $checkout_location = null;
                                 @endphp
                                 @foreach ($merchandiser_time_sheet->timeSheetRecords as $time_sheet_record)
                                 
@@ -217,7 +217,7 @@
                                     $timestamp = strtotime($checkin_date_time);
                                     $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
 
-                                    if($start_break_date_time!="N/A" && $end_break_date_time!="N/A" )
+                                    if($start_break_date_time!=null && $end_break_date_time!=null )
                                     {
                                         $startBreakDateTime = new DateTime($start_break_date_time);
                                         $endBreakDateTime = new DateTime($end_break_date_time);
@@ -234,21 +234,23 @@
                                     $formatedEndBreakDateTime = date("Y-m-d h:i A", $timestamp);
 
 
-
                                     }
                                     else {
-                                        // $formatedStartBreakDateTime= "N/A";
-                                        // $formatedEndBreakDateTime="N/A";
+                                        // $formatedStartBreakDateTime= null;
+                                        // $formatedEndBreakDateTime=null;
                                         $breakSeconds=0;
+                                        $breakTimeInterval=0;
                                         # code...
                                     }
 
-                                    if($start_lunch_date_time!="N/A" && $end_lunch_date_time!="N/A" )
+                                    if($start_lunch_date_time!=null && $end_lunch_date_time!=null )
                                     {
                                         $startLunchDateTime = new DateTime($start_lunch_date_time);
                                     $endLunchDateTime = new DateTime($end_lunch_date_time);
 
                                     $LunchTimeInterval=$startLunchDateTime->diff($endLunchDateTime);
+                                    
+                                    
                                     $lunchSeconds = $LunchTimeInterval->s + $LunchTimeInterval->i * 60 + $LunchTimeInterval->h * 3600 + $LunchTimeInterval->d * 86400;
                                         
 
@@ -260,17 +262,17 @@
 
                                     }
                                     else {
-                                        // $startBreakDateTime= "N/A";
-                                        // $endBreakDateTime= "N/A";
-
+                                        // $startBreakDateTime= null;
+                                        // $endBreakDateTime= null;
+                                        $LunchTimeInterval=0;
                                         $lunchSeconds=0;
-                                        // $formatedStartLunchDateTime= "N/A";
-                                        // $formatedEndLunchDateTime= "N/A";
+                                        // $formatedStartLunchDateTime= null;
+                                        // $formatedEndLunchDateTime= null;
                                         # code...
                                     }
                                     
-
                                    
+                                    // dd ($breakTimeInterval, $LunchTimeInterval);
 
                                     // Add the seconds together
                                     $totalBreakLunchSeconds = $breakSeconds + $lunchSeconds;
@@ -283,14 +285,23 @@
 
                                     //getting difference between checkin and checkout;
                                     $interval = $checkinDateTime->diff($checkoutDateTime);
-                                        // dd($interval);
+                                        // $interval->sub($breakTimeInterval);
+
                                     //here calculating total hours worked after subtracting break and lunch
 
                                     $intervalSeconds = $interval->s + $interval->i * 60 + $interval->h * 3600 + $interval->d * 86400;
                                     $intervalAfterBreakLunch= $intervalSeconds-$totalBreakLunchSeconds;
                                     $resultIntervalAfterBreakLunch = new DateInterval('PT' . $intervalAfterBreakLunch . 'S');
-                                    // dd($resultIntervalAfterBreakLunch->h);
+                                    // dd($resultIntervalAfterBreakLunch->s);
 
+                                    if($resultIntervalAfterBreakLunch->days==false)
+                                    {
+                                        $daysWorked=0;
+                                    }
+                                    else {
+                                        $daysWorked=$resultIntervalAfterBreakLunch->days *24;
+                                    }
+                                    #
                                     // Calculate hours and minutes
                                     $tempHours = floor($intervalAfterBreakLunch / 3600); // 3600 seconds in an hour
                                     $tempRemainingSeconds = $intervalAfterBreakLunch % 3600;
@@ -298,12 +309,12 @@
 
                                     // dd($interval, $checkinDateTime, $checkoutDateTime);
                                     // Calculate the total hours
-                                    $hoursWorked = $tempHours;
+                                    $hoursWorked = $daysWorked+ $tempHours+ $tempMinutes/60;
                                     $minutesWorked = $tempMinutes;
-                                    $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
-                                    // dd($totalHours);
-                                    $totalHourworked+= $totalHours;
+                                    // $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
                                     // dd($hoursWorked);
+                                    $totalHourworked+= $hoursWorked;
+                                    // dd($totalHourworked);
                                     // dd(
                                     //     $checkin_date_time,  $checkout_date_time,
                                     // $formatedCheckinDateTime, $formatedCheckoutDateTime , $interval, $hoursWorked, $minutesWorked);
@@ -312,33 +323,33 @@
                                     <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
                                     <td  class="tdclass">{{$merchandiser_time_sheet->store->location}}</td>
                                     <td  class="tdclass">
-                                        @if($checkin_date_time!='N/A')
+                                        @if($checkin_date_time!=null)
                                         {{$formatedCheckinDateTime}}
                                         @endif
                                         </td>
                                     <td  class="tdclass">{{$checkin_location}}</td>
                                     <td  class="tdclass">
-                                        @if($start_break_date_time!='N/A')
+                                        @if($start_break_date_time!=null)
                                         {{$formatedStartBreakDateTime}}
                                         @endif
                                     </td>
                                     <td  class="tdclass">
-                                        @if($end_break_date_time!='N/A')
+                                        @if($end_break_date_time!=null)
                                         {{$formatedEndBreakDateTime}}
                                         @endif
                                     </td>
                                     <td  class="tdclass">
-                                        @if($start_lunch_date_time!='N/A')
+                                        @if($start_lunch_date_time!=null)
                                         {{$formatedStartLunchDateTime}}
                                         @endif
                                     </td>
                                     <td  class="tdclass">
-                                        @if($end_lunch_date_time!='N/A')
+                                        @if($end_lunch_date_time!=null)
                                         {{$formatedEndLunchDateTime}}
                                         @endif
                                     </td>
                                     <td  class="tdclass">
-                                        @if($checkout_date_time!='N/A')
+                                        @if($checkout_date_time!=null)
                                         @php
                                             $checkout_time_converted= $formatedCheckoutDateTime
                                         @endphp
@@ -379,7 +390,7 @@
                                     </td>
                                 </tr>
                                 @php
-                                    array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$totalHours] );
+                                    array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$hoursWorked] );
                                 @endphp
                             @endforeach
                         @endforeach
@@ -412,6 +423,10 @@
 
     document.getElementById('clearDate').addEventListener('click', function () {
         document.getElementById('period-search').clear;
+        document.getElementById('merchandiser-search').value='';
+        document.getElementById('location-search').value='';
+        document.getElementById('store-search').value='';
+        
         convertingData(chartData);
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = hoursWorked;
