@@ -209,36 +209,23 @@
                                     @endswitch
                                 @endforeach
                                 @php
+                                  
+                                //   echo ($checkin_date_time." ". $start_lunch_date_time." ". $end_lunch_date_time." ". $start_break_date_time." ". $end_break_date_time." ". $checkout_date_time." ". "<br>");
                                     
-                                    $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
+                                  $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
                                     // Check-out date and time
                                     $timestamp = strtotime($checkin_date_time);
                                     $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
 
-                                    $startBreakDateTime = new DateTime($start_break_date_time);
-                                    $endBreakDateTime = new DateTime($end_break_date_time);
-
-                                    $startLunchDateTime = new DateTime($start_lunch_date_time);
-                                    $endLunchDateTime = new DateTime($end_lunch_date_time);
-
+                                    if($start_break_date_time!="N/A" && $end_break_date_time!="N/A" )
+                                    {
+                                        $startBreakDateTime = new DateTime($start_break_date_time);
+                                        $endBreakDateTime = new DateTime($end_break_date_time);
+                                     
+                                    //getting break time interval
                                     $breakTimeInterval=$startBreakDateTime->diff($endBreakDateTime);
-                                    $LunchTimeInterval=$startLunchDateTime->diff($endLunchDateTime);
-                                    // dd($breakTimeInterval, $LunchTimeInterval);
-                                    // Calculate the total seconds in $breakTimeInterval and $LunchTimeInterval
                                     $breakSeconds = $breakTimeInterval->s + $breakTimeInterval->i * 60 + $breakTimeInterval->h * 3600 + $breakTimeInterval->d * 86400;
-                                    $lunchSeconds = $LunchTimeInterval->s + $LunchTimeInterval->i * 60 + $LunchTimeInterval->h * 3600 + $LunchTimeInterval->d * 86400;
 
-                                    // Add the seconds together
-                                    $totalBreakLunchSeconds = $breakSeconds + $lunchSeconds;
-
-                                    // Create a new DateInterval object with the total seconds
-                                    // $resultInterval = new DateInterval('PT' . $totalBreakLunchSeconds . 'S');
-
-                                    // You can access the components of the resulting interval as needed
-                                    // $hours = $resultInterval->h; // Hours
-                                    // $minutes = $resultInterval->i; // Minutes
-                                    // $seconds = $resultInterval->s; // Seconds
-                                    // // Check-out date and time
 
                                     $timestamp = strtotime($start_break_date_time);
                                     $formatedStartBreakDateTime = date("Y-m-d h:i A", $timestamp);
@@ -246,13 +233,47 @@
                                     $timestamp = strtotime($end_break_date_time);
                                     $formatedEndBreakDateTime = date("Y-m-d h:i A", $timestamp);
 
+
+
+                                    }
+                                    else {
+                                        // $formatedStartBreakDateTime= "N/A";
+                                        // $formatedEndBreakDateTime="N/A";
+                                        $breakSeconds=0;
+                                        # code...
+                                    }
+
+                                    if($start_lunch_date_time!="N/A" && $end_lunch_date_time!="N/A" )
+                                    {
+                                        $startLunchDateTime = new DateTime($start_lunch_date_time);
+                                    $endLunchDateTime = new DateTime($end_lunch_date_time);
+
+                                    $LunchTimeInterval=$startLunchDateTime->diff($endLunchDateTime);
+                                    $lunchSeconds = $LunchTimeInterval->s + $LunchTimeInterval->i * 60 + $LunchTimeInterval->h * 3600 + $LunchTimeInterval->d * 86400;
+                                        
+
                                     $timestamp = strtotime($start_lunch_date_time);
                                     $formatedStartLunchDateTime = date("Y-m-d h:i A", $timestamp);
 
                                     $timestamp = strtotime($end_lunch_date_time);
                                     $formatedEndLunchDateTime = date("Y-m-d h:i A", $timestamp);
 
+                                    }
+                                    else {
+                                        // $startBreakDateTime= "N/A";
+                                        // $endBreakDateTime= "N/A";
 
+                                        $lunchSeconds=0;
+                                        // $formatedStartLunchDateTime= "N/A";
+                                        // $formatedEndLunchDateTime= "N/A";
+                                        # code...
+                                    }
+                                    
+
+                                   
+
+                                    // Add the seconds together
+                                    $totalBreakLunchSeconds = $breakSeconds + $lunchSeconds;
 
                                     $checkoutDateTime = new DateTime($checkout_date_time); // Replace with your actual check-out date and time
 
