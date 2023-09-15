@@ -70,7 +70,7 @@ function convertingData(data, startDate=0, endDate=0) {
           const weekStartDate = new Date(weekEndDate);
           weekStartDate.setDate(weekEndDate.getDate() - 6); // Subtract 6 days to get the start date
       
-        //   console.log(weekStartDate >= startDate, startDate, weekStartDate, 'loop if check');
+        //   console.log(weekStartDate >= startDate, startDate, weekStartDate,weekEndDate, 'loop if check');
           // Check if the week's start date is within the provided range
           if (weekStartDate >= startDate) {
             previousWeeks.push({ startDate: weekStartDate, endDate: weekEndDate });
@@ -90,7 +90,7 @@ function convertingData(data, startDate=0, endDate=0) {
     previousWeeks.forEach(week =>{
         data.forEach(element => {
             chkDate=element['date'];
-            if(formatDateYMD(week.startDate)<=chkDate && formatDateYMD(week.endDate)>chkDate)
+            if(formatDateYMD(week.startDate)<=chkDate && formatDateYMD(week.endDate)>=chkDate)
             {
                 workedHrs+= element['hours'] ;
                 // console.log("date for check is "+ chkDate+ ", now hours " +workedHrs);

@@ -314,7 +314,7 @@
                                     // $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
                                     // dd($hoursWorked);
                                     $totalHourworked+= $hoursWorked;
-                                    // dd($totalHourworked);
+                                    // dd($hoursWorked);
                                     // dd(
                                     //     $checkin_date_time,  $checkout_date_time,
                                     // $formatedCheckinDateTime, $formatedCheckoutDateTime , $interval, $hoursWorked, $minutesWorked);
