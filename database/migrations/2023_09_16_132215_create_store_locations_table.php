@@ -13,22 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('merchandiser_time_sheets', function (Blueprint $table) {
+        Schema::create('store_locations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('company_user_id');
-            $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
-
-
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
-            
-            $table->unsignedBigInteger('store_location_id');
-            $table->foreign('store_location_id')->references('id')->on('stores')->onDelete('cascade');
-
-
-            $table->string('store_manager_name');
-
-            $table->string('signature')->nullable();
+            $table->string('location');
             $table->timestamps();
         });
     }
@@ -40,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('merchandiser_time_sheets');
+        Schema::dropIfExists('store_locations');
     }
 };

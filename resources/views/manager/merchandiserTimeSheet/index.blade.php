@@ -68,15 +68,14 @@
         <div class="col-md-3 col-3 p-4">
             <div class="form-group">
                 <label for="store-search" class="form-label filter store">Select Store</label>
-                <select name="store-search" class=" filter form-select" id="store-search">
-                    <option value="" selected>--Select-- </option>
+                <select name="store-search" class="filter form-select" id="store-search">
+                    <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                    @foreach ($stores->unique('name_of_store')->sort() as $store)
-                    <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
-                    @endforeach
+                        @foreach ($stores->unique('name_of_store')->sort() as $store)
+                            <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
+                        @endforeach
                     @endif
                 </select>
-
                 
 
 
@@ -85,15 +84,60 @@
         <div class="col-md-3 col-3 p-4">
             <div class="form-group">
                 <label for="location-search" class="form-label filter location">Select Location</label>
-                <select name="location-search" class=" filter form-select"  id="location-search">
-                    <option value="" selected>--Select-- </option>
+                <select name="location-search" class="filter form-select" id="location-search">
+                    <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                    @foreach ($stores->unique('location')->sort() as $store)
-                    <option value="{{$store['location']}}">{{$store['location']}}</option>
-                    @endforeach
+                        @foreach ($stores as $store)
+                            @foreach($store->locations->unique('location')->sort() as $location)
+                                <option value="{{$location['location']}}">{{$location['location']}}</option>
+                            @endforeach
+                        @endforeach
                     @endif
-                </select>
+                </select>                
             </div>
+
+            {{-- <script>
+            function updateLocations() {
+                const selectedStore = document.getElementById('store-search').value;
+                const locationDropdown = document.getElementById('location-search');
+                const allLocations = {!! json_encode($stores) !!};
+                const uniqueLocations = [];
+
+                // Clear existing options
+                locationDropdown.innerHTML = '<option value="" selected>--Select--</option>';
+
+                if (selectedStore === '') {
+                    // If no store is selected, show all locations
+                    for (const store of allLocations) {
+                        for (const location of store.locations) {
+                            if (!uniqueLocations.includes(location.location)) {
+                                uniqueLocations.push(location.location);
+                                const option = document.createElement('option');
+                                option.value = location.location;
+                                option.textContent = location.location;
+                                locationDropdown.appendChild(option);
+                            }
+                        }
+                    }
+                } else {
+                    // If a store is selected, filter locations based on the selected store
+                    for (const store of allLocations) {
+                        if (store.name_of_store === selectedStore) {
+                            for (const location of store.locations) {
+                                if (!uniqueLocations.includes(location.location)) {
+                                    uniqueLocations.push(location.location);
+                                    const option = document.createElement('option');
+                                    option.value = location.location;
+                                    option.textContent = location.location;
+                                    locationDropdown.appendChild(option);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            </script> --}}
         </div>
         <div class="col-md-3 col-3 p-4">
             <div class="form-group">
@@ -314,14 +358,15 @@
                                     // $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
                                     // dd($hoursWorked);
                                     $totalHourworked+= $hoursWorked;
-                                    // dd($hoursWorked);
                                     // dd(
                                     //     $checkin_date_time,  $checkout_date_time,
                                     // $formatedCheckinDateTime, $formatedCheckoutDateTime , $interval, $hoursWorked, $minutesWorked);
-                                @endphp         
+                                @endphp
+                            {{-- {{dd($merchandiser_time_sheet->storeLocation->location)}} --}}
+                                         
                                 <tr>
                                     <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
-                                    <td  class="tdclass">{{$merchandiser_time_sheet->store->location}}</td>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->location}}</td>
                                     <td  class="tdclass">
                                         @if($checkin_date_time!=null)
                                         {{$formatedCheckinDateTime}}
@@ -394,15 +439,192 @@
                                 @endphp
                             @endforeach
                         @endforeach
-                        {{-- {{dd($chartHoursArray)}} --}}
+                        
+                        {{-- {{dd("pending timesheets",$pendingTimeSheetArr)}} --}}
                     </tbody>
                 </table>
             </div>
+
+            <div class="text-center mb-2">
+                <h1 class="mb-1">Pending Time Sheets</h1>
+            </div>
+
+            <div class="table-responsive" >
+                {{-- table-responsive --}}
+                {{-- nowrap --}}
+                <table id="mechandiserDatatable2" class="table table-sm table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
+                    <thead>
+                        <tr>
+                            <th class="thclass" scope="col">Name of Store</th>
+                            <th class="thclass" scope="col">Location</th>
+                            <th class="thclass" scope="col">Check-in Time</th>
+                            <th class="thclass" scope="col">Check-in GPS Location</th>
+                            <th class="thclass" scope="col">Start Break Time</th>
+                            <th class="thclass" scope="col">End Break Time</th>
+                            <th class="thclass" scope="col">Start Lunch Time</th>
+                            <th class="thclass" scope="col">End Lunch Time</th>
+                            <th class="thclass" scope="col">Check-out Time</th>
+                            <th class="thclass" scope="col">Check-out GPS Location</th>
+                            <th class="thclass" scope="col">Hours Worked</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
+                            <th class="thclass" scope="col">Store Manager</th>
+                            <th class="thclass" scope="col">Signature</th>
+                            <th class="thclass" scope="col">Time of Signature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                        @foreach ($merchandiserArray as $merchandiser)
+                            {{-- {{dd($merchandiser['time_sheets'])}} --}}
+                            @foreach ($merchandiser['pending_time_sheets'] as $merchandiser_time_sheet)
+                              
+                            @php
+                                $manager = $merchandiser_time_sheet->store_manager_name;
+                                // dd($manager);
+                                $checkin_date_time = null;
+                                $checkin_location = null;
+                                $start_lunch_date_time = null;
+                                $end_lunch_date_time = null;
+                                $start_break_date_time = null;
+                                $end_break_date_time = null;
+                                $checkout_date_time = null;
+                                $checkout_location = null;
+                            @endphp
+                            @foreach ($merchandiser_time_sheet->timeSheetRecords as $time_sheet_record)
+                            
+                                @switch($time_sheet_record->status)
+                                    @case('check-in')
+                                        @php
+                                            $checkin_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            $checkin_location = $time_sheet_record->gps_location;
+                                        @endphp
+                                        @break
+                                    @case('start-lunch-time')
+                                        @php
+                                            $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                        @endphp
+                                        @break
+                                    @case('end-lunch-time')
+                                        @php
+                                            $end_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                        @endphp
+                                        @break
+                                    @case('start-break-time')
+                                        @php
+                                            $start_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                        @endphp
+                                        @break
+                                    @case('end-break-time')
+                                        @php
+                                            $end_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                        @endphp
+                                        @break
+                                    @case('check-out')
+                                        @php
+                                            $checkout_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            $checkout_location = $time_sheet_record->gps_location;
+                                        @endphp
+                                        @break
+                                    @default
+                                @endswitch
+                            @endforeach
+                              
+                              @php
+                                //   echo ($checkin_date_time." ". $start_lunch_date_time." ". $end_lunch_date_time." ". $start_break_date_time." ". $end_break_date_time." ". $checkout_date_time." ". "<br>");
+                                    
+                                    $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
+                                    // Check-out date and time
+                                    $timestamp = strtotime($checkin_date_time);
+                                    $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
+
+                                    if($start_break_date_time!=null  )
+                                    {
+                                        $timestamp = strtotime($start_break_date_time);
+                                        $formatedStartBreakDateTime = date("Y-m-d h:i A", $timestamp);
+                                    }
+                                    if($end_break_date_time!=null)
+                                    {
+                                        $timestamp = strtotime($end_break_date_time);
+                                        $formatedEndBreakDateTime = date("Y-m-d h:i A", $timestamp);
+                                    }
+
+                                    if($start_lunch_date_time!=null)
+                                    {
+                                        $timestamp = strtotime($start_lunch_date_time);
+                                        $formatedStartLunchDateTime = date("Y-m-d h:i A", $timestamp);
+                                    }
+                                    if($end_lunch_date_time!=null )
+                                    {
+                                        $timestamp = strtotime($end_lunch_date_time);
+                                        $formatedEndLunchDateTime = date("Y-m-d h:i A", $timestamp);
+
+                                    }
+                                @endphp
+                                        
+                                <tr>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->location}}</td>
+                                    <td  class="tdclass">
+                                        @if($checkin_date_time!=null)
+                                        {{$formatedCheckinDateTime}}
+                                        @endif
+                                        </td>
+                                    <td  class="tdclass">{{$checkin_location}}</td>
+                                    <td  class="tdclass">
+                                        @if($start_break_date_time!=null)
+                                        {{$formatedStartBreakDateTime}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">
+                                        @if($end_break_date_time!=null)
+                                        {{$formatedEndBreakDateTime}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">
+                                        @if($start_lunch_date_time!=null)
+                                        {{$formatedStartLunchDateTime}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">
+                                        @if($end_lunch_date_time!=null)
+                                        {{$formatedEndLunchDateTime}}
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">
+                                        @if($checkout_date_time!=null)
+                                        @php
+                                            $checkout_time_converted= $formatedCheckoutDateTime
+                                        @endphp
+                                        @endif
+                                    </td>
+                                    <td  class="tdclass">{{$checkout_location}}</td>
+                                    <td  class="tdclass"></td>
+                                    {{-- <td  class="tdclass">{{}}</td> --}}
+                                    <td  class="tdclass">{{$merchandiser['name']}}</td>
+                                    <td  class="tdclass">{{$manager}}</td>
+                                    <td  class="tdclass">
+                                        
+                                    </td>
+                                    <td  class="tdclass">
+                                        
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                        
+                        {{-- {{dd("pending timesheets",$pendingTimeSheetArr)}} --}}
+                    </tbody>
+                </table>
+            </div>
+           
+
+
         </div>  
     </div>
 </div>
 
 <script>
+    var allStores = {!! json_encode($stores) !!};
     var labels = [];
     var chartData =  {{ Js::from($chartHoursArray) }};
     console.log(chartData, "chart datwaaaaaa");
@@ -421,19 +643,19 @@
             });
     });
 
-    document.getElementById('clearDate').addEventListener('click', function () {
-        document.getElementById('period-search').clear;
-        document.getElementById('merchandiser-search').value='';
-        document.getElementById('location-search').value='';
-        document.getElementById('store-search').value='';
+    // document.getElementById('clearDate').addEventListener('click', function () {
+    //     document.getElementById('period-search').clear;
+    //     // document.getElementById('merchandiser-search').value='';
+    //     // document.getElementById('location-search').value='';
+    //     // document.getElementById('store-search').value='';
         
-        convertingData(chartData);
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = hoursWorked;
-        myChartJS.update(); 
-        document.getElementById('period-search').value= 'Date Range';
+    //     // convertingData(chartData);
+    //     // myChartJS.data.labels = labels;
+    //     // myChartJS.data.datasets[0].data = hoursWorked;
+    //     // myChartJS.update(); 
+    //     document.getElementById('period-search').value= 'Date Range';
 
-    });
+    // });
 </script>
  
 

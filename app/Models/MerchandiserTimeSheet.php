@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Store;
 use App\Models\CompanyUser;
+use App\Models\StoreLocation;
 use App\Models\TimeSheetRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,6 +15,7 @@ class MerchandiserTimeSheet extends Model
     protected $fillable = [
         'store_id',
         'store_manager_name',
+        'store_location_id',
         'signature',
         'company_user_id'
     ];
@@ -50,6 +52,15 @@ class MerchandiserTimeSheet extends Model
         return $this->belongsTo(Store::class, 'store_id');
     }
 
+    /**
+     * Get the storeLocation that owns the MerchandiserTimeSheet
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function storeLocation(): BelongsTo
+    {
+        return $this->belongsTo(StoreLocation::class, 'store_location_id');
+    }
     public function manager($id){
         $user = User::findOrFail($id);
         return $user;

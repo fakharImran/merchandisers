@@ -10,6 +10,7 @@ use App\Exports\ExportStore;
 
 use App\Imports\ImportStore;
 use Illuminate\Http\Request;
+use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -29,7 +30,7 @@ class StoreController extends Controller
     {
         $pageConfigs = ['pageSidebar' => 'store'];    
         $stores= Store::select('*')->get();        
-        // dd($stores);
+        // dd($stores[15]->locations);
         
         $currentUser = Auth::user();
         $userTimeZone  = $currentUser->time_zone;
@@ -64,13 +65,22 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        $tempUser= new Store();
-        $tempUser->company_id= $request->company_id??null;
-        $tempUser->name_of_store= $request->name_of_store??null;
-        $tempUser->location= $request->location??null;
-        $tempUser->parish= $request->parish??null;
-        $tempUser->channel= $request->channel??null;
+        $tempUser = new Store();
+        $tempUser->company_id = $request->company_id ?? null;
+        $tempUser->name_of_store = $request->name_of_store ?? null;
+        $tempUser->parish = $request->parish ?? null;
+        $tempUser->channel = $request->channel ?? null;
         $tempUser->save();
+        $store_id= $tempUser->id;
+        // Store the locations
+        if ($request->has('locations')) {
+            foreach ($request->locations as $location) {
+
+                $tempUser->locations()->create(['location' => $location]);
+            }
+        }
+
+        
         return redirect()->route('store.index');
     }
 
@@ -108,7 +118,18 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $query =  Store::where('id', $id)->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'location' =>$request->location, 'parish' =>$request->parish, 'channel' =>$request->channel]);
+        // dd($request->locations);
+        $query =  Store::where('id', $id)->first();
+        $query->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'parish' =>$request->parish, 'channel' =>$request->channel]);
+        $query->locations()->delete();
+        // $existionsLocationsCount=count($locations);
+        // dd($existionsLocationsCount);
+        if ($request->has('locations')) {
+            foreach ($request->locations as $location) {
+               
+                    $query->locations()->updateOrCreate(['store_id'=> $query->id, 'location' => $location]);
+            }
+        }
 
         return redirect()->route('store.index');
     }

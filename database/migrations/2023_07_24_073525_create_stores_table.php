@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
             $table->String('name_of_store');
-            $table->String('location');
             $table->String('parish');
             $table->String('channel')->nullable();
             $table->timestamps();

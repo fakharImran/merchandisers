@@ -195,7 +195,7 @@ updatePaginationButtons();
         {{ session('error') }}
     </div>
 @endif
-
+{{-- {{dd($stores)}} --}}
     <div class="row" style="    max-width: 99%; margin: 1px auto; font-size: 12px;">
         <div class="col-12">
             <div class="table_btn_list">
@@ -322,7 +322,16 @@ updatePaginationButtons();
                             <td class="tdclass">{{ $i}}</td>
                             <td class="tdclass">{{ $store->company->company }}</td>
                             <td class="tdclass">{{ $store['name_of_store'] }}</td>
-                            <td class="tdclass">{{ $store['location'] }}</td>
+                            <td class="tdclass">
+                              @if($store->locations!=null)
+                              @foreach($store->locations as $location)
+                              {{$location->location}}
+                              @if(!$loop->last)
+                              ,
+                              @endif
+                              @endforeach
+                              @endif
+                              
                             <td class="tdclass">{{ $store['parish'] }}</td>
                             <td class="tdclass">{{ $store['channel'] }}</td>
                             @php

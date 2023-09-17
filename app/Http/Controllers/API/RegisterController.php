@@ -56,6 +56,10 @@ class RegisterController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+        $company_code = Company::where('id', $request->company_id)->first();
+        if(!$company_code){
+            return $this->sendError('Validation Error.', 'company not exist');       
+        }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);

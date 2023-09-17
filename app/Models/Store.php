@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Company;
+use App\Models\StoreLocation;
 use App\Models\MerchandiserTimeSheet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,7 +14,7 @@ class Store extends Model
 {
     use HasFactory;
     protected $table= 'stores';
-    protected $fillable= ['company_id', 'name_of_store', 'location', 'parish', 'channel'];
+    protected $fillable= ['company_id', 'name_of_store', 'parish', 'channel'];
 
     /**
      * Get the company that owns the Store
@@ -23,6 +24,15 @@ class Store extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+    /**
+     * Get all of the locations for the Store
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function locations(): HasMany
+    {
+        return $this->hasMany(StoreLocation::class, 'store_id');
     }
 
     // /**

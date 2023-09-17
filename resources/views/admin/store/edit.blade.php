@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 @section('content')
   <div class="site-wrapper">
@@ -57,14 +58,47 @@
                                         <div class="label">
                                             <label>{{ __('Location') }} <span class="text-danger">*</span></label>
                                         </div>
-                                        <div class="user_input_form">
-                                            <input type="text" required class="form-control"  value="{{$store['location']}}" id="location" name="location" required autocomplete="location" autofocus  placeholder="">
-                                        @error('location')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                        <div class="user_form_content" id="repeater-container">
+                                            @foreach($store->locations as $location)
+                                                <div>
+                                                    <div class="label">
+                                                        <label>{{ __('Location') }} <span class="text-danger">*</span></label>
+                                                    </div>
+                                                    <div class="user_input_form">
+                                                        <input type="text" required class="form-control" name="locations[]" value="{{ $location->location }}" required autocomplete="location" autofocus placeholder="">
+                                                        <button type="button" class="btn btn-danger" onclick="removeRepeaterItem(this)">Remove</button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
+                                        
+                                        <div class="user_form_content">
+                                            <button type="button" class="btn btn-primary" onclick="addRepeaterItem()">Add Location</button>
+                                        </div>
+                                        
+                                        <script>
+                                        function addRepeaterItem() {
+                                            const repeaterContainer = document.getElementById('repeater-container');
+                                            const newItem = document.createElement('div');
+                                            newItem.innerHTML = `
+                                                <div>
+                                                    <div class="label">
+                                                        <label>{{ __('Location') }} <span class="text-danger">*</span></label>
+                                                    </div>
+                                                    <div class="user_input_form">
+                                                        <input type="text" required class="form-control" name="locations[]" required autocomplete="location" autofocus placeholder="">
+                                                        <button type="button" class="btn btn-danger" onclick="removeRepeaterItem(this)">Remove</button>
+                                                    </div>
+                                                </div>
+                                            `;
+                                            repeaterContainer.appendChild(newItem);
+                                        }
+                                        
+                                        function removeRepeaterItem(button) {
+                                            button.parentElement.parentElement.remove();
+                                        }
+                                        </script>
+                                        
                                     </div>
                                     <div class="user_form_content">
                                         <div class="label">

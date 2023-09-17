@@ -204,8 +204,60 @@ var myChartJS= new Chart(
 
           // Perform the search on the first column of the DataTable
           table.column(0).search(this.value).draw();
+          var storeName = this.value;
+          
+          console.log(table.column(1).data());
+          //append to #location-search
+          
+            // Assuming you have a dropdown with ID 'location-search'
+            var dropdown = $('#location-search');
+            
+            allStores.forEach(function(store) {
+                if(storeName == store.name_of_store){
+                    console.log('store.locations',store.locations);
+                    // Append each option into the select list
+                    // Append the column data to the dropdown
+                    dropdown.empty();
+                    dropdown.append('<option value="" selected>--Select--</option>');
+
+                    var storeLocations = store.locations;
+                    storeLocations.forEach(function(storeLocation) {
+                        console.log('storeLocation.location', storeLocation.location);
+                        // dropdown.append('<option value="' + storeLocation.location + '">' + storeLocation.location + '</option>');
+                            dropdown.append('<option value="' + storeLocation.location + '">' + storeLocation.location + '</option>');
+                    });
+                }
+            });            
+            if(storeName== "")
+            {
+                // table.lengthMenu= [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ];
+                table.column(1).search('', true, false).draw(); // Clear previous search
+                dropdown.empty();
+                dropdown.append('<option value="" selected>--Select--</option>');
+
+                allStores.forEach(function(store) {
+                    console.log('store.locations',store.locations);
+                    // Append each option into the select list
+                    // Append the column data to the dropdown
+                    dropdown.innerHTML = '<option value="" selected>--Select--</option>';
+
+                    var storeLocations = store.locations;
+                    storeLocations.forEach(function(storeLocation) {
+                        console.log('storeLocation.location', storeLocation.location);
+                        // dropdown.append('<option value="' + storeLocation.location + '">' + storeLocation.location + '</option>');
+                            dropdown.append('<option value="' + storeLocation.location + '">' + storeLocation.location + '</option>');
+                    });
+                }); 
+            }
+            // Empty the dropdown to remove previous options
+
+
+            
+
+            
+
           var convertedToChartData = changeGraph(table);
-          console.log(convertedToChartData,' at change graph    ');
+          console.log(convertedToChartData,' at change graph');
           convertingData(convertedToChartData);
           myChartJS.data.labels = labels;
           myChartJS.data.datasets[0].data = hoursWorked;
@@ -279,8 +331,19 @@ var myChartJS= new Chart(
               console.log("The substring 'to' does not exist in the original string.");
           }
         
-        });
-        document.getElementById('clearDate').addEventListener('click', function () {
+        }); 
+
+        document.getElementById('clearDate').addEventListener('click', function (element) {
             table.column(8).search('', true, false).draw(); // Clear previous search
+            document.getElementById('period-search').clear;
+            // table.column(8).search('').draw();
+            var convertedToChartData = changeGraph(table);
+            console.log(convertedToChartData);
+            convertingData(convertedToChartData);
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = hoursWorked;
+            myChartJS.update(); 
+            document.getElementById('period-search').value= 'Date Range';
+
         });
   });

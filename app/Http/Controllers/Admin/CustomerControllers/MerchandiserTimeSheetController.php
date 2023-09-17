@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\CustomerControllers;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\StoreLocation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,7 @@ class MerchandiserTimeSheetController extends Controller
 
        
         $merchandiserArray = array();
+        $allLocations=StoreLocation::all();
         $compnay_users = $user->companyUser->company->companyUsers;
         $stores= $user->companyUser->company->stores;
         foreach ($compnay_users as $key => $compnay_user) {
@@ -87,8 +89,8 @@ class MerchandiserTimeSheetController extends Controller
 
         // ];
     
-            // dd($merchandiserArray);
-        return view('manager.merchandiserTimeSheet.index', compact('merchandiserArray', 'stores'), ['pageConfigs' => $pageConfigs]);
+            // dd($stores);
+        return view('manager.merchandiserTimeSheet.index', compact('merchandiserArray', 'stores','allLocations'), ['pageConfigs' => $pageConfigs]);
 
         //
     }
