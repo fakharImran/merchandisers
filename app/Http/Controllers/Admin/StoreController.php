@@ -7,6 +7,7 @@ use App\Models\Store;
 use App\Models\Company;
 use App\Exports\ExportStore;
 
+use Validator;
 
 use App\Imports\ImportStore;
 use Illuminate\Http\Request;
@@ -65,6 +66,18 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'company_id' => 'required',
+            'name_of_store' => 'required',
+            'locations' => 'required',
+            'parish' => 'required',
+            'channel' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Validation failed
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $tempUser = new Store();
         $tempUser->company_id = $request->company_id ?? null;
         $tempUser->name_of_store = $request->name_of_store ?? null;
@@ -118,6 +131,20 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $this->validate($request, [
+            'company_id' => 'required',
+            'name_of_store' => 'required',
+            'locations' => 'required',
+            'parish' => 'required',
+            'channel' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Validation failed
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        
         // dd($request->locations);
         $query =  Store::where('id', $id)->first();
         $query->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'parish' =>$request->parish, 'channel' =>$request->channel]);

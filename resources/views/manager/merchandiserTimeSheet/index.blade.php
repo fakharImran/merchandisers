@@ -9,6 +9,9 @@
 {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
 @endsection
 
 @section("bottom_links")
@@ -336,8 +339,9 @@
                                     $intervalSeconds = $interval->s + $interval->i * 60 + $interval->h * 3600 + $interval->d * 86400;
                                     $intervalAfterBreakLunch= $intervalSeconds-$totalBreakLunchSeconds;
                                     $resultIntervalAfterBreakLunch = new DateInterval('PT' . $intervalAfterBreakLunch . 'S');
-                                    // dd($resultIntervalAfterBreakLunch->s);
-
+                                    // dd($intervalAfterBreakLunch);
+                                    $tempTotalMinutes=  $intervalAfterBreakLunch % 3600;
+                                    // dd($tempTotalMinutes);
                                     if($resultIntervalAfterBreakLunch->days==false)
                                     {
                                         $daysWorked=0;
@@ -353,11 +357,14 @@
 
                                     // dd($interval, $checkinDateTime, $checkoutDateTime);
                                     // Calculate the total hours
-                                    $hoursWorked = $daysWorked+ $tempHours+ $tempMinutes/60;
+                                    $hoursWorked = $daysWorked+ $tempHours;
                                     $minutesWorked = $tempMinutes;
                                     // $totalHours=  $interval->days * 24 + $interval->h + $interval->i/60;
-                                    // dd($hoursWorked);
+                                    // dd($hoursWorked, $minutesWorked);
                                     $totalHourworked+= $hoursWorked;
+                                    $hoursWorked = [$hoursWorked + ($minutesWorked / 60)];
+                                    $timeFormatted = $daysWorked+ $tempHours . ' hours ' . $minutesWorked . ' minutes';
+                                    // dd($timeFormatted);
                                     // dd(
                                     //     $checkin_date_time,  $checkout_date_time,
                                     // $formatedCheckinDateTime, $formatedCheckoutDateTime , $interval, $hoursWorked, $minutesWorked);
@@ -435,7 +442,7 @@
                                     </td>
                                 </tr>
                                 @php
-                                    array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$hoursWorked] );
+                                    array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$intervalAfterBreakLunch] );
                                 @endphp
                             @endforeach
                         @endforeach
