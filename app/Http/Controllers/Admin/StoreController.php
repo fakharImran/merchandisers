@@ -132,7 +132,7 @@ class StoreController extends Controller
     public function update(Request $request, $id)
     {
 
-        $this->validate($request, [
+        $validator= $this->validate($request, [
             'company_id' => 'required',
             'name_of_store' => 'required',
             'locations' => 'required',
