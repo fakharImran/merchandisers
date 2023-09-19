@@ -66,13 +66,14 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'company_id' => 'required',
             'name_of_store' => 'required',
             'locations' => 'required',
             'parish' => 'required',
             'channel' => 'required',
         ]);
+    
         if ($validator->fails()) {
             // Validation failed
             return redirect()->back()->withErrors($validator)->withInput();
@@ -132,13 +133,14 @@ class StoreController extends Controller
     public function update(Request $request, $id)
     {
 
-        $validator= $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'company_id' => 'required',
             'name_of_store' => 'required',
             'locations' => 'required',
             'parish' => 'required',
             'channel' => 'required',
         ]);
+    
         if ($validator->fails()) {
             // Validation failed
             return redirect()->back()->withErrors($validator)->withInput();
