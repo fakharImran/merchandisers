@@ -163,6 +163,8 @@ const config = {
                         console.log(epoch_to_hh_mm_ss(v) );
                         return epoch_to_hh_mm_ss(v) 
                     },
+                    stepSize: 30 * 60,
+                    beginAtZero: true
                 }
             }]
         },
@@ -238,6 +240,20 @@ function changeGraph(table) {
 
 $(document).ready(function () {
     var table = $('#mechandiserDatatable').DataTable({
+        //exact search algorithem 
+        // initComplete: function () {
+        //     this.api().columns().every(function () {
+        //         const column = this;
+        //         $('input', this.footer()).on('keyup change clear', function () {
+        //             const searchValue = this.value.trim();
+        //             if (column.search() !== searchValue) {
+        //                 column
+        //                     .search(searchValue ? `^${searchValue}$` : '', true, false)
+        //                     .draw();
+        //             }
+        //         });
+        //     });
+        // },
         // Add your custom options here
         scrollX: true, // scroll horizontally
         paging: true, // Enable pagination
@@ -253,7 +269,9 @@ $(document).ready(function () {
     $('#store-search').on('change', function () {
 
         // Perform the search on the first column of the DataTable
-        table.column(0).search(this.value).draw();
+        const searchValue = this.value.trim();
+        table.column(0).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        // table.column(0).search(this.value).draw();
         var storeName = this.value;
 
         console.log(table.column(1).data());
@@ -316,9 +334,13 @@ $(document).ready(function () {
     });
 
     $('#location-search').on('change', function () {
-        table.column(1).search(this.value).draw();
+        const searchValue = this.value.trim();
+        table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        // table.column(1).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
-        // console.log(convertedToChartData);
+
+        
+        console.log(convertedToChartData , 'converted data', this.value);
         convertingData(convertedToChartData);
         myChartJS.data.labels = labels;
         console.log(hoursWorked, 'hour worked');
@@ -329,7 +351,9 @@ $(document).ready(function () {
 
     });
     $('#merchandiser-search').on('change', function () {
-        table.column(11).search(this.value).draw();
+        const searchValue = this.value.trim();
+        table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        // table.column(11).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
         // console.log(convertedToChartData);
         convertingData(convertedToChartData);
