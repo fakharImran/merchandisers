@@ -76,7 +76,7 @@ class MerchandiserTimeSheetController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'gps_location'=>'required',
-            // 'store_id'=>'required',
+            'store_id'=>'required',
             'store_location_id'=>'required',
             'store_manager_name'=>'required',
             'status'=>'required',
@@ -96,9 +96,15 @@ class MerchandiserTimeSheetController extends BaseController
         {
             return $this->sendError('Validation Error Store location not exist.');       
         }
-        $store=$store_location->store;
+        // $store=$store_location->store;
 
-        // $store= Store::find($request->store_id);
+        $store= Store::find($request->store_id);
+
+        if($store->id!=$store_location->store->id)
+        {
+            return $this->sendResponse(['location'=>$store_location, 'store'=>$store_location->store], 'store not have this selected location ');
+        }
+
         if(!$store)
         {
             return $this->sendError('Validation Error Store not exist.');       

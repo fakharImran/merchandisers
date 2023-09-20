@@ -369,11 +369,10 @@
                                     //     $checkin_date_time,  $checkout_date_time,
                                     // $formatedCheckinDateTime, $formatedCheckoutDateTime , $interval, $hoursWorked, $minutesWorked);
                                 @endphp
-                            {{-- {{dd($merchandiser_time_sheet->storeLocation->location)}} --}}
-                                         
+                          
                                 <tr>
                                     <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
-                                    <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->location}}</td>
+                                    <td  class="tdclass">{{($merchandiser_time_sheet->storeLocation->location)??null}}</td>
                                     <td  class="tdclass">
                                         @if($checkin_date_time!=null)
                                         {{$formatedCheckinDateTime}}
