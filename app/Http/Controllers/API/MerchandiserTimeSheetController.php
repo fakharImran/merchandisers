@@ -146,9 +146,9 @@ class MerchandiserTimeSheetController extends BaseController
                 'gps_location'=> $request->gps_location
 
             ];
+            return $this->sendError('check3', [ $storeArr]);       
 
             $merchandiserTimeSheet= MerchandiserTimeSheet::create($storeArr);
-        return $this->sendError('check3');       
 
             $timesheetRecord= $merchandiserTimeSheet->timeSheetRecords()->create($recordArray);
             return $this->sendResponse(['current_store'=>$storeArr, 'timeSheetRecord'=>$timesheetRecord, 'timeSheet'=>$merchandiserTimeSheet], 'time sheet stored successfully.');
