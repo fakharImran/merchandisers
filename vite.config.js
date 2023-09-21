@@ -2,8 +2,9 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin'; // Assuming this is the correct import path
 
 export default defineConfig({
-    publicDir: 'public',
+    // publicDir: 'public',
     base: '/public/', // Adjust this based on your asset path
+    // outDir: 'public',
     plugins: [
         laravel({
             input: [
