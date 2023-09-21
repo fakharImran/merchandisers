@@ -96,6 +96,8 @@ class MerchandiserTimeSheetController extends BaseController
         {
             return $this->sendError('Validation Error Store location not exist.');       
         }
+        return $this->sendError('check1');       
+
         $store=$store_location->store;
 
         // $store= Store::find($request->store_id);
