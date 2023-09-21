@@ -76,7 +76,7 @@ class MerchandiserTimeSheetController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'gps_location'=>'required',
-            'store_id'=>'required',
+            // 'store_id'=>'required',
             'store_location_id'=>'required',
             'store_manager_name'=>'required',
             'status'=>'required',
@@ -112,7 +112,7 @@ class MerchandiserTimeSheetController extends BaseController
         $company_user_id = $user->companyUser->id;
 
         if($company_user_id && $store ){
-            $storeArr= ['company_user_id'=>$company_user_id, 'store_id'=>$request->store_id, 'store_location_id'=>$request->store_location_id, 'store_manager_name'=>$request->store_manager_name];
+            $storeArr= ['company_user_id'=>$company_user_id, 'store_id'=>$store->id, 'store_location_id'=>$request->store_location_id, 'store_manager_name'=>$request->store_manager_name];
             $dateString = $request->date;
             $correctDateFormat = date('Y-m-d', strtotime($dateString));
 
