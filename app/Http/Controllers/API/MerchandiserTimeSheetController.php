@@ -57,7 +57,7 @@ class MerchandiserTimeSheetController extends BaseController
             $recordsCount = count($records);
             if($records[$recordsCount-1]->status != 'check-out'){
                 $timeSheet = $timeSheets[$numberTimeSheets-1];
-                return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'store_manager_name'=>$timeSheet->store_manager_name, 'company_user_id'=> $timeSheet->company_user_id, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray], 'incomplete status in time sheet');
+                return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'store_manager_name'=>$timeSheet->store_manager_name, 'company_user_id'=> $timeSheet->companyUser->id, 'store_id'=> $timeSheet->storeLocation->store->id,'store_location_id'=>$timeSheet->storeLocation->id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray], 'incomplete status in time sheet');
             }
         }
 
@@ -76,7 +76,7 @@ class MerchandiserTimeSheetController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'gps_location'=>'required',
-            'store_id'=>'required',
+            // 'store_id'=>'required',
             'store_location_id'=>'required',
             'store_manager_name'=>'required',
             'status'=>'required',
@@ -96,15 +96,9 @@ class MerchandiserTimeSheetController extends BaseController
         {
             return $this->sendError('Validation Error Store location not exist.');       
         }
-        // $store=$store_location->store;
+        $store=$store_location->store;
 
-        $store= Store::find($request->store_id);
-
-        if($store->id!=$store_location->store->id)
-        {
-            return $this->sendResponse(['location'=>$store_location, 'store'=>$store_location->store], 'store not have this selected location ');
-        }
-
+        // $store= Store::find($request->store_id);
         if(!$store)
         {
             return $this->sendError('Validation Error Store not exist.');       
@@ -130,7 +124,7 @@ class MerchandiserTimeSheetController extends BaseController
            
             $storeArr= array_merge(
                 ['company_user_id'=>$company_user_id],
-                ['store_id'=>$store->id],
+                // ['store_id'=>$store->id],
                 $request->only(
                     'store_location_id',
                     'store_manager_name',

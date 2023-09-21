@@ -371,7 +371,7 @@
                                 @endphp
                           
                                 <tr>
-                                    <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->store->name_of_store}}</td>
                                     <td  class="tdclass">{{($merchandiser_time_sheet->storeLocation->location)??null}}</td>
                                     <td  class="tdclass">
                                         @if($checkin_date_time!=null)
@@ -568,7 +568,7 @@
                                 @endphp
                                         
                                 <tr>
-                                    <td  class="tdclass">{{$merchandiser_time_sheet->store->name_of_store}}</td>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->store->name_of_store}}</td>
                                     <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->location}}</td>
                                     <td  class="tdclass">
                                         @if($checkin_date_time!=null)
@@ -630,6 +630,8 @@
 </div>
 
 <script>
+    var startDate= 0;
+    var endDate = 0;
     var allStores = {!! json_encode($stores) !!};
     var labels = [];
     var chartData =  {{ Js::from($chartHoursArray) }};

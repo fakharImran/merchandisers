@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class MerchandiserTimeSheet extends Model
 {
     protected $fillable = [
-        'store_id',
+        // 'store_id',
         'store_manager_name',
         'store_location_id',
         'signature',
@@ -47,10 +47,10 @@ class MerchandiserTimeSheet extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function store(): BelongsTo
-    {
-        return $this->belongsTo(Store::class, 'store_id');
-    }
+    // public function store(): BelongsTo
+    // {
+    //     return $this->belongsTo(Store::class, 'store_id');
+    // }
 
     /**
      * Get the storeLocation that owns the MerchandiserTimeSheet

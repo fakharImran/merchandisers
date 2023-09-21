@@ -216,7 +216,7 @@ class MerchandiserTimeSheetController extends Controller
                                 }
                                 $selectedTimeSheetArrayByStore= [];
                                 foreach ($timeSheetArray as $key => $timesheet) {
-                                    if($time_sheet->store_id==$SelectedStoreId)
+                                    if($time_sheet->storeLocation->store->id==$SelectedStoreId)
                                     {
                                         array_push($selectedTimeSheetArrayByStore,$time_sheet);
                                     }

@@ -326,7 +326,9 @@ $(document).ready(function () {
 
         var convertedToChartData = changeGraph(table);
         // console.log(convertedToChartData, ' at change graph');
-        convertingData(convertedToChartData);
+        console.log( 'store data', startDate, endDate);
+
+        convertingData(convertedToChartData , startDate, endDate);
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = hoursWorked;
         myChartJS.update();
@@ -340,8 +342,10 @@ $(document).ready(function () {
         var convertedToChartData = changeGraph(table);
 
         
-        console.log(convertedToChartData , 'converted data', this.value);
-        convertingData(convertedToChartData);
+        console.log( 'converted data', startDate, endDate);
+
+        convertingData(convertedToChartData , startDate, endDate);
+
         myChartJS.data.labels = labels;
         console.log(hoursWorked, 'hour worked');
 
@@ -356,7 +360,7 @@ $(document).ready(function () {
         // table.column(11).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
         // console.log(convertedToChartData);
-        convertingData(convertedToChartData);
+        convertingData(convertedToChartData , startDate, endDate);
         myChartJS.data.labels = labels;
         // console.log(hoursWorked, 'hour worked');
         myChartJS.data.datasets[0].data = hoursWorked;
@@ -373,13 +377,13 @@ $(document).ready(function () {
             var start = parts[0].trim(); // Remove leading/trailing spaces
             startDate = start.replace(/^\s+/, ''); // Remove the first space
             startDate = new Date(startDate);
-            var startDate = formatDateYMD(startDate);
+             startDate = formatDateYMD(startDate);
             // console.log("start date", startDate);
 
             var end = parts[1].trim(); // Remove leading/trailing spaces
             endDate = end.replace(/^\s+/, ''); // Remove the first space
             endDate = new Date(endDate);
-            var endDate = formatDateYMD(endDate);
+             endDate = formatDateYMD(endDate);
             // console.log("end date", endDate);
 
             table.column(8).search('', true, false).draw(); // Clear previous search
@@ -414,6 +418,8 @@ $(document).ready(function () {
     document.getElementById('clearDate').addEventListener('click', function (element) {
         table.column(8).search('', true, false).draw(); // Clear previous search
         document.getElementById('period-search').clear;
+        endDate = 0;
+        startDate = 0;
         // table.column(8).search('').draw();
         var convertedToChartData = changeGraph(table);
         // console.log(convertedToChartData);

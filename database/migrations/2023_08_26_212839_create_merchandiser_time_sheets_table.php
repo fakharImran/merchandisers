@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
 
-            $table->unsignedBigInteger('store_id');
-            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
+            // $table->unsignedBigInteger('store_id');
+            // $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             
             $table->unsignedBigInteger('store_location_id');
             $table->foreign('store_location_id')->references('id')->on('stores')->onDelete('cascade');
