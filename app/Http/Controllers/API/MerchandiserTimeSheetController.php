@@ -76,34 +76,24 @@ class MerchandiserTimeSheetController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'gps_location'=>'required',
-            // 'store_id'=>'required',
+            'store_id'=>'required',
             'store_location_id'=>'required',
             'store_manager_name'=>'required',
             'status'=>'required',
             'date'=>'required',
             'time'=>'required',
         ]);
-        // return $this->sendResponse(['request'=>$request->store_location_id], 'current location selected');
-        
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
         $store_location=StoreLocation::select('*')->where('id', $request->store_location_id)->first();
-
-        // return $this->sendResponse(['location'=>$store_location, 'store'=>$store_location->store], 'current location selected');
-
          if(!$store_location)
         {
             return $this->sendError('Validation Error Store location not exist.');       
         }
 
         $store=$store_location->store;
-
-        // $store= Store::find($request->store_id);
-        if(!$store)
-        {
-            return $this->sendError('Validation Error Store not exist.');       
-        }
+        if(!$store){  return $this->sendError('Validation Error Store not exist.'); }
 
         $user = Auth::user();
 
@@ -120,13 +110,9 @@ class MerchandiserTimeSheetController extends BaseController
         }
 
         $company_user_id = $user->companyUser->id;
-        // $store = Store::findOrFail($request->store_id);
-        if($company_user_id && $store ){
-           
-            $storeArr= ['company_user_id'=>$company_user_id, 'store_location_id'=>$request->store_location_id, 'store_manager_name'=>$request->store_manager_name];
-             
-        // return $this->sendResponse(['location'=>$store_location, 'store_array'=>$storeArr], 'current location selected');
 
+        if($company_user_id && $store ){
+            $storeArr= ['company_user_id'=>$company_user_id, 'store_id'=>$request->store_id, 'store_location_id'=>$request->store_location_id, 'store_manager_name'=>$request->store_manager_name];
             $dateString = $request->date;
             $correctDateFormat = date('Y-m-d', strtotime($dateString));
 
@@ -140,21 +126,14 @@ class MerchandiserTimeSheetController extends BaseController
                 'gps_location'=> $request->gps_location
 
             ];
-            return $this->sendError('check3', [ $storeArr]);       
 
             $merchandiserTimeSheet= MerchandiserTimeSheet::create($storeArr);
-
             $timesheetRecord= $merchandiserTimeSheet->timeSheetRecords()->create($recordArray);
             return $this->sendResponse(['current_store'=>$storeArr, 'timeSheetRecord'=>$timesheetRecord, 'timeSheet'=>$merchandiserTimeSheet], 'time sheet stored successfully.');
-
         }
         else{
             return $this->sendError('Validation Error Store or Company not exist.');       
         }
-
-        
-       
-
     }
 
     /**

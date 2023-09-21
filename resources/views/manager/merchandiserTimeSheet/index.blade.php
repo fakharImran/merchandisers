@@ -371,8 +371,8 @@
                                 @endphp
                           
                                 <tr>
-                                    <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->store->name_of_store}}</td>
-                                    <td  class="tdclass">{{($merchandiser_time_sheet->storeLocation->location)??null}}</td>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->store()->name_of_store}}</td>
+                                    <td  class="tdclass">{{($merchandiser_time_sheet->store_location()->location)??null}}</td>
                                     <td  class="tdclass">
                                         @if($checkin_date_time!=null)
                                         {{$formatedCheckinDateTime}}
@@ -568,8 +568,8 @@
                                 @endphp
                                         
                                 <tr>
-                                    <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->store->name_of_store}}</td>
-                                    <td  class="tdclass">{{$merchandiser_time_sheet->storeLocation->location}}</td>
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->store()->name_of_store}}</td>
+                                    <td  class="tdclass">{{($merchandiser_time_sheet->store_location()->location)??null}}</td>
                                     <td  class="tdclass">
                                         @if($checkin_date_time!=null)
                                         {{$formatedCheckinDateTime}}

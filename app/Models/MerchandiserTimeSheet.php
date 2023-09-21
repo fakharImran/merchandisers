@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class MerchandiserTimeSheet extends Model
 {
     protected $fillable = [
-        // 'store_id',
+        'store_id',
         'store_manager_name',
         'store_location_id',
         'signature',
@@ -40,27 +40,19 @@ class MerchandiserTimeSheet extends Model
     {
         return $this->hasMany(TimeSheetRecord::class, 'time_sheet_id');
     }
-    // Define relationships, methods, or other configurations here
-
-    /**
-     * Get the store that owns the MerchandiserTimeSheet
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    // public function store(): BelongsTo
-    // {
-    //     return $this->belongsTo(Store::class, 'store_id');
-    // }
-
-    /**
-     * Get the storeLocation that owns the MerchandiserTimeSheet
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function storeLocation(): BelongsTo
+   
+    public function store()
     {
-        return $this->belongsTo(StoreLocation::class, 'store_location_id');
+        $store= Store::findOrFail($this->store_id);
+        return $store;
     }
+
+    public function store_location()
+    {
+        $store_location= Store::findOrFail($this->store_location_id);
+        return $store_location;
+    }
+    
     public function manager($id){
         $user = User::findOrFail($id);
         return $user;

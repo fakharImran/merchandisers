@@ -129,8 +129,7 @@ Route::group(['middleware' => ['auth', 'role:manager']], function() {
     
     Route::get('/manager-dashboard', [DashboardController::class, 'index'])->name('manager-dashboard');
     Route::get('/merchandiser-time-sheet', [MerchandiserTimeSheetController::class, 'index'])->name('merchandiser-time-sheet');
-    Route::get('/getData', [MerchandiserTimeSheetController::class, 'getDataByStore'])->name('getData');
-    Route::get('/chart-data', [MerchandiserTimeSheetController::class, 'getChartData']);
+    // Route::get('/getData', [MerchandiserTimeSheetController::class, 'getDataByStore'])->name('getData');
 });
 
     

@@ -22,10 +22,7 @@ class CompanyController extends Controller
     {   
         $pageConfigs = ['pageSidebar' => 'company'];    
         $companies= Company::select('*')->get();
-        
-        // $company = Company::select('*')->where('id', 1)->first();
-        // dd($company->stores);
-        
+       
         $currentUser = Auth::user();
         $userTimeZone  = $currentUser->time_zone;
 
@@ -45,7 +42,6 @@ class CompanyController extends Controller
     public function create()
     {
         $pageConfigs = ['pageSidebar' => 'company'];    
-
         return view('admin.company.create', ['pageConfigs' => $pageConfigs]);
         //
     }
@@ -109,7 +105,6 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         $query =  Company::where('id', $id)->update(['company'=>$request->company_name, 'code' =>$request->company_code]);
-
         return redirect()->route('company.index');
     }
 
