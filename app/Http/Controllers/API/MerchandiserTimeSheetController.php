@@ -123,14 +123,8 @@ class MerchandiserTimeSheetController extends BaseController
         // $store = Store::findOrFail($request->store_id);
         if($company_user_id && $store ){
            
-            $storeArr= array_merge(
-                ['company_user_id'=>$company_user_id],
-                // ['store_id'=>$store->id],
-                $request->only(
-                    'store_location_id',
-                    'store_manager_name',
-            ));
-
+            $storeArr= ['company_user_id'=>$company_user_id, 'store_location_id'=>$request->store_location_id, 'store_manager_name'=>$request->store_manager_name];
+             
         // return $this->sendResponse(['location'=>$store_location, 'store_array'=>$storeArr], 'current location selected');
 
             $dateString = $request->date;
