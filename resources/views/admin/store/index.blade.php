@@ -203,6 +203,7 @@ updatePaginationButtons();
                 <div class="add_btn">
                     <a href="{{ route('store.create') }}"> <span>+</span>New</a>
                 </div>
+
                 <div class="select_field">
                     <select class="clickable-element" id="name-search">
                         <option class="text-secondary" value="">Select Company</option>
@@ -274,7 +275,7 @@ updatePaginationButtons();
                                 Upload
                             </button>
                           {{-- <a class="btn btn-warning"
-                            href="{{ route('export') }}">
+                            href="{{ route('export-store') }}">
                                     Export User Data
                             </a> --}}
                       </form>

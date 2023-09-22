@@ -18,6 +18,7 @@ class RegisterController extends BaseController
     //get companies list
     public function getCompanies(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'token' => [
                     'required',
@@ -29,7 +30,7 @@ class RegisterController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
         
-        $companies = Company::all();
+        $companies = Company::select('*')->get();
         if($companies)
         {
             return response()->json($companies, 200);

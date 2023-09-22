@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Store;
+use App\Models\StoreLocation;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class ImportStore implements ToModel
@@ -15,14 +16,34 @@ class ImportStore implements ToModel
     public function model(array $row)
     {
         try {
+            $company_id =$row[0];
+            
             $store = new Store([
-                'company_id' => $row[0],
+                'company_id' => $company_id,
                 'name_of_store' => $row[1],
-                'location' => $row[2],
+                // 'location' => $row[2],
                 'parish' => $row[3],
                 'channel' => $row[4],
             ]);
-            
+            $store->save();
+            // dd($store);
+
+            $locations=explode('|',$row[2]);
+            foreach ($locations as $key => $location) 
+            {
+                # code...
+            // dd($store->locations());
+
+                $store->locations()->create(['location'=>$location]);
+                // $storeLocation= new StoreLocation([
+                //     'store_id'=>$store->id,
+                //     'location'=>$location
+                    
+                // ]);
+            }
+
+            // dd($storeLocation);
+                
             if($store==false)
             {
                 dd("invalid");

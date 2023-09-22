@@ -41,13 +41,13 @@ class MerchandiserTimeSheet extends Model
         return $this->hasMany(TimeSheetRecord::class, 'time_sheet_id');
     }
    
-    public function store($id)
+    public function store($id=null)
     {
         $store= Store::findOrFail($id);
         return $store;
     }
 
-    public function store_location($id)
+    public function store_location($id=null)
     {
         $store_location= StoreLocation::findOrFail($id);
         return $store_location;

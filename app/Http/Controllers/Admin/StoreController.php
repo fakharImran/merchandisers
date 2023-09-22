@@ -147,18 +147,71 @@ class StoreController extends Controller
         }
 
         
-        // dd($request->locations);
-        $query =  Store::where('id', $id)->first();
-        $query->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'parish' =>$request->parish, 'channel' =>$request->channel]);
-        $query->locations()->delete();
-        // $existionsLocationsCount=count($locations);
-        // dd($existionsLocationsCount);
-        if ($request->has('locations')) {
-            foreach ($request->locations as $location) {
-               
-                    $query->locations()->updateOrCreate(['store_id'=> $query->id, 'location' => $location]);
+        // dd($request);
+        
+        // // dd($existionsLocationsCount);
+        // dd($existionsLocationsCount== count($request->locations));
+        // if($existionsLocationsCount== count($request->locations))
+        // {
+            
+        // }
+            // foreach ($request->locations as $req_location) {
+            //     foreach ($query->locations as $key => $location) {
+            //         if($req_location == $location->location){
+            //             $location->update([ 'location' => $location]);
+            //         }
+            //     }
+            // }
+
+            $query =  Store::where('id', $id)->first();
+            $query->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'parish' =>$request->parish, 'channel' =>$request->channel]);
+            
+            $existingLocations = $query->locations;
+
+            $existingLocationsCount = count($existingLocations);
+            $requestLocationsCount = count($request->locations);
+
+            if ($existingLocationsCount == $requestLocationsCount) {
+                // Update existing locations
+                foreach ($existingLocations as $existingLocation) {
+                    // dd($existingLocation);
+                    $reqLocation = $request->locations[$existingLocation->id]; // Assuming the location ID matches the array index
+                    $existingLocation->update(['location' => $reqLocation]);
+                }
+            } else {
+                $existingLocationIds = $existingLocations->pluck('id')->toArray();
+                $requestLocationIds = array_keys($request->locations);
+
+                // Locations to delete (only those that are not in the request)
+                $locationsToDelete = array_diff($existingLocationIds, $requestLocationIds);
+
+                // Delete excess locations (those not in the request)
+                if (!empty($locationsToDelete)) {
+                    StoreLocation::whereIn('id', $locationsToDelete)->delete();
+                }
+
+                // Update existing locations and add new locations
+                // dd($existingLocations);
+                // foreach ($existingLocations as $existingLocation) {
+                //     $reqLocation = $request->locations[$existingLocation->id]; // Assuming the location ID matches the array index
+                //     $existingLocation->update(['location' => $reqLocation]);
+                // }
+
+                // Add new locations
+                $newLocationIds = array_diff($requestLocationIds, $existingLocationIds);
+                foreach ($newLocationIds as $locationId) {
+                    $reqLocation = $request->locations[$locationId];
+                    $query->locations()->create(['location' => $reqLocation]);
+                }
+
+
+                // // Update existing locations
+                // foreach ($existingLocations as $existingLocation) {
+                //     $reqLocation = $request->locations[$existingLocation->id]; // Assuming the location ID matches the array index
+                //     $existingLocation->update(['location' => $reqLocation]);
+                // }
             }
-        }
+
 
         return redirect()->route('store.index');
     }
@@ -231,7 +284,7 @@ class StoreController extends Controller
 
             // Store the uploaded file
             $filePath = $request->file('file')->store('files');
-
+            // dd($filePath);
             // Import the data from the Excel file using the ImportStore class
             Excel::import(new ImportStore, $filePath);
 
@@ -250,6 +303,7 @@ class StoreController extends Controller
     }
 
     public function exportUsers(Request $request){
+        // dd($request->all());
         return Excel::download(new ExportStore, 'stores.xlsx');
     }
 }

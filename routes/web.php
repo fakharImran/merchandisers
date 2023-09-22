@@ -111,16 +111,16 @@ Route::group(['middleware' => ['auth', 'role:admin']], function() {
     Route::post('/import',[StoreController::class,
             'import'])->name('import');
 
-    Route::get('/export-users',[StoreController::class,
-            'exportUsers'])->name('export');
+    Route::get('/export-store',[StoreController::class,
+            'exportUsers'])->name('export-store');
 
             //product import ecport file
             
     Route::post('/importProduct',[ProductController::class,
     'importProduct'])->name('import-product');
 
-    Route::get('/export-users',[ProductController::class,
-            'exportUsers'])->name('export');
+    Route::get('/export-product',[ProductController::class,
+            'exportUsers'])->name('export-product');
             
 });
 

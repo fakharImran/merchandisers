@@ -88,8 +88,16 @@
                             @endphp         
                             <tr>
         
-                                <td>{{$merchandiser_time_sheet->store($merchandiser_time_sheet->store_id)->name_of_store}}</td>
-                                <td>{{($merchandiser_time_sheet->store_location($merchandiser_time_sheet->store_location_id)->location)??null}}</td>
+                                @if ($merchandiser_time_sheet->store($merchandiser_time_sheet->store_id))
+                                    <td  class="tdclass">{{$merchandiser_time_sheet->store($merchandiser_time_sheet->store_id)->name_of_store}}</td>
+                                @else
+                                    <td  class="tdclass"></td>
+                                @endif
+                                @if ($merchandiser_time_sheet->store_location($merchandiser_time_sheet->store_location_id))
+                                    <td  class="tdclass">{{($merchandiser_time_sheet->store_location($merchandiser_time_sheet->store_location_id)->location)??null}}</td>
+                                @else
+                                    <td  class="tdclass"></td>
+                                @endif
                                 <td>{{$checkin_date_time}}</td>
                                 <td>{{$checkin_location}}</td>
                                 <td>{{$break_date_time}}</td>

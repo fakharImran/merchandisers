@@ -76,7 +76,7 @@
                                                         <label>{{ __('Location') }} <span class="text-danger">*</span></label>
                                                     </div>
                                                     <div class="user_input_form">
-                                                        <input type="text" required class="form-control" name="locations[]" value="{{ $location->location }}" required autocomplete="location" autofocus placeholder="">
+                                                        <input type="text" required class="form-control" name="locations[{{$location->id}}]" value="{{ $location->location }}" required autocomplete="location" autofocus placeholder="">
                                                         <button type="button" class="btn btn-danger" onclick="removeRepeaterItem(this)">Remove</button>
                                                     </div>
                                                 </div>

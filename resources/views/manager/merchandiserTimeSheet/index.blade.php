@@ -84,18 +84,45 @@
 
             </div>
         </div>
+        {{-- for setting the filter dropdown unique and sorted value --}}
+        @php
+            $locationArr=array();
+            $storesArr=array();
+            
+        @endphp
+        @if($stores!=null)
+        @foreach ($stores as $store)
+                @php
+                    $tempLocation=array();
+                @endphp
+
+                @foreach($store->locations->unique('location')->sort() as $location)
+                    @php
+                        array_push($locationArr, $location['location']); 
+                        array_push($tempLocation, $location['location']) ;                             
+                    @endphp    
+                @endforeach
+                @php
+                    $uniqueLocation = array_unique($tempLocation);
+                    sort($uniqueLocation);
+                    array_push($storesArr, [$store->name_of_store,$uniqueLocation ]);
+
+                @endphp
+            @endforeach
+        @endif
+        @php
+            $locationArr = array_unique($locationArr);
+            sort($locationArr);
+        @endphp
+        {{-- end sorting and unique location value in filter search --}}
         <div class="col-md-3 col-3 p-4">
             <div class="form-group">
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class="filter form-select" id="location-search">
                     <option value="" selected>--Select--</option>
-                    @if($stores!=null)
-                        @foreach ($stores as $store)
-                            @foreach($store->locations->unique('location')->sort() as $location)
-                                <option value="{{$location['location']}}">{{$location['location']}}</option>
-                            @endforeach
-                        @endforeach
-                    @endif
+                    @foreach ($locationArr as $location)
+                        <option value="{{$location}}">{{$location}}</option>
+                    @endforeach
                 </select>                
             </div>
 
@@ -171,6 +198,9 @@
         </div>
     </div> --}}
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
+        <div class="col-12">
+            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download Time Sheet</button>
+        </div>
         <div class="col-12">
 
             <div class="table-responsive" >
@@ -450,11 +480,16 @@
                     </tbody>
                 </table>
             </div>
-
+        </div>
+    </div>
+    <div class="row pt-3" style="     margin: 1px auto; font-size: 12px;">
+        <div class="col-12">
+            <button id="downloadPendingButton" class="btn btn-dark m-3 float-end">Download Pending Time Sheets</button>
+        </div>
+        <div class="col-12">
             <div class="text-center mb-2">
-                <h1 class="mb-1">Pending Time Sheets</h1>
+                <h3 class="mb-1">Pending Time Sheets</h3>
             </div>
-
             <div class="table-responsive" >
                 {{-- table-responsive --}}
                 {{-- nowrap --}}
@@ -632,7 +667,9 @@
 <script>
     var startDate= 0;
     var endDate = 0;
-    var allStores = {!! json_encode($stores) !!};
+    var allStores = {!! json_encode($storesArr) !!};
+    var allUniqueLocations = {!! json_encode($locationArr) !!};
+
     var labels = [];
     var chartData =  {{ Js::from($chartHoursArray) }};
     console.log(chartData, "chart datwaaaaaa");
@@ -651,6 +688,7 @@
             });
     });
 
+    
     // document.getElementById('clearDate').addEventListener('click', function () {
     //     document.getElementById('period-search').clear;
     //     // document.getElementById('merchandiser-search').value='';
@@ -665,9 +703,49 @@
 
     // });
 </script>
- 
+<script>
+
+    function downloadTable(table) {
+        const rows = table.getElementsByTagName('tr');
+        let csvContent = 'data:text/csv;charset=utf-8,';
+
+        // Add headers as bold and uppercase
+        const headers = table.querySelectorAll('thead th');
+        const headerText = Array.from(headers)
+            .map(header => header.innerText.toUpperCase())
+            .join(',');
+        csvContent += headerText + '\r\n';
+
+        // Add data rows
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            for (let j = 0; j < cells.length; j++) {
+                csvContent += cells[j].innerText + ',';
+            }
+            csvContent += '\r\n';
+        }
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'table_data.csv');
+        document.body.appendChild(link);
+        link.click();
+        
+    }
+    document.getElementById('downloadButton').addEventListener('click', () => {
+        const timeSheetTable = document.getElementById('mechandiserDatatable');
+        downloadTable(timeSheetTable);
+    });
+
+    document.getElementById('downloadPendingButton').addEventListener('click', () => {
+        const timeSheetTable = document.getElementById('mechandiserDatatable2');
+        downloadTable(timeSheetTable);
+    });
+</script>
 
 
-@include('manager/merchandiserTimeSheet/pendingTimeSheets')
+
+{{-- @include('manager/merchandiserTimeSheet/pendingTimeSheets') --}}
 
 @endsection
