@@ -8,6 +8,15 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\ResetPasswordController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\MerchandiserTimeSheetController;
+use App\Http\Controllers\API\MerchandiserApiControllers\OutOfStockController;
+use App\Http\Controllers\API\MerchandiserApiControllers\PriceAuditController;
+use App\Http\Controllers\API\MerchandiserApiControllers\OpportunityController;
+use App\Http\Controllers\API\MerchandiserApiControllers\NotificationController;
+use App\Http\Controllers\API\MerchandiserApiControllers\MarketingActivityController;
+use App\Http\Controllers\API\MerchandiserApiControllers\SellinSelloutDataController;
+use App\Http\Controllers\API\MerchandiserApiControllers\StockCountByStoreController;
+use App\Http\Controllers\API\MerchandiserApiControllers\ProductExpiryTrackerController;
+use App\Http\Controllers\API\MerchandiserApiControllers\PlanogramComplianceTrackerController;
 
 // 'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
 /*
@@ -39,4 +48,16 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::apiResource('companies', CompanyController::class);
     Route::apiResource('time-sheets', MerchandiserTimeSheetController::class);
     Route::post('time-sheets/check-out/{id}', [MerchandiserTimeSheetController::class, 'update']);
+
+
+    Route::apiResource('price-audit',PriceAuditController::class);
+    Route::apiResource('stock-count-by-store',StockCountByStoreController::class);
+    Route::apiResource('planogram-compliance-tracker',PlanogramComplianceTrackerController::class);
+    Route::apiResource('sellin-vs-sellout-data',SellinSelloutDataController::class);
+    Route::apiResource('marketing-activity',MarketingActivityController::class);
+    Route::apiResource('product-expiry-tracker',ProductExpiryTrackerController::class);
+    Route::apiResource('out-of-stock',OutOfStockController::class);
+    Route::apiResource('opportunity',OpportunityController::class);
+    Route::apiResource('notification',NotificationController::class);
+
 });

@@ -169,13 +169,16 @@
 
             </script> --}}
         </div>
-        <div class="col-md-3 col-3 p-4">
+        <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
                 <select name="merchandiser-search" class=" filter form-select"  id="merchandiser-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($merchandiserArray as $merchandiser)
-                    <option value="{{$merchandiser['name']}}">{{$merchandiser['name']}}</option>
+                    @php
+                        $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                    @endphp
+                    @foreach($uniqueMerchandisers as $merchandiser)
+                         <option value="{{$merchandiser}}">{{$merchandiser}}</option>
                     @endforeach
                 </select>   
             </div>
@@ -688,20 +691,6 @@
             });
     });
 
-    
-    // document.getElementById('clearDate').addEventListener('click', function () {
-    //     document.getElementById('period-search').clear;
-    //     // document.getElementById('merchandiser-search').value='';
-    //     // document.getElementById('location-search').value='';
-    //     // document.getElementById('store-search').value='';
-        
-    //     // convertingData(chartData);
-    //     // myChartJS.data.labels = labels;
-    //     // myChartJS.data.datasets[0].data = hoursWorked;
-    //     // myChartJS.update(); 
-    //     document.getElementById('period-search').value= 'Date Range';
-
-    // });
 </script>
 <script>
 
@@ -743,9 +732,4 @@
         downloadTable(timeSheetTable);
     });
 </script>
-
-
-
-{{-- @include('manager/merchandiserTimeSheet/pendingTimeSheets') --}}
-
 @endsection

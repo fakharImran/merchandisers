@@ -774,3 +774,26 @@ label.form-label.filter.location::after{
     background-color: #f1f1f1!important;
     font-size: revert;
 }
+
+/* manager dashboard style */
+.manager-card-style {
+    border: none;
+    border-radius: 1.25rem;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.09);
+    min-height: 127px;
+}
+.manager-card-header{
+    border-radius: calc(1.25rem - 1px) calc(1.25rem - 1px) 0 0 !important;
+
+}
+.manager-card-header {
+    color: #2297C3;
+    font-size: 15px;
+    font-family: Inter;
+    font-weight: 700;
+    line-height: 30px;
+    word-wrap: break-word;
+    margin-bottom: 0;
+    background: none;
+    border: none;
+}

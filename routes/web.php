@@ -11,7 +11,17 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CompanyUserController;
 use App\Http\Controllers\Manager\DashboardController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Admin\CustomerControllers\OutOfStockController;
+use App\Http\Controllers\Admin\CustomerControllers\PriceAuditController;
+use App\Http\Controllers\Admin\CustomerControllers\OpportunityController;
+use App\Http\Controllers\Admin\CustomerControllers\NotificationController;
+use App\Http\Controllers\Admin\CustomerControllers\BusinessOverviewController;
+use App\Http\Controllers\Admin\CustomerControllers\MarketingActivityController;
+use App\Http\Controllers\Admin\CustomerControllers\SellinSelloutDataController;
+use App\Http\Controllers\Admin\CustomerControllers\StockCountByStoreController;
+use App\Http\Controllers\Admin\CustomerControllers\ProductExpiryTrackerController;
 use App\Http\Controllers\Admin\CustomerControllers\MerchandiserTimeSheetController;
+use App\Http\Controllers\Admin\CustomerControllers\PlanogramComplianceTrackerController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -126,13 +136,30 @@ Route::group(['middleware' => ['auth', 'role:admin']], function() {
 
 
 Route::group(['middleware' => ['auth', 'role:manager']], function() {
+   
     
-    Route::get('/manager-dashboard', [DashboardController::class, 'index'])->name('manager-dashboard');
-    Route::get('/merchandiser-time-sheet', [MerchandiserTimeSheetController::class, 'index'])->name('merchandiser-time-sheet');
+    Route::resource('manager-dashboard', DashboardController::class);
+    Route::resource('business_overview', BusinessOverviewController::class);
+    Route::resource('merchandiser_time_sheet', MerchandiserTimeSheetController::class);
+    Route::resource('price_audit', PriceAuditController::class);
+    Route::resource('stock_count_by_store', StockCountByStoreController::class);
+    Route::resource('planogram_compliance_tracker', PlanogramComplianceTrackerController::class);
+    Route::resource('sellin_vs_sellout_data', SellinSelloutDataController::class);
+    Route::resource('marketing_activity', MarketingActivityController::class);
+    Route::resource('product_expiry_tracker', ProductExpiryTrackerController::class);
+    Route::resource('out_of_stock', OutOfStockController::class);
+    Route::resource('web_opportunity', OpportunityController::class);
+    
+    Route::resource('web_notification', NotificationController::class);
+    Route::get('/notification-edit/{target?}/{parameter?}', [NotificationController::class, 'edit'])->name('edit-notification');
+
+    // Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
+    // Route::get('/notification-store', [NotificationController::class, 'createNotification'])->name('create-notification');
+    // Route::post('/notification-add', [NotificationController::class, 'store'])->name('add-notification');
+    // Route::get('/notification-destroy/{target?}', [NotificationController::class, 'destroy'])->name('destroy-notification');
     // Route::get('/getData', [MerchandiserTimeSheetController::class, 'getDataByStore'])->name('getData');
 });
 
-    
 
 
 
