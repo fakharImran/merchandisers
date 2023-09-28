@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Company;
+use App\Models\Product;
 use App\Models\StoreLocation;
 use App\Models\MerchandiserTimeSheet;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,15 @@ class Store extends Model
     public function locations(): HasMany
     {
         return $this->hasMany(StoreLocation::class, 'store_id');
+    }
+    /**
+     * Get all of the products for the Store
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'store_id');
     }
 
     // /**

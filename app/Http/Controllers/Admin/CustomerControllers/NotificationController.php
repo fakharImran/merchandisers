@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use App\Models\User;
+use App\Models\Product;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
@@ -35,7 +36,12 @@ class NotificationController extends Controller
             }
         }
         $stores= $user->companyUser->company->stores;
-        $products= $user->companyUser->company->products;
+        $products = [];
+        foreach ($stores as $store) {
+            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $storeProducts); // Merge product IDs
+        }
+        $products = Product::whereIn('id', $products)->get();
 
         $name=$user->name;
         $userTimeZone  = $user->time_zone;
@@ -66,8 +72,12 @@ class NotificationController extends Controller
             }
         }
         $stores= $user->companyUser->company->stores;
-        $products= $user->companyUser->company->products;
-
+    $products = [];
+        foreach ($stores as $store) {
+            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $storeProducts); // Merge product IDs
+        }
+        $products = Product::whereIn('id', $products)->get();
         $name=$user->name;
         return view('manager.modal.createNotification', compact('userArr', 'name',  'stores','allLocations', 'products'),['pageConfigs' => $pageConfigs]);
                 //
@@ -98,8 +108,12 @@ class NotificationController extends Controller
             }
         }
         $stores= $user->companyUser->company->stores;
-        $products= $user->companyUser->company->products;
-
+        $products = [];
+        foreach ($stores as $store) {
+            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $storeProducts); // Merge product IDs
+        }
+        $products = Product::whereIn('id', $products)->get();
         $name=$user->name;
         
         
@@ -173,8 +187,12 @@ class NotificationController extends Controller
             }
         }
         $stores= $user->companyUser->company->stores;
-        $products= $user->companyUser->company->products;
-
+        $products = [];
+        foreach ($stores as $store) {
+            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $storeProducts); // Merge product IDs
+        }
+        $products = Product::whereIn('id', $products)->get();
         $name=$user->name;
         $userTimeZone  = $user->time_zone;
         $selectedNotification= Notification::select()->where('id',$id)->first();
@@ -209,8 +227,12 @@ class NotificationController extends Controller
             }
         }
         $stores= $user->companyUser->company->stores;
-        $products= $user->companyUser->company->products;
-
+        $products = [];
+        foreach ($stores as $store) {
+            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $storeProducts); // Merge product IDs
+        }
+        $products = Product::whereIn('id', $products)->get();
         $name=$user->name;
         
           // Check for a new file

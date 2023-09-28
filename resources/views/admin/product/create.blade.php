@@ -21,26 +21,40 @@
                                       <h4>General</h4>
                                   </div>
                                   <div class="user_form_content">
-                                      <div class="label">
-                                          <label>{{ __('Company') }} <span class="text-danger">*</span></label>
-                                      </div>
-                                      <div class="user_select_form">
+                                    <div class="label">
+                                        <label>{{ __('Company') }} <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="user_select_form">
                                         <select id="company" name="company_id" class="form-select" required>
-                                            <option value disabled selected>Select Company</option>
-                                            @if($companies!=null)
-                                            @foreach($companies as $company)
-                                            <option value="{{$company['id']}}">{{$company['company']}}</option>
-                                            @endforeach
+                                            <option value="" disabled selected>Select Company</option>
+                                            @if($companies != null)
+                                                @foreach($companies as $company)
+                                                    <option value="{{$company['id']}}" data-stores="{{ json_encode($company->stores) }}" data-categories="{{ json_encode($company->categories) }}">{{$company['company']}}</option>
+                                                @endforeach
                                             @endif
                                         </select>
                                     </div>
-                                  </div>
-                                  <div class="user_form_content">
+                                </div>
+                                
+                                <div class="user_form_content">
+                                    <div class="label">
+                                        <label>{{ __('Store') }} <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="user_select_form">
+                                        <select id="store" name="store_id" class="form-select" required>
+                                            <option value="" disabled selected>Select Store</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="user_form_content">
                                     <div class="label">
                                         <label>{{ __('Category') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="user_select_form">
-                                        <input type="text" required  class="form-control" id="category" name="category" required autocomplete="category" autofocus  placeholder="">
+                                        <select id="category" name="category" class="form-select" required>
+                                            <option value="" disabled selected>Select Category</option>
+                                        </select>
                                         @error('category')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -48,6 +62,47 @@
                                         @enderror
                                     </div>
                                 </div>
+                                
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $('#company').change(function() {
+                                            var selectedCompany = $(this).find(':selected');
+                                            var stores = JSON.parse(selectedCompany.attr('data-stores'));
+                                            var categories = JSON.parse(selectedCompany.attr('data-categories'));
+                                
+                                            // Update the store dropdown
+                                            populateDropdown('#store', stores, 'Select Store');
+                                
+                                            // Update the category dropdown
+                                            populateDropdown('#category', categories, 'Select Category');
+                                        });
+                                
+                                        function populateDropdown(dropdownId, options, defaultOptionText) {
+                                            var dropdown = $(dropdownId);
+                                            dropdown.empty();
+                                            dropdown.append('<option value="" disabled selected>' + defaultOptionText + '</option>');
+                                
+                                            if (options && options.length > 0) {
+                                                $.each(options, function(key, value) {
+                                                    if(dropdownId== '#store')
+                                                    {
+                                                        dropdown.append('<option value="'+value.id+'">'+value.name_of_store+'</option>');
+                                                    }
+                                                    else
+                                                    {
+                                                        dropdown.append('<option value="'+value.id+'">'+value.category+'</option>');
+                                                        
+                                                    }
+                                                });
+                                            } else {
+                                                dropdown.append('<option value="" disabled>No options available</option>');
+                                            }
+                                        }
+                                    });
+                                </script>
+                                
+                                
                                   <div class="user_form_content">
                                     <div class="label">
                                         <label>{{ __('Product Name') }} <span class="text-danger">*</span></label>
@@ -74,18 +129,19 @@
                                             @enderror
                                         </div>
                                     </div>
+
                                     <div class="user_form_content">
                                         <div class="label">
-                                            <label>{{ __('Competitor Product Name') }} <span class="text-danger">*</span></label>
+                                            <label>{{ __('Compititor Product Name') }} <span class="text-danger">*</span></label>
                                         </div>
-                                        <div class="user_input_form">
-                                            <input type="text" required class="form-control" id="competitor_product_name" name="competitor_product_name" autocomplete="competitor_product_name" autofocus  placeholder="">
-                                            @error('competitor_product_name')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
+                                        <div class="user_form_content" id="repeater-container">
+                                            <!-- This is the container for the repeater items -->
                                         </div>
+                                        
+                                        <div class="user_form_content">
+                                            <button type="button" class="btn btn-primary" onclick="addRepeaterItem()">Add Compititor Product Name</button>
+                                        </div>
+                                        
                                     </div>
                                     <div class="user_btn_list">
                                         {{-- <div class="user_btn text-secondary" >
@@ -116,6 +172,26 @@
     </div>
 </div>
 
+<script>
+    function addRepeaterItem() {
+    const repeaterContainer = document.getElementById('repeater-container');
+    const newItem = document.createElement('div');
+    newItem.innerHTML = `
+        <div class="label">
+            <label style="width:200px" >{{ __('Compititor Product Name') }} <span class="text-danger">*</span></label>
+        </div>
+        <div class="user_input_form">
+            <input type="text" required class="form-control" name="competitor_product_name[]" required style="width:200px" autocomplete="competitor_product_name" autofocus placeholder="">
+            <button type="button" class="btn btn-danger" onclick="removeRepeaterItem(this)">Remove</button>
+        </div>
+    `;
+    repeaterContainer.appendChild(newItem);
+}
 
+function removeRepeaterItem(button) {
+    button.parentElement.parentElement.remove();
+}
+
+</script>
 
 @endsection

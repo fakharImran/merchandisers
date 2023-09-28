@@ -20,6 +20,75 @@ class MerchandiserTimeSheetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function checkTimeSheetStatus($timesheets)
+    {
+        // dd($timesheets);
+
+        foreach ($timesheets as $key => $time_sheet) {
+            // dd($lastTimeSheetRecord = $time_sheet->timeSheetRecords()->latest()->first()->status );
+                    // dd($time_sheet);
+                    $firstTimeSheetRecord = $time_sheet->timeSheetRecords()->first();
+                    $lastTimeSheetRecord = $time_sheet->timeSheetRecords()->latest()->first();
+
+                if($lastTimeSheetRecord->status!='check-out')
+                {
+                    // dd($firstTimeSheetRecord,$lastTimeSheetRecord);
+
+                    $checkin_date_time = $firstTimeSheetRecord->date . ' ' . $firstTimeSheetRecord->time;
+
+                    $checkinDateTime = new DateTime($checkin_date_time);
+                    $currentDateTime = new DateTime();
+
+                    $interval = $checkinDateTime->diff($currentDateTime);
+
+                    // Format the date and time
+                    $formattedDateTime = $currentDateTime->format('Y-m-d H:i A');
+
+                    $timestamp = strtotime($checkin_date_time);
+                    $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
+
+                    $intervalSeconds = $interval->s + $interval->i * 60 + $interval->h * 3600 + $interval->d * 86400;
+
+                    $IntervalHrs= $intervalSeconds/3600;
+                    // dd($IntervalHrs>=8);
+                    if($IntervalHrs>=8)
+                    {
+                        $checkoutDateTime = clone $checkinDateTime; // Create a copy to avoid modifying the original object
+                        $checkoutDateTime->modify('+8 hours');
+
+                        // Add 8 hours to the date component
+                        // Separate date and time
+                        $checkoutDate = $checkoutDateTime->format('Y-m-d');
+                        $checkoutTime = $checkoutDateTime->format('H:i:s');
+                        
+                        $recordArray=[
+                            'date'=>$checkoutDate,
+                            'time'=> $checkoutTime,
+                            'status'=> 'check-out',
+                            'gps_location'=> $lastTimeSheetRecord->gps_location
+                        ];
+                        
+                        $time_sheet->signature=null;
+                        $timeSheetRecord = $time_sheet->timeSheetRecords()->create($recordArray);
+
+                        // dd($time_sheet);
+                        
+
+                        // $timeSheetRecord->date= $checkoutDate;
+                        // $timeSheetRecord->time= $checkoutTime;
+                        // $timeSheetRecord->status='check-out';
+                    }
+                    
+
+                }
+                # code...
+            # code...
+        }
+        // dd($timesheets);
+        return $timesheets;
+
+    }
+
     public function index()
     {
         $pageConfigs = ['pageSidebar' => 'merchandiser-timeSheet'];    
@@ -48,6 +117,9 @@ class MerchandiserTimeSheetController extends Controller
                         $roleName = $role->name;
                         if($roleName == 'merchandiser'){
                             $time_sheets = $user->companyUser->timeSheets;
+
+                           $time_sheets= $this->checkTimeSheetStatus($time_sheets);
+
                             if($time_sheets && $time_sheets->count() > 0){
                                 foreach ($time_sheets as $key => $time_sheet) {
 
@@ -55,133 +127,6 @@ class MerchandiserTimeSheetController extends Controller
                                     foreach ($time_sheet->timeSheetRecords as $key => $timeSheetRecord) {
                                         if($timeSheetRecord->status=="check-out")
                                         {
-
-                                            // $checkin_date_time = null;
-                                            // $checkin_location = null;
-                                            // $start_lunch_date_time = null;
-                                            // $end_lunch_date_time = null;
-                                            // $start_break_date_time = null;
-                                            // $end_break_date_time = null;
-                                            // $checkout_date_time = null;
-                                            // $checkout_location = null;
-                                            // foreach ($time_sheet->timeSheetRecords as $time_sheet_record) {
-                                            //     # code...
-                                            //     switch ($time_sheet_record->status) {
-                                            //         case 'check-in':
-                                            //             $checkin_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            //             $checkin_location = $time_sheet_record->gps_location;   
-                                            //             # code...
-                                            //             break;
-                                            //         case 'start-lunch-time':
-                                            //             $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            //             break;
-                                            //         case 'end-lunch-time':
-                                            //             $end_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            //             break;
-                                            //         case 'start-break-time':
-                                            //             $start_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            //             break;
-                                            //         case 'end-break-time':
-                                            //             $end_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            //             break;
-                                            //         case 'start-lunch-time':
-                                            //             $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            //             break;
-                                            //         case 'check-out':
-                                            //             $checkout_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            //             $checkout_location = $time_sheet_record->gps_location;                                                        break;
-
-                                            //         default:
-                                            //             # code...
-                                            //             break;
-                                            //     }
-
-                                            //     $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
-                                            //     // Check-out date and time
-                                            //     $timestamp = strtotime($checkin_date_time);
-                                            //     $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
-            
-                                            //     if($start_break_date_time!=null && $end_break_date_time!=null )
-                                            //     {
-                                            //         $startBreakDateTime = new DateTime($start_break_date_time);
-                                            //         $endBreakDateTime = new DateTime($end_break_date_time);
-                                                 
-                                            //         //getting break time interval
-                                            //         $breakTimeInterval=$startBreakDateTime->diff($endBreakDateTime);
-                                            //         $breakSeconds = $breakTimeInterval->s + $breakTimeInterval->i * 60 + $breakTimeInterval->h * 3600 + $breakTimeInterval->d * 86400;
-                
-                
-                                            //         $timestamp = strtotime($start_break_date_time);
-                                            //         $formatedStartBreakDateTime = date("Y-m-d h:i A", $timestamp);
-                
-                                            //         $timestamp = strtotime($end_break_date_time);
-                                            //         $formatedEndBreakDateTime = date("Y-m-d h:i A", $timestamp);
-            
-            
-                                            //     }
-                                            //     else {
-                                            //         $breakSeconds=0;
-                                            //         $breakTimeInterval=0;
-                                            //     }
-            
-                                            //     if($start_lunch_date_time!=null && $end_lunch_date_time!=null )
-                                            //     {
-                                            //         $startLunchDateTime = new DateTime($start_lunch_date_time);
-                                            //         $endLunchDateTime = new DateTime($end_lunch_date_time);
-                
-                                            //         $LunchTimeInterval=$startLunchDateTime->diff($endLunchDateTime);
-                                            //         $lunchSeconds = $LunchTimeInterval->s + $LunchTimeInterval->i * 60 + $LunchTimeInterval->h * 3600 + $LunchTimeInterval->d * 86400;
-                
-                                            //         $timestamp = strtotime($start_lunch_date_time);
-                                            //         $formatedStartLunchDateTime = date("Y-m-d h:i A", $timestamp);
-                
-                                            //         $timestamp = strtotime($end_lunch_date_time);
-                                            //         $formatedEndLunchDateTime = date("Y-m-d h:i A", $timestamp);
-            
-                                            //     }
-                                            //     else {
-                                            //         $LunchTimeInterval=0;
-                                            //         $lunchSeconds=0;
-                                            //     }
-                                            //     // Add the seconds together
-                                            //     $totalBreakLunchSeconds = $breakSeconds + $lunchSeconds;
-            
-                                            //     $checkoutDateTime = new DateTime($checkout_date_time); 
-            
-                                            //     $timestamp = strtotime($checkout_date_time);
-                                            //     $formatedCheckoutDateTime = date("Y-m-d h:i A", $timestamp);
-                                            //     dd($checkinDateTime, $checkout_date_time);
-                                            //     $interval = $checkinDateTime->diff($checkoutDateTime);
-            
-                                            //     //here calculating total hours worked after subtracting break and lunch
-            
-                                            //     $intervalSeconds = $interval->s + $interval->i * 60 + $interval->h * 3600 + $interval->d * 86400;
-                                            //     $intervalAfterBreakLunch= $intervalSeconds-$totalBreakLunchSeconds;
-                                            //     $resultIntervalAfterBreakLunch = new DateInterval('PT' . $intervalAfterBreakLunch . 'S');
-                                            //     $tempTotalMinutes=  $intervalAfterBreakLunch % 3600;
-
-                                            //     if($resultIntervalAfterBreakLunch->days==false)
-                                            //     {
-                                            //         $daysWorked=0;
-                                            //     }
-                                            //     else {
-                                            //         $daysWorked=$resultIntervalAfterBreakLunch->days *24;
-                                            //     }
-                                            //     #
-                                            //     // Calculate hours and minutes
-                                            //     $tempHours = floor($intervalAfterBreakLunch / 3600); // 3600 seconds in an hour
-                                            //     $tempRemainingSeconds = $intervalAfterBreakLunch % 3600;
-                                            //     $tempMinutes = floor($tempRemainingSeconds / 60); 
-                                            //     dd($tempHours);
-                                            //     $hoursWorked = $daysWorked+ $tempHours;
-                                            //     $minutesWorked = $tempMinutes;
-                                            //     dd($hoursWorked, "in cpnttprller");
-
-                                            //     $totalHourworked+= $hoursWorked;
-                                            //     $hoursWorked = [$hoursWorked + ($minutesWorked / 60)];
-                                            //     $timeFormatted = $daysWorked+ $tempHours . ' hours ' . $minutesWorked . ' minutes';
-                                            //     dd($hoursWorked, "in cpnttprller");
-                                            // }
                                             array_push($timeSheetArray, $time_sheet);
                                             $checkoutFound = true;
                                             break; // Break the loop if "check-out" status is found

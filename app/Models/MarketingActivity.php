@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Models\Store;
 use App\Models\CompanyUser;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Notification extends Model
+class MarketingActivity extends Model
 {
     use HasFactory;
-    protected $table= 'notifications';
-    protected $fillable= ['store_id','company_user_id','title', 'message', 'name_of_store', 'location', 'merchandiser', 'attachment'];
+    protected $table= 'marketing_activities';
+    protected $fillable= ['store_id','company_user_id','type_of_promotion','category', 'product_name', 'product_number_sku', 'compititor_product_name', 'marketing_photo', 'marketing_activity_notes'];
 
     public function companyUser(): BelongsTo
     {
@@ -22,4 +23,7 @@ class Notification extends Model
     {
         return $this->belongsTo(Store::class, 'store_id');
     }
+
 }
+
+

@@ -25,15 +25,6 @@ class Company extends Model
         return $this->hasMany(CompanyUser::class,  'company_id');
     }
     
-    /**
-     * Get all of the products for the CompanyUser
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class, 'company_id');
-    }
 
     /**
      * Get all of the stores for the CompanyUser
@@ -44,5 +35,14 @@ class Company extends Model
     {
         return $this->hasMany(Store::class, 'company_id');
         
+    }
+    /**
+     * Get all of the categories for the Company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'company_id');
     }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('stock_count_by_stores', function (Blueprint $table) {
+        Schema::create('out_of_stocks', function (Blueprint $table) {
             $table->id();
             $table->string('store_id')->nullable();
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
@@ -21,13 +21,10 @@ return new class extends Migration
             $table->string('company_user_id')->nullable();
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
-            $table->string('category');
-            $table->string('product_name');
-            $table->bigInteger('product_number_sku');
-            $table->bigInteger('stock_on_shelf');
-            $table->bigInteger('stocks_packed');
-            $table->bigInteger('stocks_in_storeroom');
-
+            $table->string('category')->nullable();
+            $table->string('product_name')->nullable();
+            $table->bigInteger('product_number_sku')->nullable();
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }
@@ -39,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stock_count_by_stores');
+        Schema::dropIfExists('out_of_stocks');
     }
 };

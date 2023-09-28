@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Validator;
 use Exception;
 use App\Models\Company;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Exports\ExportProduct;
 use App\Imports\ImportProduct;
@@ -45,8 +47,9 @@ class ProductController extends Controller
     {
         $pageConfigs = ['pageSidebar' => 'product'];    
 
+        $categories= Category::select('*')->get();
         $companies= Company::select('*')->get();
-        return view('admin.product.create', compact('companies'), ['pageConfigs' => $pageConfigs]);
+        return view('admin.product.create', compact('companies', 'categories'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
@@ -57,12 +60,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'company_id' => 'required',
+            'store_id' => 'required',
+            'category' => 'required',
+            'product_name' => 'required',
+            'product_number_sku' => 'required',
+            'competitor_product_name' => 'required',
+        ]);
+    
+        if ($validator->fails()) {
+            // Validation failed
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // dd($request->all());
         $tempProduct= new Product();
         $tempProduct->company_id= $request->company_id??null;
-        $tempProduct->category= $request->category??null;
+        $tempProduct->store_id= $request->store_id??null;
+        $tempProduct->category_id= $request->category??null;
         $tempProduct->product_name= $request->product_name??null;
         $tempProduct->product_number_sku= $request->product_number_sku??null;
-        $tempProduct->competitor_product_name= $request->competitor_product_name??null;
+        $tempProduct->competitor_product_name= json_encode($request->competitor_product_name??null);
+        // dd($tempProduct);
         $tempProduct->save();
         return redirect()->route('product.index');
     }
@@ -85,10 +105,13 @@ class ProductController extends Controller
      */
     public function edit($target, $id)
     {
+        // dd($target);
         $pageConfigs = ['pageSidebar' => 'product'];    
         $companies= Company::select('*')->get();
         $product= Product::select()->where('id',$id)->first();
-        return view('admin.product.edit', compact('product', 'id','companies'), ['pageConfigs' => $pageConfigs]);
+        $categories= Category::select('*')->get();
+
+        return view('admin.product.edit', compact('product', 'id','companies','categories'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
@@ -100,7 +123,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $query =  Product::where('id', $id)->update(['company_id'=>$request->company_id, 'category' =>$request->category, 'product_name' =>$request->product_name, 'product_number_sku' =>$request->product_number_sku, 'competitor_product_name' =>$request->competitor_product_name]);
+        // dd($request->all());
+        $query =  Product::where('id', $id)->update(['company_id'=>$request->company_id, 'store_id' => $request->store_id, 'category_id' =>$request->category, 'product_name' =>$request->product_name, 'product_number_sku' =>$request->product_number_sku, 'competitor_product_name' => json_encode($request->competitor_product_name??null)]);
 
         return redirect()->route('product.index');
     }
@@ -127,6 +151,7 @@ class ProductController extends Controller
             return response()->json(['error' => 'Something went wrong while deleting the item']);
         }
     }
+    
     public function delete( $id) {
          try {
             // Find the item with the given ID and delete it

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use App\Models\User;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Models\StockCountByStores;
@@ -34,8 +35,12 @@ class PlanogramComplianceTrackerController extends Controller
             }
         }
         $stores= $user->companyUser->company->stores;
-        $products= $user->companyUser->company->products;
-
+        $products = [];
+        foreach ($stores as $store) {
+            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $storeProducts); // Merge product IDs
+        }
+        $products = Product::whereIn('id', $products)->get();
         
         $name=$user->name;
      

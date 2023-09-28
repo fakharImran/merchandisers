@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Models\Store;
 use App\Models\CompanyUser;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Notification extends Model
+class PriceAudit extends Model
 {
     use HasFactory;
-    protected $table= 'notifications';
-    protected $fillable= ['store_id','company_user_id','title', 'message', 'name_of_store', 'location', 'merchandiser', 'attachment'];
+    protected $table= 'price_audits';
+    protected $fillable= ['store_id','company_user_id','category', 'product_name', 'product_number_sku', 'store_price', 'tax', 'total_price','compititor_product_name','compititor_product_price','notes'];
 
     public function companyUser(): BelongsTo
     {

@@ -15,6 +15,13 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
+            
+            $table->string('store_id')->nullable();
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
+
+            $table->string('company_user_id')->nullable();
+            $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
+
             $table->string('title')->nullable();
             $table->string('message')->nullable();
             $table->string('name_of_store')->nullable();

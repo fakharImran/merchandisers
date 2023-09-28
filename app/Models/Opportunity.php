@@ -7,11 +7,11 @@ use App\Models\CompanyUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Notification extends Model
+class Opportunity extends Model
 {
     use HasFactory;
-    protected $table= 'notifications';
-    protected $fillable= ['store_id','company_user_id','title', 'message', 'name_of_store', 'location', 'merchandiser', 'attachment'];
+    protected $table= 'opportunities';
+    protected $fillable= ['store_id','company_user_id','type_of_opportunity','category', 'product_name', 'product_number_sku', 'opportunity_photo', 'description'];
 
     public function companyUser(): BelongsTo
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\MerchandiserApiControllers;
 use Validator;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\StockCountByStores;
 use App\Http\Controllers\Controller;
@@ -19,9 +20,20 @@ class StockCountByStoreController extends BaseController
     public function index()
     {
         $user = Auth::user();
-        $products = $user->companyUser->company->products;
-        $company = $user->companyUser->company;
-        return $this->sendResponse(['products'=>$products], 'here are products of company named:');
+        $stores = $user->companyUser->company->stores;
+        $categories = $user->companyUser->company->categories;
+        $products = [];
+        foreach ($categories as $category) {
+            $categoryProducts = $category->products->pluck('id', 'product_name')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $categoryProducts); // Merge product IDs
+        // return $this->sendResponse(['products'=>$products, 'categoryProducts'=>$categoryProducts], 'here are products of company named:');
+
+        }
+
+        $productsList = Product::whereIn('id', $products)->get();
+
+
+        return $this->sendResponse([ 'categories'=>$categories], 'here are products of company named:');
 
 
         //

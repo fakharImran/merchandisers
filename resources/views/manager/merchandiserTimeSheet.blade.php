@@ -447,6 +447,8 @@
                                     <td  class="tdclass">{{$manager}}</td>
                                     <td  class="tdclass">
                                         @php
+                                        if($merchandiser_time_sheet->signature!=null)
+                                        {
                                             $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
                                             if (file_exists($imagePath)) 
                                             {
@@ -456,22 +458,20 @@
                                             {
                                                 echo "N/A";
                                             }
+                                        }
+                                        else {
+                                            echo "N/A";
+                                        }
+                                            
                                         @endphp     
                                     </td>
                                     <td  class="tdclass">
-                                        @php
-                                            $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
-                                        
-                                            if (file_exists($imagePath)) 
-                                            {
-                                                echo "$checkout_time_converted";
-                                            } 
-                                            else 
-                                            {
-                                                echo "N/A";
-                                            }
-                                        @endphp   
-                                    </td>
+                                        @if($merchandiser_time_sheet->signature!=null)
+                                           {{$checkout_time_converted}} 
+                                        @else
+                                            {{"N/A"}}
+                                        @endif
+                                        </td>
                                 </tr>
                                 @php
                                     array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$intervalAfterBreakLunch] );
@@ -613,187 +613,11 @@
                                 </tr>
                             @endforeach
                         @endforeach
-                        
-                        {{-- {{dd("pending timesheets",$pendingTimeSheetArr)}} --}}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    {{-- <div class="row pt-3" style="     margin: 1px auto; font-size: 12px;">
-        <div class="col-12">
-            <button id="downloadPendingButton" class="btn btn-dark m-3 float-end">Download Pending Time Sheets</button>
-        </div>
-        <div class="col-12">
-            <div class="text-center mb-2">
-                <h3 class="mb-1">Pending Time Sheets</h3>
-            </div>
-            <div class="table-responsive" >
-                <table id="mechandiserDatatable2" class="table table-sm table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
-                    <thead>
-                        <tr>
-                            <th class="thclass" scope="col">Name of Store</th>
-                            <th class="thclass" scope="col">Location</th>
-                            <th class="thclass" scope="col">Check-in Time</th>
-                            <th class="thclass" scope="col">Check-in GPS Location</th>
-                            <th class="thclass" scope="col">Start Break Time</th>
-                            <th class="thclass" scope="col">End Break Time</th>
-                            <th class="thclass" scope="col">Start Lunch Time</th>
-                            <th class="thclass" scope="col">End Lunch Time</th>
-                            <th class="thclass" scope="col">Check-out Time</th>
-                            <th class="thclass" scope="col">Check-out GPS Location</th>
-                            <th class="thclass" scope="col">Hours Worked</th>
-                            <th class="thclass" scope="col">Merchandiser</th>
-                            <th class="thclass" scope="col">Store Manager</th>
-                            <th class="thclass" scope="col">Signature</th>
-                            <th class="thclass" scope="col">Time of Signature</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      
-                        @foreach ($merchandiserArray as $merchandiser)
-                            @foreach ($merchandiser['pending_time_sheets'] as $merchandiser_time_sheet)
-                              
-                            @php
-                                $manager = $merchandiser_time_sheet->store_manager_name;
-                                // dd($manager);
-                                $checkin_date_time = null;
-                                $checkin_location = null;
-                                $start_lunch_date_time = null;
-                                $end_lunch_date_time = null;
-                                $start_break_date_time = null;
-                                $end_break_date_time = null;
-                                $checkout_date_time = null;
-                                $checkout_location = null;
-                            @endphp
-                            @foreach ($merchandiser_time_sheet->timeSheetRecords as $time_sheet_record)
-                            
-                                @switch($time_sheet_record->status)
-                                    @case('check-in')
-                                        @php
-                                            $checkin_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            $checkin_location = $time_sheet_record->gps_location;
-                                        @endphp
-                                        @break
-                                    @case('start-lunch-time')
-                                        @php
-                                            $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                        @endphp
-                                        @break
-                                    @case('end-lunch-time')
-                                        @php
-                                            $end_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                        @endphp
-                                        @break
-                                    @case('start-break-time')
-                                        @php
-                                            $start_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                        @endphp
-                                        @break
-                                    @case('end-break-time')
-                                        @php
-                                            $end_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                        @endphp
-                                        @break
-                                    @case('check-out')
-                                        @php
-                                            $checkout_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            $checkout_location = $time_sheet_record->gps_location;
-                                        @endphp
-                                        @break
-                                    @default
-                                @endswitch
-                            @endforeach
-                              
-                              @php
-                                    
-                                    $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
-                                    // Check-out date and time
-                                    $timestamp = strtotime($checkin_date_time);
-                                    $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
-
-                                    if($start_break_date_time!=null  )
-                                    {
-                                        $timestamp = strtotime($start_break_date_time);
-                                        $formatedStartBreakDateTime = date("Y-m-d h:i A", $timestamp);
-                                    }
-                                    if($end_break_date_time!=null)
-                                    {
-                                        $timestamp = strtotime($end_break_date_time);
-                                        $formatedEndBreakDateTime = date("Y-m-d h:i A", $timestamp);
-                                    }
-
-                                    if($start_lunch_date_time!=null)
-                                    {
-                                        $timestamp = strtotime($start_lunch_date_time);
-                                        $formatedStartLunchDateTime = date("Y-m-d h:i A", $timestamp);
-                                    }
-                                    if($end_lunch_date_time!=null )
-                                    {
-                                        $timestamp = strtotime($end_lunch_date_time);
-                                        $formatedEndLunchDateTime = date("Y-m-d h:i A", $timestamp);
-
-                                    }
-                                    // dd($end_lunch_date_time);
-                                @endphp
-                                        
-                                <tr>
-                                    <td  class="tdclass">{{$merchandiser_time_sheet->store($merchandiser_time_sheet->store_id)->name_of_store}}</td>
-                                    <td  class="tdclass">{{($merchandiser_time_sheet->store_location($merchandiser_time_sheet->store_location_id)->location)??null}}</td>
-                                    <td  class="tdclass">
-                                        @if($checkin_date_time!=null)
-                                        {{$formatedCheckinDateTime}}
-                                        @endif
-                                        </td>
-                                    <td  class="tdclass">{{$checkin_location}}</td>
-                                    <td  class="tdclass">
-                                        @if($start_break_date_time!=null)
-                                        {{$formatedStartBreakDateTime}}
-                                        @endif
-                                    </td>
-                                    <td  class="tdclass">
-                                        @if($end_break_date_time!=null)
-                                        {{$formatedEndBreakDateTime}}
-                                        @endif
-                                    </td>
-                                    <td  class="tdclass">
-                                        @if($start_lunch_date_time!=null)
-                                        {{$formatedStartLunchDateTime}}
-                                        @endif
-                                    </td>
-                                    <td  class="tdclass">
-                                        @if($end_lunch_date_time!=null)
-                                        {{$formatedEndLunchDateTime}}
-                                        @endif
-                                    </td>
-                                    <td  class="tdclass">
-                                        @if($checkout_date_time!=null)
-                                        @php
-                                            $checkout_time_converted= $formatedCheckoutDateTime
-                                        @endphp
-                                        @endif
-                                    </td>
-                                    <td  class="tdclass">{{$checkout_location}}</td>
-                                    <td  class="tdclass"></td>
-                                    <td  class="tdclass">{{$merchandiser['name']}}</td>
-                                    <td  class="tdclass">{{$manager}}</td>
-                                    <td  class="tdclass">
-                                        
-                                    </td>
-                                    <td  class="tdclass">
-                                        
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-           
-
-
-        </div>  
-    </div> --}}
 </div>
 
 <script>
@@ -856,9 +680,5 @@
         downloadTable(timeSheetTable);
     });
 
-    document.getElementById('downloadPendingButton').addEventListener('click', () => {
-        const timeSheetTable = document.getElementById('mechandiserDatatable2');
-        downloadTable(timeSheetTable);
-    });
 </script>
 @endsection

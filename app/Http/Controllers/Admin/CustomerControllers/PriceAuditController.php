@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\CustomerControllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
@@ -32,8 +33,15 @@ class PriceAuditController extends Controller
         }
 
 
-        $stores= $user->companyUser->company->stores;
-        $products= $user->companyUser->company->products;
+        $stores = $user->companyUser->company->stores;
+
+        $products = [];
+        foreach ($stores as $store) {
+            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $storeProducts); // Merge product IDs
+        }
+        $products = Product::whereIn('id', $products)->get();
+        
 
         foreach ($compnay_users as $key => $compnay_user) {
             $user = $compnay_user->user;

@@ -174,7 +174,7 @@ updatePaginationButtons();
     
     <div class="row mb-5" style="   max-width: 99%; margin: 1px auto;">
         <div class="col-md-12 col-12">
-            <div class="Company" >Products
+            <div class="Company" >Category
             </div>
             
         </div>
@@ -203,14 +203,14 @@ updatePaginationButtons();
             <div class="table_btn_list">
 
                 <div class="add_btn">
-                    <a href="{{ route('product.create') }}"> <span>+</span>New</a>
+                    <a href="{{ route('category.create') }}"> <span>+</span>New</a>
                 </div>
                 <div class="select_field">
                     <select class="clickable-element" id="name-search">
                         <option class="text-secondary" value="">Select Company</option>
-                        @if($products!=null)
-                        @foreach ($products->unique('company.company')->sort() as $product)
-                            <option value="{{ $product->company->company }}">{{ $product->company->company }}</option>
+                        @if($categories!=null)
+                        @foreach ($categories->unique('company.company')->sort()  as $category)
+                            <option value="{{ $category->company->company }}">{{ $category->company->company }}</option>
                         @endforeach
                         @endif
                     </select>
@@ -252,7 +252,7 @@ updatePaginationButtons();
                 </div>
 
                 <!-- Modal -->
-                <div id="upload" class="modal fade" role="dialog">
+                {{-- <div id="upload" class="modal fade" role="dialog">
                   <div class="modal-dialog">
 
                     <!-- Modal content-->
@@ -260,7 +260,7 @@ updatePaginationButtons();
                       
                       <div class="modal-header">
                         <h4 class="modal-title">Upload Product</h4>
-                        {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
 
                       </div>
                       <div class="modal-body">
@@ -275,10 +275,10 @@ updatePaginationButtons();
                           <button class="btn btn-success">
                                 Upload
                             </button>
-                          {{-- <a class="btn btn-warning"
+                          <a class="btn btn-warning"
                             href="{{ route('export') }}">
                                     Export User Data
-                            </a> --}}
+                            </a>
                       </form>
                       </div>
                       <div class="modal-footer">
@@ -288,7 +288,7 @@ updatePaginationButtons();
 
                   </div>
                 </div>
-            
+             --}}
             
                 <div class="search_bar">
                     <div class="search_field">
@@ -306,13 +306,9 @@ updatePaginationButtons();
                     <tr>
                     <th class="thclass" scope="col">#</th>
                     <th class="thclass"  scope="col">Company</th>
-                    <th class="thclass"  scope="col">store</th>
-                    <th class="thclass"  scope="col">Category</th>
-                    <th class="thclass"  scope="col">Product Name</th>
-                    <th class="thclass"  scope="col">Product Number / SKU</th>
-                    <th class="thclass"  scope="col">Competitor Product Name</th>
-                    <th class="thclass"  scope="col">dateModified</th>
-                    <th class="thclass"  scope="col">dateCreated</th>
+                    <th class="thclass"  scope="col">category</th>
+                    <th class="thclass"  scope="col">created_at</th>
+                    <th class="thclass"  scope="col">updated_at</th>
                     <th class="thclass"  scope="col">Action</th>
                     </tr>
                 </thead> 
@@ -320,28 +316,15 @@ updatePaginationButtons();
                     $i=1;
                 @endphp
                 <tbody>
-                    @if($products!=null)
-                    @foreach ($products as $product)
+                    @if($categories!=null)
+                    @foreach ($categories as $category)
                         <tr>
                             <td class="tdclass">{{ $i}}</td>
-                            <td class="tdclass">{{ $product->company->company }}</td>
-                            <td class="tdclass">{{ $product->store->name_of_store }}</td>
-                            <td class="tdclass">{{ $product['category']->category }}</td>
-                            <td class="tdclass">{{ $product['product_name'] }}</td>
-                            <td class="tdclass">{{ $product['product_number_sku'] }}</td>
-                              @php
-                                $jsonData =  $product['competitor_product_name'];
-                                $arrayData = json_decode($jsonData, true);
-                                if (is_array($arrayData)) {
-                                    $compititorProductName = implode(', ', $arrayData);
-                                } else {
-                                    $compititorProductName = 'Invalid JSON data';
-                                }
-                              @endphp
-                              <td>{{ $compititorProductName }}</td>
+                            <td class="tdclass">{{ $category->company->company }}</td>
+                            <td class="tdclass">{{ $category->category}}</td>
                             @php
-                                $updatedTime = new DateTime($product['updated_at']);
-                                $createdTime = new DateTime($product['created_at']);
+                                $updatedTime = new DateTime($category['updated_at']);
+                                $createdTime = new DateTime($category['created_at']);
                                 
                                 // Format the DateTime object in 12-hour format
                                 $formattedUpdatedTime = $updatedTime->format("Y-m-d h:i:s A");
@@ -350,13 +333,13 @@ updatePaginationButtons();
                             <td class="tdclass">{{ $formattedUpdatedTime }}</td>
                             <td class="tdclass">{{ $formattedCreatedTime }}</td>
                             <td class="tdclass">
-                                <form action={{ route('product.destroy', $product['id']) }} method="post">
+                                <form action={{ route('category.destroy', $category['id']) }} method="post">
                                     @csrf
                                     @method('DELETE')
                                 
                                     <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                     </button>
-                                    <a href="{{ route('product-edit',  [$i, $product['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
+                                    <a href="{{ route('category-edit',  [$i, $category['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
                                     </a>
                                 </form>
                             

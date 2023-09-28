@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\ExcelExportController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyUserController;
 use App\Http\Controllers\Manager\DashboardController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -115,7 +116,12 @@ Route::group(['middleware' => ['auth', 'role:admin']], function() {
     Route::get('product/edit/{target?}/{parameter?}', [ProductController::class, 'edit'])->name('product-edit');
     Route::get('product/delete/{parameter?}', [ProductController::class, 'delete'])->name('product-delete');
 
-    // Route::get('/file-import',[StoreController::class,
+     //products
+     Route::resource('category', CategoryController::class);
+     Route::get('category/edit/{target?}/{parameter?}', [CategoryController::class, 'edit'])->name('category-edit');
+
+
+     // Route::get('/file-import',[StoreController::class,
     //         'importView'])->name('import-view');
 
     Route::post('/import',[StoreController::class,

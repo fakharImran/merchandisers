@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('time-sheets/check-out/{id}', [MerchandiserTimeSheetController::class, 'update']);
 
 
+    
     Route::apiResource('price-audit',PriceAuditController::class);
     Route::apiResource('stock-count-by-store',StockCountByStoreController::class);
     Route::apiResource('planogram-compliance-tracker',PlanogramComplianceTrackerController::class);
