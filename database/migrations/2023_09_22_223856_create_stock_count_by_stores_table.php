@@ -15,18 +15,29 @@ return new class extends Migration
     {
         Schema::create('stock_count_by_stores', function (Blueprint $table) {
             $table->id();
+           
+          
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
             $table->unsignedBigInteger('company_user_id')->nullable();
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
-            $table->string('category');
-            $table->string('product_name');
-            $table->bigInteger('product_number_sku');
-            $table->bigInteger('stock_on_shelf');
-            $table->bigInteger('stocks_packed');
-            $table->bigInteger('stocks_in_storeroom');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+            $table->string('product_sku');
+            $table->string('stock_on_shelf');
+            $table->bigInteger('stock_on_shelf_unit');
+
+            $table->string('stock_packed');
+            $table->bigInteger('stock_packed_unit');
+
+            $table->string('stock_in_store_room');
+            $table->bigInteger('stock_in_store_room_unit');
 
             $table->timestamps();
         });

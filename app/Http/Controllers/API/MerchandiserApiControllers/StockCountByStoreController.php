@@ -32,8 +32,13 @@ class StockCountByStoreController extends BaseController
 
         $productsList = Product::whereIn('id', $products)->get();
 
+        $stores=array();
+        foreach ($productsList as $key => $product) {
+        return $this->sendResponse([ 'product store'=>$product->store->id], 'here are products of store:');
 
-        return $this->sendResponse([ 'categories'=>$categories], 'here are products of company named:');
+            # code...
+        }
+        return $this->sendResponse([ 'productsList'=>$productsList,  'categories'=>$categories], 'here are products of company named:');
 
 
         //
@@ -48,21 +53,35 @@ class StockCountByStoreController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category'=>'required',
-            'product_name'=>'required',
-            'product_number_sku'=>'required',
+            'category_id'=>'required',
+            'product_id'=>'required',
+            'product_sku'=>'required',
             'stock_on_shelf'=>'required',
-            'stocks_packed'=>'required',
-            'stocks_in_storeroom'=>'required',
+            'stock_on_shelf_unit'=>'required',
+            'stock_packed'=>'required',
+            'stock_packed_unit'=>'required',
+            'stock_in_store_room'=>'required',
+            'stock_in_store_room_unit'=>'required',
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-
-        $stockCountArr= ['category'=>$request->category, 'product_name'=>$request->product_name, 'product_number_sku'=>$request->product_number_sku, 'stock_on_shelf'=>$request->stock_on_shelf, 'stocks_packed'=>$request->stocks_packed, 'stocks_in_storeroom'=>$request->stocks_in_storeroom];
+        $product_id= $request->product_id;
+        $product= Product::where('id', $product_id)->first();
+        $store_id = $product->store->id;
         
-        $merchandiserTimeSheet= StockCountByStores::create($stockCountArr);
-        return $this->sendResponse(['stockCountArr'=>$stockCountArr, $merchandiserTimeSheet], 'here is an array to be stored:');
+        $user = Auth::user();
+        $company_user_id = $user->companyUser->id;
+
+
+        // category_id,product_id,product_sku,stock_on_shelf,
+        // stock_on_shelf_unit,stock_packed,stock_packed_unit,
+        // stock_in_store_room,stock_in_store_room_unit
+        
+        $stockCountArr= ['store_id'=>$store_id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'stock_on_shelf'=>$request->stock_on_shelf, 'stock_on_shelf_unit'=>$request->stock_on_shelf_unit, 'stock_packed'=>$request->stock_packed, 'stock_packed_unit'=>$request->stock_packed_unit, 'stock_in_store_room'=>$request->stock_in_store_room , 'stock_in_store_room_unit'=> $request->stock_in_store_room_unit];
+        
+        $responseofQuery= StockCountByStores::create($stockCountArr);
+        return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an stockCountArr be stored:');
 
         //
     }
