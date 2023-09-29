@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('price_audits', function (Blueprint $table) {
             $table->id();
-            $table->string('store_id')->nullable();
+            $table->unsignedBigInteger('store_id')->nullable();
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
-            $table->string('company_user_id')->nullable();
+            $table->unsignedBigInteger('company_user_id')->nullable();
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
             $table->string('category')->nullable();
