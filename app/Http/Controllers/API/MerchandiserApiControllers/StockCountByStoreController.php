@@ -32,12 +32,6 @@ class StockCountByStoreController extends BaseController
 
         $productsList = Product::whereIn('id', $products)->get();
 
-        $stores=array();
-        foreach ($productsList as $key => $product) {
-        return $this->sendResponse([ 'product store'=>$product->store->id], 'here are products of store:');
-
-            # code...
-        }
         return $this->sendResponse([ 'productsList'=>$productsList,  'categories'=>$categories], 'here are products of company named:');
 
 
