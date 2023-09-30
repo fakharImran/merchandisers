@@ -253,7 +253,7 @@
                             <tr>
                                 <td>
                                     @php
-                                        $date= explode(' ', $priceAudit->created_at);
+                                        $date= explode(' ', $stockCount->created_at);
                                     @endphp
                                     {{$date[0]}}
                                 </td>
