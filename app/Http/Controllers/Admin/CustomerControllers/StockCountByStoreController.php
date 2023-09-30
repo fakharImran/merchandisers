@@ -40,9 +40,18 @@ class StockCountByStoreController extends Controller
             $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
             $products = array_merge($products, $storeProducts); // Merge product IDs
         }
-        $products = Product::whereIn('id', $products)->get();        
-        $stockCountData= StockCountByStores::all();
-
+        $products = Product::whereIn('id', $products)->get();
+        
+        $stockCountByStoreArr = [];
+        foreach ($stores as $store) {
+            $storestockCountByStoreData = $store->stockCountByStores->pluck('id')->toArray(); // Pluck product IDs
+            $stockCountByStoreArr = array_merge($stockCountByStoreArr, $storestockCountByStoreData); // Merge product IDs
+        }
+        // dd($stockCountByStoreArr);
+        $stockCountData = StockCountByStores::whereIn('id', $stockCountByStoreArr)->get();
+        
+        
+        // dd($stockCountData);
         
         $userId=$user->id;
         $name=$user->name;

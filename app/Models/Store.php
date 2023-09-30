@@ -45,14 +45,24 @@ class Store extends Model
         return $this->hasMany(Product::class, 'store_id');
     }
 
-    // /**
-    //  * Get all of the merchandiserTimeSheets for the Store
-    //  *
-    //  * @return \Illuminate\Database\Eloquent\Relations\HasMany
-    //  */
-    // public function merchandiserTimeSheets(): HasMany
-    // {
-    //     return $this->hasMany(MerchandiserTimeSheet::class, 'store_id');
-    // }
+    /**
+     * Get all of the merchandiserTimeSheets for the Store
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function merchandiserTimeSheets(): HasMany
+    {
+        return $this->hasMany(MerchandiserTimeSheet::class, 'store_id');
+    }
+    /**
+     * Get all of the stockCountByStores for the Store
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function stockCountByStores(): HasMany
+    {
+        return $this->hasMany(StockCountByStores::class, 'store_id');
+    }
+    
 }
 

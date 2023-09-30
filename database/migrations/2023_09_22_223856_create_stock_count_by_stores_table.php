@@ -30,14 +30,14 @@ return new class extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 
             $table->string('product_sku');
-            $table->string('stock_on_shelf');
-            $table->bigInteger('stock_on_shelf_unit');
+            $table->bigInteger('stock_on_shelf');
+            $table->string('stock_on_shelf_unit');
 
-            $table->string('stock_packed');
-            $table->bigInteger('stock_packed_unit');
+            $table->bigInteger('stock_packed');
+            $table->string('stock_packed_unit');
 
-            $table->string('stock_in_store_room');
-            $table->bigInteger('stock_in_store_room_unit');
+            $table->bigInteger('stock_in_store_room');
+            $table->string('stock_in_store_room_unit');
 
             $table->timestamps();
         });

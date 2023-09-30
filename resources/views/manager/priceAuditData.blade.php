@@ -175,7 +175,7 @@
                 <table id="mechandiserDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
-                            <th class="thclass" scope="col">#</th>
+                            <th class="thclass" scope="col">Date</th>
                             <th class="thclass" scope="col">Name of Store</th>
                             <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Category</th>
@@ -195,9 +195,51 @@
                             $chartDateArray = array();
                             $chartHoursArray = array();
                     @endphp
-                       @php
+                       {{-- @php
                            array_push($chartHoursArray ,['product name'=>"first_product", 'price'=>50] );
-                       @endphp 
+                       @endphp  --}}
+
+                        @if ($priceAuditData!=null)
+                        @foreach ($priceAuditData as $priceAudit)
+                        <tr>
+                            <td>
+                                @php
+                                    $date= explode(' ', $priceAudit->created_at);
+                                @endphp
+                                {{$date[0]}}
+                            </td>
+                            <td>{{$priceAudit->store->name_of_store}}</td>
+                            <td>
+                                @php
+                                    $locationCount = count($priceAudit->store->locations);
+                                    $counter = 0;
+                                    foreach ($priceAudit->store->locations as $key => $location) {
+                                        echo $location->location;
+                                        if ($counter < $locationCount - 1) {
+                                            echo ', ';
+                                        }
+                                        $counter++;
+                                    }
+                                @endphp
+                            </td>
+                            
+                            <td>{{$priceAudit->category->category}}</td>
+                            <td>{{$priceAudit->product->product_name}}</td>
+                            <td>{{$priceAudit->Product_SKU}}</td>
+                            <td>{{$priceAudit->product_store_price}}</td>
+                            <td>{{$priceAudit->tax_in_percentage}}</td>
+                            <td>
+                                @php
+                                    $totalPrice= $priceAudit->product_store_price + $priceAudit->product_store_price/100 * $priceAudit->tax_in_percentage;
+                                    echo $totalPrice;
+                                @endphp
+                            </td>
+                            <td>{{$priceAudit->competitor_product_name}}</td>
+                            <td>{{$priceAudit->competitor_product_price}}</td>
+                            <td>{{$priceAudit->notes}}</td>
+                        </tr>
+                        @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

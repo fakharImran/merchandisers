@@ -29,7 +29,7 @@ return new class extends Migration
 
 
 
-            $table->bigInteger('Product_SKU')->nullable();
+            $table->string('Product_SKU')->nullable();
             $table->bigInteger('product_store_price')->nullable();
             $table->integer('tax_in_percentage')->nullable();
             $table->string('competitor_product_name')->nullable();

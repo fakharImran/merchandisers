@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin\CustomerControllers;
 
+use App\Models\User;
 use App\Models\Product;
+use App\Models\PriceAudit;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
@@ -19,22 +21,20 @@ class PriceAuditController extends Controller
     {
         $pageConfigs = ['pageSidebar' => 'price-audit-data'];    
 
-        $user= Auth::user();    
-       
+        $user= Auth::user();  
+        $merchandiserUsers = User::role('merchandiser')->get();
+
+        //   dd($merchandiserUsers);
         $merchandiserArray = array();
         $allLocations=StoreLocation::all();
         $compnay_users = $user->companyUser->company->companyUsers;
-
         $userArr = array();
         foreach ($compnay_users as $key => $compnay_user) {
             if($compnay_user->user->hasRole('merchandiser')){
                 array_push($userArr, $compnay_user->user)  ;
             }
         }
-
-
-        $stores = $user->companyUser->company->stores;
-
+        $stores= $user->companyUser->company->stores;
         $products = [];
         foreach ($stores as $store) {
             $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
@@ -42,49 +42,24 @@ class PriceAuditController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
         
-
-        foreach ($compnay_users as $key => $compnay_user) {
-            $user = $compnay_user->user;
-            $timeSheetArray=array();
-            $pendingTimeSheetArr=array();
-            if ($user) {
-                $userRoles = $user->roles; // Retrieve all roles for the user
-                if ($userRoles->count() > 0) {
-                    foreach ($userRoles as $role) {
-                        $roleName = $role->name;
-                        if($roleName == 'merchandiser'){
-                            $time_sheets = $user->companyUser->timeSheets;
-                            if($time_sheets && $time_sheets->count() > 0){
-                                foreach ($time_sheets as $key => $time_sheet) {
-
-                                    $checkoutFound = false; // Flag to check if "check-out" status is found
-                                    foreach ($time_sheet->timeSheetRecords as $key => $timeSheetRecord) {
-                                        if($timeSheetRecord->status=="check-out")
-                                        {
-                                            array_push($timeSheetArray, $time_sheet);
-                                            $checkoutFound = true;
-                                            break; // Break the loop if "check-out" status is found
-                                        }
-                                    }
-                                    if (!$checkoutFound) {
-
-                                        if($time_sheet->timeSheetRecords->count() > 0)
-                                        {
-                                            array_push($pendingTimeSheetArr, $time_sheet);
-                                        }
-                                    }
-                                    # code...
-                                }
-                                array_push($merchandiserArray, ['id'=>$user->id,'name'=>$user->name, 'role'=>$roleName, 'time_sheets'=>$timeSheetArray, "pending_time_sheets"=>$pendingTimeSheetArr]);
-                            }
-                        }
-                    }
-                }
-            }
+        $stockCountByStoreArr = [];
+        foreach ($stores as $store) {
+            $storestockCountByStoreData = $store->stockCountByStores->pluck('id')->toArray(); // Pluck product IDs
+            $stockCountByStoreArr = array_merge($stockCountByStoreArr, $storestockCountByStoreData); // Merge product IDs
         }
-        // dd($products);
-        return view('manager.priceAuditData', compact('merchandiserArray', 'userArr', 'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        // dd($stockCountByStoreArr);
+        $priceAuditData = PriceAudit::whereIn('id', $stockCountByStoreArr)->get();
+        
+        
+        // dd($priceAuditData);
+        
+        $userId=$user->id;
+        $name=$user->name;
+     
+        return view('manager.priceAuditData', compact('priceAuditData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.

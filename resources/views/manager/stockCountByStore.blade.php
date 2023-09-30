@@ -219,12 +219,12 @@
                 <table id="mechandiserDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
-                            <th class="thclass" scope="col">#</th>
+                            <th class="thclass" scope="col">Date</th>
                             <th class="thclass" scope="col">Name of Store</th>
                             <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
-                            <th class="thclass" scope="col">Product Number/SKU</th>
+                            <th class="thclass" scope="col">Product Number</th>
                             <th class="thclass" scope="col">Stocks on Shelf (unit)</th>
                             <th class="thclass" scope="col">Stocks on Shelf (cases)</th>
                             <th class="thclass" scope="col">Stocks Packed (units)</th>
@@ -239,30 +239,50 @@
                             $totalHourworked=0;
                             $chartDateArray = array();
                             $chartHoursArray = array();
-                            $i=0;
+                            $i=1;
                     @endphp
                     
                     {{-- {{dd($stockCountData)}} --}}
                       @if ($stockCountData!=null)
                         @foreach ($stockCountData as $stockCount)
                         @php
-                            $totalStock=$stockCount['stock_on_shelf']+$stockCount['stocks_packed']+$stockCount['stocks_in_storeroom'];
+                            // dd($stockCount);
+
+                            $totalStock=$stockCount['stock_on_shelf']+$stockCount['stock_packed']+$stockCount['stock_in_store_room'];
                         @endphp
                             <tr>
-                            <td>{{$i++}}</td>
-                            <td></td>
-                            <td></td>
-                            <td>{{$stockCount['category']}}</td>
-                            <td>{{$stockCount['product_name']}}</td>
-                            <td>{{$stockCount['product_number_sku']}}</td>
-                            <td>{{$stockCount['stock_on_shelf']}}</td>
-                            <td>{{$stockCount['stock_on_shelf']}}</td>
-                            <td>{{$stockCount['stocks_packed']}}</td>
-                            <td>{{$stockCount['stocks_packed']}}</td>
-                            <td>{{$stockCount['stocks_in_storeroom']}}</td>
-                            <td>{{$stockCount['stocks_in_storeroom']}}</td>
-                            <td>{{$totalStock}}</td>
-                        </tr>
+                                <td>
+                                    @php
+                                        $date= explode(' ', $priceAudit->created_at);
+                                    @endphp
+                                    {{$date[0]}}
+                                </td>
+                                <td>{{$stockCount->store->name_of_store}}</td>
+                                <td>
+                                    @php
+                                        $locationCount = count($stockCount->store->locations);
+                                        $counter = 0;
+                                        foreach ($stockCount->store->locations as $key => $location) {
+                                            echo $location->location;
+                                            if ($counter < $locationCount - 1) {
+                                                echo ', ';
+                                            }
+                                            $counter++;
+                                        }
+                                    @endphp
+                                </td>
+                                
+                                <td>{{$stockCount->category->category}}</td>
+                                <td>{{$stockCount->product->product_name}}</td>
+                                <td>{{$stockCount->product_sku}}</td>
+                                <td>{{$stockCount->stock_on_shelf_unit}}</td>
+                                <td>{{$stockCount->stock_on_shelf}}</td>
+                                <td>{{$stockCount->stock_packed_unit}}</td>
+                                <td>{{$stockCount->stock_packed}}</td>
+                                <td>{{$stockCount->stock_in_store_room_unit}}</td>
+                                <td>{{$stockCount->stock_in_store_room}}</td>
+                                <td>{{$totalStock}}</td>
+                            </tr>
                         @endforeach
                       @endif                     
                         
