@@ -15,20 +15,25 @@ return new class extends Migration
     {
         Schema::create('marketing_activities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('store_id')->nullable();
+            $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
             $table->unsignedBigInteger('company_user_id')->nullable();
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
-            $table->bigInteger('type_of_promotion')->nullable();
-            $table->string('category')->nullable();
-            $table->string('product_name')->nullable();
-            $table->bigInteger('product_number_sku')->nullable();
-            $table->string('compititor_product_name')->nullable();
-            $table->string('marketing_photo')->nullable();
-            $table->string('marketing_activity_notes')->nullable();
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+            $table->string('promotion_type')->nullable();
+            $table->string('product_sku')->nullable();
+            $table->string('Competitor_product_name')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('Note')->nullable();
             $table->timestamps();
+
         });
     }
 

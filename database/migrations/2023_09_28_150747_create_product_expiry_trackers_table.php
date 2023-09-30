@@ -15,21 +15,27 @@ return new class extends Migration
     {
         Schema::create('product_expiry_trackers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('store_id')->nullable();
+            $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
             $table->unsignedBigInteger('company_user_id')->nullable();
             $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
-            $table->string('category')->nullable();
-            $table->string('product_name')->nullable();
-            $table->bigInteger('product_number_sku')->nullable();
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+
+
+            $table->string('product_sku')->nullable();
             $table->bigInteger('amount_expired')->nullable();
-            $table->string('batch_no')->nullable();
+            $table->string('batchNumber')->nullable();
             $table->date('expiry_date')->nullable();
-            $table->string('action')->nullable();
-            $table->string('expire_product_photo')->nullable();
+            $table->string('action_taken')->nullable();
+            $table->string('photo')->nullable();
             $table->timestamps();
+            
         });
     }
 
