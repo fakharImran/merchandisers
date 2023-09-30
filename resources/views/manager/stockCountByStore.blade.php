@@ -225,12 +225,12 @@
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
                             <th class="thclass" scope="col">Product Number</th>
-                            <th class="thclass" scope="col">Stocks on Shelf (unit)</th>
-                            <th class="thclass" scope="col">Stocks on Shelf (cases)</th>
-                            <th class="thclass" scope="col">Stocks Packed (units)</th>
-                            <th class="thclass" scope="col">Stocks Packed (cases)</th>
-                            <th class="thclass" scope="col">Stocks in Storeroom (units)</th>
-                            <th class="thclass" scope="col">Stocks in Storeroom (cases)</th>
+                            <th class="thclass" scope="col">Stocks on Shelf (Qty)</th>
+                            <th class="thclass" scope="col">Stocks on Shelf (units/cases)</th>
+                            <th class="thclass" scope="col">Stocks Packed (Qty)</th>
+                            <th class="thclass" scope="col">Stocks Packed (units/cases)</th>
+                            <th class="thclass" scope="col">Stocks in Storeroom (Qty)</th>
+                            <th class="thclass" scope="col">Stocks in Storeroom  (units/cases)</th>
                             <th class="thclass" scope="col">Total Stocks</th>
                         </tr>
                     </thead>
@@ -275,12 +275,12 @@
                                 <td>{{$stockCount->category->category}}</td>
                                 <td>{{$stockCount->product->product_name}}</td>
                                 <td>{{$stockCount->product_sku}}</td>
-                                <td>{{$stockCount->stock_on_shelf_unit}}</td>
                                 <td>{{$stockCount->stock_on_shelf}}</td>
-                                <td>{{$stockCount->stock_packed_unit}}</td>
+                                <td>{{$stockCount->stock_on_shelf_unit}}</td>
                                 <td>{{$stockCount->stock_packed}}</td>
-                                <td>{{$stockCount->stock_in_store_room_unit}}</td>
+                                <td>{{$stockCount->stock_packed_unit}}</td>
                                 <td>{{$stockCount->stock_in_store_room}}</td>
+                                <td>{{$stockCount->stock_in_store_room_unit}}</td>
                                 <td>{{$totalStock}}</td>
                             </tr>
                         @endforeach
