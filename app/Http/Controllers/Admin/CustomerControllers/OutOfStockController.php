@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\OutOfStock;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
@@ -41,10 +42,21 @@ class OutOfStockController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
         
+        $outOfStockIDArr = [];
+        foreach ($stores as $store) {
+            $outOfStocksData = $store->outOfStocks->pluck('id')->toArray(); // Pluck product IDs
+            $outOfStockIDArr = array_merge($outOfStockIDArr, $outOfStocksData); // Merge product IDs
+        }
+        // dd($outOfStockIDArr);
+        $outOfStockData = OutOfStock::whereIn('id', $outOfStockIDArr)->get();
+        
+        
+        // dd($outOfStockData);
+        
         $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.outOfStock', compact('userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.outOfStock', compact('outOfStockData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

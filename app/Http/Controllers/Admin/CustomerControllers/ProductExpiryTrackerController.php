@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
+use App\Models\ProductExpiryTracker;
 use Illuminate\Support\Facades\Auth;
 
 class ProductExpiryTrackerController extends Controller
@@ -41,12 +42,22 @@ class ProductExpiryTrackerController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
         
+        $productExpiryTrackerIDArr = [];
+        foreach ($stores as $store) {
+            $productExpiryTrackersData = $store->productExpiryTrackers->pluck('id')->toArray(); // Pluck product IDs
+            $productExpiryTrackerIDArr = array_merge($productExpiryTrackerIDArr, $productExpiryTrackersData); // Merge product IDs
+        }
+        // dd($productExpiryTrackerIDArr);
+        $productExpiryTrackerData = ProductExpiryTracker::whereIn('id', $productExpiryTrackerIDArr)->get();
+        
+        
+        // dd($productExpiryTrackerData);
+        
         $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.productExpiryTracker', compact('userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.productExpiryTracker', compact('productExpiryTrackerData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
     }
-
     /**
      * Show the form for creating a new resource.
      *

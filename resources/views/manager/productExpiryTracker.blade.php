@@ -174,7 +174,7 @@
     </div>
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download Data</button>
+            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download filtered table in excel</button>
         </div>
         <div class="col-12">
 
@@ -184,19 +184,76 @@
                 <table id="mechandiserDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
+                            <th class="thclass" scope="col">Date</th>
                             <th class="thclass" scope="col">Name of Store</th>
-                            <th class="thclass" scope="col">Location</th>
+                            <th class="thclass" scope="col">Locations</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
                             <th class="thclass" scope="col">Product Number/SKU</th>
-                            <th class="thclass" scope="col">Amount Expired</th>
+                            <th class="thclass" scope="col">Amount Expired (units)</th>
                             <th class="thclass" scope="col">Batch #</th>
-                            <th class="thclass" scope="col">Shelf Life Date</th>
+                            <th class="thclass" scope="col">Expiry Date</th>
                             <th class="thclass" scope="col">Action</th>
                             <th class="thclass" scope="col">Photo</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @if($productExpiryTrackerData!=null)
+                        @foreach($productExpiryTrackerData as $productExpiryTracker)
+                            <tr>
+                                {{-- {{dd($productExpiryTracker   )}} --}}
+                                <td class="tdclass">
+                                    @php
+                                        $date= explode(' ', $productExpiryTracker->created_at);
+                                    @endphp
+                                    {{$date[0]}}
+                                </td>
+                                <td class="tdclass">{{$productExpiryTracker->store->name_of_store}}</td>
+                                <td class="tdclass">
+                                    @php
+                                        $locationCount = count($productExpiryTracker->store->locations);
+                                        $counter = 0;
+                                        foreach ($productExpiryTracker->store->locations as $key => $location) {
+                                            echo $location->location;
+                                            if ($counter < $locationCount - 1) {
+                                                echo ', ';
+                                            }
+                                            $counter++;
+                                        }
+                                    @endphp
+                                </td>
+                                <td class="tdclass">{{$productExpiryTracker->category->category}}</td>
+                                <td class="tdclass">{{$productExpiryTracker->product->product_name}}</td>
+                                <td class="tdclass">{{$productExpiryTracker->product_sku}}</td>
+                                <td class="tdclass">{{$productExpiryTracker->amount_expired}}</td>
+                                <td class="tdclass">{{$productExpiryTracker->batchNumber}}</td>
+                                <td class="tdclass">{{$productExpiryTracker->expiry_date}}</td>
+                                
+                                <td class="tdclass">{{$productExpiryTracker->action_taken}}</td>
+                                <td  class="tdclass">
+                                    @php
+                                    if($productExpiryTracker->photo!=null)
+                                    {
+                                        $imagePath = public_path('storage/' . $productExpiryTracker->photo);
+                                        if (file_exists($imagePath)) 
+                                        {
+                                            echo "<img width='100' src='" . asset('storage/' . $productExpiryTracker->photo) . "' />";
+                                        } 
+                                        else 
+                                        {
+                                            echo "N/A";
+                                        }
+                                    }
+                                    else {
+                                        echo "N/A";
+                                    }
+                                    @endphp     
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                        
+                        
                     </tbody>
                 </table>
             </div>

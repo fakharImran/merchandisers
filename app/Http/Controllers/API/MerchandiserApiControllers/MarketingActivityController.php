@@ -68,6 +68,7 @@ class MarketingActivityController extends BaseController
         $marketingActivityArr= ['store_id'=>$store_id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'promotion_type'=>$request->promotion_type, 'Competitor_product_name'=>$request->Competitor_product_name, 'photo'=>$photo_path, 'Note'=>$request->Note];
         
         $responseofQuery= MarketingActivity::create($marketingActivityArr);
+        // $allMerketingActivity =MarketingActivity::all();
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an marketingActivityArr be stored:');
 
         //

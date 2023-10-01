@@ -139,7 +139,7 @@
     </div>
     <div class="row pt-5" style="margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download Opportunities</button>
+            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download filtered table in excel</button>
         </div>
         <div class="col-12">
 
@@ -149,13 +149,16 @@
                 <table id="mechandiserDatatable" class="table table-sm  table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
+                            <th class="thclass" scope="col">Date</th>
                             <th class="thclass" scope="col">Name of Store</th>
-                            <th class="thclass" scope="col">Location</th>
+                            <th class="thclass" scope="col">Locations</th>
+                            <th class="thclass" scope="col">Type Of Opportunity</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
-                            <th class="thclass" scope="col">Compititor Product Name</th>
-                            <th class="thclass" scope="col">Description</th>
+                            <th class="thclass" scope="col">Product Number/SKU</th>
                             <th class="thclass" scope="col">Photo</th>
+                            <th class="thclass" scope="col">Description Of Opportunity</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -164,17 +167,58 @@
                             $chartDateArray = array();
                             $chartHoursArray = array();
                     @endphp
-                    <tr>
-                        <td> abc store</td>
-                        <td>test location</td>
-                        <td>Bevereges</td>
-                        <td>Shampain</td>
-                        <td>wisky</td>
-                        <td>this is best opportunity</td>
-                        <td>
-                            <img  src="{{asset('assets/images/pctracker1683118440.jpg.png')}}" alt="Image Description" width="100" height="100">
-                        </td>
-                    </tr>
+                        @if($opportunityData!=null)
+                        @foreach($opportunityData as $opportunity)
+                            <tr>
+                                {{-- {{dd($opportunity->store   )}} --}}
+                                <td class="tdclass">
+                                    @php
+                                        $date= explode(' ', $opportunity->created_at);
+                                    @endphp
+                                    {{$date[0]}}
+                                </td>
+                                <td class="tdclass">{{$opportunity->store->name_of_store}}</td>
+                                <td class="tdclass">
+                                    @php
+                                        $locationCount = count($opportunity->store->locations);
+                                        $counter = 0;
+                                        foreach ($opportunity->store->locations as $key => $location) {
+                                            echo $location->location;
+                                            if ($counter < $locationCount - 1) {
+                                                echo ', ';
+                                            }
+                                            $counter++;
+                                        }
+                                    @endphp
+                                </td>
+                                <td class="tdclass">{{$opportunity->Opportunity_type}}</td>
+                                <td class="tdclass">{{$opportunity->category->category}}</td>
+                                <td class="tdclass">{{$opportunity->product->product_name}}</td>
+                                <td class="tdclass">{{$opportunity->product_sku}}</td>
+                                <td  class="tdclass">
+                                    @php
+                                    if($opportunity->photo!=null)
+                                    {
+                                        $imagePath = public_path('storage/' . $opportunity->photo);
+                                        if (file_exists($imagePath)) 
+                                        {
+                                            echo "<img width='100' src='" . asset('storage/' . $opportunity->photo) . "' />";
+                                        } 
+                                        else 
+                                        {
+                                            echo "N/A";
+                                        }
+                                    }
+                                    else {
+                                        echo "N/A";
+                                    }
+                                        
+                                    @endphp     
+                                </td>
+                                <td class="tdclass">{{$opportunity->Note}}</td>
+                            </tr>
+                        @endforeach
+                    @endif
                        @php
                            array_push($chartHoursArray ,['product name'=>"first_product", 'price'=>50] );
                        @endphp 
@@ -209,7 +253,11 @@
             });
     });
 
-    
+    document.getElementById('downloadButton').addEventListener('click', () => {
+        const timeSheetTable = document.getElementById('mechandiserDatatable');
+        downloadTable(timeSheetTable);
+    });
+
     // document.getElementById('clearDate').addEventListener('click', function () {
     //     document.getElementById('period-search').clear;
     //     // document.getElementById('merchandiser-search').value='';

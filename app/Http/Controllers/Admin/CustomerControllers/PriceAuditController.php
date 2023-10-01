@@ -42,13 +42,13 @@ class PriceAuditController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
         
-        $stockCountByStoreArr = [];
+        $priceAuditIdsArr = [];
         foreach ($stores as $store) {
-            $storestockCountByStoreData = $store->stockCountByStores->pluck('id')->toArray(); // Pluck product IDs
-            $stockCountByStoreArr = array_merge($stockCountByStoreArr, $storestockCountByStoreData); // Merge product IDs
+            $priceAuditData = $store->priceAudits->pluck('id')->toArray(); // Pluck product IDs
+            $priceAuditIdsArr = array_merge($priceAuditIdsArr, $priceAuditData); // Merge product IDs
         }
-        // dd($stockCountByStoreArr);
-        $priceAuditData = PriceAudit::whereIn('id', $stockCountByStoreArr)->get();
+        // dd($priceAuditIdsArr);
+        $priceAuditData = PriceAudit::whereIn('id', $priceAuditIdsArr)->get();
         
         
         // dd($priceAuditData);

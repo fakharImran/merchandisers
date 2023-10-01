@@ -166,7 +166,7 @@
     </div>
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download Data</button>
+            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download filtered table in excel</button>
         </div>
         <div class="col-12">
 
@@ -176,7 +176,7 @@
                 <table id="mechandiserDatatable" class="table table-sm  table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
-                            <th class="thclass" scope="col">#ID</th>
+                            <th class="thclass" scope="col">Date</th>
                             <th class="thclass" scope="col">Name of Store</th>
                             <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Category</th>
@@ -186,15 +186,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                        @if($outOfStockData!=null)
+                        @foreach($outOfStockData as $outOfStock)
+                            <tr>
+                                <td class="tdclass">
+                                    @php
+                                        $date= explode(' ', $outOfStock->created_at);
+                                    @endphp
+                                    {{$date[0]}}
+                                </td>
+                                <td class="tdclass">{{$outOfStock->store->name_of_store}}</td>
+                                <td class="tdclass">
+                                    @php
+                                        $locationCount = count($outOfStock->store->locations);
+                                        $counter = 0;
+                                        foreach ($outOfStock->store->locations as $key => $location) {
+                                            echo $location->location;
+                                            if ($counter < $locationCount - 1) {
+                                                echo ', ';
+                                            }
+                                            $counter++;
+                                        }
+                                    @endphp
+                                </td>
+                                <td class="tdclass">{{$outOfStock->category->category}}</td>
+                                <td class="tdclass">{{$outOfStock->product->product_name}}</td>
+                                <td class="tdclass">{{$outOfStock->product_sku}}</td>
+                                <td class="tdclass">{{$outOfStock->Reason_out_of_stock}}</td>
+                            </tr>
+                        @endforeach
+                    @endif
                     </tbody>
                 </table>
             </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Opportunity;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
@@ -16,6 +17,7 @@ class OpportunityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $pageConfigs = ['pageSidebar' => 'opportunities'];    
@@ -40,9 +42,22 @@ class OpportunityController extends Controller
             $products = array_merge($products, $storeProducts); // Merge product IDs
         }
         $products = Product::whereIn('id', $products)->get();
+        
+        $opportunityIDArr = [];
+        foreach ($stores as $store) {
+            $opportunitiesData = $store->opportunities->pluck('id')->toArray(); // Pluck product IDs
+            $opportunityIDArr = array_merge($opportunityIDArr, $opportunitiesData); // Merge product IDs
+        }
+        // dd($opportunityIDArr);
+        $opportunityData = Opportunity::whereIn('id', $opportunityIDArr)->get();
+        
+        
+        // dd($opportunityData);
+        
+        $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.opportunities', compact('userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.opportunities', compact('opportunityData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

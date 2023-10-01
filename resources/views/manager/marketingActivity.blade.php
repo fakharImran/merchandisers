@@ -149,14 +149,16 @@
                 <table id="mechandiserDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
+                            <th class="thclass" scope="col">Date</th>
                             <th class="thclass" scope="col">Name of Store</th>
                             <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Type of Promotion</th>
+                            <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
                             <th class="thclass" scope="col">Product Number/SKU</th>
                             <th class="thclass" scope="col">Compititor Product Name</th>
-                            <th class="thclass" scope="col">POP</th>
-                            <th class="thclass" scope="col">View Activity</th>
+                            <th class="thclass" scope="col">Photo</th>
+                            <th class="thclass" scope="col">Description</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,18 +167,58 @@
                             $chartDateArray = array();
                             $chartHoursArray = array();
                     @endphp
-                    <tr>
-                        <td> abc store</td>
-                        <td>test location</td>
-                        <td>adds</td>
-                        <td>Shampain</td>
-                        <td>1121</td>
-                        <td>wisky</td>
-                        <td>what is pop?</td>
-                        <td>
-                            <img  src="{{asset('assets/images/pctracker1683118440.jpg.png')}}" alt="Image Description" width="100" height="100">
-                        </td>
-                    </tr>
+                    @if($marketingActivityData!=null)
+                        @foreach($marketingActivityData as $marketingActivity)
+                            <tr>
+                                <td class="tdclass">
+                                    @php
+                                        $date= explode(' ', $marketingActivity->created_at);
+                                    @endphp
+                                    {{$date[0]}}
+                                </td>
+                                <td class="tdclass">{{$marketingActivity->store->name_of_store}}</td>
+                                <td class="tdclass">
+                                    @php
+                                        $locationCount = count($marketingActivity->store->locations);
+                                        $counter = 0;
+                                        foreach ($marketingActivity->store->locations as $key => $location) {
+                                            echo $location->location;
+                                            if ($counter < $locationCount - 1) {
+                                                echo ', ';
+                                            }
+                                            $counter++;
+                                        }
+                                    @endphp
+                                </td>
+                                <td class="tdclass">{{$marketingActivity->promotion_type}}</td>
+                                <td class="tdclass">{{$marketingActivity->category->category}}</td>
+                                <td class="tdclass">{{$marketingActivity->product->product_name}}</td>
+                                <td class="tdclass">{{$marketingActivity->product_sku}}</td>
+                                <td class="tdclass">{{$marketingActivity->Competitor_product_name}}</td>
+                                <td  class="tdclass">
+                                    @php
+                                    if($marketingActivity->photo!=null)
+                                    {
+                                        $imagePath = public_path('storage/' . $marketingActivity->photo);
+                                        if (file_exists($imagePath)) 
+                                        {
+                                            echo "<img width='100' src='" . asset('storage/' . $marketingActivity->photo) . "' />";
+                                        } 
+                                        else 
+                                        {
+                                            echo "N/A";
+                                        }
+                                    }
+                                    else {
+                                        echo "N/A";
+                                    }
+                                        
+                                    @endphp     
+                                </td>
+                                <td class="tdclass">{{$marketingActivity->Note}}</td>
+                            </tr>
+                        @endforeach
+                    @endif
                        @php
                            array_push($chartHoursArray ,['product name'=>"first_product", 'price'=>50] );
                        @endphp 
@@ -210,7 +252,10 @@
             mode: "range",
             });
     });
-
+    document.getElementById('downloadButton').addEventListener('click', () => {
+        const timeSheetTable = document.getElementById('mechandiserDatatable');
+        downloadTable(timeSheetTable);
+    });
     
     // document.getElementById('clearDate').addEventListener('click', function () {
     //     document.getElementById('period-search').clear;

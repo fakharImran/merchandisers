@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
+use App\Models\MarketingActivity;
 use App\Models\StockCountByStores;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -41,9 +42,22 @@ class MarketingActivityController extends Controller
             $products = array_merge($products, $storeProducts); // Merge product IDs
         }
         $products = Product::whereIn('id', $products)->get();
+        
+        $marketingActivityIDArr = [];
+        foreach ($stores as $store) {
+            $marketingActivitiesData = $store->marketingActivities->pluck('id')->toArray(); // Pluck product IDs
+            $marketingActivityIDArr = array_merge($marketingActivityIDArr, $marketingActivitiesData); // Merge product IDs
+        }
+        // dd($marketingActivityIDArr);
+        $marketingActivityData = MarketingActivity::whereIn('id', $marketingActivityIDArr)->get();
+        
+        
+        // dd($marketingActivityData);
+        
+        $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.marketingActivity', compact('userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.marketingActivity', compact('marketingActivityData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

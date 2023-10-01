@@ -72,6 +72,8 @@ class ProductExpiryTrackerController extends BaseController
         $productExpiryTrackerArr= ['store_id'=>$store_id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'amount_expired'=>$request->amount_expired, 'batchNumber'=>$request->batchNumber, 'expiry_date'=>$request->expiry_date, 'action_taken'=>$request->action_taken, 'photo'=>$photo_path];
         
         $responseofQuery= ProductExpiryTracker::create($productExpiryTrackerArr);
+        // $productExpTracker =ProductExpiryTracker::all();
+
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an productExpiryTrackerArr be stored:');
 
         //

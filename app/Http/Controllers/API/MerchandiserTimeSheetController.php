@@ -53,7 +53,7 @@ class MerchandiserTimeSheetController extends BaseController
         if ($timeSheets && count($timeSheets) > 0) 
         {
             $numberTimeSheets = count($timeSheets);
-            $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords;
+            $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords; //getting last timesheeet records
             $recordsCount = count($records);
             if($records[$recordsCount-1]->status != 'check-out'){
                 $timeSheet = $timeSheets[$numberTimeSheets-1];

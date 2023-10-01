@@ -118,7 +118,7 @@ class MerchandiserTimeSheetController extends Controller
                         if($roleName == 'merchandiser'){
                             $time_sheets = $user->companyUser->timeSheets;
 
-                           $time_sheets= $this->checkTimeSheetStatus($time_sheets);
+                        //    $time_sheets= $this->checkTimeSheetStatus($time_sheets);
 
                             if($time_sheets && $time_sheets->count() > 0){
                                 foreach ($time_sheets as $key => $time_sheet) {

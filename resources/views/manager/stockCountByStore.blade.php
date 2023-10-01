@@ -208,10 +208,12 @@
         </div>
     </div> --}}
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
-        {{-- <div class="col-12">
-            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download Time Sheet</button>
-        </div> --}}
         <div class="col-12">
+            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download filtered table in excel</button>
+        </div>
+        <div class="col-12">
+
+            
 
             <div class="table-responsive" >
                     {{-- table-responsive --}}
@@ -350,10 +352,10 @@
     //     link.click();
         
     // }
-    // document.getElementById('downloadButton').addEventListener('click', () => {
-    //     const timeSheetTable = document.getElementById('mechandiserDatatable');
-    //     downloadTable(timeSheetTable);
-    // });
+    document.getElementById('downloadButton').addEventListener('click', () => {
+        const timeSheetTable = document.getElementById('mechandiserDatatable');
+        downloadTable(timeSheetTable);
+    });
 </script>
 
 
