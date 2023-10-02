@@ -5,6 +5,7 @@ use Validator;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\StoreLocation;
 use App\Models\StockCountByStores;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,22 +20,38 @@ class StockCountByStoreController extends BaseController
      */
     public function index()
     {
-        $user = Auth::user();
-        $stores = $user->companyUser->company->stores;
-        $categories = $user->companyUser->company->categories;
-        $products = [];
-        foreach ($categories as $category) {
-            $categoryProducts = $category->products->pluck('id', 'product_name')->toArray(); // Pluck product IDs
-            $products = array_merge($products, $categoryProducts); // Merge product IDs
-        // return $this->sendResponse(['products'=>$products, 'categoryProducts'=>$categoryProducts], 'here are products of company named:');
 
+        $currentUser = Auth::user();
+
+        $timeSheets = $currentUser->companyUser->timeSheets;
+
+        //for edit the timesheet if the last visit is not checkout
+        if ($timeSheets && count($timeSheets) > 0) 
+        {
+            $numberTimeSheets = count($timeSheets);
+            $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords; //getting last timesheeet records
+            $recordsCount = count($records);
+            if($records[$recordsCount-1]->status != 'check-out'){
+                $timeSheet = $timeSheets[$numberTimeSheets-1];
+                $stores = $currentUser->companyUser->company->stores;
+                $categories = $currentUser->companyUser->company->categories;
+                $products = [];
+                foreach ($categories as $category) {
+                    $categoryProducts = $category->products->pluck('id', 'product_name')->toArray(); // Pluck product IDs
+                    $products = array_merge($products, $categoryProducts); // Merge product IDs
+                }
+                $productsList = Product::whereIn('id', $products)->get();
+                return $this->sendResponse(['productsList'=>$productsList , 'categories'=>$categories, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id], 'check-in');
+            }
         }
 
-        $productsList = Product::whereIn('id', $products)->get();
+        // for create a new visit from frontend
+        return $this->sendError('already-checkout');       
 
-        return $this->sendResponse([ 'productsList'=>$productsList,  'categories'=>$categories], 'here are products of company named:');
 
 
+       
+       
         //
     }
 
@@ -47,6 +64,8 @@ class StockCountByStoreController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'store_id'=> 'required',
+            'store_location_id'=>'required',
             'category_id'=>'required',
             'product_id'=>'required',
             'product_sku'=>'required',
@@ -60,19 +79,20 @@ class StockCountByStoreController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+        
         $product_id= $request->product_id;
         $product= Product::where('id', $product_id)->first();
-        $store_id = $product->store->id;
+        $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
+        $store = $store_location->store;
         
-        $user = Auth::user();
-        $company_user_id = $user->companyUser->id;
+        $company = $store->company;
 
 
         // category_id,product_id,product_sku,stock_on_shelf,
         // stock_on_shelf_unit,stock_packed,stock_packed_unit,
         // stock_in_store_room,stock_in_store_room_unit
         
-        $stockCountArr= ['store_id'=>$store_id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'stock_on_shelf'=>$request->stock_on_shelf, 'stock_on_shelf_unit'=>$request->stock_on_shelf_unit, 'stock_packed'=>$request->stock_packed, 'stock_packed_unit'=>$request->stock_packed_unit, 'stock_in_store_room'=>$request->stock_in_store_room , 'stock_in_store_room_unit'=> $request->stock_in_store_room_unit];
+        $stockCountArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'stock_on_shelf'=>$request->stock_on_shelf, 'stock_on_shelf_unit'=>$request->stock_on_shelf_unit, 'stock_packed'=>$request->stock_packed, 'stock_packed_unit'=>$request->stock_packed_unit, 'stock_in_store_room'=>$request->stock_in_store_room , 'stock_in_store_room_unit'=> $request->stock_in_store_room_unit];
         
         $responseofQuery= StockCountByStores::create($stockCountArr);
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an stockCountArr be stored:');

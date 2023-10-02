@@ -179,17 +179,7 @@
                                 </td>
                                 <td class="tdclass">{{$opportunity->store->name_of_store}}</td>
                                 <td class="tdclass">
-                                    @php
-                                        $locationCount = count($opportunity->store->locations);
-                                        $counter = 0;
-                                        foreach ($opportunity->store->locations as $key => $location) {
-                                            echo $location->location;
-                                            if ($counter < $locationCount - 1) {
-                                                echo ', ';
-                                            }
-                                            $counter++;
-                                        }
-                                    @endphp
+                                    {{$opportunity->storeLocation->location}}
                                 </td>
                                 <td class="tdclass">{{$opportunity->Opportunity_type}}</td>
                                 <td class="tdclass">{{$opportunity->category->category}}</td>

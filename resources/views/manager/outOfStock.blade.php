@@ -197,17 +197,7 @@
                                 </td>
                                 <td class="tdclass">{{$outOfStock->store->name_of_store}}</td>
                                 <td class="tdclass">
-                                    @php
-                                        $locationCount = count($outOfStock->store->locations);
-                                        $counter = 0;
-                                        foreach ($outOfStock->store->locations as $key => $location) {
-                                            echo $location->location;
-                                            if ($counter < $locationCount - 1) {
-                                                echo ', ';
-                                            }
-                                            $counter++;
-                                        }
-                                    @endphp
+                                    {{$outOfStock->storeLocation->location}}
                                 </td>
                                 <td class="tdclass">{{$outOfStock->category->category}}</td>
                                 <td class="tdclass">{{$outOfStock->product->product_name}}</td>

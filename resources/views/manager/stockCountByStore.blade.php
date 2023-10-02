@@ -253,37 +253,27 @@
                             $totalStock=$stockCount['stock_on_shelf']+$stockCount['stock_packed']+$stockCount['stock_in_store_room'];
                         @endphp
                             <tr>
-                                <td>
+                                <td class="tdclass">
                                     @php
                                         $date= explode(' ', $stockCount->created_at);
                                     @endphp
                                     {{$date[0]}}
                                 </td>
-                                <td>{{$stockCount->store->name_of_store}}</td>
-                                <td>
-                                    @php
-                                        $locationCount = count($stockCount->store->locations);
-                                        $counter = 0;
-                                        foreach ($stockCount->store->locations as $key => $location) {
-                                            echo $location->location;
-                                            if ($counter < $locationCount - 1) {
-                                                echo ', ';
-                                            }
-                                            $counter++;
-                                        }
-                                    @endphp
+                                <td class="tdclass">{{$stockCount->store->name_of_store}}</td>
+                                <td class="tdclass">
+                                    {{$stockCount->storeLocation->location}}
                                 </td>
                                 
-                                <td>{{$stockCount->category->category}}</td>
-                                <td>{{$stockCount->product->product_name}}</td>
-                                <td>{{$stockCount->product_sku}}</td>
-                                <td>{{$stockCount->stock_on_shelf}}</td>
-                                <td>{{$stockCount->stock_on_shelf_unit}}</td>
-                                <td>{{$stockCount->stock_packed}}</td>
-                                <td>{{$stockCount->stock_packed_unit}}</td>
-                                <td>{{$stockCount->stock_in_store_room}}</td>
-                                <td>{{$stockCount->stock_in_store_room_unit}}</td>
-                                <td>{{$totalStock}}</td>
+                                <td class="tdclass">{{$stockCount->category->category}}</td>
+                                <td class="tdclass">{{$stockCount->product->product_name}}</td>
+                                <td class="tdclass">{{$stockCount->product_sku}}</td>
+                                <td class="tdclass">{{$stockCount->stock_on_shelf}}</td>
+                                <td class="tdclass">{{$stockCount->stock_on_shelf_unit}}</td>
+                                <td class="tdclass">{{$stockCount->stock_packed}}</td>
+                                <td class="tdclass">{{$stockCount->stock_packed_unit}}</td>
+                                <td class="tdclass">{{$stockCount->stock_in_store_room}}</td>
+                                <td class="tdclass">{{$stockCount->stock_in_store_room_unit}}</td>
+                                <td class="tdclass">{{$totalStock}}</td>
                             </tr>
                         @endforeach
                       @endif                     

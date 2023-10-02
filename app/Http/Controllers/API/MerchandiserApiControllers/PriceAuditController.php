@@ -94,7 +94,7 @@ class PriceAuditController extends BaseController
         
         $company = $store->company;
 
-        $priceAuditArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'Product_SKU'=>$request->Product_SKU, 'product_store_price'=>$request->product_store_price, 'tax_in_percentage'=>$request->tax_in_percentage, 'competitor_product_name'=>$request->competitor_product_name, 'competitor_product_price'=>$request->competitor_product_price, 'notes'=>$request->notes];
+        $priceAuditArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'Product_SKU'=>$request->Product_SKU, 'product_store_price'=>$request->product_store_price, 'tax_in_percentage'=>$request->tax_in_percentage, 'competitor_product_name'=>$request->competitor_product_name, 'competitor_product_price'=>$request->competitor_product_price, 'notes'=>$request->notes];
         // return $this->sendResponse(['priceAuditArr'=>$priceAuditArr], 'checking:');
         $responseofQuery= PriceAudit::create($priceAuditArr);
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an priceAuditArr be stored:');

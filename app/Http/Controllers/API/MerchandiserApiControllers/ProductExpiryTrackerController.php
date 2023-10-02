@@ -5,6 +5,7 @@ use Validator;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
 use App\Models\ProductExpiryTracker;
 use Illuminate\Support\Facades\Auth;
@@ -19,20 +20,38 @@ class ProductExpiryTrackerController extends BaseController
      */
     public function index()
     {
-       
-        $user = Auth::user();
-        $stores = $user->companyUser->company->stores;
-        $categories = $user->companyUser->company->categories;
-        $products = [];
-        foreach ($categories as $category) {
-            $categoryProducts = $category->products->pluck('id', 'product_name')->toArray(); // Pluck product IDs
-            $products = array_merge($products, $categoryProducts); // Merge product IDs
-        // return $this->sendResponse(['products'=>$products, 'categoryProducts'=>$categoryProducts], 'here are products of company named:');
 
+        $currentUser = Auth::user();
+
+        $timeSheets = $currentUser->companyUser->timeSheets;
+
+        //for edit the timesheet if the last visit is not checkout
+        if ($timeSheets && count($timeSheets) > 0) 
+        {
+            $numberTimeSheets = count($timeSheets);
+            $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords; //getting last timesheeet records
+            $recordsCount = count($records);
+            if($records[$recordsCount-1]->status != 'check-out'){
+                $timeSheet = $timeSheets[$numberTimeSheets-1];
+                $stores = $currentUser->companyUser->company->stores;
+                $categories = $currentUser->companyUser->company->categories;
+                $products = [];
+                foreach ($categories as $category) {
+                    $categoryProducts = $category->products->pluck('id', 'product_name')->toArray(); // Pluck product IDs
+                    $products = array_merge($products, $categoryProducts); // Merge product IDs
+                }
+                $productsList = Product::whereIn('id', $products)->get();
+                return $this->sendResponse(['productsList'=>$productsList , 'categories'=>$categories, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id], 'check-in');
+            }
         }
-        $productsList = Product::whereIn('id', $products)->get();
-        return $this->sendResponse(['productsList'=>$productsList,  'categories'=>$categories], 'here are categories and products of company store');
 
+        // for create a new visit from frontend
+        return $this->sendError('already-checkout');       
+
+
+
+       
+       
         //
     }
 
@@ -45,6 +64,8 @@ class ProductExpiryTrackerController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'store_id'=> 'required',
+            'store_location_id'=>'required',
             'category_id'=>'required',
             'product_id'=>'required',
             'product_sku'=>'required',
@@ -64,12 +85,12 @@ class ProductExpiryTrackerController extends BaseController
 
         $product_id= $request->product_id;
         $product= Product::where('id', $product_id)->first();
-        $store_id = $product->store->id;
+        $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
+        $store = $store_location->store;
         
-        $user = Auth::user();
-        $company_user_id = $user->companyUser->id;
+        $company = $store->company;
 
-        $productExpiryTrackerArr= ['store_id'=>$store_id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'amount_expired'=>$request->amount_expired, 'batchNumber'=>$request->batchNumber, 'expiry_date'=>$request->expiry_date, 'action_taken'=>$request->action_taken, 'photo'=>$photo_path];
+        $productExpiryTrackerArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'amount_expired'=>$request->amount_expired, 'batchNumber'=>$request->batchNumber, 'expiry_date'=>$request->expiry_date, 'action_taken'=>$request->action_taken, 'photo'=>$photo_path];
         
         $responseofQuery= ProductExpiryTracker::create($productExpiryTrackerArr);
         // $productExpTracker =ProductExpiryTracker::all();

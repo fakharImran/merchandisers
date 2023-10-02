@@ -210,17 +210,7 @@
                                 </td>
                                 <td class="tdclass">{{$productExpiryTracker->store->name_of_store}}</td>
                                 <td class="tdclass">
-                                    @php
-                                        $locationCount = count($productExpiryTracker->store->locations);
-                                        $counter = 0;
-                                        foreach ($productExpiryTracker->store->locations as $key => $location) {
-                                            echo $location->location;
-                                            if ($counter < $locationCount - 1) {
-                                                echo ', ';
-                                            }
-                                            $counter++;
-                                        }
-                                    @endphp
+                                    {{$productExpiryTracker->storeLocation->location}}
                                 </td>
                                 <td class="tdclass">{{$productExpiryTracker->category->category}}</td>
                                 <td class="tdclass">{{$productExpiryTracker->product->product_name}}</td>

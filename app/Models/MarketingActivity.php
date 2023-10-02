@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use App\Models\Store;
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\CompanyUser;
+use App\Models\StoreLocation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,17 +15,23 @@ class MarketingActivity extends Model
 {
     use HasFactory;
     protected $table= 'marketing_activities';
-    protected $fillable= ['store_id','company_user_id','category_id','product_id', 'product_sku', 'promotion_type', 'Competitor_product_name', 'photo', 'Note'];
+    protected $fillable= ['store_location_id','store_id','company_id','category_id','product_id', 'product_sku', 'promotion_type', 'Competitor_product_name', 'photo', 'Note'];
 
-    public function companyUser(): BelongsTo
+    public function storeLocation(): BelongsTo
     {
-        return $this->belongsTo(CompanyUser::class, 'company_user_id');
+        return $this->belongsTo(StoreLocation::class, 'store_location_id');
     }
     
     public function store(): BelongsTo
     {
         return $this->belongsTo(Store::class, 'store_id');
     }
+   
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+    
 
     public function category(): BelongsTo
     {
