@@ -210,17 +210,7 @@
                             </td>
                             <td>{{$priceAudit->store->name_of_store}}</td>
                             <td>
-                                @php
-                                    $locationCount = count($priceAudit->store->locations);
-                                    $counter = 0;
-                                    foreach ($priceAudit->store->locations as $key => $location) {
-                                        echo $location->location;
-                                        if ($counter < $locationCount - 1) {
-                                            echo ', ';
-                                        }
-                                        $counter++;
-                                    }
-                                @endphp
+                                {{$priceAudit->storeLocation->location}}
                             </td>
                             
                             <td>{{$priceAudit->category->category}}</td>

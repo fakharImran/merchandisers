@@ -6,6 +6,7 @@ use Validator;
 use App\Models\Product;
 use App\Models\PriceAudit;
 use Illuminate\Http\Request;
+use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\BaseController;
@@ -69,6 +70,8 @@ class PriceAuditController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'store_id'=> 'required',
+            'store_location_id'=>'required',
             'category_id'=>'required',
             'product_id'=>'required',
             'Product_SKU'=>'required',
@@ -77,6 +80,7 @@ class PriceAuditController extends BaseController
             'competitor_product_name'=>'required',
             'competitor_product_price'=>'required',
             'notes'=>'required',
+            
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
@@ -85,13 +89,13 @@ class PriceAuditController extends BaseController
 
         $product_id= $request->product_id;
         $product= Product::where('id', $product_id)->first();
-        $store_id = $product->store->id;
+        $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
+        $store = $store_location->store;
         
-        $user = Auth::user();
-        $company_user_id = $user->companyUser->id;
+        $company = $store->company;
 
-        $priceAuditArr= ['store_id'=>$store_id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'Product_SKU'=>$request->Product_SKU, 'product_store_price'=>$request->product_store_price, 'tax_in_percentage'=>$request->tax_in_percentage, 'competitor_product_name'=>$request->competitor_product_name, 'competitor_product_price'=>$request->competitor_product_price, 'notes'=>$request->notes];
-        
+        $priceAuditArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'Product_SKU'=>$request->Product_SKU, 'product_store_price'=>$request->product_store_price, 'tax_in_percentage'=>$request->tax_in_percentage, 'competitor_product_name'=>$request->competitor_product_name, 'competitor_product_price'=>$request->competitor_product_price, 'notes'=>$request->notes];
+        // return $this->sendResponse(['priceAuditArr'=>$priceAuditArr], 'checking:');
         $responseofQuery= PriceAudit::create($priceAuditArr);
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an priceAuditArr be stored:');
 
