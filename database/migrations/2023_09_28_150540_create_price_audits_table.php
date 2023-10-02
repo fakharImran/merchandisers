@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
             $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
