@@ -36,23 +36,22 @@ class PriceAuditController extends BaseController
                 // $user = Auth::user();
                 $stores = $currentUser->companyUser->company->stores;
                 $categories = $currentUser->companyUser->company->categories;
-                // $products = [];
-                // foreach ($categories as $category) {
-                //     $categoryProducts = $category->products->pluck('id', 'product_name')->toArray(); // Pluck product IDs
-                //     $products = array_merge($products, $categoryProducts); // Merge product IDs
-                // // return $this->sendResponse(['products'=>$products, 'categoryProducts'=>$categoryProducts], 'here are products of company named:');
+                $products = [];
+                foreach ($categories as $category) {
+                    $categoryProducts = $category->products->pluck('id', 'product_name')->toArray(); // Pluck product IDs
+                    $products = array_merge($products, $categoryProducts); // Merge product IDs
+                // return $this->sendResponse(['products'=>$products, 'categoryProducts'=>$categoryProducts], 'here are products of company named:');
         
-                // }
-                // $productsList = Product::whereIn('id', $products)->get();
+                }
+                $productsList = Product::whereIn('id', $products)->get();
 
-                return $this->sendResponse([ 'categories'=>$categories, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'your are checked in,  here are categories of company named:');
+                return $this->sendResponse(['productsList'=>$productsList , 'categories'=>$categories, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id], 'check-in');
         
-                // return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'store_manager_name'=>$timeSheet->store_manager_name, 'company_user_id'=> $timeSheet->companyUser->id, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray], 'incomplete status in time sheet');
             }
         }
 
         // for create a new visit from frontend
-        return $this->sendResponse(['time sheet'=>$timeSheets], 'you are already checkout');
+        return $this->sendError('already-checkout');       
 
 
 
