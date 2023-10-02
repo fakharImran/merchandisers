@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\API;
-use Validator;
+use DateTime;
 
+use Validator;
+use DateTimeZone;
 use App\Models\User;
 use App\Models\Store;
 use Illuminate\Http\Request;
@@ -113,11 +115,18 @@ class MerchandiserTimeSheetController extends BaseController
 
         if($company_user_id && $store ){
             $storeArr= ['company_user_id'=>$company_user_id, 'store_id'=>$store->id, 'store_location_id'=>$request->store_location_id, 'store_manager_name'=>$request->store_manager_name];
-            $dateString = $request->date;
-            $correctDateFormat = date('Y-m-d', strtotime($dateString));
+           
+            $dateTimeString = $request->date. ' '.$request->time;
 
-            $timeString = $request->time;
-            $correctTimeFormat = date('H:i:s', strtotime($timeString));
+
+            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone('asia/karachi'));
+
+            $date->setTimezone(new DateTimeZone('UTC'));
+            
+            
+            $correctDateFormat = $date->format('Y-m-d');
+            $correctTimeFormat = $date->format('H:i:s');
+            
 
             $recordArray=[
                 'date'=>$correctDateFormat,
@@ -126,6 +135,7 @@ class MerchandiserTimeSheetController extends BaseController
                 'gps_location'=> $request->gps_location
 
             ];
+            // return $this->sendResponse(['recordArray'=>$recordArray, 'dateTimeString' =>$dateTimeString], ' record testing time sheet stored successfully.');
 
             $merchandiserTimeSheet= MerchandiserTimeSheet::create($storeArr);
             $timesheetRecord= $merchandiserTimeSheet->timeSheetRecords()->create($recordArray);
@@ -186,11 +196,17 @@ class MerchandiserTimeSheetController extends BaseController
                 }
             }
             
-            $dateString = $request->date;
-            $correctDateFormat = date('Y-m-d', strtotime($dateString));
+            $dateTimeString = $request->date. ' '.$request->time;
 
-            $timeString = $request->time;
-            $correctTimeFormat = date('H:i:s', strtotime($timeString));
+
+            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone('asia/karachi'));
+
+            $date->setTimezone(new DateTimeZone('UTC'));
+            
+            
+            $correctDateFormat = $date->format('Y-m-d');
+            $correctTimeFormat = $date->format('H:i:s');
+
 
             $recordArray=[
                 'date'=>$correctDateFormat,
@@ -198,6 +214,7 @@ class MerchandiserTimeSheetController extends BaseController
                 'status'=> $request->status,
                 'gps_location'=> $request->gps_location
             ];
+            // return $this->sendResponse(['recordArray'=>$recordArray, 'dateTimeString' =>$dateTimeString], ' record testing time sheet stored successfully.');
             
 
             $timeSheetRecord = $timeSheet->timeSheetRecords()->create($recordArray);
