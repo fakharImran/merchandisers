@@ -291,7 +291,11 @@
                                 @php
                                   
                                 //   echo ($checkin_date_time." ". $start_lunch_date_time." ". $end_lunch_date_time." ". $start_break_date_time." ". $end_break_date_time." ". $checkout_date_time." ". "<br>");
-                                    
+                                        $formatedStartBreakDateTime= null;
+                                        $formatedEndBreakDateTime=null;
+                                        $formatedStartLunchDateTime= null;
+                                        $formatedEndLunchDateTime= null;
+                                        
                                   $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
                                     // Check-out date and time
                                     $timestamp = strtotime($checkin_date_time);
@@ -317,7 +321,7 @@
                                     }
                                     else {
                                         // $formatedStartBreakDateTime= null;
-                                        $formatedEndBreakDateTime=null;
+                                        // $formatedEndBreakDateTime=null;
                                         $breakSeconds=0;
                                         $breakTimeInterval=0;
                                         # code...
@@ -347,7 +351,7 @@
                                         $LunchTimeInterval=0;
                                         $lunchSeconds=0;
                                         // $formatedStartLunchDateTime= null;
-                                        $formatedEndLunchDateTime= null;
+                                        // $formatedEndLunchDateTime= null;
                                         # code...
                                     }
                                     
