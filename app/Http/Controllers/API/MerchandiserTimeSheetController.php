@@ -121,7 +121,7 @@ class MerchandiserTimeSheetController extends BaseController
             $dateTimeString = $request->date. ' '.$request->time;
 
 
-            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone($user->time_zone));
+            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone('asia/karachi'));  //time zone will be set when asim will update
 
             $date->setTimezone(new DateTimeZone('UTC'));
             
