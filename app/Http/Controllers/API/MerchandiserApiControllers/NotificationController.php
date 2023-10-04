@@ -17,12 +17,11 @@ class NotificationController extends BaseController
     public function index()
     {
         $user = Auth::user();
-        $companyUser=$user->companyUser;
         $notifications= $user->companyUser->notifications;
 
         if($notifications)
         {
-            return $this->sendResponse(['notifications'=>$notifications, 'companyUser'=>$companyUser], 'notifications exist');
+            return $this->sendResponse(['notifications'=>$notifications, 'user'=>$user], 'notifications exist');
         }
         else
         {
