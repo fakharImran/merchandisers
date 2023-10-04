@@ -115,9 +115,9 @@ class MerchandiserTimeSheetController extends BaseController
         // }
 
         $timeSheet = $user->companyUser->timeSheets()->latest()->first();
-        $record=$timeSheet->timeSheetRecords()->latest()->first();
         //exception handler for the timesheet if the last visit is not checkout
         if ($timeSheet) {
+            $record=$timeSheet->timeSheetRecords()->latest()->first();
             
                 if ($record->status != 'check-out') {
                     return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1]], 'TimeSheet already Exist! Please call the update function');
