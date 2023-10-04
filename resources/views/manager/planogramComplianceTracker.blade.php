@@ -53,7 +53,7 @@
 <div class="container">
 
     {{-- {{dd($userArr)}} --}}
-    <div  class="row d-flex align-items-center col-actions" style="max-width: 99%; margin: 1px auto;">
+    <div  class="row d-flex align-items-center col-actions" style="   max-width: 99%; margin: 1px auto;">
         <div class="col-md-3 col-3 p-3">
             
             <div class="form-group" >
@@ -136,64 +136,109 @@
                 </select>   
             </div>
         </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="product-search" class="form-label filter product">Select product</label>
+                <select name="product-search" class=" filter form-select"  id="product-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($products->unique('product_name')->sort() as $product)
+                    <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
     </div>
-    <br><br><br>
+    <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
+        <div class="col-12">
+            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download filtered table in excel</button>
+        </div>
+        <div class="col-12">
 
-    <div class='row d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
-        <label for="planogram Compliance Tracker" class="form-label filter merchandiser">Planogram Compliance Tracker By Category</label>
-
-        <div class="col-md-4 col-3 p-3">
-            <div class="card manager-card-style">
-                {{-- <div class="card-header manager-card-header">Opening Week Stock</div> --}}
-                <div class="card-body">
-                    <img  src="{{asset('assets/images/pctracker1683118440.jpg.png')}}" alt="Image Description" width="100" height="100">
-                        {{ '24-09-2023'}}<br>
-                        {{'PriceMart'}}
-                        {{"111, 19 RED HILLS ROAD"}}
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-3 p-3">
-            <div class="card manager-card-style">
-                {{-- <div class="card-header manager-card-header">Opening Week Stock</div> --}}
-                <div class="card-body">
-                    <img  src="{{asset('assets/images/pctracker1683118440.jpg.png')}}" alt="Image Description" width="100" height="100">
-                        {{ '24-09-2023'}}<br>
-                        {{'PriceMart'}}
-                        {{"111, 19 RED HILLS ROAD"}}
-                </div>
-            </div>
-        </div>
-        
-    </div>
-    <div class="row">
-        <div class="col-md-08 col-8 p-3">
-            <div class="card" style="height:350px">
-                <div class="card-body">
-                    <img  src="{{asset('assets/images/pctracker1683118440.jpg.png')}}" alt="Image Description" width="400" height="300">
-                      
-                </div>
-            </div>
-        </div>
-        <div class="col-md-08 col-8 p-3">
             <div class="table-responsive" >
-                {{-- table-responsive --}}
-                {{-- nowrap --}}
-                <table id="table" class="table" style="border: 1px solid #ccc;">
+                    {{-- table-responsive --}}
+                    {{-- nowrap --}}
+                <table id="mechandiserDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
+                            <th class="thclass" scope="col">Date</th>
+                            <th class="thclass" scope="col">Name of Store</th>
+                            <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
+                            <th class="thclass" scope="col">Product Number/SKU</th>
+                            <th class="thclass" scope="col">Before Photo</th>
+                            <th class="thclass" scope="col">After Photo</th>
                             <th class="thclass" scope="col">Action</th>
-                            
                         </tr>
                     </thead>
                     <tbody>
+                    @php
+                            $totalHourworked=0;
+                            $chartDateArray = array();
+                            $chartHoursArray = array();
+                    @endphp
+                        @if ($planogramComplianceData!=null)
+                        @foreach ($planogramComplianceData as $planogram)
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            {{-- {{DD($planogram)}} --}}
+                            <td class="tdclass">
+                                @php
+                                    $date= explode(' ', $planogram->created_at);
+                                @endphp
+                                {{$date[0]}}
+                            </td>
+                            <td class="tdclass">{{$planogram->store->name_of_store}}</td>
+                            <td class="tdclass">
+                                {{$planogram->storeLocation->location}}
+                            </td>
+                            
+                            <td class="tdclass">{{$planogram->category->category}}</td>
+                            <td class="tdclass">{{$planogram->product->product_name}}</td>
+                            <td class="tdclass">{{$planogram->product_number_sku}}</td>
+                            <td class="tdclass">
+                                @php
+                                if($planogram->photo_before_stocking_shelf!=null)
+                                {
+                                    $imagePath = public_path('storage/' . $planogram->photo_before_stocking_shelf);
+                                    if (file_exists($imagePath)) 
+                                    {
+                                        echo "<img width='100' src='" . asset('storage/' . $planogram->photo_before_stocking_shelf) . "' />";
+                                    } 
+                                    else 
+                                    {
+                                        echo "N/A";
+                                    }
+                                }
+                                else {
+                                    echo "N/A";
+                                }
+                                    
+                                @endphp     
+                            </td>
+                            <td class="tdclass">
+                                @php
+                                if($planogram->photo_after_stocking_shelf!=null)
+                                {
+                                    $imagePath = public_path('storage/' . $planogram->photo_after_stocking_shelf);
+                                    if (file_exists($imagePath)) 
+                                    {
+                                        echo "<img width='100' src='" . asset('storage/' . $planogram->photo_after_stocking_shelf) . "' />";
+                                    } 
+                                    else 
+                                    {
+                                        echo "N/A";
+                                    }
+                                }
+                                else {
+                                    echo "N/A";
+                                }
+                                    
+                                @endphp     
+                            </td>
+                            <td class="tdclass">{{$planogram->action}}</td>
                         </tr>
+                        @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

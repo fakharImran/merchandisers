@@ -99,27 +99,34 @@ function formatDateYMD(date) {
 // convertingData(chartData);
 
 const data = {
-    labels: ['Product Name', 'Compititor Product Name', 'Averate Price'],
+    labels: [['Grace', 'Nestle'], ['Nayab','Olper'], ['Vital','Tapal']],
     datasets: [{
-        label: 'Total Time Worked',
-        backgroundColor: '#1892C0',
+        label: 'Our Product',
+        backgroundColor: '#1BC018',
         borderColor: 'rgb(255, 99, 132)',
         // data: hoursWorked,
         data: [80, 60, 60],
+    },
+    {
+        label: 'Compatitor Product',
+        backgroundColor: '#1892C0',
+        borderColor: 'rgb(255, 99, 132)',
+        // data: hoursWorked,
+        data: [85, 40, 90],
     }]
+    
 };
-
 const config = {
-    type: 'bar',
+    type: 'horizontalBar',
+
+    // type: 'bar',
     data: data,
     options: {
-        // responsive: true,
-        // maintainAspectRatio: false,
         scales: {
-            yAxes: [{
+            xAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Price $'
+                    labelString: 'Price in USD'
                 },
                 ticks: {
                     stepSize: 10,
@@ -130,12 +137,53 @@ const config = {
         tooltips: {
             callbacks: {
                 label: function (tooltipItem, data) {
-                    return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel
+                    return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.xLabel
                 }
             }
+        },
+      indexAxis: 'x',
+      // Elements options apply to all of the options unless overridden in a dataset
+      // In this case, we are setting the border of each horizontal bar to be 2px wide
+      elements: {
+        bar: {
+          borderWidth: 2,
         }
-    }
-};
+      },
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'right',
+        }
+      }
+    },
+  };
+// const config = {
+//     type: 'bar',
+//     data: data,
+//     options: {
+//         // responsive: true,
+//         // maintainAspectRatio: false,
+//         scales: {
+//             yAxes: [{
+//                 scaleLabel: {
+//                     display: true,
+//                     labelString: 'Price $'
+//                 },
+//                 ticks: {
+//                     stepSize: 10,
+//                     beginAtZero: true
+//                 }
+//             }]
+//         },
+//         tooltips: {
+//             callbacks: {
+//                 label: function (tooltipItem, data) {
+//                     return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel
+//                 }
+//             }
+//         }
+//     }
+// };
 
 
 var myChartJS = new Chart(
@@ -179,7 +227,7 @@ function changeGraph(table) {
 
 
 $(document).ready(function () { 
-    var table = $('#mechandiserDatatable').DataTable({
+    var table = $('#pricaAuditDatatable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
         paging: true, // Enable pagination
@@ -196,7 +244,7 @@ $(document).ready(function () {
 
         // Perform the search on the first column of the DataTable
         const searchValue = this.value.trim();
-        table.column(0).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
         var storeName = this.value;
 
@@ -218,7 +266,7 @@ $(document).ready(function () {
         });
         if (storeName == "") {
             // table.lengthMenu= [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ];
-            table.column(1).search('', true, false).draw(); // Clear previous search
+            table.column(2).search('', true, false).draw(); // Clear previous search
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
             allUniqueLocations.forEach(function (location) {
@@ -246,7 +294,7 @@ $(document).ready(function () {
 
     $('#location-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(1).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
 

@@ -12,6 +12,7 @@ use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MerchandiserTimeSheet;
+use App\Models\PlanogramComplianceTracker;
 use App\Http\Controllers\API\BaseController;
 
 class MerchandiserTimeSheetController extends BaseController
@@ -49,18 +50,20 @@ class MerchandiserTimeSheetController extends BaseController
 
         $currentUser = Auth::user();
 
-        $timeSheets = $currentUser->companyUser->timeSheets;
-
+        $timeSheet = $user->companyUser->timeSheets()->latest()->first();
+        // $record=$timeSheet->timeSheetRecords()->latest()->first();
         //for edit the timesheet if the last visit is not checkout
-        if ($timeSheets && count($timeSheets) > 0) 
+        if ($timeSheet) 
         {
-            $numberTimeSheets = count($timeSheets);
-            $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords; //getting last timesheeet records
-            $recordsCount = count($records);
-            if($records[$recordsCount-1]->status != 'check-out'){
-                $timeSheet = $timeSheets[$numberTimeSheets-1];
-                return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'store_manager_name'=>$timeSheet->store_manager_name, 'company_user_id'=> $timeSheet->companyUser->id, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray], 'incomplete status in time sheet');
+            $records = $timeSheet->timeSheetRecords; //getting last timesheeet records
+            // $recordsCount = count($records);
+            foreach ($records as $key => $record) {
+                if ($record->status == 'check-out') {
+                    return $this->sendResponse(['stores'=>$storesArray], 'please start your new time sheet');
+                }
             }
+            
+            return $this->sendResponse(['merchandiserTimeSheet'=>['id'=>$timeSheet->id, 'store_manager_name'=>$timeSheet->store_manager_name, 'company_user_id'=> $timeSheet->companyUser->id, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id, 'time_sheet_records'=>$timeSheet->timeSheetRecords], 'stores'=>$storesArray], 'incomplete status in time sheet');
         }
 
         // for create a new visit from frontend
@@ -99,16 +102,26 @@ class MerchandiserTimeSheetController extends BaseController
 
         $user = Auth::user();
 
-        $timeSheets = $user->companyUser->timeSheets;
-        //exception handler for the timesheet if the last visit is not checkout
-        if ($timeSheets && count($timeSheets) > 0 ) {
+        // $timeSheets = $user->companyUser->timeSheets;
+        // //exception handler for the timesheet if the last visit is not checkout
+        // if ($timeSheets && count($timeSheets) > 0 ) {
             
-            $numberTimeSheets = count($timeSheets);
-            $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords;
-            $recordsCount = count($records);
-            if($records[$recordsCount-1]->status != 'check-out'){
-                return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1]], 'TimeSheet already Exist! Please call the update function');
-            }
+        //     $numberTimeSheets = count($timeSheets);
+        //     $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords;
+        //     $recordsCount = count($records);
+        //     if($records[$recordsCount-1]->status != 'check-out'){
+        //         return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1]], 'TimeSheet already Exist! Please call the update function');
+        //     }
+        // }
+
+        $timeSheet = $user->companyUser->timeSheets()->latest()->first();
+        $record=$timeSheet->timeSheetRecords()->latest()->first();
+        //exception handler for the timesheet if the last visit is not checkout
+        if ($timeSheet) {
+            
+                if ($record->status != 'check-out') {
+                    return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1]], 'TimeSheet already Exist! Please call the update function');
+                }
         }
 
         $company_user_id = $user->companyUser->id;
@@ -119,10 +132,11 @@ class MerchandiserTimeSheetController extends BaseController
             $dateTimeString = $request->date. ' '.$request->time;
 
 
-            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone('asia/karachi'));
+            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone($user->time_zone));
 
             $date->setTimezone(new DateTimeZone('UTC'));
             
+            // return $this->sendResponse(['date in my time zone'=>$date, 'dateTimeString' =>$dateTimeString], ' record testing time sheet stored successfully.');
             
             $correctDateFormat = $date->format('Y-m-d');
             $correctTimeFormat = $date->format('H:i:s');
@@ -194,6 +208,10 @@ class MerchandiserTimeSheetController extends BaseController
                 if($validator->fails()){
                     return $this->sendError('Validation Error.', $validator->errors());       
                 }
+
+                PlanogramComplianceTracker::where('store_location_id', $timeSheet->store_location_id)
+                ->whereNull('photo_after_stocking_shelf')
+                ->update(['photo_after_stocking_shelf' => 'N/A']);
             }
             
             $dateTimeString = $request->date. ' '.$request->time;

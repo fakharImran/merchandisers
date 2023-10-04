@@ -65,15 +65,15 @@
                             <label>{{ __('Name of Store:') }}</label>
                         </div>
                         <div class="user_select_form">
-                            <select name="name_of_store" onchange="setLocations(this, {{$stores}})" class="form-select" id="store-search">
+                            <select name="store_id" class="form-select" id="store-search">
                                 <option value="" selected>--Select--</option>
                                 @if($stores!=null)
-                                    @foreach ($stores->unique('name_of_store')->sort() as $store)
-                                        <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
+                                    @foreach ($stores as $store)
+                                        <option value="{{$store['id']}}">{{$store['name_of_store']}}</option>
                                     @endforeach
                                 @endif
                             </select>
-                            @error('name_of_store')
+                            @error('store_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -92,7 +92,7 @@
         
                         @foreach($store->locations->unique('location')->sort() as $location)
                             @php
-                                array_push($locationArr, $location['location']); 
+                                array_push($locationArr, ['store_location_id'=>$location['id'],'location'=>$location['location'],]); 
                                 array_push($tempLocation, $location['location']) ;                             
                             @endphp    
                         @endforeach
@@ -105,23 +105,21 @@
                     @endforeach
                 @endif
                 @php
-                    $locationArr = array_unique($locationArr);
-                    sort($locationArr);
                 @endphp
                     <div class="user_form_content">
                         <div class="label">
                             <label>{{ __('Location:') }}</label>
                         </div>
                         <div class="user_select_form">
-                            <select id="store" class="form-select " name="location" required>
+                            <select id="store_location_id" class="form-select " name="store_location_id" required>
                                 <option value disabled selected>--Select--</option>
                                 @if($locationArr!=null)
                                 @foreach ($locationArr as $location)
-                                    <option value="{{$location}}">{{$location}}</option>
+                                    <option value="{{$location['store_location_id']}}">{{$location['location']}}</option>
                                 @endforeach
                                 @endif
                             </select>
-                            @error('location')
+                            @error('store_location_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -133,16 +131,13 @@
                             <label>{{ __('Select Merchandiser:') }}</label>
                         </div>
                         <div class="user_select_form">
-                            <select name="merchandiser" class=" form-select"  id="merchandiser-search">
+                            <select name="company_user_id" class=" form-select"  id="merchandiser-search">
                                 <option value="" selected>--Select-- </option>
-                                @php
-                                  $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
-                                @endphp
-                                @foreach($uniqueMerchandisers as $merchandiser)
-                                        <option value="{{$merchandiser}}">{{$merchandiser}}</option>
+                                @foreach($userArr as $merchandiser)
+                                        <option value="{{$merchandiser->companyUser->id}}">{{$merchandiser->name}}</option>
                                 @endforeach
                             </select>   
-                            @error('merchandiser')
+                            @error('company_user_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -159,7 +154,7 @@
                             <label>{{ __('Attachment') }}</label>
                         </div>
                         <div class="user_input_form">
-                            <input type="file"  class="form-control" id="full_name" name="file_name" required autocomplete="name"   >
+                            <input type="file"  class="form-control" id="full_name" name="attachment" required autocomplete="name"   >
                         @error('Attachment')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -173,7 +168,7 @@
                         </div> --}}
                         <div class="user_btn myborder">
                         <button type="submit" class=" user_btn_style submit  ">
-                        <img src="{{asset('assets/images/next.png')}}" alt="->"> Submit
+                        <img src="{{asset('assets/images/next.png')}}" alt="->"> Send
                         </button>
                         </div>
 
@@ -191,9 +186,9 @@
     </div>
 
     <script>
-     function   setLocations(data)
-     {
-        alert(data.value)
-     }
+    //  function   setLocations(data)
+    //  {
+    //     alert(data.value)
+    //  }
     </script>
 @endsection

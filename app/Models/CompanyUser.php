@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Company;
+use App\Models\Notification;
 use App\Models\MerchandiserTimeSheet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -44,5 +45,14 @@ class CompanyUser extends Model
     {
         // return $this->id;
         return $this->hasMany(MerchandiserTimeSheet::class, "company_user_id");
+    }
+    /**
+     * Get all of the notifications for the CompanyUser
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'company_user_id');
     }
 }

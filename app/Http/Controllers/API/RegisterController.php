@@ -51,6 +51,7 @@ class RegisterController extends BaseController
             'email' => 'required|email',
             'password' => 'required',
             'c_password' => 'required|same:password',
+            'time_zone' =>'required'
             
         ]);
    
@@ -124,6 +125,7 @@ class RegisterController extends BaseController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
+            'time_zone'=> 'required'
         ]);
    
         if($validator->fails()){
@@ -136,14 +138,12 @@ class RegisterController extends BaseController
                 //update last login date and time
                 $user->companyUser->last_login_date_time =  date("Y-m-d h:i:s A");
                 $user->companyUser->save();
+                $user->update(['time_zone' => $request->input('time_zone')]);
 
                 $success['token'] = $user->createToken('api-token')->plainTextToken;
                 $success['name'] =  $user->name;
                 $success['id'] =  $user->id;
                 $success['company'] = $user->companyUser->company;
-    
-               
-    
                 return $this->sendResponse($success, 'User login successfully.');
             }
             else{ 

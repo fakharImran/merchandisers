@@ -66,15 +66,15 @@
                             <label>{{ __('Name of Store:') }}</label>
                         </div>
                         <div class="user_select_form">
-                            <select name="name_of_store" onchange="setLocations(this, {{$stores}})" class="form-select" id="store-search">
+                            <select name="store_id" class="form-select" id="store-search">
                                 <option value="" selected>--Select--</option>
                                 @if($stores!=null)
-                                    @foreach ($stores->unique('name_of_store')->sort() as $store)
-                                        <option {{($selectedNotification->name_of_store==$store['name_of_store'])?"selected":""}} value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
+                                    @foreach ($stores as $store)
+                                    <option {{($selectedNotification->store->name_of_store=$store->name_of_store)?"selected":""}} value="{{$store->id}}">{{$store->name_of_store}}</option>
                                     @endforeach
                                 @endif
                             </select>
-                            @error('name_of_store')
+                            @error('store_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -93,7 +93,7 @@
         
                         @foreach($store->locations->unique('location')->sort() as $location)
                             @php
-                                array_push($locationArr, $location['location']); 
+                                array_push($locationArr, ['store_location_id'=>$location['id'],'location'=>$location['location'],]); 
                                 array_push($tempLocation, $location['location']) ;                             
                             @endphp    
                         @endforeach
@@ -105,20 +105,16 @@
                         @endphp
                     @endforeach
                 @endif
-                @php
-                    $locationArr = array_unique($locationArr);
-                    sort($locationArr);
-                @endphp
                     <div class="user_form_content">
                         <div class="label">
                             <label>{{ __('Location:') }}</label>
                         </div>
                         <div class="user_select_form">
-                            <select id="store" class="form-select " name="location" required>
+                            <select id="store" class="form-select " name="store_location_id" required>
                                 <option value disabled selected>--Select--</option>
                                 @if($locationArr!=null)
                                 @foreach ($locationArr as $location)
-                                    <option {{($selectedNotification->location==$location)?"selected":""}} value="{{$location}}">{{$location}}</option>
+                                    <option {{($selectedNotification->store_location_id==$location['store_location_id'])?"selected":""}} value="{{$location['store_location_id']}}">{{$location['location']}}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -134,16 +130,13 @@
                             <label>{{ __('Select Merchandiser:') }}</label>
                         </div>
                         <div class="user_select_form">
-                            <select name="merchandiser" class=" form-select"  id="merchandiser-search">
+                            <select name="company_user_id" class=" form-select"  id="merchandiser-search">
                                 <option value="" selected>--Select-- </option>
-                                @php
-                                  $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
-                                @endphp
-                                @foreach($uniqueMerchandisers as $merchandiser)
-                                        <option {{($selectedNotification->merchandiser==$merchandiser)?"selected":""}} value="{{$merchandiser}}">{{$merchandiser}}</option>
+                                @foreach($userArr as $merchandiser)
+                                        <option {{($selectedNotification->company_user_id==$merchandiser->id)?"selected":""}} value="{{$merchandiser->id}}">{{$merchandiser->name}}</option>
                                 @endforeach
                             </select>   
-                            @error('merchandiser')
+                            @error('company_user_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -156,7 +149,7 @@
                     </div>
                     
                     <div class="user_input_form">
-                        <input type="file" class="form-control" id="full_name" name="file_name" autocomplete="name">
+                        <input type="file" class="form-control" id="full_name" name="attachment" autocomplete="name">
                         @error('Attachment')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -168,7 +161,7 @@
                                 @php
                                     $filename= explode('/', $selectedNotification->attachment);
                                 @endphp
-                                Current file: {{ $filename[5] }}
+                                Current file: {{ $filename[1] }}
                             </span>
                         @else
                             <span class="file-name-display">

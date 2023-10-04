@@ -21,20 +21,22 @@ class StockCountByStoreController extends BaseController
     public function index()
     {
 
-        $currentUser = Auth::user();
+        $user = Auth::user();
 
-        $timeSheets = $currentUser->companyUser->timeSheets;
+        $timeSheet = $user->companyUser->timeSheets()->latest()->first();
 
         //for edit the timesheet if the last visit is not checkout
-        if ($timeSheets && count($timeSheets) > 0) 
+        if ($timeSheet) 
         {
-            $numberTimeSheets = count($timeSheets);
-            $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords; //getting last timesheeet records
-            $recordsCount = count($records);
-            if($records[$recordsCount-1]->status != 'check-out'){
-                $timeSheet = $timeSheets[$numberTimeSheets-1];
-                $stores = $currentUser->companyUser->company->stores;
-                $categories = $currentUser->companyUser->company->categories;
+            $records = $timeSheet->timeSheetRecords; //getting last timesheeet records
+            foreach ($records as $key => $record) {
+                if ($record->status == 'check-out') 
+                {
+                    return $this->sendError('already-checkout');       
+                }  
+            }
+                $stores = $user->companyUser->company->stores;
+                $categories = $user->companyUser->company->categories;
                 $products = [];
                 foreach ($categories as $category) {
                     $categoryProducts = $category->products->pluck('id', 'product_name')->toArray(); // Pluck product IDs
@@ -42,7 +44,6 @@ class StockCountByStoreController extends BaseController
                 }
                 $productsList = Product::whereIn('id', $products)->get();
                 return $this->sendResponse(['productsList'=>$productsList , 'categories'=>$categories, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id], 'check-in');
-            }
         }
 
         // for create a new visit from frontend

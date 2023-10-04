@@ -54,6 +54,8 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::apiResource('price-audit',PriceAuditController::class);
     Route::apiResource('stock-count-by-store',StockCountByStoreController::class);
     Route::apiResource('planogram-compliance-tracker',PlanogramComplianceTrackerController::class);
+    Route::post('planogram-compliance-tracker/{id}', [PlanogramComplianceTrackerController::class, 'update']);
+
     Route::apiResource('sellin-vs-sellout-data',SellinSelloutDataController::class);
     Route::apiResource('marketing-activity',MarketingActivityController::class);
     Route::apiResource('product-expiry-tracker',ProductExpiryTrackerController::class);

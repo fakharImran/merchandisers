@@ -12,6 +12,7 @@ use App\Models\MarketingActivity;
 use App\Models\ProductExpiryTracker;
 use App\Models\MerchandiserTimeSheet;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PlanogramComplianceTracker;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -87,6 +88,10 @@ class Store extends Model
     public function productExpiryTrackers(): HasMany
     {
         return $this->hasMany(ProductExpiryTracker::class, 'store_id');
+    }
+    public function planogramComplianceTrackers(): HasMany
+    {
+        return $this->hasMany(PlanogramComplianceTracker::class, 'store_id');
     }
     
 }

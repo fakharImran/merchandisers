@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin\CustomerControllers;
+use Validator;
 
 use App\Models\User;
 use App\Models\Product;
@@ -91,56 +92,43 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $pageConfigs = ['pageSidebar' => 'notification'];    
 
-
-        $user= Auth::user();  
-        $merchandiserUsers = User::role('merchandiser')->get();
-
-        //   dd($merchandiserUsers);
-        $merchandiserArray = array();
-        $allLocations=StoreLocation::all();
-        $compnay_users = $user->companyUser->company->companyUsers;
-        $userArr = array();
-        foreach ($compnay_users as $key => $compnay_user) {
-            if($compnay_user->user->hasRole('merchandiser')){
-                array_push($userArr, $compnay_user->user)  ;
-            }
+        $validator = Validator::make($request->all(), [
+            'store_id'=> 'required',
+            'company_user_id'=>'required',
+            'title'=>'required',
+            'message'=>'required',
+            'store_location_id'=>'required',
+        ]);
+        if ($validator->fails()) {
+            // Validation failed
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-        $stores= $user->companyUser->company->stores;
-        $products = [];
-        foreach ($stores as $store) {
-            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
-            $products = array_merge($products, $storeProducts); // Merge product IDs
-        }
-        $products = Product::whereIn('id', $products)->get();
-        $name=$user->name;
-        
-        
-        if($request['file_name']!=null)
+
+        if($request->hasFile('attachment'))
         {
-            $path = $request->file('file_name')->store('public/uploads');
-
-            // Modify the path to use a publicly accessible URL
-            $url = asset(str_replace('public', 'storage', $path));
-            // dd($refPatDocument_url);
+            $url = $request->file('attachment')->store('notifications', 'public');
+        }
+        else
+        {
+            $url=null;
         }
 
         $data= $request->input();
         $notification = new Notification;
+
+               $notification->store_location_id =$data['store_location_id'];
+               $notification->store_id =$data['store_id'];
+               $notification->company_user_id =$data['company_user_id'];
                $notification->title =$data['title'];
                $notification->message =$data['message'];
-               $notification->name_of_store =$data['name_of_store'];
-               $notification->location =$data['location'];
-               $notification->merchandiser =$data['merchandiser'];
                $notification->attachment =$url;
                $notification->save();
                
-               $userTimeZone  = $user->time_zone;
-
-                //here we need to set notification using Auth:user, for now all  notifications will be send
-                $allNotifications= Notification::all();
-                return redirect()->route('web_notification.index')->with(compact('allNotifications','userTimeZone', 'userArr', 'name', 'stores', 'allLocations', 'products'))->with(['pageConfigs' => $pageConfigs]);
+            
+                return redirect()->route('web_notification.index')->with(['pageConfigs' => $pageConfigs]);
 
                 // return view('manager.notifications', compact('allNotifications','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
 
@@ -209,63 +197,52 @@ class NotificationController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        // dd($request->all());
+        $pageConfigs = ['pageSidebar' => 'notification'];    
+        // dd($request->all());
         $pageConfigs = ['pageSidebar' => 'notification'];    
 
-
-        $user= Auth::user();  
-        $merchandiserUsers = User::role('merchandiser')->get();
-
-        //   dd($merchandiserUsers);
-        $merchandiserArray = array();
-        $allLocations=StoreLocation::all();
-        $compnay_users = $user->companyUser->company->companyUsers;
-        $userArr = array();
-        foreach ($compnay_users as $key => $compnay_user) {
-            if($compnay_user->user->hasRole('merchandiser')){
-                array_push($userArr, $compnay_user->user)  ;
-            }
+        $validator = Validator::make($request->all(), [
+            'store_id'=> 'required',
+            'company_user_id'=>'required',
+            'title'=>'required',
+            'message'=>'required',
+            'store_location_id'=>'required',
+        ]);
+        if ($validator->fails()) {
+            // Validation failed
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-        $stores= $user->companyUser->company->stores;
-        $products = [];
-        foreach ($stores as $store) {
-            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
-            $products = array_merge($products, $storeProducts); // Merge product IDs
-        }
-        $products = Product::whereIn('id', $products)->get();
-        $name=$user->name;
-        
+
           // Check for a new file
-        if ($request->hasFile('file_name')) {
-            $path = $request->file('file_name')->store('public/uploads');
-
-            // Modify the path to use a publicly accessible URL
-            $url = asset(str_replace('public', 'storage', $path));
-        } else {
-            $url = null;
-        }
+          if($request->hasFile('attachment'))
+          {
+              $url = $request->file('attachment')->store('notifications', 'public');
+          }
+          else
+          {
+              $url=null;
+          }
 
         // Retrieve existing notification
         $notification = Notification::findOrFail($id);
-
+        $data=$request->all();
         // Update notification attributes
-        $notification->title = $request->input('title');
-        $notification->message = $request->input('message');
-        $notification->name_of_store = $request->input('name_of_store');
-        $notification->location = $request->input('location');
-        $notification->merchandiser = $request->input('merchandiser');
+        $notification->store_location_id =$data['store_location_id'];
+        $notification->store_id =$data['store_id'];
+        $notification->company_user_id =$data['company_user_id'];
+        $notification->title =$data['title'];
+        $notification->message =$data['message'];
 
         // Update attachment if a new file was uploaded
-        if ($url) {
+        if ($url!=null) {
             $notification->attachment = $url;
         }
 
         // Save and update notification
-        $notification->save();
+        $notification->update();
 
-        $userTimeZone  = $user->time_zone;
-        $allNotifications= Notification::all();
-        return redirect()->route('web_notification.index')->with(compact('allNotifications','userTimeZone', 'userArr', 'name', 'stores', 'allLocations', 'products'))->with(['pageConfigs' => $pageConfigs]);
+        return redirect()->route('web_notification.index')->with(['pageConfigs' => $pageConfigs]);
     }
 
     /**

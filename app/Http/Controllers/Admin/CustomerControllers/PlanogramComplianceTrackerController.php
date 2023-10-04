@@ -9,6 +9,7 @@ use App\Models\StoreLocation;
 use App\Models\StockCountByStores;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PlanogramComplianceTracker;
 
 class PlanogramComplianceTrackerController extends Controller
 {
@@ -42,9 +43,21 @@ class PlanogramComplianceTrackerController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
         
+        $planogramArr = [];
+        foreach ($stores as $store) {
+            $planogramComplianceData = $store->planogramComplianceTrackers->pluck('id')->toArray(); // Pluck product IDs
+            $planogramArr = array_merge($planogramArr, $planogramComplianceData); // Merge product IDs
+        }
+        // dd($planogramArr);
+        $planogramComplianceData = PlanogramComplianceTracker::whereIn('id', $planogramArr)->get();
+        
+        
+        // dd($planogramComplianceData);
+        
+        $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.planogramComplianceTracker', compact('userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.planogramComplianceTracker', compact('planogramComplianceData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

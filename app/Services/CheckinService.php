@@ -5,6 +5,7 @@ use DateTime;
 use Carbon\Carbon;
 use App\Models\Checkin;
 use App\Models\MerchandiserTimeSheet;
+use App\Models\PlanogramComplianceTracker;
 
 class CheckinService
 {
@@ -67,6 +68,12 @@ class CheckinService
                         $timeSheetRecord = $timeSheet->timeSheetRecords()->create($recordArray);
                         print($timeSheetRecord);
 
+                        
+                        // Update photo_after_stocking_shelf where store_location_id matches and it's null
+
+                        PlanogramComplianceTracker::where('store_location_id', $timeSheet->store_location_id)
+                        ->whereNull('photo_after_stocking_shelf')
+                        ->update(['photo_after_stocking_shelf' => 'N/A']);
                     }
                 }
             }

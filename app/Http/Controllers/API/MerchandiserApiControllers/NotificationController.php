@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\MerchandiserApiControllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\BaseController;
 
 class NotificationController extends BaseController
@@ -15,7 +16,19 @@ class NotificationController extends BaseController
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $notifications= $user->companyUser->notifications;
+        return $this->sendResponse(['notifications'=>$notifications], 'notifications exist');
+
+        if($notifications)
+        {
+            return $this->sendResponse(['notifications'=>$notifications], 'notifications exist');
+        }
+        else
+        {
+            return $this->sendError('no notifications exists');       
+
+        }
     }
 
     /**

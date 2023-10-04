@@ -141,7 +141,7 @@
         <div class="col-12">
             <div class="col-12">
                 <a href="{{ route('web_notification.create')}}">
-                    <i><img class="btn btn-dark m-3 float-end" src="{{asset('assets/images/Vector.png')}}">
+                    <i><button id="notification" class="btn btn-dark m-3 float-end">Send Notification</button>
                 </i>
                 </a>
                 {{-- <button
@@ -185,11 +185,32 @@
                         @if($allNotifications!=null)
                             @foreach($allNotifications as $notification)
                                 <tr>
+                                    {{-- {{dd($notification->attachment)}} --}}
+
                                     <td class="tdclass">{{$i++}}</td>
                                     <td class="tdclass">{{$notification->title}}</td>
                                     <td class="tdclass">{{$notification->message}}</td>
-                                    <td class="tdclass">    <img src="{{ $notification['attachment'] }}" alt="Attachment Image"  width="100" height="100">  </td>
-                                    @php
+                                    <td  class="tdclass">
+                                        @php
+                                        if($notification->attachment!=null)
+                                        {
+                                            $imagePath = public_path('storage/' . $notification->attachment);
+                                            if (file_exists($imagePath)) 
+                                            {
+                                                echo "<img width='100' src='" . asset('storage/' . $notification->attachment) . "' />";
+                                            } 
+                                            else 
+                                            {
+                                                echo "N/A";
+                                            }
+                                        }
+                                        else {
+                                            echo "N/A";
+                                        }
+                                            
+                                        @endphp     
+                                    </td>                                   
+                                     @php
                                     // dd($userTimeZone);
                                         $created_at = convertToTimeZone($notification->created_at, 'UTC', $userTimeZone);
                                         $createdTime = new DateTime($created_at);
