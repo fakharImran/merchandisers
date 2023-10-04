@@ -316,8 +316,8 @@
 
                                     }
                                     else {
-                                        // $formatedStartBreakDateTime= null;
-                                        // $formatedEndBreakDateTime=null;
+                                        $formatedStartBreakDateTime= null;
+                                        $formatedEndBreakDateTime=null;
                                         $breakSeconds=0;
                                         $breakTimeInterval=0;
                                         # code...
@@ -346,8 +346,8 @@
                                         // $endBreakDateTime= null;
                                         $LunchTimeInterval=0;
                                         $lunchSeconds=0;
-                                        // $formatedStartLunchDateTime= null;
-                                        // $formatedEndLunchDateTime= null;
+                                        $formatedStartLunchDateTime= null;
+                                        $formatedEndLunchDateTime= null;
                                         # code...
                                     }
                                     
