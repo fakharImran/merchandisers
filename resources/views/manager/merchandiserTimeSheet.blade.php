@@ -295,29 +295,35 @@
                                         $formatedEndBreakDateTime=null;
                                         $formatedStartLunchDateTime= null;
                                         $formatedEndLunchDateTime= null;
-                                        
+
                                   $checkinDateTime = new DateTime($checkin_date_time); // Replace with your actual check-in date and time
                                     // Check-out date and time
                                     $timestamp = strtotime($checkin_date_time);
                                     $formatedCheckinDateTime = date("Y-m-d h:i A", $timestamp);
 
-                                    if($start_break_date_time!=null && $end_break_date_time!=null )
+                                    if($start_break_date_time!=null )
                                     {
-                                        $startBreakDateTime = new DateTime($start_break_date_time);
-                                        $endBreakDateTime = new DateTime($end_break_date_time);
-                                     
-                                    //getting break time interval
-                                    $breakTimeInterval=$startBreakDateTime->diff($endBreakDateTime);
-                                    $breakSeconds = $breakTimeInterval->s + $breakTimeInterval->i * 60 + $breakTimeInterval->h * 3600 + $breakTimeInterval->d * 86400;
+                                        if($end_break_date_time!=null)
+                                        {
+                                            $startBreakDateTime = new DateTime($start_break_date_time);
+                                            $endBreakDateTime = new DateTime($end_break_date_time);
+                                        
+                                        //getting break time interval
+                                        $breakTimeInterval=$startBreakDateTime->diff($endBreakDateTime);
+                                        $breakSeconds = $breakTimeInterval->s + $breakTimeInterval->i * 60 + $breakTimeInterval->h * 3600 + $breakTimeInterval->d * 86400;
 
 
-                                    $timestamp = strtotime($start_break_date_time);
-                                    $formatedStartBreakDateTime = date("Y-m-d h:i A", $timestamp);
+                                        $timestamp = strtotime($start_break_date_time);
+                                        $formatedStartBreakDateTime = date("Y-m-d h:i A", $timestamp);
 
-                                    $timestamp = strtotime($end_break_date_time);
-                                    $formatedEndBreakDateTime = date("Y-m-d h:i A", $timestamp);
+                                        $timestamp = strtotime($end_break_date_time);
+                                        $formatedEndBreakDateTime = date("Y-m-d h:i A", $timestamp);
 
-
+                                        }
+                                        else {
+                                            $timestamp = strtotime($start_break_date_time);
+                                            $formatedStartBreakDateTime = date("Y-m-d h:i A", $timestamp);
+                                        }
                                     }
                                     else {
                                         // $formatedStartBreakDateTime= null;
@@ -327,22 +333,30 @@
                                         # code...
                                     }
 
-                                    if($start_lunch_date_time!=null && $end_lunch_date_time!=null )
+                                    if($start_lunch_date_time!=null)
                                     {
-                                        $startLunchDateTime = new DateTime($start_lunch_date_time);
-                                    $endLunchDateTime = new DateTime($end_lunch_date_time);
+                                        if($end_lunch_date_time!=null )
+                                        {
+                                            $startLunchDateTime = new DateTime($start_lunch_date_time);
+                                            $endLunchDateTime = new DateTime($end_lunch_date_time);
 
-                                    $LunchTimeInterval=$startLunchDateTime->diff($endLunchDateTime);
-                                    
-                                    
-                                    $lunchSeconds = $LunchTimeInterval->s + $LunchTimeInterval->i * 60 + $LunchTimeInterval->h * 3600 + $LunchTimeInterval->d * 86400;
+                                            $LunchTimeInterval=$startLunchDateTime->diff($endLunchDateTime);
+                                            
+                                            
+                                            $lunchSeconds = $LunchTimeInterval->s + $LunchTimeInterval->i * 60 + $LunchTimeInterval->h * 3600 + $LunchTimeInterval->d * 86400;
+                                                
+
+                                            $timestamp = strtotime($start_lunch_date_time);
+                                            $formatedStartLunchDateTime = date("Y-m-d h:i A", $timestamp);
+
+                                            $timestamp = strtotime($end_lunch_date_time);
+                                            $formatedEndLunchDateTime = date("Y-m-d h:i A", $timestamp);
+                                        }
+                                        else {
+                                            $timestamp = strtotime($start_lunch_date_time);
+                                            $formatedStartLunchDateTime = date("Y-m-d h:i A", $timestamp);
+                                        }
                                         
-
-                                    $timestamp = strtotime($start_lunch_date_time);
-                                    $formatedStartLunchDateTime = date("Y-m-d h:i A", $timestamp);
-
-                                    $timestamp = strtotime($end_lunch_date_time);
-                                    $formatedEndLunchDateTime = date("Y-m-d h:i A", $timestamp);
 
                                     }
                                     else {
