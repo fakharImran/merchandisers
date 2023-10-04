@@ -4,6 +4,7 @@ namespace App\Services;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Checkin;
+use App\Models\Activity;
 use App\Models\MerchandiserTimeSheet;
 use App\Models\PlanogramComplianceTracker;
 
@@ -38,7 +39,7 @@ class CheckinService
                     //     }
                     // }
                     
-                    print("checkout process | ");
+                    print("    checkout process | ");
     
                     $checkin = $records[0];
                     $checkinTime = $checkin->time;
@@ -66,8 +67,17 @@ class CheckinService
                         print($checkoutDate . " | ");
                         // $time_sheet->signature=null;
                         $timeSheetRecord = $timeSheet->timeSheetRecords()->create($recordArray);
-                        print($timeSheetRecord);
+                        print($timeSheetRecord . " | |");
 
+                        $activity= new Activity;
+                        $activity->store_location_id= $timeSheet->store_location_id;
+                        $activity->store_id= $timeSheet->store_id;
+                        $activity->company_user_id= $timeSheet->company_user_id;
+                        $activity->activity_name= 'Merchandiser checkout automatically';
+                        $activity->activity_detail= json_encode($recordArray);
+                        print($activity);
+
+                        $activity->save();
                         
                         // Update photo_after_stocking_shelf where store_location_id matches and it's null
 
