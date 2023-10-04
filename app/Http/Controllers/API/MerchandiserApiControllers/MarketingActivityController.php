@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\MerchandiserApiControllers;
 use Validator;
 
 use App\Models\Product;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Models\MarketingActivity;
@@ -96,6 +97,23 @@ class MarketingActivityController extends BaseController
         $marketingActivityArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'promotion_type'=>$request->promotion_type, 'Competitor_product_name'=>$request->Competitor_product_name, 'photo'=>$photo_path, 'Note'=>$request->Note];
         
         $responseofQuery= MarketingActivity::create($marketingActivityArr);
+        
+        $user = Auth::user();
+        $company_user_id=$user->companyUser->id;
+
+        $activity= new Activity;
+        $activity->store_location_id= $store_location->id;
+        $activity->store_id= $request->store_id;
+        $activity->company_user_id= $company_user_id;
+        $activity->category_id= $request->category_id;
+        $activity->product_id= $request->product_id;
+        $activity->activity_name= 'add marketing activity';
+        $activity->activity_detail= json_encode($marketingActivityArr);
+        // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
+        $activity->save();
+
+
+        
         // $allMerketingActivity =MarketingActivity::all();
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an marketingActivityArr be stored:');
 

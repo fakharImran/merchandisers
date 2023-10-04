@@ -7,6 +7,7 @@ use Validator;
 use DateTimeZone;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
@@ -102,25 +103,13 @@ class MerchandiserTimeSheetController extends BaseController
 
         $user = Auth::user();
 
-        // $timeSheets = $user->companyUser->timeSheets;
-        // //exception handler for the timesheet if the last visit is not checkout
-        // if ($timeSheets && count($timeSheets) > 0 ) {
-            
-        //     $numberTimeSheets = count($timeSheets);
-        //     $records = $timeSheets[$numberTimeSheets-1]->timeSheetRecords;
-        //     $recordsCount = count($records);
-        //     if($records[$recordsCount-1]->status != 'check-out'){
-        //         return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1]], 'TimeSheet already Exist! Please call the update function');
-        //     }
-        // }
-
         $timeSheet = $user->companyUser->timeSheets()->latest()->first();
         //exception handler for the timesheet if the last visit is not checkout
         if ($timeSheet) {
             $record=$timeSheet->timeSheetRecords()->latest()->first();
             
                 if ($record->status != 'check-out') {
-                    return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheets[$numberTimeSheets-1]], 'TimeSheet already Exist! Please call the update function');
+                    return $this->sendResponse(['merchandiserTimeSheet'=>$timeSheet], 'TimeSheet already Exist! Please call the update function');
                 }
         }
 
@@ -153,7 +142,20 @@ class MerchandiserTimeSheetController extends BaseController
 
             $merchandiserTimeSheet= MerchandiserTimeSheet::create($storeArr);
             $timesheetRecord= $merchandiserTimeSheet->timeSheetRecords()->create($recordArray);
+
+            $MerchData= array_merge($storeArr,$recordArray);
+            $activity= new Activity;
+            $activity->store_location_id= $request->store_location_id;
+            $activity->store_id= $request->store_id??null;
+            $activity->company_user_id= $company_user_id;
+            $activity->activity_name= 'Merchandiser checkin';
+            $activity->activity_detail= json_encode($MerchData);
+            $activity->save();
+
+            // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
+
             return $this->sendResponse(['current_store'=>$storeArr, 'timeSheetRecord'=>$timesheetRecord, 'timeSheet'=>$merchandiserTimeSheet], 'time sheet stored successfully.');
+
         }
         else{
             return $this->sendError('Validation Error Store or Company not exist.');       
@@ -235,14 +237,38 @@ class MerchandiserTimeSheetController extends BaseController
             // return $this->sendResponse(['recordArray'=>$recordArray, 'dateTimeString' =>$dateTimeString], ' record testing time sheet stored successfully.');
             
 
+            
+
             $timeSheetRecord = $timeSheet->timeSheetRecords()->create($recordArray);
 
             // only run in case of checkout to store signature image
             if($request->status == 'check-out'){
                 $signature_path = $request->file('signature')->store('signatures', 'public');
                 $updatedTimeSheet = $timeSheet->update(['store_manager_name'=>$request->store_manager_name,'signature'=>$signature_path]);  
+
+                $activity= new Activity;
+                $activity->store_location_id= $timeSheet->store_location_id;
+                $activity->store_id= $timeSheet->store_id;
+                $activity->company_user_id= $timeSheet->company_user_id;
+                $activity->activity_name= 'Merchandiser checkout';
+                $activity->activity_detail= json_encode($recordArray);
+                // return $this->sendResponse(['activity'=>$activity], 'activity at time sheet check-out updated successfully.');
+    
+                $activity->save();
+    
+
                 return $this->sendResponse(['curr_user'=>Auth::user(), 'updated_time_sheet'=>$updatedTimeSheet, 'current_time_sheet_record'=>$timeSheetRecord, 'all_time_sheet_records'=>$timeSheet->timeSheetRecords], 'time sheet check-out updated successfully.');
             }
+
+            $activity= new Activity;
+            $activity->store_location_id= $timeSheet->store_location_id;
+            $activity->store_id= $timeSheet->store_id;
+            $activity->company_user_id= $timeSheet->company_user_id;
+            $activity->activity_name= 'Merchandiser change status ( ' .$request->status.' ) ';
+            $activity->activity_detail= json_encode($recordArray);
+            // return $this->sendResponse(['activity'=>$activity], 'activity at time sheet check-out updated successfully.');
+
+            $activity->save();
 
             return $this->sendResponse(['curr_user'=>Auth::user(), 'time_sheet'=>$timeSheet, 'current_time_sheet_record'=>$timeSheetRecord, 'all_time_sheet_records'=>$timeSheet->timeSheetRecords], 'time sheet updated successfully.');
     

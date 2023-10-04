@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\MerchandiserApiControllers;
 use Validator;
 
 use App\Models\Product;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
@@ -94,7 +95,19 @@ class ProductExpiryTrackerController extends BaseController
         $productExpiryTrackerArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'amount_expired'=>$request->amount_expired, 'batchNumber'=>$request->batchNumber, 'expiry_date'=>$request->expiry_date, 'action_taken'=>$request->action_taken, 'photo'=>$photo_path];
         
         $responseofQuery= ProductExpiryTracker::create($productExpiryTrackerArr);
-        // $productExpTracker =ProductExpiryTracker::all();
+        
+        $user = Auth::user();
+        $company_user_id=$user->companyUser->id;
+        $activity= new Activity;
+        $activity->store_location_id= $store_location->id;
+        $activity->store_id= $store->id;
+        $activity->company_user_id= $company_user_id;
+        $activity->category_id= $request->category_id;
+        $activity->product_id= $request->product_id;
+        $activity->activity_name= 'add Product Expiry Tracker';
+        $activity->activity_detail= json_encode($productExpiryTrackerArr);
+        // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
+        $activity->save();
 
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an productExpiryTrackerArr be stored:');
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Company;
+use App\Models\Activity;
 use App\Models\Notification;
 use App\Models\MerchandiserTimeSheet;
 use Illuminate\Database\Eloquent\Model;
@@ -54,5 +55,14 @@ class CompanyUser extends Model
     public function notifications(): HasMany
     {
         return $this->hasMany(Notification::class, 'company_user_id');
+    }
+    /**
+     * Get all of the activities for the CompanyUser
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class, 'company_user_id');
     }
 }

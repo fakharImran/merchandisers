@@ -8,6 +8,8 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\ResetPasswordController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\MerchandiserTimeSheetController;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use App\Http\Controllers\API\MerchandiserApiControllers\ActivityController;
 use App\Http\Controllers\API\MerchandiserApiControllers\OutOfStockController;
 use App\Http\Controllers\API\MerchandiserApiControllers\PriceAuditController;
 use App\Http\Controllers\API\MerchandiserApiControllers\OpportunityController;
@@ -62,5 +64,6 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::apiResource('out-of-stock',OutOfStockController::class);
     Route::apiResource('opportunity',OpportunityController::class);
     Route::apiResource('notification',NotificationController::class);
+    Route::apiResource('activities',ActivityController::class);
 
 });

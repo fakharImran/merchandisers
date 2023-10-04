@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\MerchandiserApiControllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\API\BaseController;
 
-class ActivityController extends Controller
+class ActivityController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +16,21 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $user = Auth::user();
+
+        $activities = $user->companyUser->activities()
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        if($activities)
+        {
+            return $this->sendResponse(['activities'=>$activities], 'activities exist');
+        }
+        else
+        {
+            return $this->sendResponse(['activities'=>$activities, 'user'=>$user], 'no activities exist');
+
+        }    }
 
     /**
      * Store a newly created resource in storage.
@@ -32,10 +46,10 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Activity  $activity
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Activity $activity)
+    public function show($id)
     {
         //
     }
@@ -44,10 +58,10 @@ class ActivityController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Activity  $activity
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Activity $activity)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -55,10 +69,10 @@ class ActivityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Activity  $activity
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Activity $activity)
+    public function destroy($id)
     {
         //
     }

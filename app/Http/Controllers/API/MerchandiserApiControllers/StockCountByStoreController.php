@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\MerchandiserApiControllers;
 use Validator;
 
 use App\Models\Product;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Models\StockCountByStores;
@@ -96,6 +97,21 @@ class StockCountByStoreController extends BaseController
         $stockCountArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'stock_on_shelf'=>$request->stock_on_shelf, 'stock_on_shelf_unit'=>$request->stock_on_shelf_unit, 'stock_packed'=>$request->stock_packed, 'stock_packed_unit'=>$request->stock_packed_unit, 'stock_in_store_room'=>$request->stock_in_store_room , 'stock_in_store_room_unit'=> $request->stock_in_store_room_unit];
         
         $responseofQuery= StockCountByStores::create($stockCountArr);
+
+        $user = Auth::user();
+        $company_user_id=$user->companyUser->id;
+        $activity= new Activity;
+        $activity->store_location_id= $store_location->id;
+        $activity->store_id= $store->id;
+        $activity->company_user_id= $company_user_id;
+        $activity->category_id= $request->category_id;
+        $activity->product_id= $request->product_id;
+        $activity->activity_name= 'add Stock Count By Store';
+        $activity->activity_detail= json_encode($stockCountArr);
+        // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
+        $activity->save();
+
+
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an stockCountArr be stored:');
 
         //
