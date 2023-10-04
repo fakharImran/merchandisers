@@ -21,11 +21,11 @@ class NotificationController extends BaseController
 
         if($notifications)
         {
-            return $this->sendResponse(['notifications'=>$notifications, 'user'=>$user], 'notifications exist');
+            return $this->sendResponse(['notifications'=>$notifications], 'notifications exist');
         }
         else
         {
-            return $this->sendError('no notifications exists');       
+            return $this->sendResponse(['notifications'=>$notifications, 'user'=>$user], 'no notifications exist');
 
         }
     }
