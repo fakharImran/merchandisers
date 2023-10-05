@@ -167,6 +167,7 @@
                             <th class="thclass" scope="col">#ID</th>
                             <th class="thclass" scope="col">Title</th>
                             <th class="thclass" scope="col">Message</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Image</th>
                             <th class="thclass" scope="col">Date Created</th>
                             <th class="thclass" scope="col">Action</th>
@@ -185,11 +186,12 @@
                         @if($allNotifications!=null)
                             @foreach($allNotifications as $notification)
                                 <tr>
-                                    {{-- {{dd($notification->attachment)}} --}}
+                                    {{-- {{dd($notification)}} --}}
 
                                     <td class="tdclass">{{$i++}}</td>
                                     <td class="tdclass">{{$notification->title}}</td>
                                     <td class="tdclass">{{$notification->message}}</td>
+                                    <td class="tdclass">{{$notification->companyUser->user->name}}</td>
                                     <td  class="tdclass">
                                         @php
                                         if($notification->attachment!=null)
