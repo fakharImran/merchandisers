@@ -51,7 +51,7 @@ if ($user) {
         case $user->roles->contains('name', 'manager'):
             // User has a "manager" role
             // Handle manager-specific actions
-            return redirect('/manager-dashboard');
+            return redirect('/business_overview');
 
             break;
 

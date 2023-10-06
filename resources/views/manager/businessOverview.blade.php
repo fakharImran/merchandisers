@@ -203,17 +203,20 @@
             </button>
         </div>
     </div> --}}
-    <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
-        {{-- <div class="col-12">
-            <button id="downloadButton" class="btn btn-light m-3 float-end">Download filtered table in excel <img src="{{asset('assets/images/managericons/download.png')}}" alt="Download"></button>
-        </div> --}}
+    @php
+    $totalHourworked=0;
+    $chartDateArray = array();
+    $chartHoursArray = array();
+    $i=0;
+@endphp
+    {{-- <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
+        
         <div class="col-12">
 
             <label for="merchandiser-search" class="form-label filter merchandiser">Stores with Total Product Availability By Category</label>
 
             <div class="table-responsive" >
-                    {{-- table-responsive --}}
-                    {{-- nowrap --}}
+                  
                 <table id="mechandiserDatatable-test" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
@@ -229,12 +232,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @php
-                            $totalHourworked=0;
-                            $chartDateArray = array();
-                            $chartHoursArray = array();
-                            $i=0;
-                    @endphp
+                   
                     <tr>
                         <td></td>
                         <td></td>
@@ -249,7 +247,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 <script>

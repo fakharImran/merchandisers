@@ -150,14 +150,17 @@
     </div>
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <button id="downloadButton" class="btn btn-light m-3 float-end">Download filtered table in excel <img src="{{asset('assets/images/managericons/download.png')}}" alt="Download"></button>
+            <div class=" m-3 float-end">
+                <label class="">Download filtered table in excel</label>
+                <button id="downloadButton" class="btn btn-light" ><img src="{{ asset('assets/images/managericons/download.png') }}" alt="Download"></button>
+            </div>
         </div>
         <div class="col-12">
 
             <div class="table-responsive" >
                     {{-- table-responsive --}}
                     {{-- nowrap --}}
-                <table id="mechandiserDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
+                <table id="planogramComplianceTrackerDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
                             <th class="thclass" scope="col">Date</th>
@@ -284,5 +287,39 @@
     //     document.getElementById('period-search').value= 'Date Range';
 
     // });
+    function downloadTable(table) {
+        const rows = table.getElementsByTagName('tr');
+        let csvContent = 'data:text/csv;charset=utf-8,';
+
+        // Add headers as bold and uppercase
+        const headers = table.querySelectorAll('thead th');
+        const headerText = Array.from(headers)
+            .map(header => header.innerText.toUpperCase())
+            .join(',');
+        csvContent += headerText + '\r\n';
+
+        // Add data rows
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            for (let j = 0; j < cells.length; j++) {
+                csvContent += cells[j].innerText + ',';
+            }
+            csvContent += '\r\n';
+        }
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'Planogram_compliance_tracker_table.csv');
+        document.body.appendChild(link);
+        link.click();
+        
+    }
+
+    document.getElementById('downloadButton').addEventListener('click', () => {
+        const timeSheetTable = document.getElementById('planogramComplianceTrackerDatatable');
+        downloadTable(timeSheetTable);
+    });
+
 </script>
 @endsection

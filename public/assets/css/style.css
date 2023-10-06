@@ -349,8 +349,9 @@ word-wrap: break-word
     gap: 8px;
 }
 
-.user_input_form_90{
-    width: 90% !important   ;
+.user_input_form_90 {
+    width: 90% !important;
+    padding-left: 10px;
 }
 .user_btn .user_btn_style {
     justify-content: center;

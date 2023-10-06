@@ -214,7 +214,7 @@
                 <input type="text" required class="border-none user_input_form_90 height-30px" name="competitor_product_name[]" required autocomplete="competitor_product_name" autofocus placeholder="">
             </div>
         </div>
-        <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
+        <div  class="text-danger cross-btn clickable-element p-1" style="top:0px !important " onclick="removeRepeaterItem(this)">x</div>
     `;
     // user_input_form
     repeaterContainer.appendChild(newItem);

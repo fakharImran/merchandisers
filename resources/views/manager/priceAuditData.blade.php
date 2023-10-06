@@ -165,7 +165,10 @@
     </div> --}}
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <button id="downloadButton" class="btn btn-light m-3 float-end">Download filtered table in excel <img src="{{asset('assets/images/managericons/download.png')}}" alt="Download"></button>
+            <div class=" m-3 float-end">
+                <label class="">Download filtered table in excel</label>
+                <button id="downloadButton" class="btn btn-light" ><img src="{{ asset('assets/images/managericons/download.png') }}" alt="Download"></button>
+            </div>
         </div>
         <div class="col-12">
 
@@ -314,14 +317,14 @@ console.log('productsss', products_name, our_products_price, competitor_products
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
-        link.setAttribute('download', 'table_data.csv');
+        link.setAttribute('download', 'Price_audit_table.csv');
         document.body.appendChild(link);
         link.click();
         
     }
 
     document.getElementById('downloadButton').addEventListener('click', () => {
-        const timeSheetTable = document.getElementById('mechandiserDatatable');
+        const timeSheetTable = document.getElementById('pricaAuditDatatable');
         downloadTable(timeSheetTable);
     });
 </script>

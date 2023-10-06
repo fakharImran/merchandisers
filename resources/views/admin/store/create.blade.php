@@ -64,6 +64,15 @@
                                             <label>{{ __('Location') }} <span class="text-danger">*</span></label>
                                         </div>
                                         <div class="user_input_form row " id="repeater-container">
+                                            <div class="col-6 p-1">
+                                                <div class="w-100">
+                                                    <div class="user_btn myborder" style="border: 1px solid #37A849 !important">
+                                                        <input type="text" required class="border-none user_input_form_90 height-30px" name="locations[]" required autocomplete="location" autofocus placeholder="">
+                                                    </div>
+                                                </div>
+                                                <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
+                                               
+                                            </div>
                                             <!-- This is the container for the repeater items -->
                                         </div>
                                         

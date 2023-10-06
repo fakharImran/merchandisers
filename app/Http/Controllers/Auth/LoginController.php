@@ -50,7 +50,7 @@ class LoginController extends Controller
 
             $roleRoutes = [
                 'admin' => '/company',
-                'manager' => '/manager-dashboard',
+                'manager' => '/business_overview',
                 // 'merchandiser' => '/user-dashboard',
                 // Add more roles and their corresponding routes as needed
             ];
@@ -78,7 +78,7 @@ class LoginController extends Controller
         // Define the mapping of roles to routes
         $roleRoutes = [
             'admin' => '/company',
-            'manager' => '/manager-dashboard',
+            'manager' => '/business_overview',
             // 'merchandiser' => '/user-dashboard',
             // Add more roles and their corresponding routes as needed
         ];
