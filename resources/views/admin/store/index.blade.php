@@ -336,12 +336,15 @@ updatePaginationButtons();
                               @php
                                   $parishArr= json_decode($store['parish'])
                               @endphp
-                                  @foreach($parishArr as $parish)
+                              @if ($parishArr)
+                                @foreach($parishArr as $parish)
                                   {{$parish}}
                                   @if(!$loop->last)
-                                  ,
+                                    ,
                                   @endif
-                                  @endforeach
+                                @endforeach
+                              @endif
+                                  
                               </td>
                             <td class="tdclass">{{ $store['channel'] }}</td>
                             @php
