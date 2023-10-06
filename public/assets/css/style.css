@@ -89,7 +89,9 @@ button:focus,input:focus{
     display: flex;
     align-items: center;
 }
-
+.dataTables_filter{
+        visibility: hidden;
+}
 .table_btn_list {
     display: flex;
     justify-content: space-between;

@@ -209,45 +209,7 @@
     $chartHoursArray = array();
     $i=0;
 @endphp
-    {{-- <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
-        
-        <div class="col-12">
-
-            <label for="merchandiser-search" class="form-label filter merchandiser">Stores with Total Product Availability By Category</label>
-
-            <div class="table-responsive" >
-                  
-                <table id="mechandiserDatatable-test" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
-                    <thead>
-                        <tr>
-                            <th class="thclass" scope="col">#</th>
-                            <th class="thclass" scope="col">Name of Store</th>
-                            <th class="thclass" scope="col">Location</th>
-                            <th class="thclass" scope="col">Parish</th>
-                            <th class="thclass" scope="col">Channel</th>
-                            <th class="thclass" scope="col">Category</th>
-                            <th class="thclass" scope="col">Product Name</th>
-                            <th class="thclass" scope="col">Product Number/SKU</th>
-                            <th class="thclass" scope="col">Total Stocks</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                   
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div> --}}
+ --}}
 </div>
 
 <script>
