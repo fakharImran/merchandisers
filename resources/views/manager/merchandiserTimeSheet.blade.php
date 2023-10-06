@@ -202,7 +202,7 @@
     </div> --}}
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download Time Sheet</button>
+            <button id="downloadButton" class="btn btn-light m-3 float-end">Download filtered table in excel <img src="{{asset('assets/images/managericons/download.png')}}" alt="Download"></button>
         </div>
         <div class="col-12">
 

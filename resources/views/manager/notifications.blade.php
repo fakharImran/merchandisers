@@ -140,10 +140,12 @@
     <div class="row pt-5" style="margin: 1px auto; font-size: 12px;">
         <div class="col-12">
             <div class="col-12">
-                <a href="{{ route('web_notification.create')}}">
-                    <i><button id="notification" class="btn btn-dark m-3 float-end">Send Notification</button>
-                </i>
-                </a>
+                <div class="user_btn myborder float-end m-3" onclick="window.location.href = '{{ route('web_notification.create')}}'; return false;" >
+                    <button  class="user_btn_style submit" > <img src="{{asset('assets/images/managericons/send_button.svg')}}"  width=20 alt="send"> Send Notification</button>
+                </div>
+                {{-- <a href="{{ route('web_notification.create')}}" class="user_btn myborder btn btn-light m-3 float-end">
+                    <div id="notification" class=""><img src="{{asset('assets/images/managericons/send_button.svg')}}" width=30 alt="send"> Send Notification</div>
+                </a> --}}
                 {{-- <button
                     class="btn  btn-sm"
                     style="float: right"
@@ -154,7 +156,7 @@
                 </button> --}}
             </div>
 
-            {{-- <button id="downloadButton" class="btn btn-dark m-3 float-end">Download Opportunities</button> --}}
+            {{-- <button id="downloadButton" class="btn btn-light m-3 float-end">Download filtered table in excel <img src="{{asset('assets/images/managericons/download.png')}}" alt="Download"></button> --}}
         </div>
         <div class="col-12">
 

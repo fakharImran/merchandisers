@@ -332,8 +332,17 @@ updatePaginationButtons();
                               @endif
                               @endforeach
                               @endif
-                              
-                            <td class="tdclass">{{ $store['parish'] }}</td>
+                              <td class="tdclass">
+                              @php
+                                  $parishArr= json_decode($store['parish'])
+                              @endphp
+                                  @foreach($parishArr as $parish)
+                                  {{$parish}}
+                                  @if(!$loop->last)
+                                  ,
+                                  @endif
+                                  @endforeach
+                              </td>
                             <td class="tdclass">{{ $store['channel'] }}</td>
                             @php
                             $updatedTime = new DateTime($store['updated_at']);

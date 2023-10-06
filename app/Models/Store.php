@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Store;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\OutOfStock;
@@ -41,6 +42,16 @@ class Store extends Model
     {
         return $this->hasMany(StoreLocation::class, 'store_id');
     }
+
+    // protected static function boot()
+    // {
+    //     Store::boot();
+
+    //     static::deleting(function($store) {
+    //         $store->products()->delete();
+    //     });
+    // }
+
     /**
      * Get all of the products for the Store
      *

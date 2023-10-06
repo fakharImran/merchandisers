@@ -49,14 +49,19 @@ class PriceAuditController extends Controller
         }
         // dd($priceAuditIdsArr);
         $priceAuditData = PriceAudit::whereIn('id', $priceAuditIdsArr)->get();
-        
+        $competitorProductDetail=array();
+        foreach ($priceAuditData as $key => $PriceAudit) {
+            array_push($competitorProductDetail, ['c_product_name'=>$PriceAudit->competitor_product_name, 'c_product_price'=>$PriceAudit->competitor_product_price]);
+            # code...
+        }
+        // dd($priceAuditData);
         
         // dd($priceAuditData);
         
         $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.priceAuditData', compact('priceAuditData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.priceAuditData', compact('priceAuditData','userArr', 'name',  'stores','allLocations', 'products', 'competitorProductDetail'), ['pageConfigs' => $pageConfigs]);
     }
 
 

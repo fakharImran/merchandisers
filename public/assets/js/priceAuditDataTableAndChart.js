@@ -20,99 +20,22 @@ function formatDateYMD(date) {
 
     return `${year}-${month}-${day}`;
 }
-// // create weekly dates
-// function convertingData(data, startDate = 0, endDate = 0) {
-
-//     // Initialize an array to store the previous 6 weeks
-//     const previousWeeks = [];
-
-//     if (startDate == 0 && endDate == 0) {
-//         // Calculate the start date of the current week (Sunday)
-//         const currentWeekStartDate = new Date();
-//         currentWeekStartDate.setDate(currentWeekStartDate.getDate() - currentWeekStartDate.getDay());
-
-
-//         // Calculate the start and end dates for each of the previous 6 weeks
-//         for (let i = 0; i < 6; i++) {
-//             startDate = new Date(currentWeekStartDate);
-//             startDate.setDate(currentWeekStartDate.getDate() - 7 * i); // Subtract 7 days for each previous week
-//             endDate = new Date(startDate);
-//             endDate.setDate(startDate.getDate() + 6); // Add 6 days to get the end of the week
-//             previousWeeks.push({ startDate, endDate });
-//         }
-//     }
-//     else {
-//         startDate = new Date(startDate);
-//         endDate = new Date(endDate);
-//         // startDate.setDate(startDate.getDate() - startDate.getDay());
-//         startDate.setDate(startDate.getDate() - 7);
-//         let currentWeekStartDate = endDate; // Initialize with the provided end date
-//         currentWeekStartDate.setDate(currentWeekStartDate.getDate() + currentWeekStartDate.getDay());
-
-//         // Calculate the difference in milliseconds
-//         const timeDifference = currentWeekStartDate.getTime() - startDate.getTime();
-//         // Convert milliseconds to weeks (1 week = 7 days)
-//         const weeks = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
-
-//         for (let i = 0; i <= weeks; i++) {
-//             const weekEndDate = new Date(currentWeekStartDate);
-//             weekEndDate.setDate(currentWeekStartDate.getDate() - 1); // Subtract 1 day to get the week's end date
-//             const weekStartDate = new Date(weekEndDate);
-//             weekStartDate.setDate(weekEndDate.getDate() - 6); // Subtract 6 days to get the start date
-//             // Check if the week's start date is within the provided range
-//             if (weekStartDate >= startDate) {
-//                 previousWeeks.push({ startDate: weekStartDate, endDate: weekEndDate });
-//             }
-
-//             currentWeekStartDate = weekStartDate; // Set the next week's start date
-//         }
-
-
-//     }
-
-//     //check the weeks arroding to their hours
-//     var workedHrs = 0;
-//     var weekarray = [];
-//     previousWeeks.forEach(week => {
-//         data.forEach(element => {
-//             chkDate = element['date'];
-//             if (formatDateYMD(week.startDate) <= chkDate && formatDateYMD(week.endDate) >= chkDate) {
-//                 workedHrs += element['hours'];
-//             } else {
-//             }
-//         });
-//         weekarray.push(workedHrs);
-//         workedHrs = 0;
-//     });
-//     previousWeeks.forEach(function (element) {
-//         element.startDate = formatDate(element.startDate);
-//         element.endDate = formatDate(element.endDate);
-//     });
-//     const previousWeeksArray = [];
-//     previousWeeks.forEach(function (element) {
-//         previousWeeksArray.push(element.startDate + ' - ' + element.endDate);
-//     });
-
-//     hoursWorked = weekarray.reverse();
-//     labels = previousWeeksArray.reverse();
-// }
-// convertingData(chartData);
 
 const data = {
-    labels: [['Grace', 'Nestle'], ['Nayab','Olper'], ['Vital','Tapal']],
+    labels: products_name,
     datasets: [{
         label: 'Our Product',
         backgroundColor: '#1BC018',
         borderColor: 'rgb(255, 99, 132)',
         // data: hoursWorked,
-        data: [80, 60, 60],
+        data: our_products_price,
     },
     {
         label: 'Compatitor Product',
         backgroundColor: '#1892C0',
         borderColor: 'rgb(255, 99, 132)',
         // data: hoursWorked,
-        data: [85, 40, 90],
+        data: competitor_products_price,
     }]
     
 };
@@ -157,34 +80,6 @@ const config = {
       }
     },
   };
-// const config = {
-//     type: 'bar',
-//     data: data,
-//     options: {
-//         // responsive: true,
-//         // maintainAspectRatio: false,
-//         scales: {
-//             yAxes: [{
-//                 scaleLabel: {
-//                     display: true,
-//                     labelString: 'Price $'
-//                 },
-//                 ticks: {
-//                     stepSize: 10,
-//                     beginAtZero: true
-//                 }
-//             }]
-//         },
-//         tooltips: {
-//             callbacks: {
-//                 label: function (tooltipItem, data) {
-//                     return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel
-//                 }
-//             }
-//         }
-//     }
-// };
-
 
 var myChartJS = new Chart(
     document.getElementById('myChart'),
@@ -194,7 +89,7 @@ var myChartJS = new Chart(
 
 // datatable
 
-//function for change the graph it is comming from datatable search filters 
+//function for change the data it is comming from datatable search filters nnd getting it as required
 function changeGraph(table) {
     var filteredIndexes = table.rows({ search: 'applied' }).indexes();
     var filteredData = [];
@@ -202,26 +97,19 @@ function changeGraph(table) {
         var rowData = table.row(index).data();
         filteredData.push(rowData);
     });
-    var colData = [];
+    let colData = [];
+    let products_name = [];
+    let our_products_price = [];
+    let competitor_products_price = [];
+    console.log('umerrrr', filteredData);
+
     filteredData.forEach(element => {
-        const dateTime = element[2].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
-        const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
-
-        var inputString = element[10];
-        var regex = /(\d+).*?(\d+)/; // Regular expression to match the first integers before and after the comma
-        var match = inputString.match(regex);
-        if (match) {
-            var beforeComma = match[1]; // The first set of integers before the comma
-            var afterComma = match[2]; // The first set of integers after the comma
-            var Hours = (beforeComma * 1) + (afterComma / 60);
-            var seconds= beforeComma * 60 * 60 + afterComma *60;
-        } else {
-            console.log('No match found.');
-        }
-        colData.push({ 'date': formatDateYMD(currentDate1), 'hours': seconds });
-
-
+        products_name.push([element[4], element[9]]);
+        our_products_price.push(element[8]);
+        competitor_products_price.push(element[10]);
+        
     });
+    colData.push({'products_name':products_name, 'our_products_price':our_products_price, 'competitor_products_price':competitor_products_price});
     return colData;
 }
 
@@ -255,7 +143,7 @@ $(document).ready(function () {
             if (storeName == store[0]) {
                 // Append each option into the select list
                 // Append the column data to the dropdown
-                table.column(1).search('', true, false).draw(); // Clear previous search
+                table.column(2).search('', true, false).draw(); // Clear previous search
                 dropdown.empty();
                 dropdown.append('<option value="" selected>--Select--</option>');
                 var storeLocations = store[1];
@@ -266,7 +154,7 @@ $(document).ready(function () {
         });
         if (storeName == "") {
             // table.lengthMenu= [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ];
-            table.column(2).search('', true, false).draw(); // Clear previous search
+            table.column(2).search('', true, false).draw(); // Clear previous search location
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
             allUniqueLocations.forEach(function (location) {
@@ -278,16 +166,11 @@ $(document).ready(function () {
         }
         // Empty the dropdown to remove previous options
 
-
-
-
-
-
         var convertedToChartData = changeGraph(table);
-
-        convertingData(convertedToChartData , startDate, endDate);
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = hoursWorked;
+        // convertingData(convertedToChartData[0] , startDate, endDate);
+        myChartJS.data.labels = convertedToChartData[0].products_name;
+        myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
+        myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
         myChartJS.update();
 
     });
@@ -297,14 +180,9 @@ $(document).ready(function () {
         table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(1).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
-
-        
-
-        convertingData(convertedToChartData , startDate, endDate);
-
-        myChartJS.data.labels = labels;
-
-        myChartJS.data.datasets[0].data = hoursWorked;
+        myChartJS.data.labels = convertedToChartData[0].products_name;
+        myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
+        myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
         myChartJS.update();
 
 
@@ -314,11 +192,20 @@ $(document).ready(function () {
         table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(11).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
-        convertingData(convertedToChartData , startDate, endDate);
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = hoursWorked;
+        myChartJS.data.labels = convertedToChartData[0].products_name;
+        myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
+        myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
         myChartJS.update();
-
+    });
+    $('#product-search').on('change', function () {
+        const searchValue = this.value.trim();
+        table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        // table.column(11).search(this.value).draw();
+        var convertedToChartData = changeGraph(table);
+        myChartJS.data.labels = convertedToChartData[0].products_name;
+        myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
+        myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
+        myChartJS.update();
     });
     $('#period-search').on('change', function () {
 
@@ -335,7 +222,7 @@ $(document).ready(function () {
             endDate = new Date(endDate);
              endDate = formatDateYMD(endDate);
 
-            table.column(8).search('', true, false).draw(); // Clear previous search
+            table.column(0).search('', true, false).draw(); // Clear previous search
 
             var searchTerms = []; // Initialize an array to store search terms
             function dateRange(startDate, endDate) {
@@ -350,11 +237,11 @@ $(document).ready(function () {
                 return dates;
             }
             var dateList = dateRange(startDate, endDate);
-            table.column(8).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+            table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
             var convertedToChartData = changeGraph(table);
-            convertingData(convertedToChartData, startDate, endDate);
-            myChartJS.data.labels = labels;
-            myChartJS.data.datasets[0].data = hoursWorked;
+            myChartJS.data.labels = convertedToChartData[0].products_name;
+            myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
+            myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
             myChartJS.update();
         } else {
             console.log("The substring 'to' does not exist in the original string.");

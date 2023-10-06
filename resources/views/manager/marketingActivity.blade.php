@@ -139,7 +139,7 @@
     </div>
     <div class="row pt-5" style="margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download Marketing Activity</button>
+            <button id="downloadButton" class="btn btn-light m-3 float-end">Download filtered table in excel <img src="{{asset('assets/images/managericons/download.png')}}" alt="Download"></button>
         </div>
         <div class="col-12">
 
@@ -156,7 +156,7 @@
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
                             <th class="thclass" scope="col">Product Number/SKU</th>
-                            <th class="thclass" scope="col">Compititor Product Name</th>
+                            <th class="thclass" scope="col">Competitor Product Name</th>
                             <th class="thclass" scope="col">Photo</th>
                             <th class="thclass" scope="col">Description</th>
                         </tr>

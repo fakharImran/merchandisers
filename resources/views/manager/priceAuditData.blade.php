@@ -165,7 +165,7 @@
     </div> --}}
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <button id="downloadButton" class="btn btn-dark m-3 float-end">Download filtered table in excel</button>
+            <button id="downloadButton" class="btn btn-light m-3 float-end">Download filtered table in excel <img src="{{asset('assets/images/managericons/download.png')}}" alt="Download"></button>
         </div>
         <div class="col-12">
 
@@ -184,8 +184,8 @@
                             <th class="thclass" scope="col">Store Price</th>
                             <th class="thclass" scope="col">Tax</th>
                             <th class="thclass" scope="col">Total Price</th>
-                            <th class="thclass" scope="col">Compititor Product Name</th>
-                            <th class="thclass" scope="col">Compititor Product Price</th>
+                            <th class="thclass" scope="col">Competitor Product Name</th>
+                            <th class="thclass" scope="col">Competitor Product Price</th>
                             <th class="thclass" scope="col">Notes</th>
                         </tr>
                     </thead>
@@ -194,41 +194,50 @@
                             $totalHourworked=0;
                             $chartDateArray = array();
                             $chartHoursArray = array();
+
+                            $products_name = array();
+                            $our_products_price = array();
+                            $competitor_products_price = array();
                     @endphp
                        {{-- @php
                            array_push($chartHoursArray ,['product name'=>"first_product", 'price'=>50] );
                        @endphp  --}}
 
                         @if ($priceAuditData!=null)
-                        @foreach ($priceAuditData as $priceAudit)
-                        <tr>
-                            <td>
+                            @foreach ($priceAuditData as $priceAudit)
+                                <tr>
+                                    <td>
+                                        @php
+                                            $date= explode(' ', $priceAudit->created_at);
+                                        @endphp
+                                        {{$date[0]}}
+                                    </td>
+                                    <td>{{$priceAudit->store->name_of_store}}</td>
+                                    <td>
+                                        {{$priceAudit->storeLocation->location}}
+                                    </td>
+                                    
+                                    <td>{{$priceAudit->category->category}}</td>
+                                    <td>{{$priceAudit->product->product_name}}</td>
+                                    <td>{{$priceAudit->Product_SKU}}</td>
+                                    <td>{{$priceAudit->product_store_price}}</td>
+                                    <td>{{$priceAudit->tax_in_percentage}}</td>
+                                    <td>
+                                        @php
+                                            $totalPrice= $priceAudit->product_store_price + $priceAudit->product_store_price/100 * $priceAudit->tax_in_percentage;
+                                            echo $totalPrice;
+                                        @endphp
+                                    </td>
+                                    <td>{{$priceAudit->competitor_product_name}}</td>
+                                    <td>{{$priceAudit->competitor_product_price}}</td>
+                                    <td>{{$priceAudit->notes}}</td>
+                                </tr>
                                 @php
-                                    $date= explode(' ', $priceAudit->created_at);
+                                    array_push($products_name, [$priceAudit->product->product_name, $priceAudit->competitor_product_name]);
+                                    array_push($our_products_price, $totalPrice);
+                                    array_push($competitor_products_price, $priceAudit->competitor_product_price)
                                 @endphp
-                                {{$date[0]}}
-                            </td>
-                            <td>{{$priceAudit->store->name_of_store}}</td>
-                            <td>
-                                {{$priceAudit->storeLocation->location}}
-                            </td>
-                            
-                            <td>{{$priceAudit->category->category}}</td>
-                            <td>{{$priceAudit->product->product_name}}</td>
-                            <td>{{$priceAudit->Product_SKU}}</td>
-                            <td>{{$priceAudit->product_store_price}}</td>
-                            <td>{{$priceAudit->tax_in_percentage}}</td>
-                            <td>
-                                @php
-                                    $totalPrice= $priceAudit->product_store_price + $priceAudit->product_store_price/100 * $priceAudit->tax_in_percentage;
-                                    echo $totalPrice;
-                                @endphp
-                            </td>
-                            <td>{{$priceAudit->competitor_product_name}}</td>
-                            <td>{{$priceAudit->competitor_product_price}}</td>
-                            <td>{{$priceAudit->notes}}</td>
-                        </tr>
-                        @endforeach
+                            @endforeach
                         @endif
                     </tbody>
                 </table>
@@ -242,9 +251,12 @@
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
-
+    var allProducts = {!! json_encode($products) !!};
+    var products_name = {!! json_encode($products_name) !!};
+    var our_products_price = {!! json_encode($our_products_price) !!};
+    var competitor_products_price = {!! json_encode($competitor_products_price) !!};
     var labels = [];
-
+console.log('productsss', products_name, our_products_price, competitor_products_price);
     var chartData =  {{ Js::from($chartHoursArray) }};
     console.log(chartData, "chart datwaaaaaa");
 </script>

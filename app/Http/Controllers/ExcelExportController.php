@@ -32,7 +32,7 @@ class ExcelExportController extends Controller
             }
             $row++;
         }
-        dd($tableData);
+        // dd($tableData);
 
         // Set the response headers to serve as an Excel file
         $response = response()->stream(function () use ($spreadsheet) {

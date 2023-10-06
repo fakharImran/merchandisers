@@ -66,6 +66,7 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'company_id' => 'required',
             'name_of_store' => 'required',
@@ -82,7 +83,7 @@ class StoreController extends Controller
         $tempUser = new Store();
         $tempUser->company_id = $request->company_id ?? null;
         $tempUser->name_of_store = $request->name_of_store ?? null;
-        $tempUser->parish = $request->parish ?? null;
+        $tempUser->parish = json_encode($request->parish);
         $tempUser->channel = $request->channel ?? null;
         $tempUser->save();
         $store_id= $tempUser->id;
@@ -164,7 +165,7 @@ class StoreController extends Controller
             // }
 
             $query =  Store::where('id', $id)->first();
-            $query->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'parish' =>$request->parish, 'channel' =>$request->channel]);
+            $query->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'parish' =>json_encode($request->parish), 'channel' =>$request->channel]);
             
             $existingLocations = $query->locations;
 

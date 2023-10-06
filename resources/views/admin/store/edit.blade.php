@@ -69,73 +69,56 @@
                                         <div class="label">
                                             <label>{{ __('Location') }} <span class="text-danger">*</span></label>
                                         </div>
-                                        <div class="user_form_content" id="repeater-container">
+                                        <div class="user_input_form row " id="repeater-container">
                                             @foreach($store->locations as $location)
-                                                <div>
-                                                    <div class="label">
-                                                        <label>{{ __('Location') }} <span class="text-danger">*</span></label>
-                                                    </div>
-                                                    <div class="user_input_form">
-                                                        <input type="text" required class="form-control" name="locations[{{$location->id}}]" value="{{ $location->location }}" required autocomplete="location" autofocus placeholder="">
-                                                        <button type="button" class="btn btn-danger" onclick="removeRepeaterItem(this)">Remove</button>
+                                                <div class="col-6 p-1">
+                                                    <div class="w-100">
+                                                        <div class="user_btn myborder" style="border: 1px solid #37A849 !important">
+                                                            <input type="text" required class="border-none user_input_form_90 height-30px" name="locations[{{$location->id}}]" value="{{ $location->location }}" required autocomplete="location" autofocus placeholder="">
+                                                        </div>
+                                                        <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
                                                     </div>
                                                 </div>
                                             @endforeach
                                         </div>
-                                        
-                                        <div class="user_form_content">
-                                            <button type="button" class="btn btn-primary" onclick="addRepeaterItem()">Add Location</button>
+                                        <div class=" user_btn myborder label">
+                                            <div class=" user_btn_style submit clickable-element" onclick="addRepeaterItem()">Add Location</div>
                                         </div>
-                                        
-                                        <script>
-                                        function addRepeaterItem() {
-                                            const repeaterContainer = document.getElementById('repeater-container');
-                                            const newItem = document.createElement('div');
-                                            newItem.innerHTML = `
-                                                <div>
-                                                    <div class="label">
-                                                        <label>{{ __('Location') }} <span class="text-danger">*</span></label>
-                                                    </div>
-                                                    <div class="user_input_form">
-                                                        <input type="text" required class="form-control" name="locations[]" required autocomplete="location" autofocus placeholder="">
-                                                        <button type="button" class="btn btn-danger" onclick="removeRepeaterItem(this)">Remove</button>
-                                                    </div>
-                                                </div>
-                                            `;
-                                            repeaterContainer.appendChild(newItem);
-                                        }
-                                        
-                                        function removeRepeaterItem(button) {
-                                            button.parentElement.parentElement.remove();
-                                        }
-                                        </script>
-                                        
                                     </div>
+                                    @php
+                                        $selectedParish = json_decode($store['parish'])
+                                    @endphp
                                     <div class="user_form_content">
                                         <div class="label">
                                             <label>{{ __('Parish') }} <span class="text-danger">*</span></label>
                                         </div>
                                         <div class="user_select_form">
-                                          <select id="parish" name="parish" class="form-select" required>
-                                            <option {{($store['parish']=='')? "selected":""}} value disabled>Select Parish</option>
-                                            <option {{($store['parish']=='Clarendon')? "selected":""}} value="Clarendon">Clarendon</option>
-                                            <option {{($store['parish']=='Hanover')? "selected":""}} value="Hanover">Hanover</option>
-                                            <option {{($store['parish']=='Kingston')? "selected":""}} value="Kingston">Kingston</option>
-                                            <option {{($store['parish']=='Manchester')? "selected":""}} value="Manchester">Manchester</option>
-                                            <option {{($store['parish']=='Portland')? "selected":""}} value="Portland">Portland</option>
-                                            <option {{($store['parish']=='St. Andrew')? "selected":""}} value="St. Andrew">St. Andrew</option>
-                                            <option {{($store['parish']=='St. Ann')? "selected":""}} value="St. Ann">St. Ann</option>
-                                            <option {{($store['parish']=='St. Catherine')? "selected":""}} value="St. Catherine">St. Catherine</option>
-                                            <option {{($store['parish']=='St. Elizabeth')? "selected":""}} value="St. Elizabeth">St. Elizabeth</option>
-                                            <option {{($store['parish']=='St. James')? "selected":""}} value="St. James">St. James</option>
-                                            <option {{($store['parish']=='St. Mary')? "selected":""}} value="St. Mary">St. Mary</option>
-                                            <option {{($store['parish']=='St. Thomas')? "selected":""}} value="St. Thomas">St. Thomas</option>
-                                            <option {{($store['parish']=='Trelawny')? "selected":""}} value="Trelawny">Trelawny</option>
-                                            <option {{($store['parish']=='Westmoreland')? "selected":""}} value="Westmoreland">Westmoreland</option>
-                                          </select>
-
-                                      </div>
+                                            <select id="parish" name="parish[]" class="form-select" required multiple>
+                                                <option value="" disabled selected>Select Parish</option>
+                                                <option value="Clarendon">Clarendon</option>
+                                                <option value="Hanover">Hanover</option>
+                                                <option value="Kingston">Kingston</option>
+                                                <option value="Manchester">Manchester</option>
+                                                <option value="Portland">Portland</option>
+                                                <option value="St. Andrew">St. Andrew</option>
+                                                <option value="St. Ann">St. Ann</option>
+                                                <option value="St. Catherine">St. Catherine</option>
+                                                <option value="St. Elizabeth">St. Elizabeth</option>
+                                                <option value="St. James">St. James</option>
+                                                <option value="St. Mary">St. Mary</option>
+                                                <option value="St. Thomas">St. Thomas</option>
+                                                <option value="Trelawny">Trelawny</option>
+                                                <option value="Westmoreland">Westmoreland</option>
+                                            </select>
+                                            @error('parish')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                            @enderror
+                                        </div>
                                     </div>
+                                    
+                                    
                                 <div class="user_form_content">
                                     <div class="label">
                                         <label>{{ __('Channel') }} <span class="text-danger">*</span></label>
@@ -182,6 +165,39 @@
     </div>
 </div>
 
+<script>
+function addRepeaterItem() {
+    const repeaterContainer = document.getElementById('repeater-container');
+    const newItem = document.createElement('div');
+    newItem.classList.add("col-6");
+    newItem.classList.add("p-1");
+    newItem.innerHTML = `
+        <div class="w-100">
+            <div class="user_btn myborder" style="border: 1px solid #37A849 !important">
+                <input type="text" required class="border-none user_input_form_90 height-30px" name="locations[]" required autocomplete="location" autofocus placeholder="">
+            </div>
+        </div>
+        <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
+
+       
+    `;
+    // user_input_form
+    repeaterContainer.appendChild(newItem);
+}
+
+function removeRepeaterItem(button) {
+    button.parentElement.parentElement.remove();
+}
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#parish').select2();
+        var selectedParish = {!! json_encode($selectedParish) !!};
+        $('#parish').val(selectedParish);
+        $('#parish').trigger('change');
+    });
+</script>
 
 
 @endsection

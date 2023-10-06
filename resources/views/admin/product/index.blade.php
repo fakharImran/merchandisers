@@ -333,12 +333,12 @@ updatePaginationButtons();
                                 $jsonData =  $product['competitor_product_name'];
                                 $arrayData = json_decode($jsonData, true);
                                 if (is_array($arrayData)) {
-                                    $compititorProductName = implode(', ', $arrayData);
+                                    $competitorProductName = implode(', ', $arrayData);
                                 } else {
-                                    $compititorProductName = 'Invalid JSON data';
+                                    $competitorProductName = 'Invalid JSON data';
                                 }
                               @endphp
-                              <td>{{ $compititorProductName }}</td>
+                              <td>{{ $competitorProductName }}</td>
                             @php
                                 $updatedTime = new DateTime($product['updated_at']);
                                 $createdTime = new DateTime($product['created_at']);

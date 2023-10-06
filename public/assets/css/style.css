@@ -179,6 +179,7 @@ button:focus,input:focus{
     /* background-color: transparent !important; */
     background-color: rgb(219 219 219 / 19%) !important;
     text-align: left !important;
+    font-weight: bold;
     /* border: 1px solid #cccccc63; */
     /* box-shadow: 3px 3px #8888883d; */
 }
@@ -225,6 +226,20 @@ button:focus,input:focus{
 .user_input_form {
     width: 80%;
 }
+.height-30px{
+    height:30px !important;
+}
+#repeater-container {
+    width: 446px;
+    min-height: 40px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 0;
+}
+.user_input_form_60{
+    width: 60%;
+
+}
 .user_input_form input {
     /* width: 100%; */
     /* border-radius: unset !important; */
@@ -233,6 +248,11 @@ button:focus,input:focus{
     /* padding: 0 20px; */
 }
 
+
+.border-none {
+    border-radius: 25px !important;
+    border: none;
+}
 .form-control{
     background-color: white !important;
     border-radius: 0px !important;
@@ -329,15 +349,25 @@ word-wrap: break-word
     gap: 8px;
 }
 
+.user_input_form_90{
+    width: 90% !important   ;
+}
 .user_btn .user_btn_style {
+    justify-content: center;
     text-decoration: none;
     border: 1px solid #A0A0A0;
     background-color: #F0F0F0;
     padding: 7px 20px;
-    border-radius: 50px;
+    border-radius: 25px;
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.cross-btn{
+    position: absolute;
+    top: 3px;
+    right: 12px;
 }
 
 .submit{
@@ -597,7 +627,7 @@ div#mechandiserDatatable_filter {
 span.select2-selection.select2-selection--multiple {
     border-radius: 0px;
     border: 1px solid #ccc;
-    height: 40px;
+    min-height: 40px;
     cursor: pointer !important;
 }
 /* ul.select2-choices {
@@ -797,3 +827,4 @@ label.form-label.filter.location::after{
     background: none;
     border: none;
 }
+
