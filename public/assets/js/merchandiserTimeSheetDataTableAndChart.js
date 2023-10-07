@@ -120,7 +120,7 @@ const config = {
                     userCallback: function (v) { 
                         return epoch_to_hh_mm_ss(v) 
                     },
-                    stepSize: 30 * 60,
+                    stepSize: 60 * 60,
                     beginAtZero: true
                 }
             }]
@@ -144,7 +144,8 @@ const epoch_to_hh_mm_ss = epoch => {
     const formattedMinutes = minutes.toString().padStart(2, '0');
     const formattedSeconds = seconds.toString().padStart(2, '0');
 
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    return `${formattedHours}:${formattedMinutes}`;
+    // return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 };
 
 var myChartJS = new Chart(
@@ -165,7 +166,7 @@ function changeGraph(table) {
     });
     var colData = [];
     filteredData.forEach(element => {
-        const dateTime = element[2].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
+        const dateTime = element[8].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
         const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
 
         var inputString = element[10];
@@ -239,13 +240,7 @@ $(document).ready(function () {
         }
         // Empty the dropdown to remove previous options
 
-
-
-
-
-
         var convertedToChartData = changeGraph(table);
-
         convertingData(convertedToChartData , startDate, endDate);
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = hoursWorked;
@@ -259,16 +254,10 @@ $(document).ready(function () {
         // table.column(1).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
 
-        
-
         convertingData(convertedToChartData , startDate, endDate);
-
         myChartJS.data.labels = labels;
-
         myChartJS.data.datasets[0].data = hoursWorked;
         myChartJS.update();
-
-
     });
     $('#merchandiser-search').on('change', function () {
         const searchValue = this.value.trim();

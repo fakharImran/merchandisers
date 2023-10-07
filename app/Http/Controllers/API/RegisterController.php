@@ -51,7 +51,7 @@ class RegisterController extends BaseController
             'email' => 'required|email',
             'password' => 'required',
             'c_password' => 'required|same:password',
-            // 'time_zone' =>'required'
+            'time_zone' =>'required'
             
         ]);
    
@@ -125,7 +125,7 @@ class RegisterController extends BaseController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            // 'time_zone'=> 'required'
+            'time_zone'=> 'required'
         ]);
    
         if($validator->fails()){

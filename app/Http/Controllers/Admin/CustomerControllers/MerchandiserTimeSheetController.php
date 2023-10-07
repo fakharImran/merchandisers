@@ -107,16 +107,16 @@ class MerchandiserTimeSheetController extends Controller
         // dd($userArr);
         $stores= $user->companyUser->company->stores;
         foreach ($compnay_users as $key => $compnay_user) {
-            $user = $compnay_user->user;
+            $merchandiser_user = $compnay_user->user;
             $timeSheetArray=array();
             $pendingTimeSheetArr=array();
-            if ($user) {
-                $userRoles = $user->roles; // Retrieve all roles for the user
+            if ($merchandiser_user) {
+                $userRoles = $merchandiser_user->roles; // Retrieve all roles for the user
                 if ($userRoles->count() > 0) {
                     foreach ($userRoles as $role) {
                         $roleName = $role->name;
                         if($roleName == 'merchandiser'){
-                            $time_sheets = $user->companyUser->timeSheets;
+                            $time_sheets = $merchandiser_user->companyUser->timeSheets;
 
                         //    $time_sheets= $this->checkTimeSheetStatus($time_sheets);
 
@@ -141,14 +141,14 @@ class MerchandiserTimeSheetController extends Controller
                                     }
                                     # code...
                                 }
-                                array_push($merchandiserArray, ['id'=>$user->id,'name'=>$user->name, 'role'=>$roleName, 'time_sheets'=>$timeSheetArray, "pending_time_sheets"=>$pendingTimeSheetArr]);
+                                array_push($merchandiserArray, ['id'=>$merchandiser_user->id,'name'=>$merchandiser_user->name, 'role'=>$roleName, 'time_sheets'=>$timeSheetArray, "pending_time_sheets"=>$pendingTimeSheetArr]);
                             }
                         }
                     }
                 }
             }
         }
-        return view('manager.merchandiserTimeSheet', compact('merchandiserArray','userArr', 'stores','allLocations'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.merchandiserTimeSheet', compact('merchandiserArray','user','userArr', 'stores','allLocations'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

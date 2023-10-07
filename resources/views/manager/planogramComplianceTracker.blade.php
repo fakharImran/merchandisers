@@ -1,4 +1,5 @@
 @extends('manager.layout.app')
+@section('title', 'Planogram Compliance Tracker')
 
 @section("top_links")
 
@@ -150,8 +151,8 @@
     </div>
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <div class=" m-3 float-end">
-                <label class="">Download filtered table in excel</label>
+            <div class="  m-3 float-end d-flex">
+                <label class="download_filter_label">Download filtered table in excel</label>
                 <button id="downloadButton" class="btn btn-light" ><img src="{{ asset('assets/images/managericons/download.png') }}" alt="Download"></button>
             </div>
         </div>

@@ -1,4 +1,5 @@
 @extends('manager.layout.app')
+@section('title', 'Notification')
 
 @section("top_links")
 

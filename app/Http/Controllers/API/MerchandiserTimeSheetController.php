@@ -120,9 +120,9 @@ class MerchandiserTimeSheetController extends BaseController
            
             $dateTimeString = $request->date. ' '.$request->time;
 
-
-            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone('asia/karachi'));  //time zone will be set when asim will update
-
+            $userTimeZone= $user->time_zone;
+            
+            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone($userTimeZone));
             $date->setTimezone(new DateTimeZone('UTC'));
             
             // return $this->sendResponse(['date in my time zone'=>$date, 'dateTimeString' =>$dateTimeString], ' record testing time sheet stored successfully.');
@@ -154,7 +154,7 @@ class MerchandiserTimeSheetController extends BaseController
 
             // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
 
-            return $this->sendResponse(['current_store'=>$storeArr, 'timeSheetRecord'=>$timesheetRecord, 'timeSheet'=>$merchandiserTimeSheet], 'time sheet stored successfully.');
+            return $this->sendResponse(["correctDateFormat"=>$correctDateFormat,"correctTimeFormat"=>$correctTimeFormat,"date"=>$date, "date formated"=>DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone($userTimeZone)),'current_store'=>$storeArr, 'timeSheetRecord'=>$timesheetRecord, 'timeSheet'=>$merchandiserTimeSheet], 'time sheet stored successfully.');
 
         }
         else{
@@ -217,9 +217,9 @@ class MerchandiserTimeSheetController extends BaseController
             }
             
             $dateTimeString = $request->date. ' '.$request->time;
-
-
-            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone('asia/karachi'));
+            $user= Auth::user();
+            $userTimeZone= $user->time_zone;
+            $date   = DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone($userTimeZone));
 
             $date->setTimezone(new DateTimeZone('UTC'));
             
@@ -257,7 +257,7 @@ class MerchandiserTimeSheetController extends BaseController
                 $activity->save();
     
 
-                return $this->sendResponse(['curr_user'=>Auth::user(), 'updated_time_sheet'=>$updatedTimeSheet, 'current_time_sheet_record'=>$timeSheetRecord, 'all_time_sheet_records'=>$timeSheet->timeSheetRecords], 'time sheet check-out updated successfully.');
+                return $this->sendResponse(["correctDateFormat"=>$correctDateFormat,"correctTimeFormat"=>$correctTimeFormat,"date"=>$date, "date formated"=>DateTime::createFromFormat('Y-m-d H:i:s', $dateTimeString, new DateTimeZone($userTimeZone)),'curr_user'=>Auth::user(), 'updated_time_sheet'=>$updatedTimeSheet, 'current_time_sheet_record'=>$timeSheetRecord, 'all_time_sheet_records'=>$timeSheet->timeSheetRecords], 'time sheet check-out updated successfully.');
             }
 
             $activity= new Activity;

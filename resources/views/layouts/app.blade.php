@@ -53,11 +53,11 @@
                 </main>
             @else
                 <div class="site-wrapper">
-                    <div class="main_header">
-                        <div class="container-fluid">
-                            <div class="row">
+                    {{-- <div class="main_header"> --}}
+                        {{-- <div class="container-fluid"> --}}
+                            <div class="row" style="width: 100%; margin:0px;">
                                 <div class="col-md-3 col-0 p-0"  style="
-                                    width: 20%;
+                                    /* width: 20%; */
                                     background: white;
                                     box-shadow: 16px 16px 30px rgba(0, 0, 0, 0.02);
                                     min-height: 100vh;
@@ -67,15 +67,17 @@
                                     </div>
                                     @include('layouts.sidebar')
                                 </div>
-                                <div class=" col-md-9 col-12 p-0" style="width: 80%;">
+                                <div class=" col-md-9 col-12 p-0" style="
+                                /* width: 80%; */
+                                ">
                                     @include('layouts.header')
                                     <main class="py-4">
                                         @yield('content')
                                     </main>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        {{-- </div> --}}
+                    {{-- </div> --}}
                 </div>
             @endguest
         @else

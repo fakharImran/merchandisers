@@ -1,4 +1,5 @@
 @extends('manager.layout.app')
+@section('title', 'Merchandiser Timesheet')
 
 @section("top_links")
 
@@ -202,8 +203,8 @@
     </div> --}}
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
-            <div class=" m-3 float-end">
-                <label class="">Download filtered table in excel</label>
+            <div class="  m-3 float-end d-flex">
+                <label class="download_filter_label">Download filtered table in excel</label>
                 <button id="downloadButton" class="btn btn-light" ><img src="{{ asset('assets/images/managericons/download.png') }}" alt="Download"></button>
             </div>
         </div>
@@ -258,34 +259,45 @@
                                     @switch($time_sheet_record->status)
                                         @case('check-in')
                                             @php
-                                                $checkin_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $checkin_date_time_before = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $checkin_date_time = convertToTimeZone($checkin_date_time_before, 'UTC', $user->time_zone);
                                                 $checkin_location = $time_sheet_record->gps_location;
                                             @endphp
                                             @break
                                         @case('start-lunch-time')
                                             @php
                                                 $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $start_lunch_date_time = convertToTimeZone(new DateTime($start_lunch_date_time), 'UTC', $user->time_zone);
                                             @endphp
                                             @break
                                         @case('end-lunch-time')
                                             @php
                                                 $end_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $end_lunch_date_time = convertToTimeZone($end_lunch_date_time, 'UTC', $user->time_zone);
+                                                
                                             @endphp
                                             @break
                                         @case('start-break-time')
                                             @php
                                                 $start_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $start_break_date_time = convertToTimeZone($start_break_date_time, 'UTC', $user->time_zone);
+
                                             @endphp
                                             @break
                                         @case('end-break-time')
                                             @php
                                                 $end_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $end_break_date_time = convertToTimeZone($end_break_date_time, 'UTC', $user->time_zone);
+
                                             @endphp
                                             @break
                                         @case('check-out')
                                             @php
                                                 $checkout_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                                $checkout_date_time = convertToTimeZone($checkout_date_time, 'UTC', $user->time_zone);
                                                 $checkout_location = $time_sheet_record->gps_location;
+                                            // dd( $time_sheet_record->date . ' ' . $time_sheet_record->time, $checkout_date_time, $user->time_zone);
+
                                             @endphp
                                             @break
                                         @default
@@ -495,7 +507,7 @@
                                         </td>
                                 </tr>
                                 @php
-                                    array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_time_converted))->format('Y-m-d'), 'hours'=>$intervalAfterBreakLunch] );
+                                    array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_date_time))->format('Y-m-d'), 'hours'=>$intervalAfterBreakLunch] );
                                 @endphp
                             @endforeach
                             @foreach ($merchandiser['pending_time_sheets'] as $merchandiser_time_sheet)
@@ -517,34 +529,44 @@
                                 @switch($time_sheet_record->status)
                                     @case('check-in')
                                         @php
-                                            $checkin_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                           $checkin_date_time_before = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            $checkin_date_time = convertToTimeZone($checkin_date_time_before, 'UTC', $user->time_zone);
                                             $checkin_location = $time_sheet_record->gps_location;
                                         @endphp
                                         @break
-                                    @case('start-lunch-time')
+                                        @case('start-lunch-time')
                                         @php
                                             $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            $start_lunch_date_time = convertToTimeZone(new DateTime($start_lunch_date_time), 'UTC', $user->time_zone);
                                         @endphp
                                         @break
                                     @case('end-lunch-time')
                                         @php
                                             $end_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            $end_lunch_date_time = convertToTimeZone($end_lunch_date_time, 'UTC', $user->time_zone);
+                                            
                                         @endphp
                                         @break
                                     @case('start-break-time')
                                         @php
                                             $start_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            $start_break_date_time = convertToTimeZone($start_break_date_time, 'UTC', $user->time_zone);
+
                                         @endphp
                                         @break
                                     @case('end-break-time')
                                         @php
                                             $end_break_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            $end_break_date_time = convertToTimeZone($end_break_date_time, 'UTC', $user->time_zone);
+
                                         @endphp
                                         @break
                                     @case('check-out')
                                         @php
                                             $checkout_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+                                            $checkout_date_time = convertToTimeZone($checkout_date_time, 'UTC', $user->time_zone);
                                             $checkout_location = $time_sheet_record->gps_location;
+                                            // dd($checkout_date_time);
                                         @endphp
                                         @break
                                     @default

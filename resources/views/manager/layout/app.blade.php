@@ -15,7 +15,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title') - {{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -73,7 +73,7 @@
                                 <div class=" col-md-9 col-12 p-0" style="
                                 /* width: 80%; */
                                 ">
-                                    @include('layouts.header')
+                                    @include('manager.layout.header')
                                     <main class="py-4">
                                         @yield('content')
                                     </main>

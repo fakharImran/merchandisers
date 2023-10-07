@@ -89,8 +89,12 @@ button:focus,input:focus{
     display: flex;
     align-items: center;
 }
-.dataTables_filter{
-        visibility: hidden;
+div#pricaAuditDatatable_filter {
+    display: none;
+}
+.download_filter_label{
+    margin-right: 7px;
+    margin-top: 1.5rem !important;
 }
 .table_btn_list {
     display: flex;

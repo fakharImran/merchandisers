@@ -1,5 +1,5 @@
 @extends('manager.layout.app')
-
+@section('title', 'Business Overview')
 @section("top_links")
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
@@ -209,7 +209,6 @@
     $chartHoursArray = array();
     $i=0;
 @endphp
- --}}
 </div>
 
 <script>
