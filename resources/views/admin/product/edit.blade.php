@@ -221,7 +221,7 @@
 }
 
 function removeRepeaterItem(button) {
-    button.parentElement.parentElement.remove();
+    button.parentElement.remove();
 }
 
 </script>
