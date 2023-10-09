@@ -267,7 +267,7 @@
                                         @case('start-lunch-time')
                                             @php
                                                 $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                                $start_lunch_date_time = convertToTimeZone(new DateTime($start_lunch_date_time), 'UTC', $user->time_zone);
+                                                $start_lunch_date_time = convertToTimeZone($start_lunch_date_time, 'UTC', $user->time_zone);
                                             @endphp
                                             @break
                                         @case('end-lunch-time')
@@ -297,6 +297,7 @@
                                                 $checkout_date_time = convertToTimeZone($checkout_date_time, 'UTC', $user->time_zone);
                                                 $checkout_location = $time_sheet_record->gps_location;
                                             // dd( $time_sheet_record->date . ' ' . $time_sheet_record->time, $checkout_date_time, $user->time_zone);
+                                            // dd($checkout_date_time, $user->time_zone, $checkout_date_time)
 
                                             @endphp
                                             @break
@@ -530,6 +531,7 @@
                                     @case('check-in')
                                         @php
                                            $checkin_date_time_before = $time_sheet_record->date . ' ' . $time_sheet_record->time;
+
                                             $checkin_date_time = convertToTimeZone($checkin_date_time_before, 'UTC', $user->time_zone);
                                             $checkin_location = $time_sheet_record->gps_location;
                                         @endphp
@@ -537,7 +539,7 @@
                                         @case('start-lunch-time')
                                         @php
                                             $start_lunch_date_time = $time_sheet_record->date . ' ' . $time_sheet_record->time;
-                                            $start_lunch_date_time = convertToTimeZone(new DateTime($start_lunch_date_time), 'UTC', $user->time_zone);
+                                            $start_lunch_date_time = convertToTimeZone($start_lunch_date_time, 'UTC', $user->time_zone);
                                         @endphp
                                         @break
                                     @case('end-lunch-time')
