@@ -165,7 +165,7 @@
         <div class="col-12">
             <div class=" m-3 float-end d-flex">
                 <label class="download_filter_label">Download filtered table in excel</label>
-                <button id="downloadButton" class="btn btn-light" ><img src="{{ asset('assets/images/managericons/download.png') }}" alt="Download"></button>
+                <button id="downloadButton" class="btn btn-light" ><img src="{{ asset('assets/images/managericons/download.svg') }}" alt="Download"></button>
             </div>
         </div>
         <div class="col-12">
