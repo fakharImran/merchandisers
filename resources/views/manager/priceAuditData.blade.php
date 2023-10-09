@@ -115,23 +115,20 @@
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class="filter form-select" id="location-search">
                     <option value="" selected>--Select--</option>
-                    @foreach ($locationArr as $location)
+                    {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>                
             </div>
 
         </div>
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
-                <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
-                <select name="merchandiser-search" class=" filter form-select"  id="merchandiser-search">
+                <label for="category-search" class="form-label filter category">Select Category</label>
+                <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
-                    @php
-                        $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
-                    @endphp
-                    @foreach($uniqueMerchandisers as $merchandiser)
-                         <option value="{{$merchandiser}}">{{$merchandiser}}</option>
+                     @foreach($categories->unique('category')->sort() as $category)
+                     <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
             </div>
@@ -210,36 +207,36 @@
                         @if ($priceAuditData!=null)
                             @foreach ($priceAuditData as $priceAudit)
                                 <tr>
-                                    <td>
+                                    <td class="tdclass">
                                         @php
                                             $date= explode(' ', $priceAudit->created_at);
                                         @endphp
                                         {{$date[0]}}
                                     </td>
-                                    <td>{{$priceAudit->store->name_of_store}}</td>
-                                    <td>
+                                    <td class="tdclass">{{$priceAudit->store->name_of_store}}</td>
+                                    <td class="tdclass">
                                         {{$priceAudit->storeLocation->location}}
                                     </td>
                                     
-                                    <td>{{$priceAudit->category->category}}</td>
-                                    <td>{{$priceAudit->product->product_name}}</td>
-                                    <td>{{$priceAudit->Product_SKU}}</td>
-                                    <td>{{$priceAudit->product_store_price}}</td>
-                                    <td>{{$priceAudit->tax_in_percentage}}</td>
-                                    <td>
+                                    <td class="tdclass">{{$priceAudit->category->category}}</td>
+                                    <td class="tdclass">{{$priceAudit->product->product_name}}</td>
+                                    <td class="tdclass">{{$priceAudit->Product_SKU}}</td>
+                                    <td class="tdclass">{{$priceAudit->product_store_price}}</td>
+                                    <td class="tdclass">{{$priceAudit->tax_in_percentage}}</td>
+                                    <td class="tdclass">
                                         @php
                                             $totalPrice= $priceAudit->product_store_price + $priceAudit->product_store_price/100 * $priceAudit->tax_in_percentage;
                                             echo $totalPrice;
                                         @endphp
                                     </td>
-                                    <td>{{$priceAudit->competitor_product_name}}</td>
-                                    <td>{{$priceAudit->competitor_product_price}}</td>
-                                    <td>{{$priceAudit->notes}}</td>
+                                    <td class="tdclass">{{$priceAudit->competitor_product_name}}</td>
+                                    <td class="tdclass">{{$priceAudit->competitor_product_price}}</td>
+                                    <td class="tdclass">{{$priceAudit->notes}}</td>
                                 </tr>
                                 @php
-                                    array_push($products_name, [$priceAudit->product->product_name, $priceAudit->competitor_product_name]);
+                                   array_push( $products_name,[$priceAudit->product->product_name, $priceAudit->competitor_product_name]);
                                     array_push($our_products_price, $totalPrice);
-                                    array_push($competitor_products_price, $priceAudit->competitor_product_price)
+                                    array_push($competitor_products_price ,  $priceAudit->competitor_product_price);
                                 @endphp
                             @endforeach
                         @endif
@@ -256,13 +253,13 @@
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
     var allProducts = {!! json_encode($products) !!};
-    var products_name = {!! json_encode($products_name) !!};
-    var our_products_price = {!! json_encode($our_products_price) !!};
-    var competitor_products_price = {!! json_encode($competitor_products_price) !!};
+    var products_name = [];
+    var our_products_price = [];
+    var competitor_products_price =[];
     var labels = [];
-console.log('productsss', products_name, our_products_price, competitor_products_price);
+// console.log('productsss', products_name, our_products_price, competitor_products_price);
     var chartData =  {{ Js::from($chartHoursArray) }};
-    console.log(chartData, "chart datwaaaaaa");
+    // console.log(chartData, "chart datwaaaaaa");
 </script>
 
 <script src="{{ asset('assets/js/priceAuditDataTableAndChart.js') }}"></script>

@@ -1,4 +1,3 @@
-
 function formatDate(date) {
     // Define an array of month names
     const monthNames = [
@@ -27,26 +26,27 @@ const data = {
         label: 'Our Product',
         backgroundColor: '#1BC018',
         borderColor: 'rgb(255, 99, 132)',
-        // data: hoursWorked,
         data: our_products_price,
+        barPercentage: 0.4,  // Adjust the width of the bars (0.4 means 40% of the available space)
+        categoryPercentage: 0.5  // Adjust the space between the bars (0.5 means 50% of the available space)
     },
     {
-        label: 'Compatitor Product',
+        label: 'Competitor Product',
         backgroundColor: '#1892C0',
         borderColor: 'rgb(255, 99, 132)',
-        // data: hoursWorked,
         data: competitor_products_price,
+        barPercentage: 0.4,  // Adjust the width of the bars (0.4 means 40% of the available space)
+        categoryPercentage: 0.5  // Adjust the space between the bars (0.5 means 50% of the available space)
     }]
-    
 };
 const config = {
-    type: 'horizontalBar',
+    type: 'bar',
 
     // type: 'bar',
     data: data,
     options: {
         scales: {
-            xAxes: [{
+            yAxes: [{
                 scaleLabel: {
                     display: true,
                     labelString: 'Price in USD'
@@ -64,20 +64,13 @@ const config = {
                 }
             }
         },
-      indexAxis: 'x',
-      // Elements options apply to all of the options unless overridden in a dataset
-      // In this case, we are setting the border of each horizontal bar to be 2px wide
+      indexAxis: 'y',
       elements: {
         bar: {
           borderWidth: 2,
         }
       },
       responsive: true,
-      plugins: {
-        legend: {
-          position: 'right',
-        }
-      }
     },
   };
 
@@ -153,7 +146,6 @@ $(document).ready(function () {
             }
         });
         if (storeName == "") {
-            // table.lengthMenu= [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ];
             table.column(2).search('', true, false).draw(); // Clear previous search location
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
@@ -161,51 +153,40 @@ $(document).ready(function () {
                 // Append each option into the select list
                 // Append the column data to the dropdown
                 dropdown.innerHTML = '<option value="" selected>--Select--</option>';
-                dropdown.append('<option value="' + location + '">' + location + '</option>');
+                // dropdown.append('<option value="' + location + '">' + location + '</option>');
             });
         }
-        // Empty the dropdown to remove previous options
-
-        var convertedToChartData = changeGraph(table);
-        // convertingData(convertedToChartData[0] , startDate, endDate);
-        myChartJS.data.labels = convertedToChartData[0].products_name;
-        myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
-        myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
-        myChartJS.update();
-
     });
 
     $('#location-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        // table.column(1).search(this.value).draw();
-        var convertedToChartData = changeGraph(table);
-        myChartJS.data.labels = convertedToChartData[0].products_name;
-        myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
-        myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
-        myChartJS.update();
-
-
     });
-    $('#merchandiser-search').on('change', function () {
-        const searchValue = this.value.trim();
-        table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        // table.column(11).search(this.value).draw();
-        var convertedToChartData = changeGraph(table);
-        myChartJS.data.labels = convertedToChartData[0].products_name;
-        myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
-        myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
-        myChartJS.update();
-    });
+    // $('#merchandiser-search').on('change', function () {
+    //     const searchValue = this.value.trim();
+    //     table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+    // });
     $('#product-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        // table.column(11).search(this.value).draw();
+        console.log("search product", searchValue);
+
+        if(searchValue!='')
+        {
         var convertedToChartData = changeGraph(table);
         myChartJS.data.labels = convertedToChartData[0].products_name;
         myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
         myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
         myChartJS.update();
+        }
+        else
+        {
+            myChartJS.data.labels = '';
+            myChartJS.data.datasets[0].data ='';
+            myChartJS.data.datasets[1].data ='';
+            myChartJS.update();
+        }
+        
     });
     $('#period-search').on('change', function () {
 
@@ -238,11 +219,6 @@ $(document).ready(function () {
             }
             var dateList = dateRange(startDate, endDate);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
-            var convertedToChartData = changeGraph(table);
-            myChartJS.data.labels = convertedToChartData[0].products_name;
-            myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
-            myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
-            myChartJS.update();
         } else {
             console.log("The substring 'to' does not exist in the original string.");
         }
@@ -250,16 +226,8 @@ $(document).ready(function () {
     });
 
     document.getElementById('clearDate').addEventListener('click', function (element) {
-        table.column(8).search('', true, false).draw(); // Clear previous search
+        table.column(0).search('', true, false).draw(); // Clear previous search
         document.getElementById('period-search').clear;
-        endDate = 0;
-        startDate = 0;
-        // table.column(8).search('').draw();
-        var convertedToChartData = changeGraph(table);
-        convertingData(convertedToChartData);
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = hoursWorked;
-        myChartJS.update();
         document.getElementById('period-search').value = 'Date Range';
 
     });

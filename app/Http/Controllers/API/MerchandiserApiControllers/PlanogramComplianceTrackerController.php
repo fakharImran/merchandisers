@@ -50,8 +50,8 @@ class PlanogramComplianceTrackerController extends BaseController
                 $nullPhotoAfterStockingShelf = PlanogramComplianceTracker::where('store_location_id', $timeSheet->store_location_id)
                 ->whereNull('photo_after_stocking_shelf')->get();
             
-                $allPlanogram= PlanogramComplianceTracker::all();
-                return $this->sendResponse(['allPlanogram'=>$allPlanogram,'nullPhotoAfterStockingShelf'=>$nullPhotoAfterStockingShelf ,'productsList'=>$productsList , 'categories'=>$categories, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id], 'check-in');
+                $allPlanogram= PlanogramComplianceTracker::select('*')->where('store_location_id', $timeSheet->store_location_id)->get();
+                return $this->sendResponse(['allPlanogram'=>$allPlanogram,'nullPhotoAfterStockingShelf'=>$nullPhotoAfterStockingShelf], 'check-in');
         }
 
         // for create a new visit from frontend
@@ -85,6 +85,15 @@ class PlanogramComplianceTrackerController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+
+        $nullPhotoAfterStockingShelf = PlanogramComplianceTracker::where('store_location_id', $request->store_location_id)
+        ->whereNull('photo_after_stocking_shelf')->get();
+        if(!$nullPhotoAfterStockingShelf->isEmpty())
+        {
+            return $this->sendResponse(['nullPhotoAfterStockingShelf'=>$nullPhotoAfterStockingShelf], 'you cannot add new Planogram, please complete previous Plaogram:');
+
+        }
+
         $photo_path_before = $request->file('photo_before_stocking_shelf')->store('planogramComplianceTrackerBeforeStocking', 'public');
         if($request->hasFile('photo_after_stocking_shelf'))
         {
