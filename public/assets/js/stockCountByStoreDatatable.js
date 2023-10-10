@@ -331,7 +331,11 @@ $(document).ready(function () {
 
     });
 
-   
+    $('#product-search').on('change', function () {
+        const searchValue = this.value.trim();
+        table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        // console.log("search product", searchValue);
+    });
 
 
     $('#period-search').on('change', function () {
