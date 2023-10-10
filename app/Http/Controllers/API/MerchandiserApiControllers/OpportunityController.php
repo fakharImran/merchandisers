@@ -93,13 +93,13 @@ class OpportunityController extends BaseController
         $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
         $store = $store_location->store;
         
-        $company = $store->company;
-
-        $opportunityArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'Opportunity_type'=>$request->Opportunity_type, 'Note'=>$request->Note, 'photo'=>$photo_path];
-        
-        $responseofQuery= Opportunity::create($opportunityArr);
         $user = Auth::user();
         $company_user_id=$user->companyUser->id;
+
+        $opportunityArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'Opportunity_type'=>$request->Opportunity_type, 'Note'=>$request->Note, 'photo'=>$photo_path];
+        
+        $responseofQuery= Opportunity::create($opportunityArr);
+        
 
         $activity= new Activity;
         $activity->store_location_id= $store_location->id;

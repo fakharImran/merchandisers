@@ -1,6 +1,5 @@
 @extends('manager.layout.app')
 @section('title', 'Stock Count By Store')
-
 @section("top_links")
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
@@ -18,9 +17,6 @@
 
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     
-<script>
-
-</script>
 @endsection
 
 @section('content')
@@ -116,9 +112,9 @@
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class="filter form-select" id="location-search">
                     <option value="" selected>--Select--</option>
-                    @foreach ($locationArr as $location)
+                    {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>                
             </div>
 
@@ -137,8 +133,17 @@
                 </select>   
             </div>
         </div>
-    </div>
-    <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="category-search" class="form-label filter category">Select Category</label>
+                <select name="category-search" class=" filter form-select"  id="category-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($categories->unique('category')->sort() as $category)
+                    <option value="{{$category['category']}}">{{$category['category']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="product-search" class="form-label filter product">Select product</label>
@@ -146,17 +151,6 @@
                     <option value="" selected>--Select-- </option>
                     @foreach($products->unique('product_name')->sort() as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
-                    @endforeach
-                </select>   
-            </div>
-        </div>
-        <div class="col-md-3 col-3 p-3">
-            <div class="form-group">
-                <label for="category-search" class="form-label filter category">Select Category</label>
-                <select name="category-search" class=" filter form-select"  id="category-search">
-                    <option value="" selected>--Select-- </option>
-                     @foreach($categories->unique('category')->sort() as $category)
-                     <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
             </div>
@@ -204,7 +198,7 @@
             </div>
         </div>
         <div class="col-md-3 col-3 p-3">
-            <div class="card manager-card-style">
+            <div class="card manager-card-style"  data-toggle="tooltip" title="Price Comparison index = ((Store Price ➗ Competitor Product Price) x 100) - 100">
                 <div class="card-header manager-card-header">Average Stock</div>    
                 <div class="card-body">
                     <div  class="content"><h3><b>0</b></h3></div>
@@ -215,6 +209,28 @@
     <div class="row pt-5">
         <div class="col-12">
             <div style="width: 800px; margin: auto;">
+                <div class="row d-flex">
+                    <div class="col-4">
+                        <label for="merchandiser-search" class="form-label filter merchandiser">Total stocks of product packed each day</label>
+                    </div>
+                    <div class="col-4">
+                        <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select"  id="casesorunits">
+                            <option class="text-secondary" value="" selected disabled>Select Case or Units </option>
+                            <option value="Total" >Total</option>
+                            <option value="Unit">Unit</option>
+                            <option value="Case">Case</option>
+                        </select>              
+                    </div>
+                    <div class="col-4">
+                        <select onchange="changePeriod(this)" name="casesorunits" style=" padding: 10px; text-align: center; font-size: revert; "
+                         class=" form-select"  id="casesorunits">
+                            <option class="text-secondary" value="" selected disabled>Select Chart Period Filter</option>
+                            <option value="Daily">Days</option>
+                            <option value="Weekly">Weeks</option>
+                            <option value="Monthly">Months</option>
+                        </select>              
+                    </div>
+                </div>
                 <canvas id="myChart"></canvas>
             </div>
         </div>
@@ -253,6 +269,7 @@
                             <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Product Number</th>
                             <th class="thclass" scope="col">Stocks on Shelf (Qty)</th>
                             <th class="thclass" scope="col">Stocks on Shelf (units/cases)</th>
@@ -293,6 +310,7 @@
                                 
                                 <td class="tdclass">{{$stockCount->category->category}}</td>
                                 <td class="tdclass">{{$stockCount->product->product_name}}</td>
+                                <td class="tdclass">{{$stockCount->companyUser->user->name}}</td>
                                 <td class="tdclass">{{$stockCount->product_sku}}</td>
                                 <td class="tdclass">{{$stockCount->stock_on_shelf}}</td>
                                 <td class="tdclass">{{$stockCount->stock_on_shelf_unit}}</td>
@@ -318,7 +336,12 @@
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
 
-    var labels = [];
+
+    var labels = ['day 1', 'day 2', 'day 3', 'day 4', 'day 5', 'day 6', 'day 7'];
+
+    var period = 'day';
+    var periordData = [23,23,23,23,34,45, 12];
+    
 
     // var chartData =  {{ Js::from($chartHoursArray) }};
     // console.log(chartData, "chart datwaaaaaa");
@@ -401,6 +424,9 @@
         const timeSheetTable = document.getElementById('stockCoutntByStoreDatatable');
         downloadTable(timeSheetTable);
     });
+
+
+
 </script>
 
 

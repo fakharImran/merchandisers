@@ -1,6 +1,27 @@
 
+function formatDate(date) {
+    // Define an array of month names
+    const monthNames = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    // Get the current month and day
+    const currentMonth = monthNames[date.getMonth()];
+    const currentDay = String(date.getDate()).padStart(2, '0');
+
+    // Create the formatted string
+    var formattedDate = `${currentMonth} ${currentDay}`;
+    return formattedDate;
+}
+function formatDateYMD(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
 $(document).ready(function () { 
-    var table = $('#mechandiserDatatable').DataTable({
+    var table = $('#OpportunitiesDataTable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
         paging: true, // Enable pagination
@@ -17,7 +38,7 @@ $(document).ready(function () {
 
         // Perform the search on the first column of the DataTable
         const searchValue = this.value.trim();
-        table.column(0).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
         var storeName = this.value;
 
@@ -28,7 +49,7 @@ $(document).ready(function () {
             if (storeName == store[0]) {
                 // Append each option into the select list
                 // Append the column data to the dropdown
-                table.column(1).search('', true, false).draw(); // Clear previous search
+                table.column(2).search('', true, false).draw(); // Clear previous search
                 dropdown.empty();
                 dropdown.append('<option value="" selected>--Select--</option>');
                 var storeLocations = store[1];
@@ -39,7 +60,7 @@ $(document).ready(function () {
         });
         if (storeName == "") {
             // table.lengthMenu= [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ];
-            table.column(1).search('', true, false).draw(); // Clear previous search
+            table.column(2).search('', true, false).draw(); // Clear previous search
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
             allUniqueLocations.forEach(function (location) {
@@ -54,14 +75,24 @@ $(document).ready(function () {
 
     $('#location-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
   
     });
     $('#merchandiser-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(6).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
 
     });
+    $('#category-search').on('change', function () {
+        const searchValue = this.value.trim();
+        table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+    });
+
+    $('#product-search').on('change', function () {
+        const searchValue = this.value.trim();
+        table.column(5).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+    });
+
     $('#period-search').on('change', function () {
 
         if (this.value.includes('to')) {
@@ -77,7 +108,7 @@ $(document).ready(function () {
             endDate = new Date(endDate);
              endDate = formatDateYMD(endDate);
 
-            table.column(8).search('', true, false).draw(); // Clear previous search
+            table.column(0).search('', true, false).draw(); // Clear previous search
 
             var searchTerms = []; // Initialize an array to store search terms
             function dateRange(startDate, endDate) {
@@ -92,7 +123,7 @@ $(document).ready(function () {
                 return dates;
             }
             var dateList = dateRange(startDate, endDate);
-            table.column(8).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+            table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
          
         } else {
             console.log("The substring 'to' does not exist in the original string.");
@@ -101,7 +132,7 @@ $(document).ready(function () {
     });
 
     document.getElementById('clearDate').addEventListener('click', function (element) {
-        table.column(8).search('', true, false).draw(); // Clear previous search
+        table.column(0).search('', true, false).draw(); // Clear previous search
         document.getElementById('period-search').clear;
         endDate = 0;
         startDate = 0;

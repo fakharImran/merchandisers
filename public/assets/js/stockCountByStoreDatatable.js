@@ -103,18 +103,53 @@ function createLastWeekDates(data)
 //     labels = previousWeeksArray.reverse();
 // }
 // convertingData(chartData);
+function changePeriod(e) {
+    console.log(e.value);
+    switch (e.value) {
+        case 'Daily':
+            labels = ['day 1', 'day 2', 'day 3', 'day 4', 'day 5', 'day 6', 'day 7'];
+            period = 'Daily';
+            periordData = [23,23,23,23,34,45,12];
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = periordData;
+            myChartJS.data.datasets[0].label = period+' Time Worked';
+            myChartJS.update();
+            break;
+        case 'Weekly':
+            labels = ['week 1', 'week 2', 'week 3', 'week 4', 'week 5', 'week 6', 'week 7'];
+            period = 'Weekly';
+            periordData = [23,234,234,263,364,45,23];
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = periordData;
+            myChartJS.data.datasets[0].label = period+' Time Worked';
 
+            myChartJS.update();
+            break;
+        case 'Monthly':
+            labels = ['month 1', 'month 2', 'month 3', 'month 4', 'month 5', 'month 6', 'month 7'];
+            period = 'Monthly';
+            periordData = [223,223,223,623,534,345,45];
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = periordData;
+            myChartJS.data.datasets[0].label = period+' Time Worked';
+
+            myChartJS.update();
+            break;
+        default:
+            break;
+    }
+}
 const data = {
-    labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug', '7 Aug'],
+    labels: labels,
     datasets: [{
-        label: 'Total Time Worked',
+        label: period+' Time Worked',
         backgroundColor: '#1892C0',
         borderColor: 'rgb(255, 99, 132)',
         // data: hoursWorked,
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: periordData,
     }]
 };
-
+       
 const config = {
     type: 'bar',
     data: data,
@@ -122,10 +157,16 @@ const config = {
         // responsive: true,
         // maintainAspectRatio: false,
         scales: {
+            // y: {
+            //     type: 'time',
+            //     time: {
+            //         unit: 'month'
+            //     }
+            // },
             yAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Total Stocks'
+                    labelString: 'Stocks'
                 },
                 ticks: {
                     stepSize: 10,
@@ -196,7 +237,7 @@ function changeGraph(table) {
 
 
 $(document).ready(function () { 
-    var table = $('#mechandiserDatatable').DataTable({
+    var table = $('#stockCoutntByStoreDatatable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
         paging: true, // Enable pagination
@@ -213,7 +254,7 @@ $(document).ready(function () {
 
         // Perform the search on the first column of the DataTable
         const searchValue = this.value.trim();
-        table.column(0).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
         var storeName = this.value;
 
@@ -224,7 +265,7 @@ $(document).ready(function () {
             if (storeName == store[0]) {
                 // Append each option into the select list
                 // Append the column data to the dropdown
-                table.column(1).search('', true, false).draw(); // Clear previous search
+                table.column(2).search('', true, false).draw(); // Clear previous search
                 dropdown.empty();
                 dropdown.append('<option value="" selected>--Select--</option>');
                 var storeLocations = store[1];
@@ -235,7 +276,7 @@ $(document).ready(function () {
         });
         if (storeName == "") {
             // table.lengthMenu= [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ];
-            table.column(1).search('', true, false).draw(); // Clear previous search
+            table.column(2).search('', true, false).draw(); // Clear previous search
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
             allUniqueLocations.forEach(function (location) {
@@ -263,7 +304,7 @@ $(document).ready(function () {
 
     $('#location-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(1).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
 
@@ -278,17 +319,21 @@ $(document).ready(function () {
 
 
     });
-    $('#merchandiser-search').on('change', function () {
+
+    $('#category-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        // table.column(11).search(this.value).draw();
-        var convertedToChartData = changeGraph(table);
-        convertingData(convertedToChartData , startDate, endDate);
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = hoursWorked;
-        myChartJS.update();
+        table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+    });
+    $('#merchandiser-search').on('change', function () {
+        // const searchValue = this.value.trim();
+        table.column(5).search(this.value ? `^${this.value}$` : '', true, false).draw();
+        console.log(this.value);
 
     });
+
+   
+
+
     $('#period-search').on('change', function () {
 
         if (this.value.includes('to')) {
@@ -304,7 +349,7 @@ $(document).ready(function () {
             endDate = new Date(endDate);
              endDate = formatDateYMD(endDate);
 
-            table.column(8).search('', true, false).draw(); // Clear previous search
+            table.column(0).search('', true, false).draw(); // Clear previous search
 
             var searchTerms = []; // Initialize an array to store search terms
             function dateRange(startDate, endDate) {
@@ -319,7 +364,7 @@ $(document).ready(function () {
                 return dates;
             }
             var dateList = dateRange(startDate, endDate);
-            table.column(8).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+            table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
             var convertedToChartData = changeGraph(table);
             convertingData(convertedToChartData, startDate, endDate);
             myChartJS.data.labels = labels;
@@ -332,7 +377,7 @@ $(document).ready(function () {
     });
 
     document.getElementById('clearDate').addEventListener('click', function (element) {
-        table.column(8).search('', true, false).draw(); // Clear previous search
+        table.column(0).search('', true, false).draw(); // Clear previous search
         document.getElementById('period-search').clear;
         endDate = 0;
         startDate = 0;

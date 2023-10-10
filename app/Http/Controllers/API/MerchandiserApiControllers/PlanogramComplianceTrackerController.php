@@ -109,14 +109,14 @@ class PlanogramComplianceTrackerController extends BaseController
         $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
         $store = $store_location->store;
         
-        $company = $store->company;
-
-        $planogramComplianceTracker= ['store_location_id'=>$store_location->id, 'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_number_sku'=>$request->product_number_sku, 'photo_before_stocking_shelf'=>$photo_path_before, 'photo_after_stocking_shelf'=>$photo_path_after, 'action'=>$request->action];
+        $user = Auth::user();
+        $company_user_id=$user->companyUser->id;
+        
+        $planogramComplianceTracker= ['store_location_id'=>$store_location->id, 'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_number_sku'=>$request->product_number_sku, 'photo_before_stocking_shelf'=>$photo_path_before, 'photo_after_stocking_shelf'=>$photo_path_after, 'action'=>$request->action];
         // return $this->sendResponse(['planogramComplianceTracker'=>$planogramComplianceTracker], 'checking:');
         $responseofQuery= PlanogramComplianceTracker::create($planogramComplianceTracker);
 
-        $user = Auth::user();
-        $company_user_id=$user->companyUser->id;
+       
         $activity= new Activity;
         $activity->store_location_id= $store_location->id;
         $activity->store_id= $store->id;

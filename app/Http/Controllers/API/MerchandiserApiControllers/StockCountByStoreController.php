@@ -87,19 +87,19 @@ class StockCountByStoreController extends BaseController
         $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
         $store = $store_location->store;
         
-        $company = $store->company;
+        $user = Auth::user();
+        $company_user_id=$user->companyUser->id;
 
 
         // category_id,product_id,product_sku,stock_on_shelf,
         // stock_on_shelf_unit,stock_packed,stock_packed_unit,
         // stock_in_store_room,stock_in_store_room_unit
         
-        $stockCountArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'stock_on_shelf'=>$request->stock_on_shelf, 'stock_on_shelf_unit'=>$request->stock_on_shelf_unit, 'stock_packed'=>$request->stock_packed, 'stock_packed_unit'=>$request->stock_packed_unit, 'stock_in_store_room'=>$request->stock_in_store_room , 'stock_in_store_room_unit'=> $request->stock_in_store_room_unit];
+        $stockCountArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'stock_on_shelf'=>$request->stock_on_shelf, 'stock_on_shelf_unit'=>$request->stock_on_shelf_unit, 'stock_packed'=>$request->stock_packed, 'stock_packed_unit'=>$request->stock_packed_unit, 'stock_in_store_room'=>$request->stock_in_store_room , 'stock_in_store_room_unit'=> $request->stock_in_store_room_unit];
         
         $responseofQuery= StockCountByStores::create($stockCountArr);
 
-        $user = Auth::user();
-        $company_user_id=$user->companyUser->id;
+    
         $activity= new Activity;
         $activity->store_location_id= $store_location->id;
         $activity->store_id= $store->id;

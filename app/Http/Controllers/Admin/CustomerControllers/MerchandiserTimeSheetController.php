@@ -6,6 +6,8 @@ use DateTime;
 use DateInterval;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use Illuminate\Support\Facades\DB;
@@ -106,6 +108,22 @@ class MerchandiserTimeSheetController extends Controller
         }
         // dd($userArr);
         $stores= $user->companyUser->company->stores;
+        $products = [];
+        foreach ($stores as $store) {
+            $storeProducts = $store->products->pluck('id')->toArray(); // Pluck product IDs
+            $products = array_merge($products, $storeProducts); // Merge product IDs
+        }
+        $products = Product::whereIn('id', $products)->get();
+        
+        $categories = [];
+
+        foreach ($products as $product) {
+            $productCategories = $product->category->pluck('id')->toArray(); // Pluck product IDs
+            $categories = array_merge($categories, $productCategories); // Merge product IDs
+        }
+        $categories = Category::whereIn('id', $categories)->get();
+        // dd($categories);
+        
         foreach ($compnay_users as $key => $compnay_user) {
             $merchandiser_user = $compnay_user->user;
             $timeSheetArray=array();
@@ -148,7 +166,7 @@ class MerchandiserTimeSheetController extends Controller
                 }
             }
         }
-        return view('manager.merchandiserTimeSheet', compact('merchandiserArray','user','userArr', 'stores','allLocations'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.merchandiserTimeSheet', compact('merchandiserArray','user','userArr', 'stores','products', 'categories','allLocations'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

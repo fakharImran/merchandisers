@@ -94,14 +94,14 @@ class PriceAuditController extends BaseController
         $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
         $store = $store_location->store;
         
-        $company = $store->company;
+        $user = Auth::user();
+        $company_user_id=$user->companyUser->id;
 
-        $priceAuditArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'Product_SKU'=>$request->Product_SKU, 'product_store_price'=>$request->product_store_price, 'tax_in_percentage'=>$request->tax_in_percentage, 'competitor_product_name'=>$request->competitor_product_name, 'competitor_product_price'=>$request->competitor_product_price, 'notes'=>$request->notes];
+        $priceAuditArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'Product_SKU'=>$request->Product_SKU, 'product_store_price'=>$request->product_store_price, 'tax_in_percentage'=>$request->tax_in_percentage, 'competitor_product_name'=>$request->competitor_product_name, 'competitor_product_price'=>$request->competitor_product_price, 'notes'=>$request->notes];
         // return $this->sendResponse(['priceAuditArr'=>$priceAuditArr], 'checking:');
         $responseofQuery= PriceAudit::create($priceAuditArr);
 
-        $user = Auth::user();
-        $company_user_id=$user->companyUser->id;
+       
         $activity= new Activity;
         $activity->store_location_id= $store_location->id;
         $activity->store_id= $store->id;

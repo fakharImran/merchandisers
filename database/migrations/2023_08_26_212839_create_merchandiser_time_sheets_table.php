@@ -41,5 +41,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('merchandiser_time_sheets');
+        Schema::dropIfExists('time_sheet_records');
     }
 };

@@ -124,6 +124,20 @@
         </div>
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
+                <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
+                <select name="merchandiser-search" class=" filter form-select"  id="merchandiser-search">
+                    <option value="" selected>--Select-- </option>
+                    @php
+                        $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                    @endphp
+                    @foreach($uniqueMerchandisers as $merchandiser)
+                         <option value="{{$merchandiser}}">{{$merchandiser}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
@@ -136,7 +150,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="product-search" class="form-label filter product">Select product</label>
-                <select name="product-search" class=" filter form-select" onchange="getProductData(this)"  id="product-search">
+                <select name="product-search" onchange="getProductData(this)" class=" filter form-select"  id="product-search">
                     <option value="" selected>--Select-- </option>
                     @foreach($products->unique('product_name')->sort() as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
@@ -259,6 +273,7 @@
                             <th class="thclass" scope="col">Total Price</th>
                             <th class="thclass" scope="col">Competitor Product Name</th>
                             <th class="thclass" scope="col">Competitor Product Price</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Notes</th>
                         </tr>
                     </thead>
@@ -303,6 +318,8 @@
                                     </td>
                                     <td class="tdclass">{{$priceAudit->competitor_product_name}}</td>
                                     <td class="tdclass">{{$priceAudit->competitor_product_price}}</td>
+                                    <td class="tdclass">{{$priceAudit->companyUser->user->name}}</td>
+
                                     <td class="tdclass">{{$priceAudit->notes}}</td>
                                 </tr>
                                 @php
@@ -346,10 +363,24 @@
             mode: "range",
             });
     });
-    function getProductData(data)
-    {
-        alert('need to set avg in below card');
-    }
+
+    function getProductData(data) {
+    console.log(data.value);
+
+    // // Convert relevant array elements from string to number
+    // var value6 = parseFloat(data.value[0][6]);  // Assuming it's a float
+    // var value10 = parseFloat(data[0][10]);  // Assuming it's a float
+
+    // // Check if the conversion was successful
+    // if (isNaN(value6) || isNaN(value10)) {
+    //     console.error('Unable to convert some values to numbers.');
+    //     return;
+    // }
+
+    // var average = ((value6 / value10) * 100) - 100;
+    // console.log(average, 'avg');
+}
+
 
     
     // document.getElementById('clearDate').addEventListener('click', function () {

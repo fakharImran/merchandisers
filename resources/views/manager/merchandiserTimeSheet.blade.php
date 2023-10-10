@@ -121,9 +121,9 @@
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class="filter form-select" id="location-search">
                     <option value="" selected>--Select--</option>
-                    @foreach ($locationArr as $location)
+                    {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>                
             </div>
 
@@ -180,6 +180,28 @@
                     @endphp
                     @foreach($uniqueMerchandisers as $merchandiser)
                          <option value="{{$merchandiser}}">{{$merchandiser}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="category-search" class="form-label filter category">Select Category</label>
+                <select name="category-search" class=" filter form-select"  id="category-search">
+                    <option value="" selected>--Select-- </option>
+                     @foreach($categories->unique('category')->sort() as $category)
+                     <option value="{{$category['category']}}">{{$category['category']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="product-search" class="form-label filter product">Select product</label>
+                <select name="product-search" class=" filter form-select"  id="product-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($products->unique('product_name')->sort() as $product)
+                    <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
                     @endforeach
                 </select>   
             </div>

@@ -92,14 +92,14 @@ class MarketingActivityController extends BaseController
         $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
         $store = $store_location->store;
         
-        $company = $store->company;
-
-        $marketingActivityArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_id'=>$company->id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'promotion_type'=>$request->promotion_type, 'Competitor_product_name'=>$request->Competitor_product_name, 'photo'=>$photo_path, 'Note'=>$request->Note];
-        
-        $responseofQuery= MarketingActivity::create($marketingActivityArr);
         
         $user = Auth::user();
         $company_user_id=$user->companyUser->id;
+        
+        $marketingActivityArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'promotion_type'=>$request->promotion_type, 'Competitor_product_name'=>$request->Competitor_product_name, 'photo'=>$photo_path, 'Note'=>$request->Note];
+        
+        $responseofQuery= MarketingActivity::create($marketingActivityArr);
+
 
         $activity= new Activity;
         $activity->store_location_id= $store_location->id;

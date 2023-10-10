@@ -162,10 +162,16 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
     });
-    // $('#merchandiser-search').on('change', function () {
-    //     const searchValue = this.value.trim();
-    //     table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-    // });
+    $('#category-search').on('change', function () {
+        const searchValue = this.value.trim();
+        table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+    });
+
+    $('#merchandiser-search').on('change', function () {
+        const searchValue = this.value.trim();
+        table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+    });
+
     $('#product-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();

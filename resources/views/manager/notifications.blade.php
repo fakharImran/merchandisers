@@ -116,9 +116,9 @@
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class="filter form-select" id="location-search">
                     <option value="" selected>--Select--</option>
-                    @foreach ($locationArr as $location)
+                    {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>                
             </div>
 
@@ -137,6 +137,28 @@
                 </select>   
             </div>
         </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="category-search" class="form-label filter category">Select Category</label>
+                <select name="category-search" class=" filter form-select"  id="category-search">
+                    <option value="" selected>--Select-- </option>
+                     @foreach($categories->unique('category')->sort() as $category)
+                     <option value="{{$category['category']}}">{{$category['category']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="product-search" class="form-label filter product">Select product</label>
+                <select name="product-search" class=" filter form-select"  id="product-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($products->unique('product_name')->sort() as $product)
+                    <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
     </div>
     <div class="row pt-5" style="margin: 1px auto; font-size: 12px;">
         <div class="col-12">
@@ -144,27 +166,14 @@
                 <div class="user_btn myborder float-end m-3" onclick="window.location.href = '{{ route('web_notification.create')}}'; return false;" >
                     <button  class="user_btn_style submit" > <img src="{{asset('assets/images/managericons/send_button.svg')}}"  width=20 alt="send"> Send Notification</button>
                 </div>
-                {{-- <a href="{{ route('web_notification.create')}}" class="user_btn myborder btn btn-light m-3 float-end">
-                    <div id="notification" class=""><img src="{{asset('assets/images/managericons/send_button.svg')}}" width=30 alt="send"> Send Notification</div>
-                </a> --}}
-                {{-- <button
-                    class="btn  btn-sm"
-                    style="float: right"
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addNotification"
-                    >
-                </button> --}}
             </div>
-
-            {{-- <button id="downloadButton" class="btn btn-light m-3 float-end">Download filtered table in excel <img src="{{asset('assets/images/managericons/download.png')}}" alt="Download"></button> --}}
         </div>
         <div class="col-12">
 
             <div class="table-responsive" >
                     {{-- table-responsive --}}
                     {{-- nowrap --}}
-                <table id="mechandiserDatatable-test" class="table table-sm datatable table-hover  " style="border: 1px solid #ccc; min-width: 800; ">
+                <table id="mechandiserDatatable-test" class="table table-sm  table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
                             <th class="thclass" scope="col">#ID</th>

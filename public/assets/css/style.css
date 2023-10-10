@@ -92,6 +92,9 @@ button:focus,input:focus{
 div#pricaAuditDatatable_filter {
     display: none;
 }
+.dataTables_filter{
+    display: none;
+}
 .download_filter_label{
     margin-right: 7px;
     margin-top: 1.5rem !important;
@@ -834,7 +837,13 @@ label.form-label.filter.location::after{
     bottom: 0px;
     position: absolute;
 }
-
+.out-of-stock .manager-card-style {
+    min-height: 200px;
+}
+.out-of-stock .content {
+    bottom: 0px;
+    position: absolute;
+}
 
 
 .business-overview .manager-card-style {

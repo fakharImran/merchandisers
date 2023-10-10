@@ -6,6 +6,7 @@ use App\Models\Store;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\CompanyUser;
 use App\Models\StoreLocation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ class PlanogramComplianceTracker extends Model
 {
     use HasFactory;
     protected $table= 'planogram_compliance_trackers';
-    protected $fillable= ['store_location_id','store_id','company_id','category_id', 'product_id', 'product_number_sku', 'photo_before_stocking_shelf', 'photo_after_stocking_shelf', 'action'];
+    protected $fillable= ['store_location_id','store_id','company_user_id','category_id', 'product_id', 'product_number_sku', 'photo_before_stocking_shelf', 'photo_after_stocking_shelf', 'action'];
 
     public function storeLocation(): BelongsTo
     {
@@ -27,9 +28,9 @@ class PlanogramComplianceTracker extends Model
         return $this->belongsTo(Store::class, 'store_id');
     }
    
-    public function company(): BelongsTo
+    public function companyUser(): BelongsTo
     {
-        return $this->belongsTo(Company::class, 'company_id');
+        return $this->belongsTo(CompanyUser::class, 'company_user_id');
     }
     
     public function category(): BelongsTo

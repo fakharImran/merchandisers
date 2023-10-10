@@ -18,13 +18,13 @@ class StoreLocation extends Model
     {
         return $this->belongsTo(Store::class);
     }
-    /**
-     * Get all of the notifications for the StoreLocation
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(StoreLocation::class, 'store_location_id');
-    }
+    // /**
+    //  * Get all of the notifications for the StoreLocation
+    //  *
+    //  * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    //  */
+    // public function notifications(): HasMany
+    // {
+    //     return $this->hasMany(StoreLocation::class, 'store_location_id');
+    // }
 }

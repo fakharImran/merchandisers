@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Opportunity;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
@@ -43,6 +44,16 @@ class OpportunityController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
         
+        
+        $categories = [];
+
+        foreach ($products as $product) {
+            $productCategories = $product->category->pluck('id')->toArray(); // Pluck product IDs
+            $categories = array_merge($categories, $productCategories); // Merge product IDs
+        }
+        $categories = Category::whereIn('id', $categories)->get();
+        // dd($categories);
+        
         $opportunityIDArr = [];
         foreach ($stores as $store) {
             $opportunitiesData = $store->opportunities->pluck('id')->toArray(); // Pluck product IDs
@@ -57,7 +68,7 @@ class OpportunityController extends Controller
         $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.opportunities', compact('opportunityData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.opportunities', compact('opportunityData','userArr', 'name',  'stores','allLocations','categories', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

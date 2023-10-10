@@ -5,6 +5,7 @@ use Validator;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
@@ -44,11 +45,20 @@ class NotificationController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
 
+        $categories = [];
+
+        foreach ($products as $product) {
+            $productCategories = $product->category->pluck('id')->toArray(); // Pluck product IDs
+            $categories = array_merge($categories, $productCategories); // Merge product IDs
+        }
+        $categories = Category::whereIn('id', $categories)->get();
+        // dd($categories);
+        
         $name=$user->name;
         $userTimeZone  = $user->time_zone;
         $allNotifications= Notification::all();
      
-        return view('manager.notifications', compact('userTimeZone','allNotifications','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.notifications', compact('userTimeZone','allNotifications','userArr', 'name',  'stores','allLocations','categories', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

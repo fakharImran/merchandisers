@@ -21,8 +21,8 @@ return new class extends Migration
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
-            $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->unsignedBigInteger('company_user_id')->nullable();
+            $table->foreign('company_user_id')->references('id')->on('company_users')->onDelete('cascade');
 
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');

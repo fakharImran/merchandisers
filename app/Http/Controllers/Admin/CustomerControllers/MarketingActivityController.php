@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Models\MarketingActivity;
@@ -43,6 +44,14 @@ class MarketingActivityController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
         
+        $categories = [];
+
+        foreach ($products as $product) {
+            $productCategories = $product->category->pluck('id')->toArray(); // Pluck product IDs
+            $categories = array_merge($categories, $productCategories); // Merge product IDs
+        }
+        $categories = Category::whereIn('id', $categories)->get();
+        // dd($categories);
         $marketingActivityIDArr = [];
         foreach ($stores as $store) {
             $marketingActivitiesData = $store->marketingActivities->pluck('id')->toArray(); // Pluck product IDs
@@ -57,7 +66,7 @@ class MarketingActivityController extends Controller
         $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.marketingActivity', compact('marketingActivityData','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.marketingActivity', compact('marketingActivityData','userArr', 'name',  'stores','allLocations','categories', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

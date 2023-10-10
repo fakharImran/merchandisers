@@ -137,6 +137,28 @@
                 </select>   
             </div>
         </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="category-search" class="form-label filter category">Select Category</label>
+                <select name="category-search" class=" filter form-select"  id="category-search">
+                    <option value="" selected>--Select-- </option>
+                     @foreach($categories->unique('category')->sort() as $category)
+                     <option value="{{$category['category']}}">{{$category['category']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="product-search" class="form-label filter product">Select product</label>
+                <select name="product-search" class=" filter form-select"  id="product-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($products->unique('product_name')->sort() as $product)
+                    <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
     </div>
     <div class="row pt-5" style="margin: 1px auto; font-size: 12px;">
         <div class="col-12">
@@ -159,6 +181,7 @@
                             <th class="thclass" scope="col">Type of Promotion</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Product Number/SKU</th>
                             <th class="thclass" scope="col">Competitor Product Name</th>
                             <th class="thclass" scope="col">Photo</th>
@@ -187,6 +210,7 @@
                                 <td class="tdclass">{{$marketingActivity->promotion_type}}</td>
                                 <td class="tdclass">{{$marketingActivity->category->category}}</td>
                                 <td class="tdclass">{{$marketingActivity->product->product_name}}</td>
+                                <td class="tdclass">{{$marketingActivity->companyUser->user->name}}</td>
                                 <td class="tdclass">{{$marketingActivity->product_sku}}</td>
                                 <td class="tdclass">{{$marketingActivity->Competitor_product_name}}</td>
                                 <td  class="tdclass">

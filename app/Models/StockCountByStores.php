@@ -6,6 +6,7 @@ use App\Models\Store;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\CompanyUser;
 use App\Models\StoreLocation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ class StockCountByStores extends Model
 {
     use HasFactory;
     protected $table= 'stock_count_by_stores';
-    protected $fillable= ['store_location_id','store_id', 'company_id', 'category_id', 'product_id', 'product_sku', 'stock_on_shelf', 'stock_on_shelf_unit', 'stock_packed', 'stock_packed_unit' ,'stock_in_store_room','stock_in_store_room_unit'];
+    protected $fillable= ['store_location_id','store_id', 'company_user_id', 'category_id', 'product_id', 'product_sku', 'stock_on_shelf', 'stock_on_shelf_unit', 'stock_packed', 'stock_packed_unit' ,'stock_in_store_room','stock_in_store_room_unit'];
 
     public function storeLocation(): BelongsTo
     {
@@ -27,9 +28,9 @@ class StockCountByStores extends Model
         return $this->belongsTo(Store::class, 'store_id');
     }
    
-    public function company(): BelongsTo
+    public function companyUser(): BelongsTo
     {
-        return $this->belongsTo(Company::class, 'company_id');
+        return $this->belongsTo(CompanyUser::class, 'company_user_id');
     }
 
         

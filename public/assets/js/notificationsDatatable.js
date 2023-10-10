@@ -1,6 +1,27 @@
 
+function formatDate(date) {
+    // Define an array of month names
+    const monthNames = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    // Get the current month and day
+    const currentMonth = monthNames[date.getMonth()];
+    const currentDay = String(date.getDate()).padStart(2, '0');
+
+    // Create the formatted string
+    var formattedDate = `${currentMonth} ${currentDay}`;
+    return formattedDate;
+}
+function formatDateYMD(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
 $(document).ready(function () { 
-    var table = $('#mechandiserDatatable').DataTable({
+    var table = $('#notificationDataTable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
         paging: true, // Enable pagination
@@ -59,7 +80,7 @@ $(document).ready(function () {
     });
     $('#merchandiser-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(0).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
 
     });
     $('#period-search').on('change', function () {
@@ -77,7 +98,7 @@ $(document).ready(function () {
             endDate = new Date(endDate);
              endDate = formatDateYMD(endDate);
 
-            table.column(8).search('', true, false).draw(); // Clear previous search
+            table.column(0).search('', true, false).draw(); // Clear previous search
 
             var searchTerms = []; // Initialize an array to store search terms
             function dateRange(startDate, endDate) {

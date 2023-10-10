@@ -51,7 +51,7 @@
     }
     /* Define a CSS class to apply the background image */
 </style>
-<div class="container">
+<div class="container out-of-stock">
 
     {{-- {{dd($userArr)}} --}}
     <div  class="row d-flex align-items-center col-actions" style="max-width: 99%; margin: 1px auto;">
@@ -116,9 +116,9 @@
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class="filter form-select" id="location-search">
                     <option value="" selected>--Select--</option>
-                    @foreach ($locationArr as $location)
+                    {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>                
             </div>
 
@@ -137,13 +137,35 @@
                 </select>   
             </div>
         </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="category-search" class="form-label filter category">Select Category</label>
+                <select name="category-search" class=" filter form-select"  id="category-search">
+                    <option value="" selected>--Select-- </option>
+                     @foreach($categories->unique('category')->sort() as $category)
+                     <option value="{{$category['category']}}">{{$category['category']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="product-search" class="form-label filter product">Select product</label>
+                <select name="product-search" class=" filter form-select"  id="product-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($products->unique('product_name')->sort() as $product)
+                    <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
     </div>
     <br>
     <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
         <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Stores with out of stock</div>    
-                <div class="card-body">
+                <div class="card-body content">
                     <small class="text-secondary">
                         @php
                             $todayDate = (new DateTime());
@@ -157,7 +179,7 @@
         <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Categories out of stock in stores</div>    
-                <div class="card-body">
+                <div class="card-body content">
                     <small class="text-secondary">
                         @php
                             $todayDate = (new DateTime());
@@ -171,7 +193,7 @@
         <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Products out of stock in stores</div>    
-                <div class="card-body">
+                <div class="card-body content">
                     <small class="text-secondary">
                         @php
                             $todayDate = (new DateTime());
@@ -203,6 +225,7 @@
                             <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Product Number/SKU</th>
                             <th class="thclass" scope="col">Reason for Out of Stock</th>
                         </tr>
@@ -223,6 +246,7 @@
                                 </td>
                                 <td class="tdclass">{{$outOfStock->category->category}}</td>
                                 <td class="tdclass">{{$outOfStock->product->product_name}}</td>
+                                <td class="tdclass">{{$outOfStock->companyUser->user->name}}</td>
                                 <td class="tdclass">{{$outOfStock->product_sku}}</td>
                                 <td class="tdclass">{{$outOfStock->Reason_out_of_stock}}</td>
                             </tr>

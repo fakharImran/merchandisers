@@ -115,9 +115,9 @@
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class="filter form-select" id="location-search">
                     <option value="" selected>--Select--</option>
-                    @foreach ($locationArr as $location)
+                    {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>                
             </div>
 
@@ -141,8 +141,8 @@
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
-                     @foreach($categories->unique('category')->sort() as $category)
-                     <option value="{{$category['category']}}">{{$category['category']}}</option>
+                        @foreach($categories->unique('category')->sort() as $category)
+                        <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
             </div>
@@ -239,16 +239,19 @@
                     </div>
                     <div class="col-4">
                         <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select"  id="casesorunits">
-                            <option value="" selected>Select Case or Units </option>
+                            <option class="text-secondary" value="" selected disabled>Select Case or Units </option>
+                            <option value="Total" >Total</option>
+                            <option value="Unit">Unit</option>
+                            <option value="Case">Case</option>
                         </select>              
                     </div>
                     <div class="col-4">
-                        <select name="casesorunits" style=" padding: 10px; text-align: center; font-size: revert; "
+                        <select onchange="changePeriod(this)" name="casesorunits" style=" padding: 10px; text-align: center; font-size: revert; "
                          class=" form-select"  id="casesorunits">
-                            <option value="" selected>Select Chart Period Filter</option>
-                            <option value="Days">Days</option>
-                            <option value="Weeks">Weeks</option>
-                            <option value="Years">Years</option>
+                            <option class="text-secondary" value="" selected disabled>Select Chart Period Filter</option>
+                            <option value="Daily">Days</option>
+                            <option value="Weekly">Weeks</option>
+                            <option value="Monthly">Months</option>
                         </select>              
                     </div>
                 </div>
@@ -289,11 +292,18 @@
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
 
-    var labels = [];
+
+
+    var labels = ['day 1', 'day 2', 'day 3', 'day 4', 'day 5', 'day 6', 'day 7'];
+
+    var period = 'day';
+    var periordData = [23,23,23,23,34,45, 12];
+    
 
     // var chartData =  {{ Js::from($chartHoursArray) }};
     // console.log(chartData, "chart datwaaaaaa");
 </script>
+
 
 <script src="{{ asset('assets/js/businessOverviewDatatableAndChart.js') }}"></script>
 
