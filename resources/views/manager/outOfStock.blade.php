@@ -140,27 +140,45 @@
     </div>
     <br>
     <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
-        <div class="col-md-4 col-4 p-3">
+        <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header"><span style="color: red;">Total stores</span> with product out of stock for reported period</div>    
+                <div class="card-header manager-card-header">Number of Stores with out of stock</div>    
                 <div class="card-body">
-                    <div><b>0</b></div>
+                    <small class="text-secondary">
+                        @php
+                            $todayDate = (new DateTime());
+                            echo $todayDate->format('Y-m-d');
+                        @endphp 
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 / 100</span></div>                
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-4 p-3">
+        <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header"><span style="color: red;">Total categories</span> Total categories out of stock for reported period </div>    
+                <div class="card-header manager-card-header">Number of Categories out of stock in stores</div>    
                 <div class="card-body">
-                    <div><b>0</b></div>
+                    <small class="text-secondary">
+                        @php
+                            $todayDate = (new DateTime());
+                            echo $todayDate->format('Y-m-d');
+                        @endphp 
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 / 100</span></div>                
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-4 p-3">
+        <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header"><span style="color: red;">Total products</span> out of stock for reported period</div>    
+                <div class="card-header manager-card-header">Number of Products out of stock in stores</div>    
                 <div class="card-body">
-                    <div><b>0</b></div>
+                    <small class="text-secondary">
+                        @php
+                            $todayDate = (new DateTime());
+                            echo $todayDate->format('Y-m-d');
+                        @endphp 
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 / 100</span></div>                
                 </div>
             </div>
         </div>

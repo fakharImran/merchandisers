@@ -50,7 +50,7 @@
     }
     /* Define a CSS class to apply the background image */
 </style>
-<div class="container">
+<div class="container business-overview">
 
     {{-- {{dd($userArr)}} --}}
     <div  class="row d-flex align-items-center col-actions" style="max-width: 99%; margin: 1px auto;">
@@ -136,57 +136,129 @@
                 </select>   
             </div>
         </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="category-search" class="form-label filter category">Select Category</label>
+                <select name="category-search" class=" filter form-select"  id="category-search">
+                    <option value="" selected>--Select-- </option>
+                     @foreach($categories->unique('category')->sort() as $category)
+                     <option value="{{$category['category']}}">{{$category['category']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="product-search" class="form-label filter product">Select product</label>
+                <select name="product-search" class=" filter form-select"  id="product-search">
+                    <option value="" selected>--Select-- </option>
+                    @foreach($products->unique('product_name')->sort() as $product)
+                    <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
     </div>
     <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
-        <div class="col-md-2 col-2 p-2">
+        <div class="col-md-3-5 col-sm-3 col-6 pt-2">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header">Total stocks available in stores</div>    
-                <div class="card-body">
-                    <div><b>0</b></div>
-                </div>
+                <div class="card-header manager-card-header">Total Stock Count</div>    
+                <div class="card-body content">
+                    <small class="text-secondary">
+                        @php
+                            $todayDate = (new DateTime());
+                            echo $todayDate->format('Y-m-d');
+                        @endphp 
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">0 / 100</div>                </div>
             </div>
         </div>
-        <div class="col-md-2 col-2 p-2">
+        <div class="col-md-3-5 col-sm-3 col-6 pt-2">
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Stores serviced</div>    
-                <div class="card-body">
-                    <div><b>0</b></div>
+                <div class="card-body content">
+                    <small class="text-secondary">
+                        @php
+                            $todayDate = (new DateTime());
+                            echo $todayDate->format('Y-m-d');
+                        @endphp 
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">0 / 100</div>                
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-2 p-2">
+        <div class="col-md-3-5 col-sm-3 col-6 pt-2">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header">Stores with out of stock</div>    
-                <div class="card-body">
-                    <div><b>0</b></div>
+                <div class="card-header manager-card-header">Number of Stores with out of stock</div>    
+                <div class="card-body content">
+                    <small class="text-secondary">
+                        @php
+                            $todayDate = (new DateTime());
+                            echo $todayDate->format('Y-m-d');
+                        @endphp 
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span>  100</div>                
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-2 p-2">
+        <div class="col-md-3-5 col-sm-3 col-6 pt-2">
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Products out of stock in stores</div>    
-                <div class="card-body">
-                    <div><b>0</b></div>
+                <div class="card-body content">
+                    <small class="text-secondary">
+                        @php
+                            $todayDate = (new DateTime());
+                            echo $todayDate->format('Y-m-d');
+                        @endphp 
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-2 p-2">
+        <div class="col-md-3-5 col-sm-3 col-6 pt-2">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header">Stores with Expired Products</div>    
-                <div class="card-body">
-                    <div><b>0</b></div>
+                <div class="card-header manager-card-header">Number of Stores with Expired Products</div>    
+                <div class="card-body content">
+                    <small class="text-secondary">
+                        @php
+                            $todayDate = (new DateTime());
+                            echo $todayDate->format('Y-m-d');
+                        @endphp 
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
                 </div>
             </div>
         </div>
     </div>
     <div class="row pt-5">
         <div class="col-12">
-            <div style="width: 800px; margin: auto;">
-                <label for="merchandiser-search" class="form-label filter merchandiser">Total stocks of product packed each day</label>
+            <div style="width: 900px; margin: auto;">
+                <div class="row d-flex">
+                    <div class="col-4">
+                        <label for="merchandiser-search" class="form-label filter merchandiser">Total stocks of product packed each day</label>
+                    </div>
+                    <div class="col-4">
+                        <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select"  id="casesorunits">
+                            <option value="" selected>Select Case or Units </option>
+                        </select>              
+                    </div>
+                    <div class="col-4">
+                        <select name="casesorunits" style=" padding: 10px; text-align: center; font-size: revert; "
+                         class=" form-select"  id="casesorunits">
+                            <option value="" selected>Select Chart Period Filter</option>
+                            <option value="Days">Days</option>
+                            <option value="Weeks">Weeks</option>
+                            <option value="Years">Years</option>
+                        </select>              
+                    </div>
+                </div>
+               
                 <canvas id="myChart"></canvas>
             </div>
         </div>
     </div>
+
+   
 
     
     

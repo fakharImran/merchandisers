@@ -51,7 +51,7 @@
     }
     /* Define a CSS class to apply the background image */
 </style>
-<div class="container">
+<div class="container stock-count">
 
     {{-- {{dd($userArr)}} --}}
     <div  class="row d-flex align-items-center col-actions" style="max-width: 99%; margin: 1px auto;">
@@ -151,16 +151,39 @@
             </div>
         </div>
         <div class="col-md-3 col-3 p-3">
+            <div class="form-group">
+                <label for="category-search" class="form-label filter category">Select Category</label>
+                <select name="category-search" class=" filter form-select"  id="category-search">
+                    <option value="" selected>--Select-- </option>
+                     @foreach($categories->unique('category')->sort() as $category)
+                     <option value="{{$category['category']}}">{{$category['category']}}</option>
+                    @endforeach
+                </select>   
+            </div>
+        </div>
+    </div>
+    <div class='row  d-flex align-items-center col-actions ' style="max-width: 99%; margin: 1px auto; padding-top:20px">
+        <div class="col-md-3 col-3 p-3">
+            <div class="card manager-card-style">
+                <div class="card-header manager-card-header">Total stock count</div>    
+                <div class="card-body">
+                    <div class="content"><h3><b>0</b></h3></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-3 p-3">
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Opening Week Stock</div>    
                 <div class="card-body">
-                    <small class="text-secondary">
-                        @php
-                            $sevenDaysAgo = (new DateTime())->sub(new DateInterval('P7D'));
-                            echo $sevenDaysAgo->format('Y-m-d');
-                        @endphp 
-                    </small>
-                    <div><b>0.0</b></div>
+                    <div  class="content">
+                        <small class="text-secondary">
+                            @php
+                                $sevenDaysAgo = (new DateTime())->sub(new DateInterval('P7D'));
+                                echo $sevenDaysAgo->format('Y-m-d');
+                            @endphp 
+                        </small>
+                        <div><h3><b>0</b></h3></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -168,21 +191,23 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Closing Week Stock</div>    
                 <div class="card-body">
-                    <small class="text-secondary">
-                        @php
-                            $sevenDaysAgo = (new DateTime());
-                            echo $sevenDaysAgo->format('Y-m-d');
-                        @endphp 
-                    </small>
-                    <div><b>0.0</b></div>
+                    <div  class="content">
+                        <small class="text-secondary">
+                            @php
+                                $sevenDaysAgo = (new DateTime());
+                                echo $sevenDaysAgo->format('Y-m-d');
+                            @endphp 
+                        </small>
+                        <div><h3><b>0</b></h3></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-3 p-3">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header">Average Week Stock</div>    
+                <div class="card-header manager-card-header">Average Stock</div>    
                 <div class="card-body">
-                    <div><b>0.0</b></div>
+                    <div  class="content"><h3><b>0</b></h3></div>
                 </div>
             </div>
         </div>

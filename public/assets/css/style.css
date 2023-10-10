@@ -817,7 +817,53 @@ label.form-label.filter.location::after{
     border: none;
     border-radius: 1.25rem;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.09);
-    min-height: 127px;
+    min-height: 169px;
+}
+.stock-count .manager-card-style {
+    min-height: 125px;
+}
+.stock-count .card-body .content {
+    bottom: 0px;
+    position: absolute;
+}
+
+.product-expiry .manager-card-style {
+    min-height: 169px;
+}
+.product-expiry .content {
+    bottom: 0px;
+    position: absolute;
+}
+
+
+
+.business-overview .manager-card-style {
+    min-height: 179px;
+}
+.business-overview  .content{
+    bottom: 0px;
+    position: absolute;
+}
+@media (min-width: 768px){
+    .col-md-3-5 {
+        flex: 0 0 auto;
+        width: 20%;
+    }
+}
+.price-audit .manager-card-header{
+    color: #000;
+    align-self: center;
+}
+.price-audit .manager-card-style {
+    min-height: 150px;
+}
+.price-audit .percentage {
+    text-align: center;
+    color: #1892C0;
+    font-size: 45px;
+    font-family: Inter;
+    font-weight: 700;
+    word-wrap: break-word;
 }
 .manager-card-header{
     border-radius: calc(1.25rem - 1px) calc(1.25rem - 1px) 0 0 !important;
@@ -835,3 +881,10 @@ label.form-label.filter.location::after{
     border: none;
 }
 
+.bullet {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px; /* Adjust margin as needed */
+}

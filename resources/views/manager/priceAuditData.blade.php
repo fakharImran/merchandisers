@@ -51,7 +51,7 @@
     }
     /* Define a CSS class to apply the background image */
 </style>
-<div class="container">
+<div class="container price-audit">
 
     <div  class="row d-flex align-items-center col-actions" style="   max-width: 99%; margin: 1px auto;">
         <div class="col-md-3 col-3 p-3">
@@ -136,7 +136,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="product-search" class="form-label filter product">Select product</label>
-                <select name="product-search" class=" filter form-select"  id="product-search">
+                <select name="product-search" class=" filter form-select" onchange="getProductData(this)"  id="product-search">
                     <option value="" selected>--Select-- </option>
                     @foreach($products->unique('product_name')->sort() as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
@@ -161,6 +161,78 @@
             </button>
         </div>
     </div> --}}
+    <div class="row pt-5" style=" ">
+        <div class="col-5">
+
+            <div >
+                <h3 class="fw-bolder" >Legend</h3>
+            </div>
+            <div class="d-flex mt-3 mb-3">
+                <div style="background-color: #1BC018;" class="bullet"></div> <div> Your Product</div>
+            </div>
+            <div class="d-flex mt-3 mb-3">
+                <div   style="background-color: #1892C0;" class="bullet"></div> <div>Your Compititor Product</div>
+            </div>
+            
+            {{-- <div class=" bullet" style="background-color: green;"> Your Product</div><br>
+            <div class= "bullet"  style="background-color: blue;"> Your Compititor Product</div> --}}
+        </div>
+
+        <div class="col-md-3 col-3">
+            <div class="card manager-card-style "  data-toggle="tooltip" title="Price Comparison index = ((Store Price ➗ Competitor Product Price) x 100) - 100">
+                    <div class="card-header manager-card-header">Price Comparison Index</div>    
+                    <div class="card-body">
+                        <div class="percentage">46%</div>
+                    </div>     
+            </div>
+        </div>
+        <div class="col-4 " style="padding-top:41px;">
+
+            <div style=" padding-bottom: 14px; pt-10">
+                <label for=""><b style="    color: #929293">= Equal Than Competitor Average Price  </b></label>
+                <label for=""><b style="    color: #1892C0"> > Greater Than Competitor Average Price</b></label>
+                <label for=""><b style="    color: #1BC018;">< Less Than Competitor Average Price</b></label>
+            </div>
+        </div>
+
+    </div>
+    <div class="row pt-5" style=" ">
+
+        <div class="col-md-3 col-3">
+            <div class="card manager-card-style">
+                <div class="card-header manager-card-header">Max. Product Price</div>    
+                <div class="card-body">
+                    <div class="percentage">$75</div>
+                </div>     
+            </div>
+        </div>
+        <div class="col-md-3 col-3">
+            <div class="card manager-card-style">
+                <div class="card-header manager-card-header">Min. Product Price</div>    
+                <div class="card-body">
+                    <div class="percentage">$10</div>
+                </div>     
+            </div>
+        </div> 
+        <div class="col-md-3 col-3">
+            <div class="card manager-card-style"  data-toggle="tooltip" title="Average Price = Sum of store price to date ➗ Number of Stores to date For example (($75 + $34 + $25 + $10) ➗ 4 stores) = $85">
+                <div class="card-header manager-card-header">Average Product Price</div>    
+                <div class="card-body">
+                    <div class="percentage">$85</div>
+                </div>     
+            </div>
+        </div> 
+        <div class="col-md-3 col-3">
+            <div class="card manager-card-style"  data-toggle="tooltip" title="Competitor Average Price = Sum of Competitor Product price to date ➗ Number of Stores to date For example (($65 + $20 + $30 + $50) ➗ 4 stores) = $41.25">
+                <div class="card-header manager-card-header">Competitor Product Average Price</div>    
+                <div class="card-body">
+                    <div class="percentage">$41.25</div>
+                </div>     
+            </div>
+        </div>
+
+    </div>
+
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
             <div class=" m-3 float-end d-flex">
@@ -274,6 +346,10 @@
             mode: "range",
             });
     });
+    function getProductData(data)
+    {
+        alert('need to set avg in below card');
+    }
 
     
     // document.getElementById('clearDate').addEventListener('click', function () {
@@ -325,6 +401,10 @@
         const timeSheetTable = document.getElementById('pricaAuditDatatable');
         downloadTable(timeSheetTable);
     });
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 @endsection

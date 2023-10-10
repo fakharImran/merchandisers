@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
@@ -42,10 +43,20 @@ class BusinessOverviewController extends Controller
         }
         $products = Product::whereIn('id', $products)->get();
         
+        $categories = [];
+
+        foreach ($products as $product) {
+            $productCategories = $product->category->pluck('id')->toArray(); // Pluck product IDs
+            $categories = array_merge($categories, $productCategories); // Merge product IDs
+        }
+        $categories = Category::whereIn('id', $categories)->get();
+        // dd($categories);
+
+        
         $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.businessOverview', compact('userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.businessOverview', compact('userArr', 'name',  'stores','allLocations', 'products', 'categories'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

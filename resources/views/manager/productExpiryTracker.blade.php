@@ -51,7 +51,7 @@
     }
     /* Define a CSS class to apply the background image */
 </style>
-<div class="container">
+<div class="container product-expiry">
 
     {{-- {{dd($userArr)}} --}}
     <div  class="row d-flex align-items-center col-actions" style="max-width: 99%; margin: 1px auto;">
@@ -140,38 +140,38 @@
     </div>
     <br>
     <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
-        <div class="col-md-3 col-3 p-3">
+        <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header">Stores with Expire Products</div>    
-                <div class="card-body">
-                    <div><b>0.0</b></div>
+                <div class="card-header manager-card-header">Number of Stores with Expired Products</div>    
+                <div class="card-body content">
+                    <small class="text-secondary">
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-3 p-3">
+
+        <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header">Total Categories with Expired Products</div>    
-                <div class="card-body">
-                    <div><b>0.0</b></div>
+                <div class="card-header manager-card-header">Total Categories with expired products</div>    
+                <div class="card-body content">
+                    <small class="text-secondary">
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-3 p-3">
+        <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
-                <div class="card-header manager-card-header">Expired Products</div>    
-                <div class="card-body">
-                    <div><b>0.0</b></div>
+                <div class="card-header manager-card-header">Number of Expired Products</div>    
+                <div class="card-body content">
+                    <small class="text-secondary">
+                    </small>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-3 p-3">
-            <div class="card manager-card-style">
-                <div class="card-header manager-card-header">Near Dated Products</div>    
-                <div class="card-body">
-                    <div><b>0.0</b></div>
-                </div>
-            </div>
-        </div>
+
     </div>
     <div class="row pt-5" style="     margin: 1px auto; font-size: 12px;">
         <div class="col-12">
