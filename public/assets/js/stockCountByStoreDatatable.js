@@ -1,4 +1,3 @@
-
 function formatDate(date) {
     // Define an array of month names
     const monthNames = [
@@ -58,7 +57,7 @@ function createLastDaysDates(data, startDate = 0, endDate = 0)
          });
  
          // Calculate the total stock for the current day
-         const totalStock = filteredData.reduce((acc, element) => acc + element['stock'], 0);
+         const totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stock']), 0);
          previousSevenDays.push(totalStock);
      }
  
@@ -75,6 +74,7 @@ function createLastDaysDates(data, startDate = 0, endDate = 0)
 //create last week dates
 function createLastWeeksDates(data, startDate = 0, endDate = 0)
 {
+    
     // Initialize an array to store the previous 6 weeks
     const previousWeeks = [];
 
@@ -126,7 +126,7 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0)
         data.forEach(element => {
             chkDate = element['date'];
             if (formatDateYMD(week.startDate) <= chkDate && formatDateYMD(week.endDate) >= chkDate) {
-                totalStock += element['stock'];
+                totalStock += parseInt(element['stock']);
             } else {
             }
         });
@@ -206,7 +206,7 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
         data.forEach(element => {
             const chkDate = new Date(element.date);
             if (chkDate >= month.startDate && chkDate <= month.endDate) {
-                totalStock += element.stock;
+                totalStock +=  parseInt(element.stock);
             }
         });
         monthArray.push(totalStock);
@@ -299,21 +299,38 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
 //     periodData = weekarray.reverse();
 //     labels = previousWeeksArray.reverse();
 // }
-createLastDaysDates(chartData);
+createLastMonthsDates(convertedToChartData);
 
 function changePeriod(e) {
     console.log(e.value);
     switch (e.value) {
         case 'Daily':
+            
+            createLastDaysDates(convertedToChartData);
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = periodData;
+            myChartJS.update();
             graphFormat = 'days';
             break;
         case 'Weekly':
+            createLastWeeksDates(convertedToChartData);
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = periodData;
+            myChartJS.update();
             graphFormat = 'weeks';
             break;
         case 'Monthly':
+            createLastMonthsDates(convertedToChartData);
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = periodData;
+            myChartJS.update();
             graphFormat = 'months';
             break;
         default:
+            createLastDaysDates(convertedToChartData);
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = periodData;
+            myChartJS.update();
             graphFormat = 'days';
             break;
     }
@@ -321,6 +338,7 @@ function changePeriod(e) {
 const data = {
     labels: labels,
     datasets: [{
+        label:'Stock Count',
         backgroundColor: '#1892C0',
         borderColor: 'rgb(255, 99, 132)',
         // data: periodData,
@@ -397,6 +415,7 @@ function changeGraph(table) {
         var inputString = element[13];
         colData.push({ 'date': formatDateYMD(currentDate1), 'stock': inputString });
     });
+    console.log(colData);
     return colData;
 }
 
@@ -447,19 +466,19 @@ $(document).ready(function () {
            
         }
         // Empty the dropdown to remove previous options
-        var convertedToChartData = changeGraph(table);
+        convertedToChartData = changeGraph(table);
         switch (graphFormat) {
             case 'days':
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
             case 'weeks':
-                createLastWeeksDates(convertedToChartData , startDate, endDate);
+                createLastWeeksDates(convertedToChartData);
                 break;
             case 'months':
-                createLastMonthsDates(convertedToChartData , startDate, endDate);
+                createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -472,20 +491,20 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(1).search(this.value).draw();
-        var convertedToChartData = changeGraph(table);
+        convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
             case 'days':
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
             case 'weeks':
-                createLastWeeksDates(convertedToChartData , startDate, endDate);
+                createLastWeeksDates(convertedToChartData);
                 break;
             case 'months':
-                createLastMonthsDates(convertedToChartData , startDate, endDate);
+                createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -496,20 +515,20 @@ $(document).ready(function () {
     $('#category-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        var convertedToChartData = changeGraph(table);
+        convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
             case 'days':
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
             case 'weeks':
-                createLastWeeksDates(convertedToChartData , startDate, endDate);
+                createLastWeeksDates(convertedToChartData);
                 break;
             case 'months':
-                createLastMonthsDates(convertedToChartData , startDate, endDate);
+                createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -520,20 +539,20 @@ $(document).ready(function () {
         // const searchValue = this.value.trim();
         table.column(5).search(this.value ? `^${this.value}$` : '', true, false).draw();
         console.log(this.value);
-        var convertedToChartData = changeGraph(table);
+        convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
             case 'days':
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
             case 'weeks':
-                createLastWeeksDates(convertedToChartData , startDate, endDate);
+                createLastWeeksDates(convertedToChartData);
                 break;
             case 'months':
-                createLastMonthsDates(convertedToChartData , startDate, endDate);
+                createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -546,20 +565,20 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // console.log("search product", searchValue);
-        var convertedToChartData = changeGraph(table);
+        convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
             case 'days':
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
             case 'weeks':
-                createLastWeeksDates(convertedToChartData , startDate, endDate);
+                createLastWeeksDates(convertedToChartData);
                 break;
             case 'months':
-                createLastMonthsDates(convertedToChartData , startDate, endDate);
+                createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -599,7 +618,7 @@ $(document).ready(function () {
             }
             var dateList = dateRange(startDate, endDate);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
-            var convertedToChartData = changeGraph(table);
+            convertedToChartData = changeGraph(table);
             switch (graphFormat) {
                 case 'days':
                     createLastDaysDates(convertedToChartData , startDate, endDate);
@@ -629,25 +648,24 @@ $(document).ready(function () {
         endDate = 0;
         startDate = 0;
         // table.column(0).search('').draw();
-        var convertedToChartData = changeGraph(table);
+        convertedToChartData = changeGraph(table);
         switch (graphFormat) {
             case 'days':
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
             case 'weeks':
-                createLastWeeksDates(convertedToChartData , startDate, endDate);
+                createLastWeeksDates(convertedToChartData);
                 break;
             case 'months':
-                createLastMonthsDates(convertedToChartData , startDate, endDate);
+                createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData , startDate, endDate);
+                createLastDaysDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = periodData;
         myChartJS.update();
         document.getElementById('period-search').value = 'Date Range';
-
     });
 });

@@ -161,6 +161,8 @@
         </div>
     </div>
     <br>
+   
+    
     <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
         <div class="col-md-3 col-6 p-4">
             <div class="card manager-card-style">
@@ -172,7 +174,12 @@
                             echo $todayDate->format('Y-m-d');
                         @endphp 
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 / 100</span></div>                
+                    @php
+                        $totalStores=$stores->unique('name_of_store')->count();
+                        $uniqueStores = $outOfStockData->unique('store_id')->sort();
+                        $uniqueStoreCount = $uniqueStores->count();
+                    @endphp
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueStoreCount}} /{{$totalStores}}</span></div>                
                 </div>
             </div>
         </div>
@@ -186,7 +193,12 @@
                             echo $todayDate->format('Y-m-d');
                         @endphp 
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 / 100</span></div>                
+                    @php
+                        $totalCategories= $categories->unique('category')->count();
+                        $uniqueCategories = $outOfStockData->unique('category_id')->sort();
+                        $uniqueCategoryCount = $uniqueCategories->count();
+                    @endphp 
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueCategoryCount}} / {{$totalCategories}}</span></div>                
                 </div>
             </div>
         </div>
@@ -200,7 +212,12 @@
                             echo $todayDate->format('Y-m-d');
                         @endphp 
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 / 100</span></div>                
+                    @php
+                        $totalProducts= $products->unique('product_name')->count();
+                        $uniqueProducts = $outOfStockData->unique('product_id')->sort();
+                        $uniqueProductCount = $uniqueProducts->count();
+                    @endphp 
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueProductCount}} / {{$totalProducts}}</span></div>                
                 </div>
             </div>
         </div>

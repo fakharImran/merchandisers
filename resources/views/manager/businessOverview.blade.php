@@ -158,7 +158,10 @@
                 </select>   
             </div>
         </div>
-    </div>
+    </div>.
+    @php
+        $sumTotalStock=0;
+    @endphp
     <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
         <div class="col-md-3-5 col-sm-3 col-6 pt-2">
             <div class="card manager-card-style">
@@ -170,7 +173,8 @@
                             echo $todayDate->format('Y-m-d');
                         @endphp 
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">0 / 100</div>                </div>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span>{{$sumTotalStock}}</div>                
+                </div>
             </div>
         </div>
         <div class="col-md-3-5 col-sm-3 col-6 pt-2">
@@ -183,7 +187,13 @@
                             echo $todayDate->format('Y-m-d');
                         @endphp 
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">0 / 100</div>                
+
+                     @php
+                            $totalStoresOfMerchandiserCheckin=$stores->unique('name_of_store')->count();
+
+                        @endphp
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$totalStoresOfMerchandiserCheckin}}</span> / {{$systemStoreCount}}</div>
+                
                 </div>
             </div>
         </div>
@@ -195,9 +205,15 @@
                         @php
                             $todayDate = (new DateTime());
                             echo $todayDate->format('Y-m-d');
-                        @endphp 
+                        @endphp
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span>  100</div>                
+                        @php
+                            $totalStores=$stores->unique('name_of_store')->count();
+
+                            $uniqueStores = $outOfStockData->unique('store_id')->sort();
+                            $uniqueStoreCount = $uniqueStores->count();
+                        @endphp
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueStoreCount}}</span> / {{$totalStores}}</div>
                 </div>
             </div>
         </div>
@@ -211,7 +227,12 @@
                             echo $todayDate->format('Y-m-d');
                         @endphp 
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
+                    @php
+                        $totalProducts= $products->unique('product_name')->count();
+                        $uniqueProducts = $outOfStockData->unique('product_id')->sort();
+                        $uniqueProductCount = $uniqueProducts->count();
+                    @endphp 
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueProductCount}}</span> / {{$totalProducts}}</div>                
                 </div>
             </div>
         </div>
@@ -225,7 +246,14 @@
                             echo $todayDate->format('Y-m-d');
                         @endphp 
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 27px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
+                    @php
+                        $totalStores=$stores->unique('name_of_store')->count();
+
+                        $uniqueStores = $productExpiryTrackerData->unique('store_id')->sort();
+                        $uniqueStoreCount = $uniqueStores->count();
+                    @endphp
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueStoreCount}} /</span> {{$totalStores}}</div>                
+                
                 </div>
             </div>
         </div>
@@ -235,12 +263,12 @@
             <div style="width: 900px; margin: auto;">
                 <div class="row d-flex">
                     <div class="col-4">
-                        <label for="merchandiser-search" class="form-label filter merchandiser">Total stocks of product packed each day</label>
+                        <label for="merchandiser-search" class="form-label filter merchandiser">Stock Level of products in store </label>
                     </div>
                     <div class="col-4">
                         <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select"  id="casesorunits">
                             <option class="text-secondary" value="" selected disabled>Select Case or Units </option>
-                            <option value="Total" >Total</option>
+                            
                             <option value="Unit">Unit</option>
                             <option value="Case">Case</option>
                         </select>              
@@ -260,10 +288,25 @@
             </div>
         </div>
     </div>
+    @php
+        $totalHourworked=0;
+        $chartDateArray = array();
+        $chartStockArray = array();
+        $i=1;
+    @endphp
+    @if ($stockCountData!=null)
+        @foreach ($stockCountData as $stockCount)
+            @php
+                // dd($stockCount);
+                $totalStock=$stockCount['stock_on_shelf']+$stockCount['stock_packed']+$stockCount['stock_in_store_room'];
+                $date= explode(' ', $stockCount->created_at);
+                $sumTotalStock+= $totalStock;
+                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0]]);
+            @endphp
+        @endforeach
+    @endif      
 
-   
-
-    
+    {{-- {{dd($chartStockArray)}} --}}
     
     {{-- <div class="row">
         <div class="col-12">
@@ -278,30 +321,23 @@
             </button>
         </div>
     </div> --}}
-    @php
-    $totalHourworked=0;
-    $chartDateArray = array();
-    $chartHoursArray = array();
-    $i=0;
-@endphp
+     {{-- document.getElementById('total_stock_count').innerHTML = {{$sumTotalStock}};
+     document.getElementById('opening_week_stock').innerHTML = {{$sumOpeningWeekStock}};
+    document.getElementById('closing_week_stock').innerHTML = {{$sumClosingWeekStock}}; --}}
 </div>
 
 <script>
+    
     var startDate= 0;
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
-
-
-
-    var labels = ['day 1', 'day 2', 'day 3', 'day 4', 'day 5', 'day 6', 'day 7'];
-
-    var period = 'day';
-    var periordData = [23,23,23,23,34,45, 12];
     
+    var graphFormat = 'days';
 
-    // var chartData =  {{ Js::from($chartHoursArray) }};
-    // console.log(chartData, "chart datwaaaaaa");
+    var labels = [];
+
+    var convertedToChartData =  {{ Js::from($chartStockArray) }};
 </script>
 
 

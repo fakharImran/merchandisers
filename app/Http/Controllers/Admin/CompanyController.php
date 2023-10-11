@@ -31,6 +31,7 @@ class CompanyController extends Controller
             $company->updated_at = convertToTimeZone($company->updated_at, 'UTC', $userTimeZone);
         }
 
+        
         return view('admin.company.index', compact('companies'), ['pageConfigs' => $pageConfigs]);
     }
 

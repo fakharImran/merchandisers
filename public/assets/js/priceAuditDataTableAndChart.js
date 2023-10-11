@@ -167,10 +167,85 @@ $(document).ready(function () {
     });
 
     $('#product-search').on('change', function () {
-        const searchValue = this.value.trim();
-        table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        console.log("search product", searchValue);
+        console.log("pakistan");
 
+        const searchValue = this.value.trim();
+        var minProductPrice = Number.MAX_VALUE;
+        var maxProductPrice = Number.MIN_VALUE;
+
+        console.log("Initial minProductPrice:", minProductPrice);
+        console.log("Initial maxProductPrice:", maxProductPrice);
+
+        table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        var sumProductPrices = 0;
+        var sumCompititorProductPrices = 0;
+        var numberOfStore = 0; // Initialize the count of unique stores
+
+        // Use a Set to keep track of unique stores
+        var uniqueStores = new Set();
+
+        // Iterate over the visible rows and calculate the minimum and maximum product prices
+        table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+            const data = this.data();
+            var store = data[1]; // Assuming column 1 contains the store
+            var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
+            var compititorProductPrice = parseFloat(data[10]); // Assuming column 6 contains the product price
+            sumCompititorProductPrices+=compititorProductPrice;
+
+            console.log('dataaa', data);
+
+            if (!isNaN(productPrice)) {
+                sumProductPrices += productPrice;
+                uniqueStores.add(store);
+
+                if (productPrice < minProductPrice) {
+                    minProductPrice = productPrice;
+                }
+
+                if (productPrice > maxProductPrice) {
+                    maxProductPrice = productPrice;
+                }
+            }
+        });
+
+        // Calculate the average product price after the loop
+        numberOfStore = uniqueStores.size; // Count of unique stores
+        var averageProductPrice = sumProductPrices / numberOfStore;
+        var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStore;
+
+        console.log("Minimum product price:", minProductPrice);
+        console.log("Maximum product price:", maxProductPrice);
+        console.log("Average product price:", averageProductPrice, sumProductPrices, numberOfStore);
+        console.log("Average compititor product price:", averageCompititorProductPrice, sumCompititorProductPrices, numberOfStore);
+
+        document.getElementById('maxProductPrice').innerHTML = minProductPrice;
+        document.getElementById('minProductPrice').innerHTML = maxProductPrice;
+        document.getElementById('averageProductPrice').innerHTML = averageProductPrice;
+        document.getElementById('compititorProductPrice').innerHTML = averageCompititorProductPrice;
+
+
+        // var priceComparison = document.getElementById('price_comparison');
+        
+        // if (averageCompititorProductPrice > parseFloat(priceComparison.innerHTML)) 
+        // {
+        //     priceComparison.style.textAlign = 'center';
+        //     priceComparison.style.color = '#1892C0';
+        //     priceComparison.style.fontSize = '45px';
+        //     priceComparison.style.fontFamily = 'Inter';
+        //     priceComparison.style.fontWeight = '700';
+        //     priceComparison.style.wordWrap = 'break-word';
+        // }
+        // else if(averageCompititorProductPrice < parseFloat(priceComparison.innerHTML))  
+        // {
+        //     priceComparison.style.color = '#1BC018';
+        // }
+        // else
+        // {
+        //     priceComparison.style.color = '#929293';
+        // }
+        // console.log(priceComparison.style.color);
+
+        
         if(searchValue!='')
         {
         var convertedToChartData = changeGraph(table);

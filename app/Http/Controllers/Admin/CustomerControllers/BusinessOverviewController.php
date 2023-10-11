@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use App\Models\User;
+use App\Models\Store;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\OutOfStock;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
+use App\Models\StockCountByStores;
 use App\Http\Controllers\Controller;
+use App\Models\ProductExpiryTracker;
 use Illuminate\Support\Facades\Auth;
 
 class BusinessOverviewController extends Controller
@@ -42,7 +46,7 @@ class BusinessOverviewController extends Controller
             $products = array_merge($products, $storeProducts); // Merge product IDs
         }
         $products = Product::whereIn('id', $products)->get();
-        
+         
         $categories = [];
 
         foreach ($products as $product) {
@@ -51,12 +55,36 @@ class BusinessOverviewController extends Controller
         }
         $categories = Category::whereIn('id', $categories)->get();
         // dd($categories);
+        $stockCountByStoreArr = [];
+        foreach ($stores as $store) {
+            $storestockCountByStoreData = $store->stockCountByStores->pluck('id')->toArray(); // Pluck product IDs
+            $stockCountByStoreArr = array_merge($stockCountByStoreArr, $storestockCountByStoreData); // Merge product IDs
+        }
+        // dd($stockCountByStoreArr);
+        $stockCountData = StockCountByStores::whereIn('id', $stockCountByStoreArr)->get();
+        
+        $outOfStockIDArr = [];
+        foreach ($stores as $store) {
+            $outOfStocksData = $store->outOfStocks->pluck('id')->toArray(); // Pluck product IDs
+            $outOfStockIDArr = array_merge($outOfStockIDArr, $outOfStocksData); // Merge product IDs
+        }
+        // dd($outOfStockIDArr);
+        $outOfStockData = OutOfStock::whereIn('id', $outOfStockIDArr)->get();
 
+        $productExpiryTrackerIDArr = [];
+        foreach ($stores as $store) {
+            $productExpiryTrackersData = $store->productExpiryTrackers->pluck('id')->toArray(); // Pluck product IDs
+            $productExpiryTrackerIDArr = array_merge($productExpiryTrackerIDArr, $productExpiryTrackersData); // Merge product IDs
+        }
+        // dd($productExpiryTrackerIDArr);
+        $productExpiryTrackerData = ProductExpiryTracker::whereIn('id', $productExpiryTrackerIDArr)->get();
+        
+        $systemStoreCount = Store::count();
         
         $userId=$user->id;
         $name=$user->name;
      
-        return view('manager.businessOverview', compact('userArr', 'name',  'stores','allLocations', 'products', 'categories'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.businessOverview', compact('systemStoreCount','productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

@@ -191,12 +191,51 @@
             {{-- <div class=" bullet" style="background-color: green;"> Your Product</div><br>
             <div class= "bullet"  style="background-color: blue;"> Your Compititor Product</div> --}}
         </div>
-
+            {{-- @php
+                $priceComparison=0;
+                $sumStorePrice=0;
+                $sumCompititorProductPrice=0;
+            @endphp --}}
         <div class="col-md-3 col-3">
             <div class="card manager-card-style "  data-toggle="tooltip" title="Price Comparison index = ((Store Price ➗ Competitor Product Price) x 100) - 100">
                     <div class="card-header manager-card-header">Price Comparison Index</div>    
                     <div class="card-body">
-                        <div class="percentage">46%</div>
+                        <div class="percentage" id="price_comparison">
+                            @php
+                                if ($priceAuditData != null)
+                                {
+                                    $latestPriceAudit = null;
+                                    $latestCreatedAt = null;
+                            
+                                    // Iterate through each price audit in the array
+                                    foreach ($priceAuditData as $priceAudit) 
+                                    {
+                                        // Check if this price audit has a later created_at timestamp than the current latest
+                                        if ($latestPriceAudit == null || $priceAudit->created_at > $latestCreatedAt) 
+                                        {
+                                            $latestPriceAudit = $priceAudit;
+                                            $latestCreatedAt = $priceAudit->created_at;
+                                        }
+                                    }
+                                        // $priceComparison=number_format((($sumStorePrice/$sumCompititorProductPrice)*100)-100, 2);
+                            
+                                    // At this point, $latestPriceAudit will contain the latest PriceAudit object
+                                    $priceComarison= number_format((($latestPriceAudit->product_store_price/$latestPriceAudit->competitor_product_price)*100)-100, 2);
+                                    if($priceComarison>0)
+                                    {
+                                        echo '<span style="color:  #1892C0">'.$priceComarison.'</span>';                                
+                                    }
+                                    elseif ($priceComarison<0) {
+                                        echo '<span style="color:  #1BC018">'.$priceComarison.'</span>';                                
+                                    }
+                                    else
+                                    {
+                                        echo '<span style="color:  #929293">'.$priceComarison.'</span>';                                
+                                    }
+                                }
+                            @endphp
+
+                        </div>
                     </div>     
             </div>
         </div>
@@ -216,7 +255,7 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Max. Product Price</div>    
                 <div class="card-body">
-                    <div class="percentage">$75</div>
+                    <div class="percentage" id="maxProductPrice">0</div>
                 </div>     
             </div>
         </div>
@@ -224,7 +263,7 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Min. Product Price</div>    
                 <div class="card-body">
-                    <div class="percentage">$10</div>
+                    <div class="percentage" id="minProductPrice">0</div>
                 </div>     
             </div>
         </div> 
@@ -232,7 +271,7 @@
             <div class="card manager-card-style"  data-toggle="tooltip" title="Average Price = Sum of store price to date ➗ Number of Stores to date For example (($75 + $34 + $25 + $10) ➗ 4 stores) = $85">
                 <div class="card-header manager-card-header">Average Product Price</div>    
                 <div class="card-body">
-                    <div class="percentage">$85</div>
+                    <div class="percentage" id="averageProductPrice">0</div>
                 </div>     
             </div>
         </div> 
@@ -240,7 +279,7 @@
             <div class="card manager-card-style"  data-toggle="tooltip" title="Competitor Average Price = Sum of Competitor Product price to date ➗ Number of Stores to date For example (($65 + $20 + $30 + $50) ➗ 4 stores) = $41.25">
                 <div class="card-header manager-card-header">Competitor Product Average Price</div>    
                 <div class="card-body">
-                    <div class="percentage">$41.25</div>
+                    <div class="percentage" id="compititorProductPrice">0</div>
                 </div>     
             </div>
         </div>
@@ -309,7 +348,12 @@
                                     <td class="tdclass">{{$priceAudit->product->product_name}}</td>
                                     <td class="tdclass">{{$priceAudit->Product_SKU}}</td>
                                     <td class="tdclass">{{$priceAudit->product_store_price}}</td>
-                                    <td class="tdclass">{{$priceAudit->tax_in_percentage}}</td>
+                                   
+                                    <td class="tdclass">
+                                        @php
+                                            $taxAmount= ($priceAudit->product_store_price/100) * $priceAudit->tax_in_percentage;
+                                        @endphp
+                                        {{'$'.$taxAmount}}</td>
                                     <td class="tdclass">
                                         @php
                                             $totalPrice= $priceAudit->product_store_price + $priceAudit->product_store_price/100 * $priceAudit->tax_in_percentage;
@@ -323,6 +367,9 @@
                                     <td class="tdclass">{{$priceAudit->notes}}</td>
                                 </tr>
                                 @php
+                                        // $sumStorePrice+= $priceAudit->product_store_price;
+                                        // $sumCompititorProductPrice+= $priceAudit->competitor_product_price;
+                                        // $priceComparison=number_format((($sumStorePrice/$sumCompititorProductPrice)*100)-100, 2);
                                    array_push( $products_name,[$priceAudit->product->product_name, $priceAudit->competitor_product_name]);
                                     array_push($our_products_price, $totalPrice);
                                     array_push($competitor_products_price ,  $priceAudit->competitor_product_price);
@@ -346,6 +393,7 @@
     var our_products_price = [];
     var competitor_products_price =[];
     var labels = [];
+   
 // console.log('productsss', products_name, our_products_price, competitor_products_price);
     var chartData =  {{ Js::from($chartHoursArray) }};
     // console.log(chartData, "chart datwaaaaaa");

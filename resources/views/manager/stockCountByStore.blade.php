@@ -156,12 +156,15 @@
             </div>
         </div>
     </div>
+    @php
+        $sumTotalStock=0;
+    @endphp
     <div class='row  d-flex align-items-center col-actions ' style="max-width: 99%; margin: 1px auto; padding-top:20px">
         <div class="col-md-3 col-3 p-3">
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Total stock count</div>    
                 <div class="card-body">
-                    <div class="content"><h3><b>0</b></h3></div>
+                    <div  class="content"><h3><b id="total_stock_count">{{$sumTotalStock}}</b></h3></div>
                 </div>
             </div>
         </div>
@@ -170,13 +173,38 @@
                 <div class="card-header manager-card-header">Opening Week Stock</div>    
                 <div class="card-body">
                     <div  class="content">
+                        @php
+                            
+                        @endphp
                         <small class="text-secondary">
                             @php
+                                $sumOpeningWeekStock=0;
+
                                 $sevenDaysAgo = (new DateTime())->sub(new DateInterval('P7D'));
-                                echo $sevenDaysAgo->format('Y-m-d');
+                                $sevenDaysAgo = $sevenDaysAgo->format('Y-m-d');
+                                echo $sevenDaysAgo;
+                                if($stockCountData!=null)
+                            {
+                                foreach ($stockCountData as $key => $stockCount) {
+
+                                    $totalStock=$stockCount['stock_on_shelf']+$stockCount['stock_packed']+$stockCount['stock_in_store_room'];
+                                    
+                                    $date= explode(' ', $stockCount->created_at);
+                                    $stockDate= $date[0];
+
+                                    $stockDate = \Carbon\Carbon::parse($stockDate);
+                                    $sevenDaysAgo = \Carbon\Carbon::parse($sevenDaysAgo);
+
+                                    // Compare the dates
+                                    if ($stockDate->lessThanOrEqualTo($sevenDaysAgo)) {
+                                        $sumOpeningWeekStock+= $totalStock;
+                                    } 
+                                }
+                            }
+
                             @endphp 
                         </small>
-                        <div><h3><b>0</b></h3></div>
+                        <div><h3><b id="opening_week_stock"></b></h3></div>
                     </div>
                 </div>
             </div>
@@ -188,11 +216,33 @@
                     <div  class="content">
                         <small class="text-secondary">
                             @php
-                                $sevenDaysAgo = (new DateTime());
-                                echo $sevenDaysAgo->format('Y-m-d');
+                                $sumClosingWeekStock=0;
+
+                                $todayDate = (new DateTime());
+                                echo $todayDate->format('Y-m-d');
+
+                                if($stockCountData!=null)
+                            {
+                                foreach ($stockCountData as $key => $stockCount) {
+
+                                    $totalStock=$stockCount['stock_on_shelf']+$stockCount['stock_packed']+$stockCount['stock_in_store_room'];
+                                    
+                                    $date= explode(' ', $stockCount->created_at);
+                                    $stockDate= $date[0];
+
+                                    $stockDate = \Carbon\Carbon::parse($stockDate);
+                                    $todayDate = \Carbon\Carbon::parse($todayDate);
+
+                                    // Compare the dates
+                                    if ($stockDate->lessThanOrEqualTo($todayDate)){
+                                        $sumClosingWeekStock+= $totalStock;
+                                    } 
+                                }
+                            }
+
                             @endphp 
                         </small>
-                        <div><h3><b>0</b></h3></div>
+                        <div><h3><b id="closing_week_stock">0</b></h3></div>
                     </div>
                 </div>
             </div>
@@ -201,7 +251,7 @@
             <div class="card manager-card-style"  data-toggle="tooltip" title="Average Stock = Opening Week stock / Closing Week Stock">
                 <div class="card-header manager-card-header">Average Stock</div>    
                 <div class="card-body">
-                    <div  class="content"><h3><b>0</b></h3></div>
+                    <div  class="content"><h3><b>{{ number_format($sumOpeningWeekStock / $sumClosingWeekStock, 3    ) }}</b></h3></div>
                 </div>
             </div>
         </div>
@@ -211,12 +261,11 @@
             <div style="width: 800px; margin: auto;">
                 <div class="row d-flex">
                     <div class="col-md-5 col-6">
-                        <label for="" class="form-label filter merchandiser">Total stocks of product packed each day</label>
+                        <label for="" class="form-label filter merchandiser">Stock Level of products in store </label>
                     </div>
                     <div class="col-md-3 col-6">
                         <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select "  id="casesorunits">
                             <option class="text-secondary" value="" selected disabled>Select Case or Units </option>
-                            <option value="Total" >Total</option>
                             <option value="Unit">Unit</option>
                             <option value="Case">Case</option>
                         </select>              
@@ -264,6 +313,21 @@
                 <table id="stockCoutntByStoreDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
+                            {{-- <th class="thclass" scope="col">Date</th>
+                            <th class="thclass" scope="col">Name of Store</th>
+                            <th class="thclass" scope="col">Location</th>
+                            <th class="thclass" scope="col">Category</th>
+                            <th class="thclass" scope="col">Product Name</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
+                            <th class="thclass" scope="col">Product Number</th>
+                            <th class="thclass" scope="col">Stocks on Shelf (Units)</th>
+                            <th class="thclass" scope="col">Stocks on Shelf (Cases)</th>
+                            <th class="thclass" scope="col">Stocks Packed (Units)</th>
+                            <th class="thclass" scope="col">Stocks Packed (Cases)</th>
+                            <th class="thclass" scope="col">Stocks in Storeroom (Units)</th>
+                            <th class="thclass" scope="col">Stocks in Storeroom  (Cases)</th>
+                            <th class="thclass" scope="col">Total Stocks</th>
+                             --}}
                             <th class="thclass" scope="col">Date</th>
                             <th class="thclass" scope="col">Name of Store</th>
                             <th class="thclass" scope="col">Location</th>
@@ -271,12 +335,12 @@
                             <th class="thclass" scope="col">Product Name</th>
                             <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Product Number</th>
-                            <th class="thclass" scope="col">Stocks on Shelf (Qty)</th>
-                            <th class="thclass" scope="col">Stocks on Shelf (units/cases)</th>
-                            <th class="thclass" scope="col">Stocks Packed (Qty)</th>
-                            <th class="thclass" scope="col">Stocks Packed (units/cases)</th>
-                            <th class="thclass" scope="col">Stocks in Storeroom (Qty)</th>
-                            <th class="thclass" scope="col">Stocks in Storeroom  (units/cases)</th>
+                            <th class="thclass" scope="col">Stocks on Shelf (Units)</th>
+                            <th class="thclass" scope="col">Stocks on Shelf (Cases)</th>
+                            <th class="thclass" scope="col">Stocks Packed (Units)</th>
+                            <th class="thclass" scope="col">Stocks Packed (Cases)</th>
+                            <th class="thclass" scope="col">Stocks in Storeroom (Units)</th>
+                            <th class="thclass" scope="col">Stocks in Storeroom  (Cases)</th>
                             <th class="thclass" scope="col">Total Stocks</th>
                         </tr>
                     </thead>
@@ -319,10 +383,12 @@
                                 <td class="tdclass">{{$stockCount->stock_in_store_room}}</td>
                                 <td class="tdclass">{{$stockCount->stock_in_store_room_unit}}</td>
                                 <td class="tdclass">{{$totalStock}}</td>
+                                @php
+                                    $sumTotalStock+= $totalStock;
+                                @endphp
                             </tr>
                             @php
-                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0]])
-                                
+                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0]]);
                             @endphp
                         @endforeach
                       @endif                     
@@ -333,8 +399,11 @@
         </div>
     </div>
 </div>
-
+{{-- {{dd($chartStockArray);}} --}}
 <script>
+    document.getElementById('total_stock_count').innerHTML = {{$sumTotalStock}};
+    document.getElementById('opening_week_stock').innerHTML = {{$sumOpeningWeekStock}};
+    document.getElementById('closing_week_stock').innerHTML = {{$sumClosingWeekStock}};
     var startDate= 0;
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};
@@ -342,13 +411,9 @@
     
     var graphFormat = 'days';
 
-    var labels = ['day 1', 'day 2', 'day 3', 'day 4', 'day 5', 'day 6', 'day 7'];
+    var labels = [];
 
-    var period = 'day';
-    // var periodData = [23,23,23,23,34,45, 12];
-    
-
-    var chartData =  {{ Js::from($chartStockArray) }};
+    var convertedToChartData =  {{ Js::from($chartStockArray) }};
     // console.log(chartData, "chart datwaaaaaa");
 </script>
 
@@ -369,34 +434,6 @@
 </script>
 <script>
 
-    // function downloadTable(table) {
-    //     const rows = table.getElementsByTagName('tr');
-    //     let csvContent = 'data:text/csv;charset=utf-8,';
-
-    //     // Add headers as bold and uppercase
-    //     const headers = table.querySelectorAll('thead th');
-    //     const headerText = Array.from(headers)
-    //         .map(header => header.innerText.toUpperCase())
-    //         .join(',');
-    //     csvContent += headerText + '\r\n';
-
-    //     // Add data rows
-    //     for (let i = 0; i < rows.length; i++) {
-    //         const cells = rows[i].getElementsByTagName('td');
-    //         for (let j = 0; j < cells.length; j++) {
-    //             csvContent += cells[j].innerText + ',';
-    //         }
-    //         csvContent += '\r\n';
-    //     }
-
-    //     const encodedUri = encodeURI(csvContent);
-    //     const link = document.createElement('a');
-    //     link.setAttribute('href', encodedUri);
-    //     link.setAttribute('download', 'table_data.csv');
-    //     document.body.appendChild(link);
-    //     link.click();
-        
-    // }
     function downloadTable(table) {
         const rows = table.getElementsByTagName('tr');
         let csvContent = 'data:text/csv;charset=utf-8,';

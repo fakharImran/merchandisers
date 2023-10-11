@@ -168,7 +168,12 @@
                 <div class="card-body content">
                     <small class="text-secondary">
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
+                    @php
+                        $totalStores=$stores->unique('name_of_store')->count();
+                        $uniqueStores = $productExpiryTrackerData->unique('store_id')->sort();
+                        $uniqueStoreCount = $uniqueStores->count();
+                    @endphp
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueStoreCount}} /</span> {{$totalStores}}</div>                
                 </div>
             </div>
         </div>
@@ -179,7 +184,12 @@
                 <div class="card-body content">
                     <small class="text-secondary">
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
+                    @php
+                        $totalCategories= $categories->unique('category')->count();
+                        $uniqueCategories = $productExpiryTrackerData->unique('category_id')->sort();
+                        $uniqueCategoryCount = $uniqueCategories->count();
+                    @endphp 
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueCategoryCount}} /</span> {{$totalCategories}}</div>                
                 </div>
             </div>
         </div>
@@ -189,7 +199,12 @@
                 <div class="card-body content">
                     <small class="text-secondary">
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">0 /</span> 100</div>                
+                    @php
+                        $totalProducts= $products->unique('product_name')->count();
+                        $uniqueProducts = $productExpiryTrackerData->unique('product_id')->sort();
+                        $uniqueProductCount = $uniqueProducts->count();
+                    @endphp 
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueProductCount}} /</span> {{$totalProducts}}</div>                
                 </div>
             </div>
         </div>
