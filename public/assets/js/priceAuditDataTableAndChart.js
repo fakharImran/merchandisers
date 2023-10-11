@@ -169,35 +169,12 @@ $(document).ready(function () {
     $('#product-search').on('change', function () {
         console.log("pakistan");
         const searchValue = this.value.trim();
-
-        
-        // var priceComparison = document.getElementById('price_comparison');
-        
-        // if (averageCompititorProductPrice > parseFloat(priceComparison.innerHTML)) 
-        // {
-        //     priceComparison.style.textAlign = 'center';
-        //     priceComparison.style.color = '#1892C0';
-        //     priceComparison.style.fontSize = '45px';
-        //     priceComparison.style.fontFamily = 'Inter';
-        //     priceComparison.style.fontWeight = '700';
-        //     priceComparison.style.wordWrap = 'break-word';
-        // }
-        // else if(averageCompititorProductPrice < parseFloat(priceComparison.innerHTML))  
-        // {
-        //     priceComparison.style.color = '#1BC018';
-        // }
-        // else
-        // {
-        //     priceComparison.style.color = '#929293';
-        // }
-        // console.log(priceComparison.style.color);
-
-
         if(searchValue!='')
         {
             var minProductPrice = Number.MAX_VALUE;
             var maxProductPrice = Number.MIN_VALUE;
 
+            console.log(minProductPrice, maxProductPrice);
             console.log("Initial minProductPrice:", minProductPrice);
             console.log("Initial maxProductPrice:", maxProductPrice);
 
@@ -233,22 +210,25 @@ $(document).ready(function () {
                 }
             });
 
-            // Calculate the average product price after the loop
-            numberOfStore = uniqueStores.size; // Count of unique stores
-            var averageProductPrice = sumProductPrices / numberOfStore;
-            var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStore;
+            if(minProductPrice==Number.MAX_VALUE && maxProductPrice==Number.MIN_VALUE)
+            {
+                maxProductPrice=0;
+                minProductPrice=0;
+                averageProductPrice=0;
+                averageCompititorProductPrice=0;
+            }
+            else
+            {
+                 // Calculate the average product price after the loop
+                numberOfStore = uniqueStores.size; // Count of unique stores
+                var averageProductPrice = sumProductPrices / numberOfStore;
+                var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStore;
 
-            console.log("Minimum product price:", minProductPrice);
-            console.log("Maximum product price:", maxProductPrice);
-            console.log("Average product price:", averageProductPrice, sumProductPrices, numberOfStore);
-            console.log("Average compititor product price:", averageCompititorProductPrice, sumCompititorProductPrices, numberOfStore);
-            
-            document.getElementById('minProductPrice').innerHTML = minProductPrice;
-            document.getElementById('maxProductPrice').innerHTML = maxProductPrice;
-            document.getElementById('averageProductPrice').innerHTML = averageProductPrice;
-            document.getElementById('compititorProductPrice').innerHTML = averageCompititorProductPrice;
-
-
+                document.getElementById('minProductPrice').innerHTML = minProductPrice;
+                document.getElementById('maxProductPrice').innerHTML = maxProductPrice;
+                document.getElementById('averageProductPrice').innerHTML = averageProductPrice;
+                document.getElementById('compititorProductPrice').innerHTML = averageCompititorProductPrice;
+            }
 
         var convertedToChartData = changeGraph(table);
         myChartJS.data.labels = convertedToChartData[0].products_name;
