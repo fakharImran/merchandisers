@@ -63,12 +63,6 @@ $(document).ready(function () {
             table.column(2).search('', true, false).draw(); // Clear previous search
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
-            allUniqueLocations.forEach(function (location) {
-                // Append each option into the select list
-                // Append the column data to the dropdown
-                dropdown.innerHTML = '<option value="" selected>--Select--</option>';
-                dropdown.append('<option value="' + location + '">' + location + '</option>');
-            });
         }
         // Empty the dropdown to remove previous options
     });

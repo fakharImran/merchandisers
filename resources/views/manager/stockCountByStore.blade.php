@@ -198,7 +198,7 @@
             </div>
         </div>
         <div class="col-md-3 col-3 p-3">
-            <div class="card manager-card-style"  data-toggle="tooltip" title="Price Comparison index = ((Store Price ➗ Competitor Product Price) x 100) - 100">
+            <div class="card manager-card-style"  data-toggle="tooltip" title="Average Stock = Opening Week stock / Closing Week Stock">
                 <div class="card-header manager-card-header">Average Stock</div>    
                 <div class="card-body">
                     <div  class="content"><h3><b>0</b></h3></div>
@@ -210,19 +210,19 @@
         <div class="col-12">
             <div style="width: 800px; margin: auto;">
                 <div class="row d-flex">
-                    <div class="col-4">
-                        <label for="merchandiser-search" class="form-label filter merchandiser">Total stocks of product packed each day</label>
+                    <div class="col-md-5 col-6">
+                        <label for="" class="form-label filter merchandiser">Total stocks of product packed each day</label>
                     </div>
-                    <div class="col-4">
-                        <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select"  id="casesorunits">
+                    <div class="col-md-3 col-6">
+                        <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select "  id="casesorunits">
                             <option class="text-secondary" value="" selected disabled>Select Case or Units </option>
                             <option value="Total" >Total</option>
                             <option value="Unit">Unit</option>
                             <option value="Case">Case</option>
                         </select>              
                     </div>
-                    <div class="col-4">
-                        <select onchange="changePeriod(this)" name="casesorunits" style=" padding: 10px; text-align: center; font-size: revert; "
+                    <div class="col-md-4 col-6">
+                        <select onchange="changePeriod(this)" name="periodDisplay" id="periodDisplay" style=" padding: 10px; text-align: center; font-size: revert; "
                          class=" form-select"  id="casesorunits">
                             <option class="text-secondary" value="" selected disabled>Select Chart Period Filter</option>
                             <option value="Daily">Days</option>
@@ -284,7 +284,7 @@
                     @php
                             $totalHourworked=0;
                             $chartDateArray = array();
-                            $chartHoursArray = array();
+                            $chartStockArray = array();
                             $i=1;
                     @endphp
                     
@@ -320,6 +320,10 @@
                                 <td class="tdclass">{{$stockCount->stock_in_store_room_unit}}</td>
                                 <td class="tdclass">{{$totalStock}}</td>
                             </tr>
+                            @php
+                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0]])
+                                
+                            @endphp
                         @endforeach
                       @endif                     
                         
@@ -335,15 +339,16 @@
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
-
+    
+    var graphFormat = 'days';
 
     var labels = ['day 1', 'day 2', 'day 3', 'day 4', 'day 5', 'day 6', 'day 7'];
 
     var period = 'day';
-    var periordData = [23,23,23,23,34,45, 12];
+    // var periodData = [23,23,23,23,34,45, 12];
     
 
-    // var chartData =  {{ Js::from($chartHoursArray) }};
+    var chartData =  {{ Js::from($chartStockArray) }};
     // console.log(chartData, "chart datwaaaaaa");
 </script>
 
@@ -426,7 +431,9 @@
     });
 
 
-
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 

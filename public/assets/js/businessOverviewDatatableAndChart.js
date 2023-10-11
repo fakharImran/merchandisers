@@ -202,12 +202,6 @@ $(document).ready(function () {
             table.column(2).search('', true, false).draw(); // Clear previous search
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
-            allUniqueLocations.forEach(function (location) {
-                // Append each option into the select list
-                // Append the column data to the dropdown
-                dropdown.innerHTML = '<option value="" selected>--Select--</option>';
-                dropdown.append('<option value="' + location + '">' + location + '</option>');
-            });
         }
         // Empty the dropdown to remove previous options
 
@@ -310,11 +304,11 @@ $(document).ready(function () {
         endDate = 0;
         startDate = 0;
         // table.column(8).search('').draw();
-        var convertedToChartData = changeGraph(table);
-        convertingData(convertedToChartData);
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = hoursWorked;
-        myChartJS.update();
+        // var convertedToChartData = changeGraph(table);
+        // convertingData(convertedToChartData);
+        // myChartJS.data.labels = labels;
+        // myChartJS.data.datasets[0].data = hoursWorked;
+        // myChartJS.update();
         document.getElementById('period-search').value = 'Date Range';
 
     });

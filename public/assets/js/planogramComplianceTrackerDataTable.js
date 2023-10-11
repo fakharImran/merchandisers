@@ -64,12 +64,6 @@ $(document).ready(function () {
             table.column(2).search('', true, false).draw(); // Clear previous search
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
-            allUniqueLocations.forEach(function (location) {
-                // Append each option into the select list
-                // Append the column data to the dropdown
-                dropdown.innerHTML = '<option value="" selected>--Select--</option>';
-                dropdown.append('<option value="' + location + '">' + location + '</option>');
-            });
         }
         // Empty the dropdown to remove previous options
     });
@@ -116,7 +110,7 @@ $(document).ready(function () {
              endDate = formatDateYMD(endDate);
 
              console.log(endDate, startDate);
-            table.column0.search('', true, false).draw(); // Clear previous search
+            table.column(0).search('', true, false).draw(); // Clear previous search
 
             var searchTerms = []; // Initialize an array to store search terms
             function dateRange(startDate, endDate) {
@@ -132,7 +126,7 @@ $(document).ready(function () {
             }
             var dateList = dateRange(startDate, endDate);
             console.log(dateList, 'fak');
-            table.column0.search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+            table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
          
         } else {
             console.log("The substring 'to' does not exist in the original string.");
@@ -141,7 +135,7 @@ $(document).ready(function () {
     });
 
     document.getElementById('clearDate').addEventListener('click', function (element) {
-        table.column0.search('', true, false).draw(); // Clear previous search
+        table.column(0).search('', true, false).draw(); // Clear previous search
         document.getElementById('period-search').clear;
         endDate = 0;
         startDate = 0;

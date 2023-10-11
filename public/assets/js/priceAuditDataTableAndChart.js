@@ -60,7 +60,7 @@ const config = {
         tooltips: {
             callbacks: {
                 label: function (tooltipItem, data) {
-                    return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.xLabel
+                    return data.datasets[tooltipItem.datasetIndex].label + ' Price: ' + tooltipItem.yLabel
                 }
             }
         },
@@ -97,7 +97,7 @@ function changeGraph(table) {
     console.log('umerrrr', filteredData);
 
     filteredData.forEach(element => {
-        products_name.push([element[4], element[9]]);
+        products_name.push(element[4] + " | " + element[9]);
         our_products_price.push(element[8]);
         competitor_products_price.push(element[10]);
         
@@ -149,12 +149,6 @@ $(document).ready(function () {
             table.column(2).search('', true, false).draw(); // Clear previous search location
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
-            allUniqueLocations.forEach(function (location) {
-                // Append each option into the select list
-                // Append the column data to the dropdown
-                dropdown.innerHTML = '<option value="" selected>--Select--</option>';
-                // dropdown.append('<option value="' + location + '">' + location + '</option>');
-            });
         }
     });
 

@@ -7,9 +7,9 @@
 
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> --}}
 
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script> --}}
 
 
 @endsection
@@ -173,7 +173,7 @@
             <div class="table-responsive" >
                     {{-- table-responsive --}}
                     {{-- nowrap --}}
-                <table id="mechandiserDatatable-test" class="table table-sm  table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
+                <table id="notificationDatatable" class="table table-sm  datatable table-hover  " style="border: 1px solid #ccc; min-width: 1580px; ">
                     <thead>
                         <tr>
                             <th class="thclass" scope="col">#ID</th>
@@ -194,7 +194,6 @@
                     @php
                         $i=1;
                     @endphp
-                    <tr>
                         @if($allNotifications!=null)
                             @foreach($allNotifications as $notification)
                                 <tr>
@@ -248,19 +247,6 @@
                                 </tr>
                             @endforeach
                         @endif
-                        {{-- <td> abc store</td>
-                        <td>test location</td>
-                        <td>Bevereges</td>
-                        <td>Shampain</td>
-                        <td>wisky</td>
-                        <td>this is best opportunity</td>
-                        <td>
-                            <img  src="{{asset('assets/images/pctracker1683118440.jpg.png')}}" alt="Image Description" width="100" height="100">
-                        </td> --}}
-                    </tr>
-                       @php
-                           array_push($chartHoursArray ,['product name'=>"first_product", 'price'=>50] );
-                       @endphp 
                     </tbody>
                 </table>
             </div>
@@ -269,15 +255,6 @@
     
 </div>
 
-<script>
-    var startDate= 0;
-    var endDate = 0;
-    var allStores = {!! json_encode($storesArr) !!};
-    var allUniqueLocations = {!! json_encode($locationArr) !!};
-
-    var labels = [];
-
-</script>
 
 <script src="{{ asset('assets/js/notificationsDatatable.js') }}"></script>
 {{-- @include('manager/modal/modalAddNotification') --}}
