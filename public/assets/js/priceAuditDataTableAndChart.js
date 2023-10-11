@@ -217,9 +217,9 @@ $(document).ready(function () {
         console.log("Maximum product price:", maxProductPrice);
         console.log("Average product price:", averageProductPrice, sumProductPrices, numberOfStore);
         console.log("Average compititor product price:", averageCompititorProductPrice, sumCompititorProductPrices, numberOfStore);
-
-        document.getElementById('maxProductPrice').innerHTML = minProductPrice;
-        document.getElementById('minProductPrice').innerHTML = maxProductPrice;
+        
+        document.getElementById('minProductPrice').innerHTML = minProductPrice;
+        document.getElementById('maxProductPrice').innerHTML = maxProductPrice;
         document.getElementById('averageProductPrice').innerHTML = averageProductPrice;
         document.getElementById('compititorProductPrice').innerHTML = averageCompititorProductPrice;
 
@@ -245,7 +245,7 @@ $(document).ready(function () {
         // }
         // console.log(priceComparison.style.color);
 
-        
+
         if(searchValue!='')
         {
         var convertedToChartData = changeGraph(table);
