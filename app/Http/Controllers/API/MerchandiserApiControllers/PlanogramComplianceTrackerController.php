@@ -51,7 +51,7 @@ class PlanogramComplianceTrackerController extends BaseController
                 ->whereNull('photo_after_stocking_shelf')->get();
             
                 $allPlanogram= PlanogramComplianceTracker::select('*')->where('store_location_id', $timeSheet->store_location_id)->get();
-                return $this->sendResponse(['allPlanogram'=>$allPlanogram,'nullPhotoAfterStockingShelf'=>$nullPhotoAfterStockingShelf], 'check-in');
+                return $this->sendResponse(['nullPhotoAfterStockingShelf'=>$nullPhotoAfterStockingShelf, 'categories'=>$categories, 'store_id'=> $timeSheet->store_id,'store_location_id'=>$timeSheet->store_location_id], 'check-in');
         }
 
         // for create a new visit from frontend
