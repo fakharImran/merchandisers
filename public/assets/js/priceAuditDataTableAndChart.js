@@ -212,10 +212,10 @@ $(document).ready(function () {
 
             if(minProductPrice==Number.MAX_VALUE && maxProductPrice==Number.MIN_VALUE)
             {
-                maxProductPrice=0;
-                minProductPrice=0;
-                averageProductPrice=0;
-                averageCompititorProductPrice=0;
+                document.getElementById('minProductPrice').innerHTML = 0;
+                document.getElementById('maxProductPrice').innerHTML = 0;
+                document.getElementById('averageProductPrice').innerHTML = 0;
+                document.getElementById('compititorProductPrice').innerHTML = 0;
             }
             else
             {
