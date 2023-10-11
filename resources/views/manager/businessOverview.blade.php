@@ -192,7 +192,7 @@
                             $totalStoresOfMerchandiserCheckin=$stores->unique('name_of_store')->count();
 
                         @endphp
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$totalStoresOfMerchandiserCheckin}}</span> / {{$systemStoreCount}}</div>
+                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">{{$totalStoresOfMerchandiserCheckin}} / {{$systemStoreCount}}</div>
                 
                 </div>
             </div>
