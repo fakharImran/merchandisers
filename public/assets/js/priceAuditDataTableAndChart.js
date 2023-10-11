@@ -168,62 +168,9 @@ $(document).ready(function () {
 
     $('#product-search').on('change', function () {
         console.log("pakistan");
-
         const searchValue = this.value.trim();
-        var minProductPrice = Number.MAX_VALUE;
-        var maxProductPrice = Number.MIN_VALUE;
 
-        console.log("Initial minProductPrice:", minProductPrice);
-        console.log("Initial maxProductPrice:", maxProductPrice);
-
-        table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        var sumProductPrices = 0;
-        var sumCompititorProductPrices = 0;
-        var numberOfStore = 0; // Initialize the count of unique stores
-
-        // Use a Set to keep track of unique stores
-        var uniqueStores = new Set();
-
-        // Iterate over the visible rows and calculate the minimum and maximum product prices
-        table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
-            const data = this.data();
-            var store = data[1]; // Assuming column 1 contains the store
-            var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
-            var compititorProductPrice = parseFloat(data[10]); // Assuming column 6 contains the product price
-            sumCompititorProductPrices+=compititorProductPrice;
-
-            console.log('dataaa', data);
-
-            if (!isNaN(productPrice)) {
-                sumProductPrices += productPrice;
-                uniqueStores.add(store);
-
-                if (productPrice < minProductPrice) {
-                    minProductPrice = productPrice;
-                }
-
-                if (productPrice > maxProductPrice) {
-                    maxProductPrice = productPrice;
-                }
-            }
-        });
-
-        // Calculate the average product price after the loop
-        numberOfStore = uniqueStores.size; // Count of unique stores
-        var averageProductPrice = sumProductPrices / numberOfStore;
-        var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStore;
-
-        console.log("Minimum product price:", minProductPrice);
-        console.log("Maximum product price:", maxProductPrice);
-        console.log("Average product price:", averageProductPrice, sumProductPrices, numberOfStore);
-        console.log("Average compititor product price:", averageCompititorProductPrice, sumCompititorProductPrices, numberOfStore);
         
-        document.getElementById('minProductPrice').innerHTML = minProductPrice;
-        document.getElementById('maxProductPrice').innerHTML = maxProductPrice;
-        document.getElementById('averageProductPrice').innerHTML = averageProductPrice;
-        document.getElementById('compititorProductPrice').innerHTML = averageCompititorProductPrice;
-
-
         // var priceComparison = document.getElementById('price_comparison');
         
         // if (averageCompititorProductPrice > parseFloat(priceComparison.innerHTML)) 
@@ -248,6 +195,61 @@ $(document).ready(function () {
 
         if(searchValue!='')
         {
+            var minProductPrice = Number.MAX_VALUE;
+            var maxProductPrice = Number.MIN_VALUE;
+
+            console.log("Initial minProductPrice:", minProductPrice);
+            console.log("Initial maxProductPrice:", maxProductPrice);
+
+            table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+            var sumProductPrices = 0;
+            var sumCompititorProductPrices = 0;
+            var numberOfStore = 0; // Initialize the count of unique stores
+
+            // Use a Set to keep track of unique stores
+            var uniqueStores = new Set();
+
+            // Iterate over the visible rows and calculate the minimum and maximum product prices
+            table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+                const data = this.data();
+                var store = data[1]; // Assuming column 1 contains the store
+                var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
+                var compititorProductPrice = parseFloat(data[10]); // Assuming column 6 contains the product price
+                sumCompititorProductPrices+=compititorProductPrice;
+
+                console.log('dataaa', data);
+
+                if (!isNaN(productPrice)) {
+                    sumProductPrices += productPrice;
+                    uniqueStores.add(store);
+
+                    if (productPrice < minProductPrice) {
+                        minProductPrice = productPrice;
+                    }
+
+                    if (productPrice > maxProductPrice) {
+                        maxProductPrice = productPrice;
+                    }
+                }
+            });
+
+            // Calculate the average product price after the loop
+            numberOfStore = uniqueStores.size; // Count of unique stores
+            var averageProductPrice = sumProductPrices / numberOfStore;
+            var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStore;
+
+            console.log("Minimum product price:", minProductPrice);
+            console.log("Maximum product price:", maxProductPrice);
+            console.log("Average product price:", averageProductPrice, sumProductPrices, numberOfStore);
+            console.log("Average compititor product price:", averageCompititorProductPrice, sumCompititorProductPrices, numberOfStore);
+            
+            document.getElementById('minProductPrice').innerHTML = minProductPrice;
+            document.getElementById('maxProductPrice').innerHTML = maxProductPrice;
+            document.getElementById('averageProductPrice').innerHTML = averageProductPrice;
+            document.getElementById('compititorProductPrice').innerHTML = averageCompititorProductPrice;
+
+
+
         var convertedToChartData = changeGraph(table);
         myChartJS.data.labels = convertedToChartData[0].products_name;
         myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
@@ -256,6 +258,11 @@ $(document).ready(function () {
         }
         else
         {
+            document.getElementById('minProductPrice').innerHTML = 0;
+            document.getElementById('maxProductPrice').innerHTML = 0;
+            document.getElementById('averageProductPrice').innerHTML = 0;
+            document.getElementById('compititorProductPrice').innerHTML = 0;
+
             myChartJS.data.labels = '';
             myChartJS.data.datasets[0].data ='';
             myChartJS.data.datasets[1].data ='';
