@@ -158,7 +158,7 @@ Route::group(['middleware' => ['auth', 'role:manager']], function() {
     
     Route::resource('web_notification', NotificationController::class);
     Route::get('/notification-edit/{target?}/{parameter?}', [NotificationController::class, 'edit'])->name('edit-notification');
-
+    Route::patch('/fcm-token', [NotificationController::class, 'updateToken'])->name('fcmToken');
     // Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
     // Route::get('/notification-store', [NotificationController::class, 'createNotification'])->name('create-notification');
     // Route::post('/notification-add', [NotificationController::class, 'store'])->name('add-notification');
