@@ -215,6 +215,31 @@ class MerchandiserTimeSheetController extends BaseController
                 ->whereNull('photo_after_stocking_shelf')
                 ->update(['photo_after_stocking_shelf' => 'N/A']);
             }
+
+            // if($request->status=='end-break-time')
+            // {
+            //     $lastRecord=  $timeSheet->timeSheetRecords()->latest()->first();
+            //     if($lastRecord->status!="start-break-time")
+            //     {
+            //         return $this->sendResponse(['lastRecord'=>$lastRecord->status], ' this is your last record  time sheet. please enter valid status');
+            //     }
+            //     else
+            //     {
+            //         $startBreakTime = $lastRecord->date . ' ' . $lastRecord->time;
+
+            //         $startBreakTime = new DateTime($startBreakTime);
+            //         $endBreakTime = $request->date . ' ' . $request->time;
+            //         $endBreakTime = new DateTime($endBreakTime);
+
+            //         $breakInterval = $startBreakTime->diff($endBreakTime);
+
+            //         return $this->sendResponse(['startBreakTime'=>$startBreakTime,'currentDateTime'=>$endBreakTime, 'breaktimeIntervel'=>$breakInterval, 'request->status' =>$request->status], ' record testing in  time sheet in else');
+            //     }
+
+            // }
+            // else{
+            //     return $this->sendResponse(['request->status' =>$request->status], ' record testing in  time sheet in else');
+            // }
             
             $dateTimeString = $request->date. ' '.$request->time;
             $user= Auth::user();

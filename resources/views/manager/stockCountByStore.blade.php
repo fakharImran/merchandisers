@@ -334,7 +334,7 @@
                             <th class="thclass" scope="col">Stocks in Storeroom  (Cases)</th>
                             <th class="thclass" scope="col">Total Stocks</th>
                              --}}
-                            <th class="thclass" scope="col">Date</th>
+                            <th class="thclass" style=" width: 47.4375px;" scope="col">Date</th>
                             <th class="thclass" scope="col">Name of Store</th>
                             <th class="thclass" scope="col">Location</th>
                             <th class="thclass" scope="col">Category</th>
@@ -364,7 +364,7 @@
                         @foreach ($stockCountData as $stockCount)
                         @php
                             // dd($stockCount);
-                                    if($stockCount->stock_on_shelf_unit=='units')
+                                    if(strpos($stockCount->stock_on_shelf_unit, 'unit') !== false)
                                     {    
                                         $shelfUnits=$stockCount->stock_on_shelf;
                                         $shelfCases= 0;
@@ -374,7 +374,7 @@
                                         $shelfUnits=0;
                                     }
 
-                                    if($stockCount->stock_packed_unit=='units')
+                                    if(strpos($stockCount->stock_packed_unit, 'unit') !== false)
                                     {    
                                         $packedUnits=$stockCount->stock_packed;
                                         $packedCases= 0;
@@ -384,7 +384,7 @@
                                         $packedUnits=0;
                                     }
 
-                                    if($stockCount->stock_in_store_room_unit=='units')
+                                    if(strpos($stockCount->stock_in_store_room_unit, 'unit') !== false)
                                     {    
                                         $storeRoomUnits=$stockCount->stock_in_store_room;
                                         $storeRoomCases= 0;
