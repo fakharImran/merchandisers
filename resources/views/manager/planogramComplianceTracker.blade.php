@@ -211,39 +211,28 @@
                             <td class="tdclass">{{$planogram->product->product_name}}</td>
                             <td class="tdclass">{{$planogram->companyUser->user->name}}</td>
                             <td class="tdclass">{{$planogram->product_number_sku}}</td>
+
                             <td class="tdclass">
                                 @php
-                                if($planogram->photo_before_stocking_shelf!=null)
-                                {
-                                    $imagePath = public_path('storage/' . $planogram->photo_before_stocking_shelf);
-                                    if (file_exists($imagePath)) 
+                                    if($planogram->photo_before_stocking_shelf!=null)
                                     {
-                                        echo "<img width='100' src='" . asset('storage/' . $planogram->photo_before_stocking_shelf) . "' />";
-                                    } 
+                                        $imagePath = asset('storage/' . $planogram->photo_before_stocking_shelf);
+                                        echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
+
+
+                                    }
                                     else 
                                     {
                                         echo "N/A";
                                     }
-                                }
-                                else {
-                                    echo "N/A";
-                                }
-                                    
                                 @endphp     
                             </td>
                             <td class="tdclass">
                                 @php
                                 if($planogram->photo_after_stocking_shelf!=null)
                                 {
-                                    $imagePath = public_path('storage/' . $planogram->photo_after_stocking_shelf);
-                                    if (file_exists($imagePath)) 
-                                    {
-                                        echo "<img width='100' src='" . asset('storage/' . $planogram->photo_after_stocking_shelf) . "' />";
-                                    } 
-                                    else 
-                                    {
-                                        echo "N/A";
-                                    }
+                                    $imagePath = asset('storage/' . $planogram->photo_after_stocking_shelf);
+                                    echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
                                 }
                                 else {
                                     echo "N/A";
@@ -262,6 +251,38 @@
     </div>
     
 </div>
+
+
+<script>
+    function displayFullScreenImage(imagePath) {
+        // Create a modal element
+        var modal = document.createElement('div');
+        modal.className = 'imgmodal';
+        modal.innerHTML = "<span class='close' onclick='closeFullScreenImage()'>&times;</span><img src='" + imagePath + "' class='imgmodal-content'>";
+        document.body.appendChild(modal);
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Close the modal if clicked outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeFullScreenImage();
+            }
+        }
+    }
+
+    function closeFullScreenImage() {
+        // Close the modal
+        var modal = document.querySelector('.imgmodal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.remove();
+        }
+    }
+
+</script>
+
 
 <script>
     var startDate= 0;

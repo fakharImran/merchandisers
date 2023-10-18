@@ -4,27 +4,25 @@ namespace App\Imports;
 
 use App\Models\Product;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ImportProduct implements ToModel
+class ImportProduct implements ToModel, WithHeadingRow
 {
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
     public function model(array $row)
     {
         try {
+            // Process the data
             $product = new Product([
-                'company_id' => $row[0],
-                'category' => $row[1],
-                'product_name' => $row[2],
-                'product_number_sku' => $row[3],
-                'competitor_product_name' => $row[4],
+                'company_id' => $row['company_id'],
+                'store_id' => $row['store_id'],
+                'category_id' => $row['category_id'],
+                'product_name' => $row['product_name'],
+                'product_number_sku' => $row['product_number_sku'],
+                'competitor_product_name' => $row['competitor_product_name'],
             ]);
-            
+
             return $product;
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             // Handle the exception, log or display an error message
             // For example, you can log the error using `error_log` or use Laravel's logger: \Illuminate\Support\Facades\Log::error($e);
             // Return null or throw a custom exception, depending on your needs

@@ -243,8 +243,8 @@
     function displayFullScreenImage(imagePath) {
         // Create a modal element
         var modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = "<span class='close' onclick='closeFullScreenImage()'>&times;</span><img src='" + imagePath + "' class='modal-content'>";
+        modal.className = 'imgmodal';
+        modal.innerHTML = "<span class='close' onclick='closeFullScreenImage()'>&times;</span><img src='" + imagePath + "' class='imgmodal-content'>";
         document.body.appendChild(modal);
 
         // Show the modal
@@ -260,7 +260,7 @@
 
     function closeFullScreenImage() {
         // Close the modal
-        var modal = document.querySelector('.modal');
+        var modal = document.querySelector('.imgmodal');
         if (modal) {
             modal.style.display = 'none';
             modal.remove();
