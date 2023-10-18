@@ -204,25 +204,17 @@
                                     <td class="tdclass">{{$notification->message}}</td>
                                     <td class="tdclass">{{$notification->companyUser->user->name}}</td>
                                     <td  class="tdclass">
-                                        @php
+                                    @php
                                         if($notification->attachment!=null)
                                         {
-                                            $imagePath = public_path('storage/' . $notification->attachment);
-                                            if (file_exists($imagePath)) 
-                                            {
-                                                echo "<img width='100' src='" . asset('storage/' . $notification->attachment) . "' />";
-                                            } 
-                                            else 
-                                            {
-                                                echo "N/A";
-                                            }
+                                            $imagePath = asset('storage/' . $notification->attachment);
+                                            echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
                                         }
                                         else {
                                             echo "N/A";
                                         }
-                                            
-                                        @endphp     
-                                    </td>                                   
+                                    @endphp     
+                                    </td>  
                                      @php
                                     // dd($userTimeZone);
                                         $created_at = convertToTimeZone($notification->created_at, 'UTC', $userTimeZone);
@@ -255,6 +247,35 @@
     
 </div>
 
+<script>
+    function displayFullScreenImage(imagePath) {
+        // Create a modal element
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = "<span class='close' onclick='closeFullScreenImage()'>&times;</span><img src='" + imagePath + "' class='modal-content'>";
+        document.body.appendChild(modal);
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Close the modal if clicked outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeFullScreenImage();
+            }
+        }
+    }
+
+    function closeFullScreenImage() {
+        // Close the modal
+        var modal = document.querySelector('.modal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.remove();
+        }
+    }
+
+</script>
 
 <script src="{{ asset('assets/js/notificationsDatatable.js') }}"></script>
 {{-- @include('manager/modal/modalAddNotification') --}}

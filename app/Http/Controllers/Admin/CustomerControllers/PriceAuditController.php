@@ -65,7 +65,7 @@ class PriceAuditController extends Controller
         }
         // dd($priceAuditData);
         
-        // dd($priceAuditData);
+        // dd($priceAuditData->isEmpty());
         
         $userId=$user->id;
         $name=$user->name;

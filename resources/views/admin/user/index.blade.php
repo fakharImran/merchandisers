@@ -191,7 +191,17 @@ updatePaginationButtons();
             </div>
         </div> --}}
     </div>
+    @if (session('success'))
+      <div class="alert alert-success">
+          {{ session('success') }}
+      </div>
+    @endif
 
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
 
     <div class="row" style="    max-width: 99%; margin: 1px auto; font-size: 12px;">
@@ -317,8 +327,8 @@ updatePaginationButtons();
                                     @csrf
                                     @method('DELETE')
                                 
-                                    <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                                    </button>
+                                    {{-- <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                    </button> --}}
                                     <a href="{{ route('user-edit',  [$i, $user['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
                                     </a>
                                 </form>

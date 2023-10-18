@@ -76,8 +76,8 @@
                                                         <div class="user_btn myborder" style="border: 1px solid #37A849 !important">
                                                             <input type="text" required class="border-none user_input_form_90 height-30px" name="locations[{{$location->id}}]" value="{{ $location->location }}" required autocomplete="location" autofocus placeholder="">
                                                         </div>
-                                                        <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
                                                     </div>
+                                                    <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
                                                 </div>
                                             @endforeach
                                         </div>

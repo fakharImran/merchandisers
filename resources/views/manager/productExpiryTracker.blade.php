@@ -240,7 +240,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($productExpiryTrackerData!=null)
+                        @if(!$productExpiryTrackerData->isEmpty())
                         @foreach($productExpiryTrackerData as $productExpiryTracker)
                             <tr>
                                 {{-- {{dd($productExpiryTracker   )}} --}}
@@ -267,15 +267,8 @@
                                     @php
                                     if($productExpiryTracker->photo!=null)
                                     {
-                                        $imagePath = public_path('storage/' . $productExpiryTracker->photo);
-                                        if (file_exists($imagePath)) 
-                                        {
-                                            echo "<img width='100' src='" . asset('storage/' . $productExpiryTracker->photo) . "' />";
-                                        } 
-                                        else 
-                                        {
-                                            echo "N/A";
-                                        }
+                                        $imagePath = asset('storage/' . $productExpiryTracker->photo);
+                                        echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
                                     }
                                     else {
                                         echo "N/A";
@@ -293,6 +286,36 @@
         </div>
     </div>
 </div>
+
+<script>
+    function displayFullScreenImage(imagePath) {
+        // Create a modal element
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = "<span class='close' onclick='closeFullScreenImage()'>&times;</span><img src='" + imagePath + "' class='modal-content'>";
+        document.body.appendChild(modal);
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Close the modal if clicked outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeFullScreenImage();
+            }
+        }
+    }
+
+    function closeFullScreenImage() {
+        // Close the modal
+        var modal = document.querySelector('.modal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.remove();
+        }
+    }
+
+</script>
 
 <script>
     var startDate= 0;

@@ -213,26 +213,17 @@
                                 <td class="tdclass">{{$marketingActivity->companyUser->user->name}}</td>
                                 <td class="tdclass">{{$marketingActivity->product_sku}}</td>
                                 <td class="tdclass">{{$marketingActivity->Competitor_product_name}}</td>
-                                <td  class="tdclass">
+                                <td class="tdclass">
                                     @php
-                                    if($marketingActivity->photo!=null)
-                                    {
-                                        $imagePath = public_path('storage/' . $marketingActivity->photo);
-                                        if (file_exists($imagePath)) 
-                                        {
-                                            echo "<img width='100' src='" . asset('storage/' . $marketingActivity->photo) . "' />";
-                                        } 
-                                        else 
-                                        {
-                                            echo "N/A";
-                                        }
-                                    }
-                                    else {
+                                    if($marketingActivity->photo != null) {
+                                        $imagePath = asset('storage/' . $marketingActivity->photo);
+                                        echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
+                                    } else {
                                         echo "N/A";
                                     }
-                                        
-                                    @endphp     
+                                    @endphp
                                 </td>
+                                
                                 <td class="tdclass">{{$marketingActivity->Note}}</td>
                             </tr>
                         @endforeach
@@ -249,7 +240,37 @@
 </div>
 
 <script>
-    var startDate= 0;
+    function displayFullScreenImage(imagePath) {
+        // Create a modal element
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = "<span class='close' onclick='closeFullScreenImage()'>&times;</span><img src='" + imagePath + "' class='modal-content'>";
+        document.body.appendChild(modal);
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Close the modal if clicked outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeFullScreenImage();
+            }
+        }
+    }
+
+    function closeFullScreenImage() {
+        // Close the modal
+        var modal = document.querySelector('.modal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.remove();
+        }
+    }
+
+</script>
+
+<script>
+      var startDate= 0;
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};

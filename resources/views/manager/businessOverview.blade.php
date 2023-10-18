@@ -1,5 +1,11 @@
 @extends('manager.layout.app')
 @section('title', 'Business Overview')
+<head>
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script> --}}
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&callback=myMap"></script>
+
+</head>
+
 @section("top_links")
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
@@ -173,7 +179,7 @@
                             echo $todayDate->format('Y-m-d');
                         @endphp 
                     </small>
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span>{{$sumTotalStock}}</div>                
+                    <div class="Link0" id="total_stock_count" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span>{{$sumTotalStock}}</div>                
                 </div>
             </div>
         </div>
@@ -287,6 +293,14 @@
                 <canvas id="myChart"></canvas>
             </div>
         </div>
+        <div class="col-12">
+            <div class="card manager-card-style">
+                <div class="card-header manager-card-header">Number of Stores serviced by Channel</div>    
+                
+                <div id="map" style="height: 600px;"></div>
+
+            </div>
+        </div>
     </div>
     @php
         $totalHourworked=0;
@@ -305,6 +319,7 @@
             @endphp
         @endforeach
     @endif      
+
 
     {{-- {{dd($chartStockArray)}} --}}
     
@@ -325,9 +340,21 @@
      document.getElementById('opening_week_stock').innerHTML = {{$sumOpeningWeekStock}};
     document.getElementById('closing_week_stock').innerHTML = {{$sumClosingWeekStock}}; --}}
 </div>
+<script>
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 37.7749, lng: -122.4194 }, // Example: San Francisco coordinates
+            zoom: 12 // Adjust the zoom level as needed
+        });
+    }
+</script>
+<script>
+    // Call the initMap function after the Google Maps API is loaded
+    google.maps.event.addDomListener(window, 'load', initMap);
+</script>
 
 <script>
-    
+     document.getElementById('total_stock_count').innerHTML = {{$sumTotalStock}};
     var startDate= 0;
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};

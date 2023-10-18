@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Validator;
 use App\Models\User;
 use App\Models\Store;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\CompanyUser;
 use Illuminate\Http\Request;
+use App\Rules\UniqueCompanyName;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,10 +57,14 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'company_name' => 'required',
+        $validator = Validator::make($request->all(), [
+            'company_name' => ['required', new UniqueCompanyName],
             'company_code' => 'required|regex:/\d{4}/'
         ]);
+        
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $tempCompany= new Company();
         $tempCompany->company= $request->company_name;
@@ -105,6 +111,15 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'company_name' => ['required', new UniqueCompanyName],
+            'company_code' => 'required|regex:/\d{4}/'
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        
         $query =  Company::where('id', $id)->update(['company'=>$request->company_name, 'code' =>$request->company_code]);
         return redirect()->route('company.index');
     }

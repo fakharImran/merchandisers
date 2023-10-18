@@ -202,8 +202,10 @@
                     <div class="card-body">
                         <div class="percentage" id="price_comparison">
                             @php
-                                if ($priceAuditData != null)
+                            
+                                if (!$priceAuditData->isEmpty())
                                 {
+
                                     $latestPriceAudit = null;
                                     $latestCreatedAt = null;
                             
@@ -330,7 +332,7 @@
                            array_push($chartHoursArray ,['product name'=>"first_product", 'price'=>50] );
                        @endphp  --}}
 
-                        @if ($priceAuditData!=null)
+                        @if (!$priceAuditData->isEmpty())
                             @foreach ($priceAuditData as $priceAudit)
                                 <tr>
                                     <td class="tdclass">

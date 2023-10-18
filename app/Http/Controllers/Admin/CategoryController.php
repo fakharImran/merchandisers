@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use Validator;
 
 use App\Models\Company;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Rules\UniqueCategoryName;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class CategoryController extends Controller
 {
@@ -51,7 +54,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        
+            $validator = Validator::make($request->all(), [
+            'company_id' =>'required',
+            'category' => ['required', new UniqueCategoryName($request->company_id)],
+        ]);
+        if ($validator->fails()) {
+            // Validation failed
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $tempCategory= new Category();
         $tempCategory->company_id= $request->company_id??null;
         $tempCategory->category= $request->category??null;
@@ -92,6 +103,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'company_id' =>$request->company_id,
+            'category' => ['required', new UniqueCategoryName($request->company_id)],
+        ]);
+        if ($validator->fails()) {
+            // Validation failed
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $query =  Category::where('id', $id)->update(['company_id'=>$request->company_id, 'category' =>$request->category]);
 
         return redirect()->route('category.index');    }

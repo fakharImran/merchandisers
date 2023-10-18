@@ -183,7 +183,8 @@
                                 $sevenDaysAgo = (new DateTime())->sub(new DateInterval('P7D'));
                                 $sevenDaysAgo = $sevenDaysAgo->format('Y-m-d');
                                 echo $sevenDaysAgo;
-                                if($stockCountData!=null)
+                                // dd($stockCountData->isEmpty());
+                                if(!$stockCountData->isEmpty())
                             {
                                 foreach ($stockCountData as $key => $stockCount) {
 
@@ -221,7 +222,7 @@
                                 $todayDate = (new DateTime());
                                 echo $todayDate->format('Y-m-d');
 
-                                if($stockCountData!=null)
+                                if(!$stockCountData->isEmpty())
                             {
                                 foreach ($stockCountData as $key => $stockCount) {
 
@@ -251,7 +252,12 @@
             <div class="card manager-card-style"  data-toggle="tooltip" title="Average Stock = Opening Week stock / Closing Week Stock">
                 <div class="card-header manager-card-header">Average Stock</div>    
                 <div class="card-body">
-                    <div  class="content"><h3><b>{{ number_format($sumOpeningWeekStock / $sumClosingWeekStock, 3    ) }}</b></h3></div>
+                    @if($sumOpeningWeekStock!= null || $sumClosingWeekStock !=null )
+                        <div  class="content"><h3><b>{{ number_format($sumOpeningWeekStock / $sumClosingWeekStock, 3    ) }}</b></h3></div>
+                    @else
+                    <div  class="content"><h3><b>0</b></h3></div>
+
+                    @endif
                 </div>
             </div>
         </div>
@@ -341,7 +347,8 @@
                             <th class="thclass" scope="col">Stocks Packed (Cases)</th>
                             <th class="thclass" scope="col">Stocks in Storeroom (Units)</th>
                             <th class="thclass" scope="col">Stocks in Storeroom  (Cases)</th>
-                            <th class="thclass" scope="col">Total Stocks</th>
+                            <th class="thclass" scope="col">Total Stocks (units)</th>
+                            <th class="thclass" scope="col">Total Stocks (cases)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -353,12 +360,42 @@
                     @endphp
                     
                     {{-- {{dd($stockCountData)}} --}}
-                      @if ($stockCountData!=null)
+                      @if (!$stockCountData->isEmpty())
                         @foreach ($stockCountData as $stockCount)
                         @php
                             // dd($stockCount);
+                                    if($stockCount->stock_on_shelf_unit=='units')
+                                    {    
+                                        $shelfUnits=$stockCount->stock_on_shelf;
+                                        $shelfCases= 0;
+                                    }
+                                    else {
+                                        $shelfCases= $stockCount->stock_on_shelf;
+                                        $shelfUnits=0;
+                                    }
 
-                            $totalStock=$stockCount['stock_on_shelf']+$stockCount['stock_packed']+$stockCount['stock_in_store_room'];
+                                    if($stockCount->stock_packed_unit=='units')
+                                    {    
+                                        $packedUnits=$stockCount->stock_packed;
+                                        $packedCases= 0;
+                                    }
+                                    else {
+                                        $packedCases= $stockCount->stock_packed;
+                                        $packedUnits=0;
+                                    }
+
+                                    if($stockCount->stock_in_store_room_unit=='units')
+                                    {    
+                                        $storeRoomUnits=$stockCount->stock_in_store_room;
+                                        $storeRoomCases= 0;
+                                    }
+                                    else {
+                                        $storeRoomCases= $stockCount->stock_in_store_room;
+                                        $storeRoomUnits=0;
+                                    }
+                            
+                            $totalStock = $shelfUnits +  $packedUnits + $storeRoomUnits ;
+                            $totalStockCases= $shelfCases +$packedCases + $storeRoomCases
                         @endphp
                             <tr>
                                 <td class="tdclass">
@@ -371,18 +408,19 @@
                                 <td class="tdclass">
                                     {{$stockCount->storeLocation->location}}
                                 </td>
-                                
+                               
                                 <td class="tdclass">{{$stockCount->category->category}}</td>
                                 <td class="tdclass">{{$stockCount->product->product_name}}</td>
                                 <td class="tdclass">{{$stockCount->companyUser->user->name}}</td>
                                 <td class="tdclass">{{$stockCount->product_sku}}</td>
-                                <td class="tdclass">{{$stockCount->stock_on_shelf}}</td>
-                                <td class="tdclass">{{$stockCount->stock_on_shelf_unit}}</td>
-                                <td class="tdclass">{{$stockCount->stock_packed}}</td>
-                                <td class="tdclass">{{$stockCount->stock_packed_unit}}</td>
-                                <td class="tdclass">{{$stockCount->stock_in_store_room}}</td>
-                                <td class="tdclass">{{$stockCount->stock_in_store_room_unit}}</td>
+                                <td class="tdclass">{{$shelfUnits}}</td>
+                                <td class="tdclass">{{$shelfCases}}</td>
+                                <td class="tdclass">{{$packedUnits}}</td>
+                                <td class="tdclass">{{$packedCases}}</td>
+                                <td class="tdclass">{{$storeRoomUnits}}</td>
+                                <td class="tdclass">{{$storeRoomCases}}</td>
                                 <td class="tdclass">{{$totalStock}}</td>
+                                <td class="tdclass">{{$totalStockCases}}</td>
                                 @php
                                     $sumTotalStock+= $totalStock;
                                 @endphp

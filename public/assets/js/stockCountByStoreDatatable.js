@@ -362,7 +362,7 @@ const config = {
             yAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Stocks'
+                    labelString: 'Total Stocks'
                 },
                 ticks: {
                     stepSize: 10,

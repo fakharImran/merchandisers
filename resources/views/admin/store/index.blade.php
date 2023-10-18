@@ -363,8 +363,8 @@ updatePaginationButtons();
                                     @csrf
                                     @method('DELETE')
                                 
-                                    <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                                    </button>
+                                    {{-- <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                    </button> --}}
                                     <a href="{{ route('store-edit',  [$i, $store['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
                                     </a>
                                 </form>

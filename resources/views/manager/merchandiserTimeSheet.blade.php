@@ -503,24 +503,18 @@
                                     <td  class="tdclass">{{$manager}}</td>
                                     <td  class="tdclass">
                                         @php
-                                        if($merchandiser_time_sheet->signature!=null)
-                                        {
-                                            $imagePath = public_path('storage/' . $merchandiser_time_sheet->signature);
-                                            if (file_exists($imagePath)) 
+                                            if($merchandiser_time_sheet->signature!=null)
                                             {
-                                                echo "<img width='100' src='" . asset('storage/' . $merchandiser_time_sheet->signature) . "' />";
-                                            } 
+                                                $imagePath = asset('storage/' . $merchandiser_time_sheet->signature);
+                                                echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
+                                            }
                                             else 
                                             {
                                                 echo "N/A";
                                             }
-                                        }
-                                        else {
-                                            echo "N/A";
-                                        }
-                                            
                                         @endphp     
                                     </td>
+                                  
                                     <td  class="tdclass">
                                         @if($merchandiser_time_sheet->signature!=null)
                                            {{$checkout_time_converted}} 
@@ -687,6 +681,35 @@
     </div>
 </div>
 
+<script>
+    function displayFullScreenImage(imagePath) {
+        // Create a modal element
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = "<span class='close' onclick='closeFullScreenImage()'>&times;</span><img src='" + imagePath + "' class='modal-content'>";
+        document.body.appendChild(modal);
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Close the modal if clicked outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeFullScreenImage();
+            }
+        }
+    }
+
+    function closeFullScreenImage() {
+        // Close the modal
+        var modal = document.querySelector('.modal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.remove();
+        }
+    }
+
+</script>
 <script>
     var startDate= 0;
     var endDate = 0;

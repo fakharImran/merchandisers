@@ -322,6 +322,8 @@ updatePaginationButtons();
                 <tbody>
                     @if($products!=null)
                     @foreach ($products as $product)
+                      @if ($product->store != null)
+                          
                         <tr>
                             <td class="tdclass">{{ $i}}</td>
                             <td class="tdclass">{{ $product->company->company }}</td>
@@ -354,14 +356,16 @@ updatePaginationButtons();
                                     @csrf
                                     @method('DELETE')
                                 
-                                    <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                                    </button>
+                                    {{-- <button class="submit delete-button"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                    </button> --}}
                                     <a href="{{ route('product-edit',  [$i, $product['id']]) }}"><i class="fa fa-pencil-square-o text-secondary" aria-hidden="true"></i>
                                     </a>
                                 </form>
                             
                             </td>
                         </tr>
+                      @endif
+
                         @php
                             $i++;
                         @endphp

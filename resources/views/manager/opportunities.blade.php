@@ -194,7 +194,7 @@
                             $chartDateArray = array();
                             $chartHoursArray = array();
                     @endphp
-                        @if($opportunityData!=null)
+                        @if(!$opportunityData->isEmpty())
                         @foreach($opportunityData as $opportunity)
                             <tr>
                                 {{-- {{dd($opportunity->store   )}} --}}
@@ -215,22 +215,14 @@
                                 <td class="tdclass">{{$opportunity->product_sku}}</td>
                                 <td  class="tdclass">
                                     @php
-                                    if($opportunity->photo!=null)
-                                    {
-                                        $imagePath = public_path('storage/' . $opportunity->photo);
-                                        if (file_exists($imagePath)) 
-                                        {
-                                            echo "<img width='100' src='" . asset('storage/' . $opportunity->photo) . "' />";
-                                        } 
-                                        else 
-                                        {
+                                        if($opportunity->photo!=null)
+                                        {    
+                                            $imagePath = asset('storage/' . $opportunity->photo);
+                                            echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
+                                        }
+                                        else {
                                             echo "N/A";
                                         }
-                                    }
-                                    else {
-                                        echo "N/A";
-                                    }
-                                        
                                     @endphp     
                                 </td>
                                 <td class="tdclass">{{$opportunity->Note}}</td>
@@ -247,6 +239,36 @@
     </div>
     
 </div>
+
+<script>
+    function displayFullScreenImage(imagePath) {
+        // Create a modal element
+        var modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = "<span class='close' onclick='closeFullScreenImage()'>&times;</span><img src='" + imagePath + "' class='modal-content'>";
+        document.body.appendChild(modal);
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Close the modal if clicked outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeFullScreenImage();
+            }
+        }
+    }
+
+    function closeFullScreenImage() {
+        // Close the modal
+        var modal = document.querySelector('.modal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.remove();
+        }
+    }
+
+</script>
 
 <script>
     var startDate= 0;

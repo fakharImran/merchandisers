@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
+use Validator;
 use App\Models\Store;
 use App\Models\Company;
-use App\Exports\ExportStore;
 
-use Validator;
+use App\Exports\ExportStore;
 
 use App\Imports\ImportStore;
 use Illuminate\Http\Request;
 use App\Models\StoreLocation;
+use App\Rules\UniqueStoreName;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -69,11 +70,12 @@ class StoreController extends Controller
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'company_id' => 'required',
-            'name_of_store' => 'required',
+            'name_of_store' => ['required', new UniqueStoreName($request->company_id)],
             'locations' => 'required',
             'parish' => 'required',
             'channel' => 'required',
         ]);
+        
     
         if ($validator->fails()) {
             // Validation failed
@@ -136,7 +138,7 @@ class StoreController extends Controller
 
         $validator = Validator::make($request->all(), [
             'company_id' => 'required',
-            'name_of_store' => 'required',
+            'name_of_store' => ['required', new UniqueStoreName($request->company_id)],
             'locations' => 'required',
             'parish' => 'required',
             'channel' => 'required',
@@ -147,22 +149,6 @@ class StoreController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        
-        // dd($request);
-        
-        // // dd($existionsLocationsCount);
-        // dd($existionsLocationsCount== count($request->locations));
-        // if($existionsLocationsCount== count($request->locations))
-        // {
-            
-        // }
-            // foreach ($request->locations as $req_location) {
-            //     foreach ($query->locations as $key => $location) {
-            //         if($req_location == $location->location){
-            //             $location->update([ 'location' => $location]);
-            //         }
-            //     }
-            // }
 
             $query =  Store::where('id', $id)->first();
             $query->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'parish' =>json_encode($request->parish), 'channel' =>$request->channel]);

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Validator;
 use Exception;
+use Validator;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Exports\ExportProduct;
 use App\Imports\ImportProduct;
+use App\Rules\UniqueProductName;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -64,11 +65,12 @@ class ProductController extends Controller
             'company_id' => 'required',
             'store_id' => 'required',
             'category' => 'required',
-            'product_name' => 'required',
+            'product_name' => ['required',new UniqueProductName($request->company_id, $request->store_id)],
             'product_number_sku' => 'required',
             'competitor_product_name' => 'required',
         ]);
-    
+        
+       
         if ($validator->fails()) {
             // Validation failed
             return redirect()->back()->withErrors($validator)->withInput();
@@ -123,7 +125,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'company_id' => 'required',
+            'store_id' => 'required',
+            'category' => 'required',
+            'product_name' => ['required',new UniqueProductName($request->company_id, $request->store_id)],
+            'product_number_sku' => 'required',
+            'competitor_product_name' => 'required',
+        ]);
+        
+       
+        if ($validator->fails()) {
+            // Validation failed
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         $query =  Product::where('id', $id)->update(['company_id'=>$request->company_id, 'store_id' => $request->store_id, 'category_id' =>$request->category, 'product_name' =>$request->product_name, 'product_number_sku' =>$request->product_number_sku, 'competitor_product_name' => json_encode($request->competitor_product_name??null)]);
 
         return redirect()->route('product.index');

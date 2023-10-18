@@ -11,6 +11,15 @@
                       <div class="tab_title">
                         <h3>Product</h3>
                       </div>
+                      @if($errors->any())
+                      <div class="alert alert-danger">
+                          <ul>
+                              @foreach($errors->all() as $error)
+                                  <li>{{ $error }}</li>
+                              @endforeach
+                          </ul>
+                      </div>
+                      @endif
                       <form method="POST" action="{{route("product.update", $id)}}">
                         @method('PUT')
                             @csrf
@@ -117,8 +126,8 @@
                                                         <div class="user_btn myborder" style="border: 1px solid #37A849 !important">
                                                             <input type="text" required class="border-none user_input_form_90 height-30px" value="{{$prod}}" name="competitor_product_name[]" required  autofocus placeholder="">
                                                         </div>
-                                                        <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
                                                     </div>
+                                                    <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
                                                 </div>
                                             @endforeach
                                             <!-- This is the container for the repeater items -->
