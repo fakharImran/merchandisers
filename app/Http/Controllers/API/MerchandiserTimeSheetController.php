@@ -145,10 +145,9 @@ class MerchandiserTimeSheetController extends BaseController
 
             $MerchData= array_merge($storeArr,$recordArray);
             $activity= new Activity;
-            $activity->store_location_id= $request->store_location_id;
-            $activity->store_id= $request->store_id??null;
             $activity->company_user_id= $company_user_id;
-            $activity->activity_name= 'Merchandiser checkin';
+            $activity->activity_description= 'you just '. $request->status.' to '.$store->name_of_store. ' at time '.$merchandiserTimeSheet->created_at ;
+            $activity->activity_type= 'need to set';
             $activity->activity_detail= json_encode($MerchData);
             $activity->save();
 
@@ -272,10 +271,9 @@ class MerchandiserTimeSheetController extends BaseController
                 $updatedTimeSheet = $timeSheet->update(['store_manager_name'=>$request->store_manager_name,'signature'=>$signature_path]);  
 
                 $activity= new Activity;
-                $activity->store_location_id= $timeSheet->store_location_id;
-                $activity->store_id= $timeSheet->store_id;
                 $activity->company_user_id= $timeSheet->company_user_id;
-                $activity->activity_name= 'Merchandiser checkout';
+                $activity->activity_description= 'you just '. $request->status.' to '.$timeSheet->store($timeSheet->store_id)->name_of_store. ' at time '.$timeSheetRecord->created_at ;
+                $activity->activity_type= 'need to set';
                 $activity->activity_detail= json_encode($recordArray);
                 // return $this->sendResponse(['activity'=>$activity], 'activity at time sheet check-out updated successfully.');
     
@@ -286,10 +284,9 @@ class MerchandiserTimeSheetController extends BaseController
             }
 
             $activity= new Activity;
-            $activity->store_location_id= $timeSheet->store_location_id;
-            $activity->store_id= $timeSheet->store_id;
             $activity->company_user_id= $timeSheet->company_user_id;
-            $activity->activity_name= 'Merchandiser change status ( ' .$request->status.' ) ';
+            $activity->activity_description= 'you just '. $request->status.' to '.$timeSheet->store($timeSheet->store_id)->name_of_store. ' at time '.$timeSheetRecord->created_at ;
+            $activity->activity_type= 'need to set';
             $activity->activity_detail= json_encode($recordArray);
             // return $this->sendResponse(['activity'=>$activity], 'activity at time sheet check-out updated successfully.');
 

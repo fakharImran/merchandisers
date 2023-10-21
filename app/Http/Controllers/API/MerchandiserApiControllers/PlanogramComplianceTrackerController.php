@@ -118,12 +118,9 @@ class PlanogramComplianceTrackerController extends BaseController
 
        
         $activity= new Activity;
-        $activity->store_location_id= $store_location->id;
-        $activity->store_id= $store->id;
         $activity->company_user_id= $company_user_id;
-        $activity->category_id= $request->category_id;
-        $activity->product_id= $request->product_id;
-        $activity->activity_name= 'Store Planogram Compliance Tracker';
+        $activity->activity_description= 'You did a Planogram Compliance Tracker of  check and set initial photo of stocking shelf'. $product->product_name. ' Click Here to see what you captured';
+        $activity->activity_type= 'need to set';
         $activity->activity_detail= json_encode($planogramComplianceTracker);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
         $activity->save();
@@ -178,16 +175,13 @@ class PlanogramComplianceTrackerController extends BaseController
             $updatedPlanogram = PlanogramComplianceTracker::find($id);
 
         }
-
+        $product= $updatedPlanogram->product;
         $user = Auth::user();
         $company_user_id=$user->companyUser->id;
         $activity= new Activity;
-        $activity->store_location_id= $updatedPlanogram->store_location_id;
-        $activity->store_id= $updatedPlanogram->store_id;
         $activity->company_user_id= $company_user_id;
-        $activity->category_id= $updatedPlanogram->category_id;
-        $activity->product_id= $updatedPlanogram->product_id;
-        $activity->activity_name= 'Update Planogram Compliance Tracker';
+        $activity->activity_description= 'You did a Planogram Compliance Tracker of check and set after photo of stocking shelf'. $product->product_name. ' Click Here to see what you captured';
+        $activity->activity_type= 'need to set';        
         $activity->activity_detail= json_encode($updatedPlanogram);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
         $activity->save();

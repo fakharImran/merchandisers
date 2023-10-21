@@ -158,13 +158,14 @@
     </div>
     @php
         $sumTotalStock=0;
+        $sumTotalStockCases=0;
     @endphp
     <div class='row  d-flex align-items-center col-actions ' style="max-width: 99%; margin: 1px auto; padding-top:20px">
         <div class="col-md-3 col-3 p-3">
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Total stock count</div>    
                 <div class="card-body">
-                    <div  class="content"><h3><b id="total_stock_count">{{$sumTotalStock}}</b></h3></div>
+                    <div  class="content"><h3><b id="total_stock_count">{{$sumTotalStock}} </b><small> Units</small><br><b id="total_stock_count_cases">{{$sumTotalStockCases}} </b><small> Cases</small></h3></div>
                 </div>
             </div>
         </div>
@@ -270,7 +271,7 @@
                         <label for="" class="form-label filter merchandiser">Stock Level of products in store </label>
                     </div>
                     <div class="col-md-3 col-6">
-                        <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select "  id="casesorunits">
+                        <select name="casesorunits" onchange="changeUnitCount(this)"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select "  id="casesorunits">
                             <option class="text-secondary" value="" selected disabled>Select Case or Units </option>
                             <option value="Unit">Unit</option>
                             <option value="Case">Case</option>
@@ -357,6 +358,13 @@
                             $chartDateArray = array();
                             $chartStockArray = array();
                             $i=1;
+                            $shelfUnits=0;
+                            $shelfCases=0;
+                            $packedUnits= 0;
+                            $packedCases=0;
+                            $storeRoomUnits= 0;
+                            $storeRoomCases=0;
+
                     @endphp
                     
                     {{-- {{dd($stockCountData)}} --}}
@@ -364,34 +372,47 @@
                         @foreach ($stockCountData as $stockCount)
                         @php
                             // dd($stockCount);
-                                    if(strpos($stockCount->stock_on_shelf_unit, 'unit') !== false)
+                                    if ($stockCount->stock_on_shelf_unit=='Units' || $stockCount->stock_on_shelf_unit=='units')
                                     {    
                                         $shelfUnits=$stockCount->stock_on_shelf;
                                         $shelfCases= 0;
                                     }
-                                    else {
+                                    else if ($stockCount->stock_on_shelf_unit=='Cases' || $stockCount->stock_on_shelf_unit=='cases')
+                                    {
                                         $shelfCases= $stockCount->stock_on_shelf;
                                         $shelfUnits=0;
                                     }
-
-                                    if(strpos($stockCount->stock_packed_unit, 'unit') !== false)
+                                    else {
+                                        $shelfCases= 0;
+                                        $shelfUnits=0;
+                                    }
+                                    if ($stockCount->stock_packed_unit=='Units' || $stockCount->stock_packed_unit=='units')
                                     {    
                                         $packedUnits=$stockCount->stock_packed;
                                         $packedCases= 0;
                                     }
-                                    else {
+                                    else if ($stockCount->stock_packed_unit=='Cases' || $stockCount->stock_packed_unit=='cases')
+                                    {
                                         $packedCases= $stockCount->stock_packed;
                                         $packedUnits=0;
                                     }
-
-                                    if(strpos($stockCount->stock_in_store_room_unit, 'unit') !== false)
+                                    else {
+                                        $packedUnits= 0;
+                                        $packedCases=0;
+                                    }
+                                    if ($stockCount->stock_in_store_room_unit=='Units' || $stockCount->stock_in_store_room_unit=='units')
                                     {    
                                         $storeRoomUnits=$stockCount->stock_in_store_room;
                                         $storeRoomCases= 0;
                                     }
-                                    else {
+                                    else if ($stockCount->stock_in_store_room_unit=='Cases' || $stockCount->stock_in_store_room_unit=='cases')
+                                    {
                                         $storeRoomCases= $stockCount->stock_in_store_room;
                                         $storeRoomUnits=0;
+                                    }
+                                    else {
+                                        $storeRoomUnits= 0;
+                                        $storeRoomCases=0;
                                     }
                             
                             $totalStock = $shelfUnits +  $packedUnits + $storeRoomUnits ;
@@ -423,10 +444,11 @@
                                 <td class="tdclass">{{$totalStockCases}}</td>
                                 @php
                                     $sumTotalStock+= $totalStock;
+                                    $sumTotalStockCases += $totalStockCases;
                                 @endphp
                             </tr>
                             @php
-                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0]]);
+                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0], 'stockCases'=>$totalStockCases]);
                             @endphp
                         @endforeach
                       @endif                     
@@ -439,6 +461,7 @@
 </div>
 {{-- {{dd($chartStockArray);}} --}}
 <script>
+    document.getElementById('total_stock_count_cases').innerHTML = {{$sumTotalStockCases}};
     document.getElementById('total_stock_count').innerHTML = {{$sumTotalStock}};
     document.getElementById('opening_week_stock').innerHTML = {{$sumOpeningWeekStock}};
     document.getElementById('closing_week_stock').innerHTML = {{$sumClosingWeekStock}};
@@ -448,6 +471,7 @@
     var allUniqueLocations = {!! json_encode($locationArr) !!};
     
     var graphFormat = 'days';
+    var graphUnit = 'Unit';
 
     var labels = [];
 

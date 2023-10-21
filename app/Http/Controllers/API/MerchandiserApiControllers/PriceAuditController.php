@@ -103,12 +103,9 @@ class PriceAuditController extends BaseController
 
        
         $activity= new Activity;
-        $activity->store_location_id= $store_location->id;
-        $activity->store_id= $store->id;
         $activity->company_user_id= $company_user_id;
-        $activity->category_id= $request->category_id;
-        $activity->product_id= $request->product_id;
-        $activity->activity_name= 'add Price Audit';
+        $activity->activity_description= 'You did a Price Audit Check of '. $product->product_name. ' Click Here to see what you entered';
+        $activity->activity_type= 'need to set';
         $activity->activity_detail= json_encode($priceAuditArr);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
         $activity->save();

@@ -19,9 +19,9 @@ class ActivityController extends BaseController
         $user = Auth::user();
 
         $activities = $user->companyUser->activities()
-        ->orderBy('created_at', 'desc')
-        ->get();
-
+            ->orderBy('created_at', 'desc')
+            ->select('id', 'activity_description', 'activity_type', 'activity_detail') // Replace 'column1', 'column2', 'column3' with the actual column names you want to select.
+            ->get();
         if($activities)
         {
             return $this->sendResponse(['activities'=>$activities], 'activities exist');

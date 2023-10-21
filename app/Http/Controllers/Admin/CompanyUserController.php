@@ -7,6 +7,7 @@ use App\Models\User;
 
 use App\Models\Company;
 use App\Models\CompanyUser;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -193,8 +194,11 @@ class CompanyUserController extends Controller
         try {
             // Find the item with the given ID and delete it
             $item = CompanyUser::find($id);
-            if ($item) {
-                $item->delete();
+            $userID=$item->user->id;
+            $user = User::find($userID);
+
+            if ($user) {
+                $user->delete();
                 return redirect()->route('user.index');
             } else {
                 return redirect()->back()->withErrors(['error' => 'Item not found']);
@@ -204,20 +208,22 @@ class CompanyUserController extends Controller
             return response()->json(['error' => 'Something went wrong while deleting the item']);
         }
     }
-    public function delete( $id) {
-        try {
-            // Find the item with the given ID and delete it
-            $item = CompanyUser::find($id);
-            if ($item) {
-                $item->delete();
-                return redirect()->route('user.index');
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Item not found']);
-                // return response()->json(['error' => 'Item not found']);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Something went wrong while deleting the item']);
-        }
-  }
+
+
+//     public function delete( $id) {
+//         try {
+//             // Find the item with the given ID and delete it
+//             $item = CompanyUser::find($id);
+//             if ($item) {
+//                 $item->delete();
+//                 return redirect()->route('user.index');
+//             } else {
+//                 return redirect()->back()->withErrors(['error' => 'Item not found']);
+//                 // return response()->json(['error' => 'Item not found']);
+//             }
+//         } catch (\Exception $e) {
+//             return response()->json(['error' => 'Something went wrong while deleting the item']);
+//         }
+//   }
    
 }

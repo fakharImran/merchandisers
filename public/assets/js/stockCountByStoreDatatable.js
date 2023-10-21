@@ -55,9 +55,14 @@ function createLastDaysDates(data, startDate = 0, endDate = 0)
              const elementDate = new Date(element['date']);
              return elementDate >= dayStart && elementDate <= dayEnd;
          });
- 
+         let totalStock;
          // Calculate the total stock for the current day
-         const totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stock']), 0);
+         if (graphUnit == "Unit") {
+            totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stock']), 0);
+         }
+         else{
+            totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stockCases']), 0);
+         }
          previousSevenDays.push(totalStock);
      }
  
@@ -126,7 +131,12 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0)
         data.forEach(element => {
             chkDate = element['date'];
             if (formatDateYMD(week.startDate) <= chkDate && formatDateYMD(week.endDate) >= chkDate) {
-                totalStock += parseInt(element['stock']);
+                if (graphUnit == "Unit") {
+                    totalStock += parseInt(element['stock']);
+                }
+                else{
+                    totalStock += parseInt(element['stockCases']);
+                }
             } else {
             }
         });
@@ -206,7 +216,12 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
         data.forEach(element => {
             const chkDate = new Date(element.date);
             if (chkDate >= month.startDate && chkDate <= month.endDate) {
-                totalStock +=  parseInt(element.stock);
+                if (graphUnit == "Unit") {
+                    totalStock +=  parseInt(element.stock);
+                }
+                else{
+                    totalStock +=  parseInt(element.stockCases);
+                }
             }
         });
         monthArray.push(totalStock);
@@ -302,7 +317,6 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
 createLastMonthsDates(convertedToChartData);
 
 function changePeriod(e) {
-    console.log(e.value);
     switch (e.value) {
         case 'Daily':
             
@@ -335,6 +349,36 @@ function changePeriod(e) {
             break;
     }
 }
+
+function changeUnitCount(e) {
+    switch (e.value) 
+    {
+        case 'Unit':
+            graphUnit = 'Unit';
+            
+            break;
+        case 'Case':
+            graphUnit = 'Case';
+            break;
+        default:
+            graphUnit = 'Unit';
+            break;
+    }
+    switch (graphFormat) {
+        case 'days':
+            changePeriod({'value':"Daily"});
+            break;
+        case 'weeks':
+            changePeriod({'value':'Weekly'});
+            break;
+        case 'months':
+            changePeriod({'value':'Monthly'});
+            break;
+        default:
+            break;
+    }
+}
+
 const data = {
     labels: labels,
     datasets: [{
@@ -398,7 +442,24 @@ var myChartJS = new Chart(
 );
 
 
-// datatable
+// // datatable
+// function changeGraphCases(table) {
+//     var filteredIndexes = table.rows({ search: 'applied' }).indexes();
+//     var filteredData = [];
+//     filteredIndexes.each(function (index) {
+//         var rowData = table.row(index).data();
+//         filteredData.push(rowData);
+//     });
+//     var colData = [];
+//     filteredData.forEach(element => {
+//         const dateTime = element[0].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
+//         const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
+//         var inputString = element[14];
+//         colData.push({ 'date': formatDateYMD(currentDate1), 'stock': inputString });
+//     });
+//     console.log(colData);
+//     return colData;
+// }
 
 //function for change the graph it is comming from datatable search filters 
 function changeGraph(table) {
@@ -412,8 +473,9 @@ function changeGraph(table) {
     filteredData.forEach(element => {
         const dateTime = element[0].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
         const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
-        var inputString = element[13];
-        colData.push({ 'date': formatDateYMD(currentDate1), 'stock': inputString });
+        var stockcase = element[14];
+        var stockunits = element[13];
+        colData.push({ 'date': formatDateYMD(currentDate1), 'stock': stockunits, 'stockCases': stockcase});
     });
     console.log(colData);
     return colData;

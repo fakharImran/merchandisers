@@ -102,18 +102,14 @@ class MarketingActivityController extends BaseController
 
 
         $activity= new Activity;
-        $activity->store_location_id= $store_location->id;
-        $activity->store_id= $request->store_id;
         $activity->company_user_id= $company_user_id;
-        $activity->category_id= $request->category_id;
-        $activity->product_id= $request->product_id;
-        $activity->activity_name= 'add marketing activity';
+        $activity->activity_description= 'You just submitted a photo of some Marketing Activity for '. $request->promotion_type. ' You can view what you entered by clicking here';
+        $activity->activity_type= 'need to set';
         $activity->activity_detail= json_encode($marketingActivityArr);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
         $activity->save();
 
 
-        
         // $allMerketingActivity =MarketingActivity::all();
         return $this->sendResponse(['responseofQuery'=>$responseofQuery], 'here is an marketingActivityArr be stored:');
 
