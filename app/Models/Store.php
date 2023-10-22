@@ -10,6 +10,7 @@ use App\Models\PriceAudit;
 use App\Models\Opportunity;
 use App\Models\StoreLocation;
 use App\Models\MarketingActivity;
+use App\Models\StockCountByStores;
 use App\Models\ProductExpiryTracker;
 use App\Models\MerchandiserTimeSheet;
 use Illuminate\Database\Eloquent\Model;

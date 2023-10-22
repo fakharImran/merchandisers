@@ -41,6 +41,8 @@ return new class extends Migration
             $table->string('notes')->nullable();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE price_audits ENGINE = InnoDB');
+
     }
 
     /**

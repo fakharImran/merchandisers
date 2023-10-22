@@ -32,6 +32,8 @@ return new class extends Migration
             
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE notifications ENGINE = InnoDB');
+
     }
 
     /**

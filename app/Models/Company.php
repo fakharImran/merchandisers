@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Store;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\CompanyUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -41,7 +42,7 @@ class Company extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function categories(): HasMany
+    public function categories()
     {
         return $this->hasMany(Category::class, 'company_id');
     }

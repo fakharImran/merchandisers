@@ -44,6 +44,8 @@ return new class extends Migration
 
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE stock_count_by_stores ENGINE = InnoDB');
+
     }
 
     /**

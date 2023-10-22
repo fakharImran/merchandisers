@@ -38,6 +38,8 @@ return new class extends Migration
             $table->timestamps();
 
         });
+        DB::statement('ALTER TABLE marketing_activities ENGINE = InnoDB');
+
     }
 
     /**

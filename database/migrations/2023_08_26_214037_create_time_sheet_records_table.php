@@ -26,6 +26,8 @@ return new class extends Migration
 
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE time_sheet_records ENGINE = InnoDB');
+
     }
 
     /**

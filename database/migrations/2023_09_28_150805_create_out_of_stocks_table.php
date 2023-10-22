@@ -34,6 +34,8 @@ return new class extends Migration
             $table->string('Reason_out_of_stock')->nullable();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE out_of_stocks ENGINE = InnoDB');
+
     }
 
     /**

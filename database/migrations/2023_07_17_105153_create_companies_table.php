@@ -19,6 +19,8 @@ return new class extends Migration
             $table->bigInteger('code')->nullable()->default(12);
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE companies ENGINE = InnoDB');
+
     }
 
     /**

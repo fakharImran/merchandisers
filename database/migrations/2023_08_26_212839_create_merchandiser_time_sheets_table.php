@@ -31,6 +31,8 @@ return new class extends Migration
             $table->string('signature')->nullable();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE merchandiser_time_sheets ENGINE = InnoDB');
+
     }
 
     /**

@@ -24,6 +24,8 @@ return new class extends Migration
             $table->String('channel')->nullable();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE stores ENGINE = InnoDB');
+
     }
 
     /**

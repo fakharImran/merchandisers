@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Store;
 use App\Models\Company;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\CompanyUser;
 use Illuminate\Http\Request;
 use App\Rules\UniqueCompanyName;
@@ -132,68 +133,53 @@ class CompanyController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        // dd($id); 
-        try {
-            // Find the item with the given ID and delete it
-            $item = Company::find($id);
-            if ($item) {
-                if($item->delete()){
-                    foreach ($item->companyUsers as $companyUser) {
-                        $user = User::find($companyUser['user_id']);
-                        $user->delete();
-                        $companyUser = CompanyUser::find($companyUser['id']);
-                        $companyUser->delete();
-                    }
-                    foreach ($item->products as $product) {
-                        $prod = Product::find($product['id']);
-                        $prod->delete();
-                    }
-                    foreach ($item->stores as $store) {
-                        $stor = Store::find($store['id']);
-                        $stor->delete();
-                    }
-                    session()->flash("success", "Company deleted successfully");
-                }
-                return redirect()->route('company.index');
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Item not found']);
-                // return response()->json(['error' => 'Item not found']);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Something went wrong while deleting the item']);
-        }
+        
+    // Find the company by its ID
+    $company = Company::find($id);
+
+    // Check if the company exists
+    if (!$company) {
+        return response()->json(['message' => 'Company not found'], 404);
     }
 
-    public function delete( $id) {
-        try {
-            // Find the item with the given ID and delete it
-            $item = Company::find($id);
-            if ($item) {
-                if($item->delete()){
-                    foreach ($item->companyUsers as $companyUser) {
-                        $user = User::find($companyUser['user_id']);
-                        $user->delete();
-                        $companyUser = CompanyUser::find($companyUser['id']);
-                        $companyUser->delete();
-                    }
-                    foreach ($item->products as $product) {
-                        $prod = Product::find($product['id']);
-                        $prod->delete();
-                    }
-                    foreach ($item->stores as $store) {
-                        $stor = Store::find($store['id']);
-                        $stor->delete();
-                    }
-                    session()->flash("success", "Company deleted successfully");
-                }
-                return redirect()->route('company.index');
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Item not found']);
-                // return response()->json(['error' => 'Item not found']);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Something went wrong while deleting the item']);
-        }
+    // Delete the company and its related records (categories and products) due to cascade delete
+    $company->delete();
+
+    return redirect()->route('company.index');
+
+    return response()->json(['message' => 'Company and associated data deleted successfully']);
+
+        // try {
+        //     // Find the item with the given ID and delete it
+        //     $item = Company::find($id);
+        //     if ($item) {
+        //         if($item->delete()){
+        //             foreach ($item->companyUsers as $companyUser) {
+        //                 $user = User::find($companyUser['user_id']);
+        //                 $user->delete();
+        //                 $companyUser = CompanyUser::find($companyUser['id']);
+        //                 $companyUser->delete();
+        //             }
+
+        //             foreach ($item->stores as $store) {
+        //                 $stor = Store::find($store['id']);
+        //                 $stor->delete();
+        //             }
+        //             foreach ($item->categories as $category) {
+        //                 $category = Category::find($category['id']);
+        //                 $category->delete();
+        //             }
+        //             session()->flash("success", "Company deleted successfully");
+        //         }
+        //         return redirect()->route('company.index');
+        //     } else {
+        //         return redirect()->back()->withErrors(['error' => 'Item not found']);
+        //         // return response()->json(['error' => 'Item not found']);
+        //     }
+        // } catch (\Exception $e) {
+        //     return response()->json(['error' => 'Something went wrong while deleting the item']);
+        // }
     }
+
 
 }

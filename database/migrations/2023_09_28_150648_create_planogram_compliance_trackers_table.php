@@ -38,6 +38,8 @@ return new class extends Migration
             $table->string('action')->nullable();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE planogram_compliance_trackers ENGINE = InnoDB');
+
     }
 
     /**

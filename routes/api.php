@@ -64,7 +64,9 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::apiResource('out-of-stock',OutOfStockController::class);
     Route::apiResource('opportunity',OpportunityController::class);
     Route::apiResource('notification',NotificationController::class);
+    Route::get('notificationsByDate/{date}', [NotificationController::class, 'getNotificationByDate']);
     Route::apiResource('activities',ActivityController::class);
     Route::get('activitiesByDate/{date}', [ActivityController::class, 'getActivityByDate']);
+    Route::get('deleteMerchandiser', [ActivityController::class, 'deleteMerchandiser']);
 
 });

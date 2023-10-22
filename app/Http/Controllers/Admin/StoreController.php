@@ -225,21 +225,6 @@ class StoreController extends Controller
             return response()->json(['error' => 'Something went wrong while deleting the item']);
         }
     }
-    public function delete( $id) {
-        try {
-            // Find the item with the given ID and delete it
-            $item = Store::find($id);
-            if ($item) {
-                $item->delete();
-                return redirect()->route('store.index');
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Item not found']);
-                // return response()->json(['error' => 'Item not found']);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Something went wrong while deleting the item']);
-        }
-  }
 
 
     // public function importFile(Request $request)

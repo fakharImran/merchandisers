@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('location');
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE store_locations ENGINE = InnoDB');
+
     }
 
     /**

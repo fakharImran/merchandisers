@@ -40,6 +40,7 @@ return new class extends Migration
             $table->timestamps();
             
         });
+        DB::statement('ALTER TABLE product_expiry_trackers ENGINE = InnoDB');
     }
 
     /**

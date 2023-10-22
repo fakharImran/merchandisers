@@ -206,4 +206,15 @@ class ActivityController extends BaseController
         return $this->sendResponse(['id'=>$id, 'activityDetails'=>$activityDetails], 'you want to delete this id activity');
         //
     }
+    function deleteMerchandiser()
+    {
+        $user = Auth::user();
+        if($user->delete())
+        {
+            return $this->sendResponse(['loginUserData'=>$user], 'you have deleted merchandiser named '.$user->name );
+        }
+        return $this->sendResponse('you have shered id this' );
+
+        
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\MerchandiserApiControllers;
 
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,15 @@ class NotificationController extends BaseController
             return $this->sendResponse(['notifications'=>$notifications, 'user'=>$user], 'no notifications exist');
 
         }
+    }
+    function getNotificationByDate($date)
+    {
+        $notifications = Notification::select('*')
+        ->whereRaw("DATE(created_at) = ?", [$date]) 
+        // ->orderBy('created_at', 'desc')
+        ->get();
+        return $this->sendResponse(['date'=>$date, 'notifications'=>$notifications], 'this is the date Data');
+        
     }
 
     /**

@@ -22,6 +22,9 @@ return new class extends Migration
             $table->String('category');
             $table->timestamps();
         });
+
+        DB::statement('ALTER TABLE categories ENGINE = InnoDB');
+
     }
 
     /**

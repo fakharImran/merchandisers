@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('date_modified')->nullable();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE company_users ENGINE = InnoDB');
+
     }
 
     /**

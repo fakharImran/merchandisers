@@ -37,6 +37,8 @@ return new class extends Migration
             $table->timestamps();
 
         });
+        DB::statement('ALTER TABLE opportunities ENGINE = InnoDB');
+
     }
 
     /**

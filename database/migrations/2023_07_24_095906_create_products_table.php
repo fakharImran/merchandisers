@@ -31,6 +31,8 @@ return new class extends Migration
             $table->String('competitor_product_name')->nullable();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE products ENGINE = InnoDB');
+
     }
 
 
