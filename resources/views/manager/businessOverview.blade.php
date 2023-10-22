@@ -272,9 +272,8 @@
                         <label for="merchandiser-search" class="form-label filter merchandiser">Stock Level of products in store </label>
                     </div>
                     <div class="col-4">
-                        <select name="casesorunits"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select"  id="casesorunits">
+                        <select name="casesorunits"  onchange="changeUnitCount(this)"  style=" padding: 10px; text-align: center; font-size: revert; " class=" form-select"  id="casesorunits">
                             <option class="text-secondary" value="" selected disabled>Select Case or Units </option>
-                            
                             <option value="Unit">Unit</option>
                             <option value="Case">Case</option>
                         </select>              
@@ -311,11 +310,57 @@
     @if ($stockCountData!=null)
         @foreach ($stockCountData as $stockCount)
             @php
-                // dd($stockCount);
-                $totalStock=$stockCount['stock_on_shelf']+$stockCount['stock_packed']+$stockCount['stock_in_store_room'];
+                if ($stockCount->stock_on_shelf_unit=='Units' || $stockCount->stock_on_shelf_unit=='units')
+                {    
+                    $shelfUnits=$stockCount->stock_on_shelf;
+                    $shelfCases= 0;
+                }
+                else if ($stockCount->stock_on_shelf_unit=='Cases' || $stockCount->stock_on_shelf_unit=='cases')
+                {
+                    $shelfCases= $stockCount->stock_on_shelf;
+                    $shelfUnits=0;
+                }
+                else {
+                    $shelfCases= 0;
+                    $shelfUnits=0;
+                }
+                if ($stockCount->stock_packed_unit=='Units' || $stockCount->stock_packed_unit=='units')
+                {    
+                    $packedUnits=$stockCount->stock_packed;
+                    $packedCases= 0;
+                }
+                else if ($stockCount->stock_packed_unit=='Cases' || $stockCount->stock_packed_unit=='cases')
+                {
+                    $packedCases= $stockCount->stock_packed;
+                    $packedUnits=0;
+                }
+                else {
+                    $packedUnits= 0;
+                    $packedCases=0;
+                }
+                if ($stockCount->stock_in_store_room_unit=='Units' || $stockCount->stock_in_store_room_unit=='units')
+                {    
+                    $storeRoomUnits=$stockCount->stock_in_store_room;
+                    $storeRoomCases= 0;
+                }
+                else if ($stockCount->stock_in_store_room_unit=='Cases' || $stockCount->stock_in_store_room_unit=='cases')
+                {
+                    $storeRoomCases= $stockCount->stock_in_store_room;
+                    $storeRoomUnits=0;
+                }
+                else {
+                    $storeRoomUnits= 0;
+                    $storeRoomCases=0;
+                }
+        
+                $totalStock = $shelfUnits +  $packedUnits + $storeRoomUnits ;
+                $totalStockCases= $shelfCases +$packedCases + $storeRoomCases;
+
                 $date= explode(' ', $stockCount->created_at);
                 $sumTotalStock+= $totalStock;
-                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0]]);
+                // $sumTotalStockCases += $totalStockCases;
+
+                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0], 'stockCases'=>$totalStockCases]);
             @endphp
         @endforeach
     @endif      
@@ -361,6 +406,7 @@
     var allUniqueLocations = {!! json_encode($locationArr) !!};
     
     var graphFormat = 'days';
+    var graphUnit = 'Unit';
 
     var labels = [];
 

@@ -65,5 +65,6 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::apiResource('opportunity',OpportunityController::class);
     Route::apiResource('notification',NotificationController::class);
     Route::apiResource('activities',ActivityController::class);
+    Route::get('activitiesByDate/{date}', [ActivityController::class, 'getActivityByDate']);
 
 });

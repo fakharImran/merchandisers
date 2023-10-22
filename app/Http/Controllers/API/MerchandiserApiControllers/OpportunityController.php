@@ -104,8 +104,8 @@ class OpportunityController extends BaseController
         $activity= new Activity;
         $activity->company_user_id= $company_user_id;
         $activity->activity_description= 'You set the opportunity of '. $product->product_name. ' Click Here to see what you entered';
-        $activity->activity_type= 'need to set';
-        $activity->activity_detail= json_encode($opportunityArr);
+        $activity->activity_type= 'Opportunity';
+        $activity->activity_detail= json_encode($responseofQuery);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
         $activity->save();
 

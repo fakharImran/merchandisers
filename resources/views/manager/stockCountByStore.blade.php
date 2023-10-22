@@ -416,7 +416,7 @@
                                     }
                             
                             $totalStock = $shelfUnits +  $packedUnits + $storeRoomUnits ;
-                            $totalStockCases= $shelfCases +$packedCases + $storeRoomCases
+                            $totalStockCases= $shelfCases +$packedCases + $storeRoomCases;
                         @endphp
                             <tr>
                                 <td class="tdclass">

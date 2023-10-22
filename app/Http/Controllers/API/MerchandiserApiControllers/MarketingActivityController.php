@@ -100,12 +100,11 @@ class MarketingActivityController extends BaseController
         
         $responseofQuery= MarketingActivity::create($marketingActivityArr);
 
-
         $activity= new Activity;
         $activity->company_user_id= $company_user_id;
         $activity->activity_description= 'You just submitted a photo of some Marketing Activity for '. $request->promotion_type. ' You can view what you entered by clicking here';
-        $activity->activity_type= 'need to set';
-        $activity->activity_detail= json_encode($marketingActivityArr);
+        $activity->activity_type= 'Marketing Activity';
+        $activity->activity_detail= json_encode($responseofQuery);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
         $activity->save();
 

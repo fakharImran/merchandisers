@@ -101,7 +101,7 @@ class ProductExpiryTrackerController extends BaseController
         $activity= new Activity;
         $activity->company_user_id= $company_user_id;
         $activity->activity_description= 'You did set a Product Expiry of '. $product->product_name. ' Click Here to see what you entered';
-        $activity->activity_type= 'need to set';        
+        $activity->activity_type= 'Product Expiry';        
         $activity->activity_detail= json_encode($productExpiryTrackerArr);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
         $activity->save();
