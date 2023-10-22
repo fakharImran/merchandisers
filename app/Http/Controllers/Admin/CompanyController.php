@@ -113,7 +113,7 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'company_name' => ['required', new UniqueCompanyName],
+            'company_name' => 'required',
             'company_code' => 'required|regex:/\d{4}/'
         ]);
         

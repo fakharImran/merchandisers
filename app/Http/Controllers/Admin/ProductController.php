@@ -129,7 +129,7 @@ class ProductController extends Controller
             'company_id' => 'required',
             'store_id' => 'required',
             'category' => 'required',
-            'product_name' => ['required',new UniqueProductName($request->company_id, $request->store_id)],
+            'product_name' => 'required',
             'product_number_sku' => 'required',
             'competitor_product_name' => 'required',
         ]);

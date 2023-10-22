@@ -138,7 +138,7 @@ class StoreController extends Controller
 
         $validator = Validator::make($request->all(), [
             'company_id' => 'required',
-            'name_of_store' => ['required', new UniqueStoreName($request->company_id)],
+            'name_of_store' =>'required',
             'locations' => 'required',
             'parish' => 'required',
             'channel' => 'required',
