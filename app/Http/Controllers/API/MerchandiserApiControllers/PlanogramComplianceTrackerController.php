@@ -78,8 +78,8 @@ class PlanogramComplianceTrackerController extends BaseController
             'category_id'=>'required',
             'product_id'=>'required',
             'product_number_sku'=>'required',
-            'photo_before_stocking_shelf'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            // 'photo_after_stocking_shelf'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'photo_before_stocking_shelf'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
+            // 'photo_after_stocking_shelf'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
             'action'=>'required',
         ]);
         if($validator->fails()){
@@ -153,7 +153,7 @@ class PlanogramComplianceTrackerController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'store_location_id'=>'required',
-            'photo_after_stocking_shelf'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'photo_after_stocking_shelf'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       

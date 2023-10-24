@@ -77,7 +77,7 @@ class OpportunityController extends BaseController
             'product_id'=>'required',
             'product_sku'=>'required',
             'Note'=>'required',
-            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
         ]);
 
 

@@ -78,7 +78,7 @@ class MarketingActivityController extends BaseController
             'promotion_type'=>'required',
             'product_sku'=>'required',
             'Competitor_product_name'=>'required',
-            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
             'Note'=>'required',
         ]);
         if($validator->fails()){

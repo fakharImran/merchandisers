@@ -205,7 +205,7 @@ class MerchandiserTimeSheetController extends BaseController
             // only run in case of checkout for check the signature valiation
             if($request->status == 'check-out'){
                 $validator = Validator::make($request->all(), [
-                    'signature' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+                    'signature' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:50000',
                 ]);
                 if($validator->fails()){
                     return $this->sendError('Validation Error.', $validator->errors());       

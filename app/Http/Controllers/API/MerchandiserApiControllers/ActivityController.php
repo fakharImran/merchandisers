@@ -107,7 +107,7 @@ class ActivityController extends BaseController
                     return $this->sendResponse(['activityDetails id' => $activityDetails->id], 'Marketing Activity activity deleted successfully.');
                 } else {
                     // Handle the case where the data is not found
-                    return $this->sendError('Marketing Activity data not found.');
+                    return $this->sendError('Marketing Activity data not found.  Already Deleted');
                 }
                 break;
             case 'Opportunity':
@@ -120,7 +120,7 @@ class ActivityController extends BaseController
                     return $this->sendResponse(['activityDetails id' => $activityDetails->id], 'Opportunity activity deleted successfully.');
                 } else {
                     // Handle the case where the data is not found
-                    return $this->sendError('Opportunity data not found.');
+                    return $this->sendError('Opportunity data not found.  Already Deleted');
                 }
                 break;
             case 'Out of Stock':
@@ -133,11 +133,15 @@ class ActivityController extends BaseController
                      return $this->sendResponse(['activityDetails id' => $activityDetails->id], 'Out of Stock deleted successfully.');
                  } else {
                      // Handle the case where the data is not found
-                     return $this->sendError('Out of Stock data not found.');
+                     return $this->sendError('Out of Stock data not found.  Already Deleted');
                  }
                 break;
             case 'Planogram Compliance Tracker':
                     $PlanogramComplianceTracker = PlanogramComplianceTracker::find($activityDetails->id);
+                    // $prevActivityPlanogram= Activity::where('activity_type', 'Planogram Compliance Tracker')
+                    // ->where('company_user_id', $activityDetails->id)->get()
+                    // ->where('store_id', $activityDetails->store_id);
+                    // return $this->sendResponse(['PlanogramComplianceTracker' => $PlanogramComplianceTracker, 'activityData' =>$activityData, 'prevActivityPlanogram' =>$prevActivityPlanogram], 'Planogram Compliance Tracker deleted successfully.');
 
                     if ($PlanogramComplianceTracker) {
                         $PlanogramComplianceTracker->delete(); // Delete the record
@@ -145,7 +149,7 @@ class ActivityController extends BaseController
                         return $this->sendResponse(['activityDetails id' => $activityDetails->id], 'Planogram Compliance Tracker deleted successfully.');
                     } else {
                         // Handle the case where the data is not found
-                        return $this->sendError('Planogram Compliance Tracker data not found.');
+                        return $this->sendError('Planogram Compliance Tracker data not found. Already Deleted');
                     }
                     break;
             case 'Price Audit':
@@ -158,7 +162,7 @@ class ActivityController extends BaseController
                      return $this->sendResponse(['activityDetails id' => $activityDetails->id], 'Price Audit deleted successfully.');
                  } else {
                      // Handle the case where the data is not found
-                     return $this->sendError('Price Audit data not found.');
+                     return $this->sendError('Price Audit data not found.  Already Deleted');
                  }
                 break;
             case 'Product Expiry':
@@ -171,7 +175,7 @@ class ActivityController extends BaseController
                      return $this->sendResponse(['activityDetails id' => $activityDetails->id], 'Product Expiry Tracker deleted successfully.');
                  } else {
                      // Handle the case where the data is not found
-                     return $this->sendError('Product Expiry Tracker data not found.');
+                     return $this->sendError('Product Expiry Tracker data not found.  Already Deleted');
                  }
                 break;
             case 'Stock count':
@@ -184,7 +188,7 @@ class ActivityController extends BaseController
                     return $this->sendResponse(['activityDetails id' => $activityDetails->id], 'Stock count activity deleted successfully.');
                 } else {
                     // Handle the case where the data is not found
-                    return $this->sendError('Stock count data not found.');
+                    return $this->sendError('Stock count data not found.  Already Deleted');
                 }
                 break;
             case 'Merchandiser Timesheet':
@@ -196,7 +200,7 @@ class ActivityController extends BaseController
                     return $this->sendResponse(['activityDetails id' => $activityDetails->id], 'Merchandiser TimeSheet activity deleted successfully.');
                 } else {
                     // Handle the case where the data is not found
-                    return $this->sendError('Merchandiser TimeSheet data not found.');
+                    return $this->sendError('Merchandiser TimeSheet data not found.  Already Deleted');
                 }
                 break;
             default:

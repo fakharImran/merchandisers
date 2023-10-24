@@ -176,7 +176,7 @@ public function importProduct(Request $request)
     try {
         // Validate the uploaded file before processing
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls|max:2048',
+            'file' => 'required|mimes:xlsx,xls|max:100000',
         ]);
 
         // Store the uploaded file

@@ -75,7 +75,7 @@ class ProductExpiryTrackerController extends BaseController
             'batchNumber'=>'required',
             'expiry_date'=>'required',
             'action_taken'=>'required',
-            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
 
         ]);
         if($validator->fails()){
