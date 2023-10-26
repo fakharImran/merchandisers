@@ -43,7 +43,10 @@ class ActivityController extends BaseController
     }
     function getActivityByDate($date)
     {
-        $activities = Activity::select('*')
+        $user = Auth::user();
+
+        $company_user = $user->companyUser;
+        $activities = Activity::select('*')->where('company_user_id',$company_user->id )
         ->whereRaw("DATE(created_at) = ?", [$date]) 
         ->orderBy('created_at', 'desc')
         ->select('id', 'activity_description', 'activity_type', 'activity_detail') 

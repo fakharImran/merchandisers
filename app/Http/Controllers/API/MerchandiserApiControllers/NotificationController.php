@@ -18,8 +18,10 @@ class NotificationController extends BaseController
     public function index()
     {
         $user = Auth::user();
-        $notifications= $user->companyUser->notifications;
-
+        $notifications= $user->companyUser->notifications()
+        ->orderBy('created_at', 'desc')
+        ->get();
+        
         if($notifications)
         {
             return $this->sendResponse(['notifications'=>$notifications], 'notifications exist');
@@ -32,11 +34,15 @@ class NotificationController extends BaseController
     }
     function getNotificationByDate($date)
     {
-        $notifications = Notification::select('*')
+        $user = Auth::user();
+
+        $company_user = $user->companyUser;
+
+        $notifications = Notification::select('*')->where('company_user_id',$company_user->id )
         ->whereRaw("DATE(created_at) = ?", [$date]) 
-        // ->orderBy('created_at', 'desc')
+        ->orderBy('created_at', 'desc')
         ->get();
-        return $this->sendResponse(['date'=>$date, 'notifications'=>$notifications], 'this is the date Data');
+        return $this->sendResponse(['date'=>$date, 'notifications'=>$notifications], 'this is the Notification date Data');
         
     }
 
