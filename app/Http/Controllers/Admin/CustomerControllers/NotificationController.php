@@ -129,18 +129,65 @@ class NotificationController extends Controller
         $data= $request->input();
         $notification = new Notification;
 
-               $notification->store_location_id =$data['store_location_id'];
-               $notification->store_id =$data['store_id'];
-               $notification->company_user_id =$data['company_user_id'];
-               $notification->title =$data['title'];
-               $notification->message =$data['message'];
-               $notification->attachment =$url;
-               $notification->save();
-               
-            
-                return redirect()->route('web_notification.index')->with(['pageConfigs' => $pageConfigs]);
+        $notification->store_location_id =$data['store_location_id'];
+        $notification->store_id =$data['store_id'];
+        $notification->company_user_id =$data['company_user_id'];
+        $notification->title =$data['title'];
+        $notification->message =$data['message'];
+        $notification->attachment =$url;
+        $notification->save();
 
-                // return view('manager.notifications', compact('allNotifications','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
+        $fcm_url = 'https://fcm.googleapis.com/fcm/send';
+        $FcmToken = User::whereNotNull('device_token')->pluck('device_token')->all();
+          
+        $serverKey = 'AAAAZ7dCL_c:APA91bEp8yX6CiX_Jxj0iHC0tdR4Bow6maEr0Lv3vluMlSdv-XdJfVYMAlW_5ZqWYSTl0go1Iut7vx4fZYQl8XlgNJgp6COt35fhpwy4UdyQeGHz9Gi1beoRewEOeLzCB1OpRQU20S2h';
+  
+        $data = [
+            "registration_ids" => $FcmToken,
+            "notification" => [
+                "title" => $data['title'],
+                "body" => $data['message'],  
+            ],
+            "data"=>[
+                "type"=>"msj",
+                "title"=> $data['title'],
+                "message"=> $data['message'],  
+                "image_url"=> $url
+            ]
+        ];
+        $encodedData = json_encode($data);
+    
+        $headers = [
+            'Authorization:key=' . $serverKey,
+            'Content-Type: application/json',
+        ];
+
+    // dd($fcm_url , $FcmToken,$data ,$encodedData,  $headers);
+
+        $ch = curl_init();
+      
+        curl_setopt($ch, CURLOPT_URL, $fcm_url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        // Disabling SSL Certificate support temporarly
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);        
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
+        // Execute post
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            die('Curl failed: ' . curl_error($ch));
+        }        
+        // Close connection
+        curl_close($ch);
+        // FCM response
+        // dd($result);    
+          
+        return redirect()->route('web_notification.index')->with(['pageConfigs' => $pageConfigs]);
+
+        // return view('manager.notifications', compact('allNotifications','userArr', 'name',  'stores','allLocations', 'products'), ['pageConfigs' => $pageConfigs]);
 
         //
     }

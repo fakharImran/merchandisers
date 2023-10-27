@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\CustomerControllers\StockCountByStoreController;
 use App\Http\Controllers\Admin\CustomerControllers\ProductExpiryTrackerController;
 use App\Http\Controllers\Admin\CustomerControllers\MerchandiserTimeSheetController;
 use App\Http\Controllers\Admin\CustomerControllers\PlanogramComplianceTrackerController;
+use Illuminate\Support\Facades\Session;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,14 +59,17 @@ if ($user) {
         case $user->roles->contains('name', 'merchandiser'):
             // User has a "merchandiser" role
             // Handle merchandiser-specific actions
-            return redirect()->route('logout');
-
+            Session::flush();
+            Auth::logout();
+            return redirect('login');
             break;
 
         default:
             // User has other or no roles
             // Handle other user roles or cases
-            return redirect('/login'); // Handle unknown roles appropriately
+            Session::flush();
+            Auth::logout();
+            return redirect('login'); // Handle unknown roles appropriately
 
             break;
     }
@@ -80,7 +84,6 @@ if ($user) {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // for authentication through email
 Route::get('/email/verify', function () {
@@ -97,6 +100,8 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 Route::group(['middleware' => ['auth', 'role:admin']], function() {
     
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
     Route::resource('company', CompanyController::class);
     Route::get('company/edit/{target?}/{parameter?}', [CompanyController::class, 'edit'])->name('company-edit');
     Route::get('company/delete/{parameter?}', [CompanyController::class, 'delete'])->name('company-delete');

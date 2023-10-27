@@ -51,8 +51,8 @@ class RegisterController extends BaseController
             'email' => 'required|email',
             'password' => 'required',
             'c_password' => 'required|same:password',
-            'time_zone' =>'required'
-            
+            'time_zone' =>'required',
+            'device_token' => 'required',
         ]);
    
         if($validator->fails()){
@@ -84,36 +84,9 @@ class RegisterController extends BaseController
         $success['company_code'] =  $user->companyUser->company->code;
         $success['company_id'] =  $user->companyUser->company->id;
         $success['user_id'] =  $user->id;
+        $success['device_token'] = $user->device_token;
         return $this->sendResponse($success, 'User register successfully.');
     }
-
-    // public function companyValidator(Request $request) {
-    //     $validator = Validator::make($request->all(), [
-    //         'user_id' => 'required',
-    //         'company_id' => 'required',
-    //         'code' => 'required',
-    //         'token' => [
-    //             'required',
-    //             Rule::in(['qwertyuiopasdfghjkl@#$$%'])
-    //         ]
-    //     ]);
-   
-    //     if($validator->fails()){
-    //         return $this->sendError('Validation Error.', $validator->errors());       
-    //     }
-    //     $user = User::findOrFail($request->user_id);
-    //     if(!$user){
-    //         return $this->sendError('User not found.');       
-    //     }
-    //     if($user->companyUser->company->id == $request->company_id && $request->code == $user->companyUser->company->code ){
-    //         $user->companyUser->access_privilege ='Active';
-    //         $user->companyUser->update();
-    //         $success['name'] =  $user->name;
-    //         return $this->sendResponse($success, 'User code register successfully.');
-    //     }
-    //     return $this->sendError('Code not found.');       
-
-    // }
    
     /**
      * Login api
@@ -125,7 +98,8 @@ class RegisterController extends BaseController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            'time_zone'=> 'required'
+            'time_zone'=> 'required',
+            'device_token' => 'required',
         ]);
    
         if($validator->fails()){
@@ -138,12 +112,13 @@ class RegisterController extends BaseController
                 //update last login date and time
                 $user->companyUser->last_login_date_time =  date("Y-m-d h:i:s A");
                 $user->companyUser->save();
-                $user->update(['time_zone' => $request->input('time_zone')]);
+                $user->update(['time_zone' => $request->input('time_zone'), 'device_token' => $request->input('device_token')]);
 
                 $success['token'] = $user->createToken('api-token')->plainTextToken;
                 $success['name'] =  $user->name;
                 $success['id'] =  $user->id;
                 $success['company'] = $user->companyUser->company;
+                $success['device_token'] = $user->device_token;
                 return $this->sendResponse($success, 'User login successfully.');
             }
             else{ 
