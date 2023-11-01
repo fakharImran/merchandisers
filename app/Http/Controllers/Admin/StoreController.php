@@ -134,74 +134,48 @@ class StoreController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+{
+    // Validate the input data
+    $validator = Validator::make($request->all(), [
+        'company_id' => 'required',
+        // 'name_of_store' => ['required', new UniqueStoreName($request->company_id, $id)],
+        'locations' => 'required',
+        'parish' => 'required',
+        'channel' => 'required',
+    ]);
 
-        $validator = Validator::make($request->all(), [
-            'company_id' => 'required',
-            'name_of_store' =>'required',
-            'locations' => 'required',
-            'parish' => 'required',
-            'channel' => 'required',
-        ]);
-    
-        if ($validator->fails()) {
-            // Validation failed
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-
-            $query =  Store::where('id', $id)->first();
-            $query->update(['company_id'=>$request->company_id, 'name_of_store' =>$request->name_of_store, 'parish' =>json_encode($request->parish), 'channel' =>$request->channel]);
-            
-            $existingLocations = $query->locations;
-
-            $existingLocationsCount = count($existingLocations);
-            $requestLocationsCount = count($request->locations);
-
-            if ($existingLocationsCount == $requestLocationsCount) {
-                // Update existing locations
-                foreach ($existingLocations as $existingLocation) {
-                    // dd($existingLocation);
-                    $reqLocation = $request->locations[$existingLocation->id]; // Assuming the location ID matches the array index
-                    $existingLocation->update(['location' => $reqLocation]);
-                }
-            } else {
-                $existingLocationIds = $existingLocations->pluck('id')->toArray();
-                $requestLocationIds = array_keys($request->locations);
-
-                // Locations to delete (only those that are not in the request)
-                $locationsToDelete = array_diff($existingLocationIds, $requestLocationIds);
-
-                // Delete excess locations (those not in the request)
-                if (!empty($locationsToDelete)) {
-                    StoreLocation::whereIn('id', $locationsToDelete)->delete();
-                }
-
-                // Update existing locations and add new locations
-                // dd($existingLocations);
-                // foreach ($existingLocations as $existingLocation) {
-                //     $reqLocation = $request->locations[$existingLocation->id]; // Assuming the location ID matches the array index
-                //     $existingLocation->update(['location' => $reqLocation]);
-                // }
-
-                // Add new locations
-                $newLocationIds = array_diff($requestLocationIds, $existingLocationIds);
-                foreach ($newLocationIds as $locationId) {
-                    $reqLocation = $request->locations[$locationId];
-                    $query->locations()->create(['location' => $reqLocation]);
-                }
-
-
-                // // Update existing locations
-                // foreach ($existingLocations as $existingLocation) {
-                //     $reqLocation = $request->locations[$existingLocation->id]; // Assuming the location ID matches the array index
-                //     $existingLocation->update(['location' => $reqLocation]);
-                // }
-            }
-
-
-        return redirect()->route('store.index');
+    if ($validator->fails()) {
+        // Validation failed
+        return redirect()->back()->withErrors($validator)->withInput();
     }
+
+    // Find the store by its ID
+    $store = Store::find($id);
+
+    if (!$store) {
+        // Handle the case where the store with the given ID is not found
+        return redirect()->route('store.index')->with('error', 'Store not found.');
+    }
+
+    // Update the store attributes with the new data
+    $store->company_id = $request->company_id ?? null;
+    $store->name_of_store = $request->name_of_store ?? null;
+    $store->parish = json_encode($request->parish);
+    $store->channel = $request->channel ?? null;
+
+    // Save the store record with the updated data
+    $store->save();
+
+    // Update store locations
+    if ($request->has('locations')) {
+        $store->locations()->delete(); // Remove existing locations
+        foreach ($request->locations as $location) {
+            $store->locations()->create(['location' => $location]);
+        }
+    }
+
+    return redirect()->route('store.index')->with('success', 'Store updated successfully');
+}
 
     /**
      * Remove the specified resource from storage.

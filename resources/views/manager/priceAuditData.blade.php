@@ -69,7 +69,7 @@
                 <select name="store-search" class="filter form-select" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                        @foreach ($stores->unique('name_of_store')->sort() as $store)
+                        @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
                             <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                         @endforeach
                     @endif
@@ -129,6 +129,7 @@
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                        asort($uniqueMerchandisers); // Sort the array alphabetically
                     @endphp
                     @foreach($uniqueMerchandisers as $merchandiser)
                          <option value="{{$merchandiser}}">{{$merchandiser}}</option>
@@ -141,7 +142,7 @@
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
-                     @foreach($categories->unique('category')->sort() as $category)
+                     @foreach($categories->unique('category')->sortBy('category') as $category)
                      <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
@@ -152,55 +153,17 @@
                 <label for="product-search" class="form-label filter product">Select product</label>
                 <select name="product-search" onchange="getProductData(this)" class=" filter form-select"  id="product-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($products->unique('product_name')->sort() as $product)
+                    @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
                     @endforeach
                 </select>   
             </div>
         </div>
-    </div>
-    <div style="width: 800px; margin: auto;">
-        <canvas id="myChart"></canvas>
-    </div>
-    {{-- <div class="row">
-        <div class="col-12">
-            <button
-                class="btn btn-primary btn-sm edit-address"
-                style="float: right"
-                type="button"
-                data-bs-toggle="modal"
-                data-bs-target="#pendingTimeSheet"
-                >
-                Pending Time Sheets
-            </button>
-        </div>
-    </div> --}}
-    <div class="row pt-5" style=" ">
-        <div class="col-5">
-
-            <div >
-                <h3 class="fw-bolder" >Legend</h3>
-            </div>
-            <div class="d-flex mt-3 mb-3">
-                <div style="background-color: #1BC018;" class="bullet"></div> <div> Your Product</div>
-            </div>
-            <div class="d-flex mt-3 mb-3">
-                <div   style="background-color: #1892C0;" class="bullet"></div> <div>Your Compititor Product</div>
-            </div>
-            
-            {{-- <div class=" bullet" style="background-color: green;"> Your Product</div><br>
-            <div class= "bullet"  style="background-color: blue;"> Your Compititor Product</div> --}}
-        </div>
-            {{-- @php
-                $priceComparison=0;
-                $sumStorePrice=0;
-                $sumCompititorProductPrice=0;
-            @endphp --}}
         <div class="col-md-3 col-3">
-            <div class="card manager-card-style "  data-toggle="tooltip" title="Price Comparison index = ((Store Price ➗ Competitor Product Price) x 100) - 100">
+            <div class="card manager-card-style-header "  data-toggle="tooltip" title="Price Comparison index = ((Store Price ➗ Competitor Product Price) x 100) - 100">
                     <div class="card-header manager-card-header">Price Comparison Index</div>    
                     <div class="card-body">
-                        <div class="percentage" id="price_comparison">
+                        <div class="percentage" id="price_comparison" style="font-size: 35px;">
                             @php
                             
                                 if (!$priceAuditData->isEmpty())
@@ -225,14 +188,14 @@
                                     $priceComarison= number_format((($latestPriceAudit->product_store_price/$latestPriceAudit->competitor_product_price)*100)-100, 2);
                                     if($priceComarison>0)
                                     {
-                                        echo '<span style="color:  #1892C0">'.$priceComarison.'</span>';                                
+                                        echo '<span style="color:  #1892C0">'.$priceComarison.'%</span>';                                
                                     }
                                     elseif ($priceComarison<0) {
-                                        echo '<span style="color:  #1BC018">'.$priceComarison.'</span>';                                
+                                        echo '<span style="color:  #1BC018">'.$priceComarison.'%</span>';                                
                                     }
                                     else
                                     {
-                                        echo '<span style="color:  #929293">'.$priceComarison.'</span>';                                
+                                        echo '<span style="color:  #929293">'.$priceComarison.'%</span>';                                
                                     }
                                 }
                             @endphp
@@ -241,14 +204,54 @@
                     </div>     
             </div>
         </div>
-        <div class="col-4 " style="padding-top:41px;">
+        <div class="col-3 " style="padding-top:41px;">
 
-            <div style=" padding-bottom: 14px; pt-10">
+            <div style=" padding-bottom: 14px; pt-10; font-size: small;">
                 <label for=""><b style="    color: #929293">= Equal Than Competitor Average Price  </b></label>
                 <label for=""><b style="    color: #1892C0"> > Greater Than Competitor Average Price</b></label>
                 <label for=""><b style="    color: #1BC018;">< Less Than Competitor Average Price</b></label>
             </div>
         </div>
+    </div>
+    <div style="width: 800px; margin: auto;">
+        <canvas id="myChart"></canvas>
+    </div>
+    {{-- <div class="row">
+        <div class="col-12">
+            <button
+                class="btn btn-primary btn-sm edit-address"
+                style="float: right"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#pendingTimeSheet"
+                >
+                Pending Time Sheets
+            </button>
+        </div>
+    </div> --}}
+    <div class="row pt-5" style=" font-size: 15px; line-height: normal;">
+        <div class="col-5">
+
+            <div >
+                <h5 class="fw-bolder" >Legend</h5>
+            </div>
+            <div class="d-flex mt-2 mb-2">
+                <div style="background-color: #1BC018;" class="bullet"></div> <div> Your Product</div>
+            </div>
+            <div class="d-flex mt-2 mb-2">
+                <div   style="background-color: #1892C0;" class="bullet"></div> <div>Your Competitor Product</div>
+            </div>
+            
+            {{-- <div class=" bullet" style="background-color: green;"> Your Product</div><br>
+            <div class= "bullet"  style="background-color: blue;"> Your Compititor Product</div> --}}
+        </div>
+            @php
+                $minProdPrice=0;
+                $maxProdPrice=0;
+                $avgProdPrice=0;
+                $avgCompProdPrice=0;
+            @endphp
+        
 
     </div>
     <div class="row pt-5" style=" ">
@@ -257,7 +260,7 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Max. Product Price</div>    
                 <div class="card-body">
-                    <div class="percentage" id="maxProductPrice">0</div>
+                    <div class="percentage" id="maxProductPrice">$0</div>
                 </div>     
             </div>
         </div>
@@ -265,7 +268,7 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Min. Product Price</div>    
                 <div class="card-body">
-                    <div class="percentage" id="minProductPrice">0</div>
+                    <div class="percentage" id="minProductPrice">$0</div>
                 </div>     
             </div>
         </div> 
@@ -273,7 +276,7 @@
             <div class="card manager-card-style"  data-toggle="tooltip" title="Average Price = Sum of store price to date ➗ Number of Stores to date For example (($75 + $34 + $25 + $10) ➗ 4 stores) = $85">
                 <div class="card-header manager-card-header">Average Product Price</div>    
                 <div class="card-body">
-                    <div class="percentage" id="averageProductPrice">0</div>
+                    <div class="percentage" id="averageProductPrice">$0</div>
                 </div>     
             </div>
         </div> 
@@ -281,7 +284,7 @@
             <div class="card manager-card-style"  data-toggle="tooltip" title="Competitor Average Price = Sum of Competitor Product price to date ➗ Number of Stores to date For example (($65 + $20 + $30 + $50) ➗ 4 stores) = $41.25">
                 <div class="card-header manager-card-header">Competitor Product Average Price</div>    
                 <div class="card-body">
-                    <div class="percentage" id="compititorProductPrice">0</div>
+                    <div class="percentage" id="compititorProductPrice">$0</div>
                 </div>     
             </div>
         </div>
@@ -314,6 +317,9 @@
                             <th class="thclass" scope="col">Total Price</th>
                             <th class="thclass" scope="col">Competitor Product Name</th>
                             <th class="thclass" scope="col">Competitor Product Price</th>
+                            <th class="thclass" scope="col">Tax</th>
+                            <th class="thclass" scope="col">Total Competitor Price</th>
+
                             <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Notes</th>
                         </tr>
@@ -355,7 +361,7 @@
                                         @php
                                             $taxAmount= ($priceAudit->product_store_price/100) * $priceAudit->tax_in_percentage;
                                         @endphp
-                                        {{'$'.$taxAmount}}</td>
+                                        {{$taxAmount}}</td>
                                     <td class="tdclass">
                                         @php
                                             $totalPrice= $priceAudit->product_store_price + $priceAudit->product_store_price/100 * $priceAudit->tax_in_percentage;
@@ -364,6 +370,18 @@
                                     </td>
                                     <td class="tdclass">{{$priceAudit->competitor_product_name}}</td>
                                     <td class="tdclass">{{$priceAudit->competitor_product_price}}</td>
+                                    <td class="tdclass">
+                                        @php
+                                            $taxAmount= ($priceAudit->competitor_product_price/100) * $priceAudit->tax_in_percentage;
+                                        @endphp
+                                        {{$taxAmount}}
+                                    </td>
+                                    <td class="tdclass">
+                                        @php
+                                            $totalCompetetorPrice= $priceAudit->competitor_product_price + $priceAudit->competitor_product_price/100 * $priceAudit->tax_in_percentage;
+                                            echo $totalCompetetorPrice;
+                                        @endphp
+                                    </td>
                                     <td class="tdclass">{{$priceAudit->companyUser->user->name}}</td>
 
                                     <td class="tdclass">{{$priceAudit->notes}}</td>
@@ -374,7 +392,7 @@
                                         // $priceComparison=number_format((($sumStorePrice/$sumCompititorProductPrice)*100)-100, 2);
                                    array_push( $products_name,[$priceAudit->product->product_name, $priceAudit->competitor_product_name]);
                                     array_push($our_products_price, $totalPrice);
-                                    array_push($competitor_products_price ,  $priceAudit->competitor_product_price);
+                                    array_push($competitor_products_price ,  $totalCompetetorPrice);
                                 @endphp
                             @endforeach
                         @endif
@@ -449,7 +467,7 @@
 </script>
 <script>
 
-    function downloadTable(table) {
+function downloadTable(table) {
         const rows = table.getElementsByTagName('tr');
         let csvContent = 'data:text/csv;charset=utf-8,';
 
@@ -460,19 +478,30 @@
             .join(',');
         csvContent += headerText + '\r\n';
 
-        // Add data rows
-        for (let i = 0; i < rows.length; i++) {
+
+        for (let i = 0; i < rows.length; i++) 
+        {
             const cells = rows[i].getElementsByTagName('td');
             for (let j = 0; j < cells.length; j++) {
-                csvContent += cells[j].innerText + ',';
+                const cell = cells[j];
+                if (j > 0) {
+                    csvContent += ','; // Add a comma as a separator between columns
+                }
+
+                const image = cell.querySelector('img');
+                if (image) {
+                    const imageUrl = image.getAttribute('src');
+                    csvContent += cell.innerText +  imageUrl; // Combine text and image URL in the same column
+                } else {
+                    csvContent += cell.innerText; // Add the cell's text if there's no image
+                }
             }
             csvContent += '\r\n';
         }
-
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
-        link.setAttribute('download', 'Price_audit_table.csv');
+        link.setAttribute('download', 'Price_Audit_table.csv');
         document.body.appendChild(link);
         link.click();
         

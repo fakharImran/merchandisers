@@ -19,6 +19,60 @@ function formatDateYMD(date) {
 
     return `${year}-${month}-${day}`;
 }
+function setCards(table, startDate=0, endDate=0)
+{
+    var sumClosingweekStock = 0;
+    var sumOpeningWeekStock = 0;
+    var sumUnits=0;
+    var sumCases=0;
+    // Use a Set to keep track of unique stores
+    // Iterate over the visible rows and calculate the minimum and maximum product prices
+    table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+        const data = this.data();
+        var units = parseInt(data[13]); // Assuming column 1 contains the store
+        sumUnits+=units;
+        var cases = parseInt(data[14]); // Assuming column 1 contains the store
+        sumCases+=cases;
+        var stockDate= data[0];
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
+        // console.log('stockDate in table', stockDate,' date saven days ago', sevenDaysAgoString, 'xxxxxxxxxxxxxxxx');
+        if (stockDate <= sevenDaysAgoString) {
+            sumOpeningWeekStock += units+cases;
+        }
+        var tempTotal= units + cases;
+        // console.log(units,'units',cases, 'cases' );
+        sumClosingweekStock+=tempTotal;
+        var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
+        
+    });
+
+    console.log('startDate', startDate, 'enddate', endDate);
+    
+    if(startDate!=0 && endDate!=0)
+    {
+        document.getElementById('opening_week_date').innerHTML =startDate;
+        document.getElementById('closing_week_date').innerHTML =endDate;
+    }
+   
+
+    document.getElementById('total_stock_count_cases').innerHTML =sumCases;
+    document.getElementById('total_stock_count').innerHTML =  sumUnits;
+    document.getElementById('opening_week_stock').innerHTML = sumOpeningWeekStock;
+    document.getElementById('closing_week_stock').innerHTML = sumClosingweekStock;
+    // document.getElementById('average_stock').innerHTML = sumOpeningWeekStock/sumClosingweekStock*100+'%';
+   
+    const averageStockElement = document.getElementById('average_stock');
+    if (averageStockElement) {
+        if (sumOpeningWeekStock !== null && sumClosingweekStock !== null && sumClosingweekStock !== 0) {
+            const averageStockValue = (sumOpeningWeekStock / sumClosingweekStock) * 100;
+            averageStockElement.innerHTML = `<h3><b>${averageStockValue.toFixed(2)}%</b></h3>`;
+        } else {
+            averageStockElement.innerHTML = `<h3><b>0</b></h3>`;
+        }
+    }
+}
 
 //create last days dates
 function createLastDaysDates(data, startDate = 0, endDate = 0)
@@ -314,7 +368,7 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
 //     periodData = weekarray.reverse();
 //     labels = previousWeeksArray.reverse();
 // }
-createLastMonthsDates(convertedToChartData);
+createLastWeeksDates(convertedToChartData);
 
 function changePeriod(e) {
     switch (e.value) {
@@ -341,11 +395,11 @@ function changePeriod(e) {
             graphFormat = 'months';
             break;
         default:
-            createLastDaysDates(convertedToChartData);
+            createLastWeeksDates(convertedToChartData);
             myChartJS.data.labels = labels;
             myChartJS.data.datasets[0].data = periodData;
             myChartJS.update();
-            graphFormat = 'days';
+            graphFormat = 'weeks';
             break;
     }
 }
@@ -495,6 +549,8 @@ $(document).ready(function () {
         buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
         "pagingType": "full_numbers"
     });
+    setCards(table);
+
     // Custom search input for 'Name' column
     $('#store-search').on('change', function () {
 
@@ -502,6 +558,9 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
+
+        setCards(table);
+
         var storeName = this.value;
 
         // Assuming you have a dropdown with ID 'location-search'
@@ -540,7 +599,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -553,6 +612,9 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(1).search(this.value).draw();
+        setCards(table);
+
+
         convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
@@ -566,7 +628,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -577,6 +639,8 @@ $(document).ready(function () {
     $('#category-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCards(table);
+
         convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
@@ -590,7 +654,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -600,6 +664,8 @@ $(document).ready(function () {
     $('#merchandiser-search').on('change', function () {
         // const searchValue = this.value.trim();
         table.column(5).search(this.value ? `^${this.value}$` : '', true, false).draw();
+        setCards(table);
+
         console.log(this.value);
         convertedToChartData = changeGraph(table);
 
@@ -614,7 +680,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -626,6 +692,8 @@ $(document).ready(function () {
     $('#product-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCards(table);
+
         // console.log("search product", searchValue);
         convertedToChartData = changeGraph(table);
 
@@ -640,7 +708,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -680,6 +748,10 @@ $(document).ready(function () {
             }
             var dateList = dateRange(startDate, endDate);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+
+        setCards(table, startDate, endDate);
+
+        
             convertedToChartData = changeGraph(table);
             switch (graphFormat) {
                 case 'days':
@@ -692,7 +764,7 @@ $(document).ready(function () {
                     createLastMonthsDates(convertedToChartData , startDate, endDate);
                     break;
                 default:
-                    createLastDaysDates(convertedToChartData , startDate, endDate);
+                    createLastWeeksDates(convertedToChartData , startDate, endDate);
                     break;
             }
             myChartJS.data.labels = labels;
@@ -709,6 +781,17 @@ $(document).ready(function () {
         document.getElementById('period-search').clear;
         endDate = 0;
         startDate = 0;
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
+
+        let todayDate = new Date();
+        let todayDateString = todayDate.toISOString().split('T')[0];
+    
+        document.getElementById('opening_week_date').innerHTML =sevenDaysAgoString;
+        document.getElementById('closing_week_date').innerHTML = todayDateString;
+
+        setCards(table);
         // table.column(0).search('').draw();
         convertedToChartData = changeGraph(table);
         switch (graphFormat) {
@@ -722,7 +805,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;

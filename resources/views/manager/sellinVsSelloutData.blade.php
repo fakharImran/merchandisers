@@ -69,7 +69,7 @@
                 <select name="store-search" class="filter form-select" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                        @foreach ($stores->unique('name_of_store')->sort() as $store)
+                        @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
                             <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                         @endforeach
                     @endif
@@ -129,6 +129,8 @@
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                        asort($uniqueMerchandisers); // Sort the array alphabetically
+
                     @endphp
                     @foreach($uniqueMerchandisers as $merchandiser)
                          <option value="{{$merchandiser}}">{{$merchandiser}}</option>

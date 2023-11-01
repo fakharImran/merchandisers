@@ -57,7 +57,7 @@
     }
     /* Define a CSS class to apply the background image */
 </style>
-<div class="container">
+<div class="container merchandiser">
 
     <div  class="row d-flex align-items-center col-actions" style="   max-width: 99%; margin: 1px auto;">
         <div class="col-md-3 col-3 p-4">
@@ -75,7 +75,7 @@
                 <select name="store-search" class="filter form-select" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                        @foreach ($stores->unique('name_of_store')->sort() as $store)
+                        @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
                             <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                         @endforeach
                     @endif
@@ -177,6 +177,7 @@
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                        asort($uniqueMerchandisers); // Sort the array alphabetically
                     @endphp
                     @foreach($uniqueMerchandisers as $merchandiser)
                          <option value="{{$merchandiser}}">{{$merchandiser}}</option>
@@ -189,7 +190,7 @@
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
-                     @foreach($categories->unique('category')->sort() as $category)
+                     @foreach($categories->unique('category')->sortBy('category') as $category)
                      <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
@@ -200,10 +201,22 @@
                 <label for="product-search" class="form-label filter product">Select product</label>
                 <select name="product-search" class=" filter form-select"  id="product-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($products->unique('product_name')->sort() as $product)
+                    @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
                     @endforeach
                 </select>   
+            </div>
+        </div>
+        @php
+            $totalTimeWorked=0;
+        @endphp
+        <div class="col-md-3-5 col-sm-3 col-6 pt-2">
+            <div class="card manager-card-style">
+                <div class="card-header manager-card-header">Total Time Worked</div>    
+                <div class="card-body content">
+                    
+                    <div class="Link0" id="total_time_worked" style="width: 100%; height: 100%; color: #37A849; font-size: 20px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span>{{$totalTimeWorked}}</div>                
+                </div>
             </div>
         </div>
     </div>
@@ -497,7 +510,7 @@
                                         @endif
                                     </td>
                                     <td  class="tdclass">{{$checkout_location}}</td>
-                                    <td  class="tdclass">{{$tempHours}} hrs, {{$tempMinutes}} mins</td>
+                                    <td  class="tdclass">{{$tempHours. ' hrs, '. $tempMinutes. ' mins'}}</td>
                                     {{-- <td  class="tdclass">{{}}</td> --}}
                                     <td  class="tdclass">{{$merchandiser['name']}}</td>
                                     <td  class="tdclass">{{$manager}}</td>
@@ -525,6 +538,9 @@
                                 </tr>
                                 @php
                                     array_push($chartHoursArray ,['date'=>Carbon\carbon::parse(strval($checkout_date_time))->format('Y-m-d'), 'hours'=>$intervalAfterBreakLunch] );
+                                
+                                    $tempHours*60+$tempMinutes;
+                                    $totalTimeWorked+= $tempHours*60+$tempMinutes;
                                 @endphp
                             @endforeach
                             @foreach ($merchandiser['pending_time_sheets'] as $merchandiser_time_sheet)
@@ -671,6 +687,7 @@
                                     <td  class="tdclass">
                                         
                                     </td>
+                                    
                                 </tr>
                             @endforeach
                         @endforeach
@@ -736,8 +753,16 @@
 
 </script>
 <script>
+    var totalHours = Math.floor({{$totalTimeWorked}} / 60);
+    var totalMinutes = {{$totalTimeWorked}} % 60;
+    var totalWorkedTime = totalHours + 'hrs, ' + totalMinutes + 'mins';
+    console.log(totalWorkedTime);
+    // $('#total_time_worked').html(totalWorkedTime);
+    document.getElementById('total_time_worked').innerHTML = totalWorkedTime;
 
-    function downloadTable(table) {
+   // Include the xlsx library as mentioned in previous responses
+
+   function downloadTable(table) {
         const rows = table.getElementsByTagName('tr');
         let csvContent = 'data:text/csv;charset=utf-8,';
 
@@ -748,27 +773,41 @@
             .join(',');
         csvContent += headerText + '\r\n';
 
-        // Add data rows
-        for (let i = 0; i < rows.length; i++) {
+
+        for (let i = 0; i < rows.length; i++) 
+        {
             const cells = rows[i].getElementsByTagName('td');
             for (let j = 0; j < cells.length; j++) {
-                csvContent += cells[j].innerText + ',';
+                const cell = cells[j];
+                if (j > 0) {
+                    csvContent += ','; // Add a comma as a separator between columns
+                }
+
+                const image = cell.querySelector('img');
+                if (image) {
+                    const imageUrl = image.getAttribute('src');
+                    csvContent += cell.innerText +  imageUrl; // Combine text and image URL in the same column
+                } else {
+                    csvContent += cell.innerText; // Add the cell's text if there's no image
+                }
             }
             csvContent += '\r\n';
         }
-
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
-        link.setAttribute('download', 'Merchandiser_table.csv');
+        link.setAttribute('download', 'Merchandisers_table.csv');
         document.body.appendChild(link);
         link.click();
         
     }
+
+
     document.getElementById('downloadButton').addEventListener('click', () => {
         const timeSheetTable = document.getElementById('mechandiserDatatable');
         downloadTable(timeSheetTable);
     });
+
 
 </script>
 @endsection

@@ -20,6 +20,57 @@ function formatDateYMD(date) {
 
     return `${year}-${month}-${day}`;
 }
+
+function setCards(table, startDate=0, endDate=0)
+{
+    console.log(allUniqueStores,'-------------------');
+    console.log(allUniqueCategories,'-------------------');
+    console.log(allUniqueProducts,'-------------------');
+  
+    const outOfStockStores = new Set(); // Use a Set to store unique store names
+    const outOfStockCategories = new Set(); // Use a Set to store unique store names
+    const outOfStockProducts = new Set(); // Use a Set to store unique store names
+    table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+        const data = this.data();
+        const store = data[1]; // Assuming column 1 contains the store
+        const category= data[3];
+        const product= data[4];
+        
+        outOfStockStores.add(store); // Add the store name to the Set
+        outOfStockCategories.add(category);// Add the category name to the Set
+        outOfStockProducts.add(product);// Add the product name to the Set
+    });
+
+    const numberOfOutOfStockStores = outOfStockStores.size;
+    const numberOfOutOfStockCategories = outOfStockCategories.size;
+    const numberOfOutOfStockProduct = outOfStockProducts.size;
+
+    console.log('Number of unique expired stores:', numberOfOutOfStockStores);
+    console.log('Number of unique expired categories:', numberOfOutOfStockCategories);
+    console.log('Number of unique expired stores:', numberOfOutOfStockProduct);
+
+if(startDate!=0 && endDate!=0)
+{
+    document.getElementById('out_of_stock_stores').innerHTML =startDate+' to '+ endDate;
+    document.getElementById('out_of_stock_categories').innerHTML =startDate+' to '+ endDate;
+    document.getElementById('out_of_stock_product').innerHTML =startDate+' to '+ endDate;
+}
+// else
+// {
+//     let todayDate = new Date();
+//     const todayDateString = todayDate.toISOString().split('T')[0];
+
+//     document.getElementById('out_of_stock_stores').innerHTML =todayDateString;
+//     document.getElementById('out_of_stock_categories').innerHTML =todayDateString;
+//     document.getElementById('out_of_stock_product').innerHTML =todayDateString;
+// }
+
+    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockStores+' /</span> '+ allUniqueStores;
+    document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockCategories+' /</span> '+ allUniqueCategories;
+    document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockProduct+' /</span> '+ allUniqueProducts;
+}
+
+
 $(document).ready(function () { 
     var table = $('#outOfStockDatatable').DataTable({
         // Add your custom options here
@@ -33,6 +84,7 @@ $(document).ready(function () {
         buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
         "pagingType": "full_numbers"
     });
+    setCards(table);
     // Custom search input for 'Name' column
     $('#store-search').on('change', function () {
 
@@ -40,6 +92,8 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
+        setCards(table);
+
         var storeName = this.value;
 
         // Assuming you have a dropdown with ID 'location-search'
@@ -70,22 +124,26 @@ $(document).ready(function () {
     $('#location-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCards(table);
   
     });
     $('#merchandiser-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(5).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-    });
+        setCards(table);
+});
 
     $('#category-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-    });
+        setCards(table);
+});
 
     $('#product-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-    });
+        setCards(table);
+});
 
     $('#period-search').on('change', function () {
 
@@ -103,6 +161,7 @@ $(document).ready(function () {
              endDate = formatDateYMD(endDate);
 
             table.column(0).search('', true, false).draw(); // Clear previous search
+            setCards(table, startDate, endDate);
 
             var searchTerms = []; // Initialize an array to store search terms
             function dateRange(startDate, endDate) {
@@ -118,6 +177,7 @@ $(document).ready(function () {
             }
             var dateList = dateRange(startDate, endDate);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+            setCards(table);
          
         } else {
             console.log("The substring 'to' does not exist in the original string.");
@@ -130,6 +190,14 @@ $(document).ready(function () {
         document.getElementById('period-search').clear;
         endDate = 0;
         startDate = 0;
+        let todayDate = new Date();
+        const todayDateString = todayDate.toISOString().split('T')[0];
+    
+        document.getElementById('out_of_stock_stores').innerHTML =todayDateString;
+        document.getElementById('out_of_stock_categories').innerHTML =todayDateString;
+        document.getElementById('out_of_stock_product').innerHTML =todayDateString;       
+        setCards(table);
+        
         document.getElementById('period-search').value = 'Date Range';
 
     });

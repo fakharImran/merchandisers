@@ -70,7 +70,7 @@
                 <select name="store-search" class="filter form-select" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                        @foreach ($stores->unique('name_of_store')->sort() as $store)
+                        @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
                             <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                         @endforeach
                     @endif
@@ -130,6 +130,8 @@
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                        asort($uniqueMerchandisers); // Sort the array alphabetically
+
                     @endphp
                     @foreach($uniqueMerchandisers as $merchandiser)
                          <option value="{{$merchandiser}}">{{$merchandiser}}</option>
@@ -142,7 +144,7 @@
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
-                     @foreach($categories->unique('category')->sort() as $category)
+                     @foreach($categories->unique('category')->sortBy('category') as $category)
                      <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
@@ -153,7 +155,7 @@
                 <label for="product-search" class="form-label filter product">Select product</label>
                 <select name="product-search" class=" filter form-select"  id="product-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($products->unique('product_name')->sort() as $product)
+                    @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
                     @endforeach
                 </select>   
@@ -169,11 +171,10 @@
                     <small class="text-secondary">
                     </small>
                     @php
-                        $totalStores=$stores->unique('name_of_store')->count();
-                        $uniqueStores = $productExpiryTrackerData->unique('store_id')->sort();
-                        $uniqueStoreCount = $uniqueStores->count();
+                        $uniqueStoreCount=$stores->unique('name_of_store')->count();
+                        
                     @endphp
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueStoreCount}} /</span> {{$totalStores}}</div>                
+                    <div id="no_of_exp_store" class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B"></div>                
                 </div>
             </div>
         </div>
@@ -185,11 +186,9 @@
                     <small class="text-secondary">
                     </small>
                     @php
-                        $totalCategories= $categories->unique('category')->count();
-                        $uniqueCategories = $productExpiryTrackerData->unique('category_id')->sort();
-                        $uniqueCategoryCount = $uniqueCategories->count();
+                        $uniqueCategoryCount= $categories->unique('category')->count();
                     @endphp 
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueCategoryCount}} /</span> {{$totalCategories}}</div>                
+                    <div class="Link0" id="category_of_exp_product" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B"></div>                
                 </div>
             </div>
         </div>
@@ -200,11 +199,9 @@
                     <small class="text-secondary">
                     </small>
                     @php
-                        $totalProducts= $products->unique('product_name')->count();
-                        $uniqueProducts = $productExpiryTrackerData->unique('product_id')->sort();
-                        $uniqueProductCount = $uniqueProducts->count();
+                        $uniqueProductCount= $products->unique('product_name')->count();
                     @endphp 
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueProductCount}} /</span> {{$totalProducts}}</div>                
+                    <div class="Link0" id="no_of_exp_product" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B"></div>                
                 </div>
             </div>
         </div>
@@ -230,56 +227,79 @@
                             <th class="thclass" scope="col">Locations</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
-                            <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Product Number/SKU</th>
                             <th class="thclass" scope="col">Amount Expired (units)</th>
-                            <th class="thclass" scope="col">Batch #</th>
+                            <th class="thclass" scope="col">Batch No</th>
                             <th class="thclass" scope="col">Expiry Date</th>
                             <th class="thclass" scope="col">Action</th>
                             <th class="thclass" scope="col">Photo</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if(!$productExpiryTrackerData->isEmpty())
-                        @foreach($productExpiryTrackerData as $productExpiryTracker)
-                            <tr>
-                                {{-- {{dd($productExpiryTracker   )}} --}}
-                                <td class="tdclass">
-                                    @php
-                                        $date= explode(' ', $productExpiryTracker->created_at);
-                                    @endphp
-                                    {{$date[0]}}
-                                </td>
-                                <td class="tdclass">{{$productExpiryTracker->store->name_of_store}}</td>
-                                <td class="tdclass">
-                                    {{$productExpiryTracker->storeLocation->location}}
-                                </td>
-                                <td class="tdclass">{{$productExpiryTracker->category->category}}</td>
-                                <td class="tdclass">{{$productExpiryTracker->product->product_name}}</td>
-                                <td class="tdclass">{{$productExpiryTracker->companyUser->user->name}}</td>
-                                <td class="tdclass">{{$productExpiryTracker->product_sku}}</td>
-                                <td class="tdclass">{{$productExpiryTracker->amount_expired}}</td>
-                                <td class="tdclass">{{$productExpiryTracker->batchNumber}}</td>
-                                <td class="tdclass">{{$productExpiryTracker->expiry_date}}</td>
-                                
-                                <td class="tdclass">{{$productExpiryTracker->action_taken}}</td>
-                                <td  class="tdclass">
-                                    @php
-                                    if($productExpiryTracker->photo!=null)
-                                    {
-                                        $imagePath = asset('storage/' . $productExpiryTracker->photo);
-                                        echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
-                                    }
-                                    else {
-                                        echo "N/A";
-                                    }
-                                    @endphp     
-                                </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                        
-                        
+                            @foreach($productExpiryTrackerData as $productExpiryTracker)
+                                <tr>
+                                    {{-- {{dd($productExpiryTracker   )}} --}}
+                                    <td class="tdclass">
+                                        @php
+                                            $date= explode(' ', $productExpiryTracker->created_at);
+                                        @endphp
+                                        {{$date[0]}}
+                                    </td>
+                                    <td class="tdclass">{{$productExpiryTracker->store->name_of_store}}</td>
+                                    <td class="tdclass">
+                                        {{$productExpiryTracker->storeLocation->location}}
+                                    </td>
+                                    <td class="tdclass">{{$productExpiryTracker->category->category}}</td>
+                                    <td class="tdclass">{{$productExpiryTracker->product->product_name}}</td>
+                                    <td class="tdclass">{{$productExpiryTracker->product_sku}}</td>
+                                    <td class="tdclass">{{$productExpiryTracker->amount_expired}}</td>
+                                    <td class="tdclass">{{$productExpiryTracker->batchNumber}}</td>
+                                    <td class="tdclass">
+                                        @php
+                                        $todayDate = new DateTime();
+                                        $expiryDate = new DateTime($productExpiryTracker->expiry_date);
+                                        $dateDifference = $todayDate->diff($expiryDate);
+                                        // dd($dateDifference, $expiryDate,  $todayDate);
+                                        // Check if expiry date is greater than todayDate + 3 months
+                                        if ($dateDifference->m > 3 || ($dateDifference->m == 3 && $dateDifference->d >= 1)) {
+                                            echo"<span style='color: #37A849'>".$productExpiryTracker->expiry_date."</span>";
+                                            
+                                        }
+                                        // Check if difference is less than 3 months but greater than or equal to 2 weeks
+                                        elseif ($dateDifference->m > 0 || ($dateDifference->m == 0 && $dateDifference->d >= 14)) {
+                                        echo"<span style='color: #d9cc0e'>".$productExpiryTracker->expiry_date."</span>";
+
+                                        }
+                                        // Difference is less than 2 weeks
+                                        else {
+                                            echo"<span style='color: #CA371B'>".$productExpiryTracker->expiry_date."</span>";
+
+                                        }
+                                        @endphp
+                                    
+                                    </td>
+
+                                    
+                                    <td class="tdclass">{{$productExpiryTracker->action_taken}}</td>
+                                    <td  class="tdclass">
+                                        @php
+                                        if($productExpiryTracker->photo!=null)
+                                        {
+                                            $imagePath = asset('storage/' . $productExpiryTracker->photo);
+                                            echo "<img width='100' src='$imagePath' onclick='displayFullScreenImage(\"$imagePath\")' />";
+                                        }
+                                        else {
+                                            echo "N/A";
+                                        }
+                                        @endphp     
+                                    </td>
+                                    <td class="tdclass">{{$productExpiryTracker->companyUser->user->name}}</td>
+
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -321,8 +341,12 @@
     var startDate= 0;
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};
+    var allUniqueStores = {!! json_encode($uniqueStoreCount) !!};
+    var allUniqueCategories = {!! json_encode($uniqueCategoryCount) !!};
+    var allUniqueProducts = {!! json_encode($uniqueProductCount) !!};
+    
     var allUniqueLocations = {!! json_encode($locationArr) !!};
-
+    
 </script>
 
 <script src="{{ asset('assets/js/productExpiryTrackerDatatable.js') }}"></script>
@@ -342,7 +366,7 @@
 </script>
 <script>
 
-    function downloadTable(table) {
+function downloadTable(table) {
         const rows = table.getElementsByTagName('tr');
         let csvContent = 'data:text/csv;charset=utf-8,';
 
@@ -353,27 +377,41 @@
             .join(',');
         csvContent += headerText + '\r\n';
 
-        // Add data rows
-        for (let i = 0; i < rows.length; i++) {
+
+        for (let i = 0; i < rows.length; i++) 
+        {
             const cells = rows[i].getElementsByTagName('td');
             for (let j = 0; j < cells.length; j++) {
-                csvContent += cells[j].innerText + ',';
+                const cell = cells[j];
+                if (j > 0) {
+                    csvContent += ','; // Add a comma as a separator between columns
+                }
+
+                const image = cell.querySelector('img');
+                if (image) {
+                    const imageUrl = image.getAttribute('src');
+                    csvContent += cell.innerText +  imageUrl; // Combine text and image URL in the same column
+                } else {
+                    csvContent += cell.innerText; // Add the cell's text if there's no image
+                }
             }
             csvContent += '\r\n';
         }
-
+        // console.log(csvContent, 'ddddddddddddddddddddd');
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
-        link.setAttribute('download', 'Product_expiry_tracker_table.csv');
+        link.setAttribute('download', 'Product_Expiry_Data_Table.csv');
         document.body.appendChild(link);
         link.click();
         
     }
+
     document.getElementById('downloadButton').addEventListener('click', () => {
         const timeSheetTable = document.getElementById('productExpiryTrackerDatatable');
         downloadTable(timeSheetTable);
     });
+
 </script>
 
 

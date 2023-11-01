@@ -20,6 +20,68 @@ function formatDateYMD(date) {
     return `${year}-${month}-${day}`;
 }
 
+
+function setCards(table)
+{
+    // console.log(allUniqueStores,'-------------------');
+    // console.log(allUniqueCategories,'-------------------');
+    // console.log(allUniqueProducts,'-------------------');
+  
+    const expiredStores = new Set(); // Use a Set to store unique store names
+    const expiredCategories = new Set(); // Use a Set to store unique store names
+    const expiredProducts = new Set(); // Use a Set to store unique store names
+    const currentDate = new Date(); // Get the current date
+
+    table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+        const data = this.data();
+        const store = data[1]; // Assuming column 1 contains the store
+        const category= data[3];
+        const product= data[4];
+            
+        // Create a temporary element to parse the HTML content
+        const tempElement = document.createElement('div');
+        tempElement.innerHTML = data[8]; // Assuming data[8] contains the HTML content
+
+        // Extract the date from the temporary element
+        const extractedDate = tempElement.textContent.trim();
+        // console.log('Extracted Date:', extractedDate);
+
+        // Convert the extracted date to a JavaScript Date object
+        const expiryDate = new Date(extractedDate);
+        // console.log('JavaScript Date:', expiryDate);
+
+
+        // Check if the expiry date is greater than the current date
+        // console.log(expiryDate, currentDate, expiryDate < currentDate);
+        if (expiryDate < currentDate) {
+            if (!expiredStores.has(store)) {
+                expiredStores.add(store); // Add the store name to the Set if it's not already in the Set
+            }
+            if (!expiredCategories.has(category)) {
+                expiredCategories.add(category); // Add the category name to the Set if it's not already in the Set
+            }
+            if (!expiredProducts.has(product)) {
+                expiredProducts.add(product); // Add the product name to the Set if it's not already in the Set
+            }
+        }
+    });
+
+    const numberOfexpStores = expiredStores.size;
+    const numberOfexpCategories = expiredCategories.size;
+    const numberOfexpProduct = expiredProducts.size;
+
+    console.log('Number of unique expired stores:', numberOfexpStores);
+    console.log('Number of unique expired categories:', numberOfexpCategories);
+    console.log('Number of unique expired stores:', numberOfexpProduct);
+
+
+    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfexpStores+' /</span> '+ allUniqueStores;
+    document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpCategories+' /</span> '+ allUniqueCategories;
+    document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpProduct+' /</span> '+ allUniqueProducts;
+}
+
+
+
 //create last days dates
 function createLastDaysDates(data, startDate = 0, endDate = 0)
 {
@@ -314,7 +376,7 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
 //     periodData = weekarray.reverse();
 //     labels = previousWeeksArray.reverse();
 // }
-createLastMonthsDates(convertedToChartData);
+createLastWeeksDates(convertedToChartData);
 
 function changePeriod(e) {
     switch (e.value) {
@@ -341,11 +403,11 @@ function changePeriod(e) {
             graphFormat = 'months';
             break;
         default:
-            createLastDaysDates(convertedToChartData);
+            createLastWeeksDates(convertedToChartData);
             myChartJS.data.labels = labels;
             myChartJS.data.datasets[0].data = periodData;
             myChartJS.update();
-            graphFormat = 'days';
+            graphFormat = 'weeks';
             break;
     }
 }
@@ -483,7 +545,7 @@ function changeGraph(table) {
 
 
 $(document).ready(function () { 
-    var table = $('#stockCoutntByStoreDatatable').DataTable({
+    var table = $('#businessOverviewDatatable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
         paging: true, // Enable pagination
@@ -540,7 +602,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -566,7 +628,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -590,7 +652,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -614,7 +676,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -640,7 +702,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;
@@ -680,6 +742,7 @@ $(document).ready(function () {
             }
             var dateList = dateRange(startDate, endDate);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+
             convertedToChartData = changeGraph(table);
             switch (graphFormat) {
                 case 'days':
@@ -692,7 +755,7 @@ $(document).ready(function () {
                     createLastMonthsDates(convertedToChartData , startDate, endDate);
                     break;
                 default:
-                    createLastDaysDates(convertedToChartData , startDate, endDate);
+                    createLastWeeksDates(convertedToChartData , startDate, endDate);
                     break;
             }
             myChartJS.data.labels = labels;
@@ -722,7 +785,7 @@ $(document).ready(function () {
                 createLastMonthsDates(convertedToChartData);
                 break;
             default:
-                createLastDaysDates(convertedToChartData);
+                createLastWeeksDates(convertedToChartData);
                 break;
         }
         myChartJS.data.labels = labels;

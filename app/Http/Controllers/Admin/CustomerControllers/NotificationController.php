@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 class NotificationController extends Controller
@@ -137,11 +138,12 @@ class NotificationController extends Controller
         $notification->attachment =$url;
         $notification->save();
 
+        
         $fcm_url = 'https://fcm.googleapis.com/fcm/send';
         $FcmToken = User::whereNotNull('device_token')->pluck('device_token')->all();
           
         $serverKey = 'AAAAZ7dCL_c:APA91bEp8yX6CiX_Jxj0iHC0tdR4Bow6maEr0Lv3vluMlSdv-XdJfVYMAlW_5ZqWYSTl0go1Iut7vx4fZYQl8XlgNJgp6COt35fhpwy4UdyQeGHz9Gi1beoRewEOeLzCB1OpRQU20S2h';
-  
+        $baseUrl = Config::get('app.url');
         $data = [
             "registration_ids" => $FcmToken,
             "notification" => [
@@ -152,7 +154,8 @@ class NotificationController extends Controller
                 "type"=>"msj",
                 "title"=> $data['title'],
                 "message"=> $data['message'],  
-                "image_url"=> $url
+                // "image_url"=> $baseUrl.'/'.$url,
+                "image_url"=>$url,
             ]
         ];
         $encodedData = json_encode($data);

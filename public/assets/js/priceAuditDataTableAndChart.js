@@ -19,6 +19,70 @@ function formatDateYMD(date) {
 
     return `${year}-${month}-${day}`;
 }
+function setCardAndGrapgData(table) 
+{
+    var minProductPrice = Number.MAX_VALUE;
+    var maxProductPrice = Number.MIN_VALUE;
+
+    console.log(minProductPrice, maxProductPrice);
+    console.log("Initial minProductPrice:", minProductPrice);
+    console.log("Initial maxProductPrice:", maxProductPrice);
+
+    var sumProductPrices = 0;
+    var sumCompititorProductPrices = 0;
+    var numberOfStore = 0; // Initialize the count of unique stores
+
+    // Use a Set to keep track of unique stores
+    var uniqueStores = new Set();
+
+    // Iterate over the visible rows and calculate the minimum and maximum product prices
+    table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+        const data = this.data();
+        var store = data[1]; // Assuming column 1 contains the store
+        var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
+        var compititorProductPrice = parseFloat(data[12]); // Assuming column 6 contains the product price
+        sumCompititorProductPrices+=compititorProductPrice;
+
+        console.log('dataaa', data);
+
+        if (!isNaN(productPrice)) {
+            sumProductPrices += productPrice;
+            uniqueStores.add(store);
+
+            if (productPrice < minProductPrice) {
+                minProductPrice = productPrice;
+            }
+
+            if (productPrice > maxProductPrice) {
+                maxProductPrice = productPrice;
+            }
+        }
+    });
+    if(minProductPrice==Number.MAX_VALUE && maxProductPrice==Number.MIN_VALUE)
+    {
+        document.getElementById('minProductPrice').innerHTML = "$0";
+        document.getElementById('maxProductPrice').innerHTML = "$0";
+        document.getElementById('averageProductPrice').innerHTML = "$0";
+        document.getElementById('compititorProductPrice').innerHTML = "$0";
+    }
+    else
+    {
+            // Calculate the average product price after the loop
+        numberOfStore = uniqueStores.size; // Count of unique stores
+        var averageProductPrice = sumProductPrices / numberOfStore;
+        var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStore;
+
+        document.getElementById('minProductPrice').innerHTML = '$'+minProductPrice;
+        document.getElementById('maxProductPrice').innerHTML = '$'+maxProductPrice;
+        document.getElementById('averageProductPrice').innerHTML = '$'+averageProductPrice;
+        document.getElementById('compititorProductPrice').innerHTML = '$'+averageCompititorProductPrice;
+    }
+    var convertedToChartData = changeGraph(table);
+    myChartJS.data.labels = convertedToChartData[0].products_name;
+    myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
+    myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
+    myChartJS.update();
+}
 
 const data = {
     labels: products_name,
@@ -49,7 +113,7 @@ const config = {
             yAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Price in USD'
+                    labelString: 'Price $'
                 },
                 ticks: {
                     stepSize: 10,
@@ -60,7 +124,7 @@ const config = {
         tooltips: {
             callbacks: {
                 label: function (tooltipItem, data) {
-                    return data.datasets[tooltipItem.datasetIndex].label + ' Price: ' + tooltipItem.yLabel
+                    return data.datasets[tooltipItem.datasetIndex].label + ' Price: $' + tooltipItem.yLabel
                 }
             }
         },
@@ -99,7 +163,7 @@ function changeGraph(table) {
     filteredData.forEach(element => {
         products_name.push(element[4] + " | " + element[9]);
         our_products_price.push(element[8]);
-        competitor_products_price.push(element[10]);
+        competitor_products_price.push(element[12]);
         
     });
     colData.push({'products_name':products_name, 'our_products_price':our_products_price, 'competitor_products_price':competitor_products_price});
@@ -127,6 +191,9 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
+
+        setCardAndGrapgData(table);
+
         var storeName = this.value;
 
         // Assuming you have a dropdown with ID 'location-search'
@@ -154,101 +221,29 @@ $(document).ready(function () {
 
     $('#location-search').on('change', function () {
         const searchValue = this.value.trim();
+
         table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCardAndGrapgData(table);
     });
     $('#category-search').on('change', function () {
         const searchValue = this.value.trim();
+
         table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCardAndGrapgData(table);
     });
 
     $('#merchandiser-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+       
+        table.column(13).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCardAndGrapgData(table);
     });
 
+    // setCardAndGrapgData(table);
     $('#product-search').on('change', function () {
-        console.log("pakistan");
         const searchValue = this.value.trim();
-        if(searchValue!='')
-        {
-            var minProductPrice = Number.MAX_VALUE;
-            var maxProductPrice = Number.MIN_VALUE;
-
-            console.log(minProductPrice, maxProductPrice);
-            console.log("Initial minProductPrice:", minProductPrice);
-            console.log("Initial maxProductPrice:", maxProductPrice);
-
-            table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-            var sumProductPrices = 0;
-            var sumCompititorProductPrices = 0;
-            var numberOfStore = 0; // Initialize the count of unique stores
-
-            // Use a Set to keep track of unique stores
-            var uniqueStores = new Set();
-
-            // Iterate over the visible rows and calculate the minimum and maximum product prices
-            table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
-                const data = this.data();
-                var store = data[1]; // Assuming column 1 contains the store
-                var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
-                var compititorProductPrice = parseFloat(data[10]); // Assuming column 6 contains the product price
-                sumCompititorProductPrices+=compititorProductPrice;
-
-                console.log('dataaa', data);
-
-                if (!isNaN(productPrice)) {
-                    sumProductPrices += productPrice;
-                    uniqueStores.add(store);
-
-                    if (productPrice < minProductPrice) {
-                        minProductPrice = productPrice;
-                    }
-
-                    if (productPrice > maxProductPrice) {
-                        maxProductPrice = productPrice;
-                    }
-                }
-            });
-
-            if(minProductPrice==Number.MAX_VALUE && maxProductPrice==Number.MIN_VALUE)
-            {
-                document.getElementById('minProductPrice').innerHTML = 0;
-                document.getElementById('maxProductPrice').innerHTML = 0;
-                document.getElementById('averageProductPrice').innerHTML = 0;
-                document.getElementById('compititorProductPrice').innerHTML = 0;
-            }
-            else
-            {
-                 // Calculate the average product price after the loop
-                numberOfStore = uniqueStores.size; // Count of unique stores
-                var averageProductPrice = sumProductPrices / numberOfStore;
-                var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStore;
-
-                document.getElementById('minProductPrice').innerHTML = minProductPrice;
-                document.getElementById('maxProductPrice').innerHTML = maxProductPrice;
-                document.getElementById('averageProductPrice').innerHTML = averageProductPrice;
-                document.getElementById('compititorProductPrice').innerHTML = averageCompititorProductPrice;
-            }
-
-        var convertedToChartData = changeGraph(table);
-        myChartJS.data.labels = convertedToChartData[0].products_name;
-        myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
-        myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
-        myChartJS.update();
-        }
-        else
-        {
-            document.getElementById('minProductPrice').innerHTML = 0;
-            document.getElementById('maxProductPrice').innerHTML = 0;
-            document.getElementById('averageProductPrice').innerHTML = 0;
-            document.getElementById('compititorProductPrice').innerHTML = 0;
-
-            myChartJS.data.labels = '';
-            myChartJS.data.datasets[0].data ='';
-            myChartJS.data.datasets[1].data ='';
-            myChartJS.update();
-        }
-        
+        table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCardAndGrapgData(table);
     });
     $('#period-search').on('change', function () {
 
@@ -281,6 +276,9 @@ $(document).ready(function () {
             }
             var dateList = dateRange(startDate, endDate);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+
+            setCardAndGrapgData(table);
+
         } else {
             console.log("The substring 'to' does not exist in the original string.");
         }

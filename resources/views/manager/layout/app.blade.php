@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" user-scalable="no">
     <link rel="icon" href="{{asset('assets/images/favicon.png')}}" type="image/x-icon">
 
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.14/xlsx.full.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+
+
     <!-- StyleSheet -->
     {{-- <link href="{{asset('assets/css/bootstrap.min_.css')}}" rel="stylesheet"> --}}
     {{-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> --}}

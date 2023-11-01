@@ -66,7 +66,7 @@
                 <select name="store-search" class="filter form-select" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                        @foreach ($stores->unique('name_of_store')->sort() as $store)
+                        @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
                             <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                         @endforeach
                     @endif
@@ -126,6 +126,8 @@
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                        asort($uniqueMerchandisers); // Sort the array alphabetically
+
                     @endphp
                     @foreach($uniqueMerchandisers as $merchandiser)
                          <option value="{{$merchandiser}}">{{$merchandiser}}</option>
@@ -138,7 +140,7 @@
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($categories->unique('category')->sort() as $category)
+                    @foreach($categories->unique('category')->sortBy('category') as $category)
                     <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
@@ -149,7 +151,7 @@
                 <label for="product-search" class="form-label filter product">Select product</label>
                 <select name="product-search" class=" filter form-select"  id="product-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($products->unique('product_name')->sort() as $product)
+                    @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
                     @endforeach
                 </select>   
@@ -165,7 +167,16 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Total stock count</div>    
                 <div class="card-body">
-                    <div  class="content"><h3><b id="total_stock_count">{{$sumTotalStock}} </b><small> Units</small><br><b id="total_stock_count_cases">{{$sumTotalStockCases}} </b><small> Cases</small></h3></div>
+                    <div  class="content">
+                        <div class="row">
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="total_stock_count">{{$sumTotalStock}}  </b><sub style="font-size: small;"> Units</sub></h3>
+                            </div>
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="total_stock_count_cases">{{$sumTotalStockCases}} </b><sub style="font-size: small;"> Cases</sub></h3>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -177,7 +188,7 @@
                         @php
                             
                         @endphp
-                        <small class="text-secondary">
+                        <small id="opening_week_date" class="text-secondary">
                             @php
                                 $sumOpeningWeekStock=0;
 
@@ -206,7 +217,7 @@
 
                             @endphp 
                         </small>
-                        <div><h3><b id="opening_week_stock"></b></h3></div>
+                        <div style="color: #37A849;"><h3><b id="opening_week_stock">0</b></h3></div>
                     </div>
                 </div>
             </div>
@@ -216,7 +227,7 @@
                 <div class="card-header manager-card-header">Closing Week Stock</div>    
                 <div class="card-body">
                     <div  class="content">
-                        <small class="text-secondary">
+                        <small id="closing_week_date" class="text-secondary">
                             @php
                                 $sumClosingWeekStock=0;
 
@@ -244,7 +255,7 @@
 
                             @endphp 
                         </small>
-                        <div><h3><b id="closing_week_stock">0</b></h3></div>
+                        <div style="color: #37A849;"><h3><b id="closing_week_stock">0</b></h3></div>
                     </div>
                 </div>
             </div>
@@ -254,9 +265,9 @@
                 <div class="card-header manager-card-header">Average Stock</div>    
                 <div class="card-body">
                     @if($sumOpeningWeekStock!= null || $sumClosingWeekStock !=null )
-                        <div  class="content"><h3><b>{{ number_format($sumOpeningWeekStock / $sumClosingWeekStock, 3    ) }}</b></h3></div>
+                        <div  class="content" id="average_stock" style="color: #37A849;"><h3><b>0</b></h3></div>
                     @else
-                    <div  class="content"><h3><b>0</b></h3></div>
+                    <div  class="content" id="average_stock"  style="color: #37A849;"><h3><b>0</b></h3></div>
 
                     @endif
                 </div>
@@ -350,6 +361,7 @@
                             <th class="thclass" scope="col">Stocks in Storeroom  (Cases)</th>
                             <th class="thclass" scope="col">Total Stocks (units)</th>
                             <th class="thclass" scope="col">Total Stocks (cases)</th>
+                            <th class="thclass" scope="col">Total Stock Count</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -442,6 +454,8 @@
                                 <td class="tdclass">{{$storeRoomCases}}</td>
                                 <td class="tdclass">{{$totalStock}}</td>
                                 <td class="tdclass">{{$totalStockCases}}</td>
+                                <td class="tdclass">{{$totalStock}} Units, {{$totalStockCases}} Cases</td>
+
                                 @php
                                     $sumTotalStock+= $totalStock;
                                     $sumTotalStockCases += $totalStockCases;
@@ -461,16 +475,19 @@
 </div>
 {{-- {{dd($chartStockArray);}} --}}
 <script>
-    document.getElementById('total_stock_count_cases').innerHTML = {{$sumTotalStockCases}};
-    document.getElementById('total_stock_count').innerHTML = {{$sumTotalStock}};
-    document.getElementById('opening_week_stock').innerHTML = {{$sumOpeningWeekStock}};
-    document.getElementById('closing_week_stock').innerHTML = {{$sumClosingWeekStock}};
+
+   
     var startDate= 0;
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
     
-    var graphFormat = 'days';
+    var sumTotalStockCases = {!! json_encode($sumTotalStockCases) !!};
+    var sumTotalStock = {!! json_encode($sumTotalStock) !!};
+    var sumOpeningWeekStock = {!! json_encode($sumOpeningWeekStock) !!};
+    var sumClosingWeekStock = {!! json_encode($sumClosingWeekStock) !!};
+
+    var graphFormat = 'weeks';
     var graphUnit = 'Unit';
 
     var labels = [];
@@ -496,7 +513,7 @@
 </script>
 <script>
 
-    function downloadTable(table) {
+function downloadTable(table) {
         const rows = table.getElementsByTagName('tr');
         let csvContent = 'data:text/csv;charset=utf-8,';
 
@@ -507,23 +524,35 @@
             .join(',');
         csvContent += headerText + '\r\n';
 
-        // Add data rows
-        for (let i = 0; i < rows.length; i++) {
+
+        for (let i = 0; i < rows.length; i++) 
+        {
             const cells = rows[i].getElementsByTagName('td');
             for (let j = 0; j < cells.length; j++) {
-                csvContent += cells[j].innerText + ',';
+                const cell = cells[j];
+                if (j > 0) {
+                    csvContent += ','; // Add a comma as a separator between columns
+                }
+
+                const image = cell.querySelector('img');
+                if (image) {
+                    const imageUrl = image.getAttribute('src');
+                    csvContent += cell.innerText +  imageUrl; // Combine text and image URL in the same column
+                } else {
+                    csvContent += cell.innerText; // Add the cell's text if there's no image
+                }
             }
             csvContent += '\r\n';
         }
-
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
-        link.setAttribute('download', 'Stock_count_by_store_table.csv');
+        link.setAttribute('download', 'Stock_Count_By_Store_table.csv');
         document.body.appendChild(link);
         link.click();
         
     }
+
     document.getElementById('downloadButton').addEventListener('click', () => {
         const timeSheetTable = document.getElementById('stockCoutntByStoreDatatable');
         downloadTable(timeSheetTable);

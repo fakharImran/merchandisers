@@ -70,7 +70,7 @@
                 <select name="store-search" class="filter form-select" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                        @foreach ($stores->unique('name_of_store')->sort() as $store)
+                        @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
                             <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                         @endforeach
                     @endif
@@ -130,6 +130,8 @@
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                        asort($uniqueMerchandisers); // Sort the array alphabetically
+
                     @endphp
                     @foreach($uniqueMerchandisers as $merchandiser)
                          <option value="{{$merchandiser}}">{{$merchandiser}}</option>
@@ -142,7 +144,7 @@
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
-                     @foreach($categories->unique('category')->sort() as $category)
+                     @foreach($categories->unique('category')->sortBy('category') as $category)
                      <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
@@ -153,7 +155,7 @@
                 <label for="product-search" class="form-label filter product">Select product</label>
                 <select name="product-search" class=" filter form-select"  id="product-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($products->unique('product_name')->sort() as $product)
+                    @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
                     @endforeach
                 </select>   
@@ -304,19 +306,30 @@
             .join(',');
         csvContent += headerText + '\r\n';
 
-        // Add data rows
-        for (let i = 0; i < rows.length; i++) {
+
+        for (let i = 0; i < rows.length; i++) 
+        {
             const cells = rows[i].getElementsByTagName('td');
             for (let j = 0; j < cells.length; j++) {
-                csvContent += cells[j].innerText + ',';
+                const cell = cells[j];
+                if (j > 0) {
+                    csvContent += ','; // Add a comma as a separator between columns
+                }
+
+                const image = cell.querySelector('img');
+                if (image) {
+                    const imageUrl = image.getAttribute('src');
+                    csvContent += cell.innerText +  imageUrl; // Combine text and image URL in the same column
+                } else {
+                    csvContent += cell.innerText; // Add the cell's text if there's no image
+                }
             }
             csvContent += '\r\n';
         }
-
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
-        link.setAttribute('download', 'Opportunities_table.csv');
+        link.setAttribute('download', 'Opportunities_Table.csv');
         document.body.appendChild(link);
         link.click();
         
@@ -327,18 +340,6 @@
         downloadTable(timeSheetTable);
     });
 
-    // document.getElementById('clearDate').addEventListener('click', function () {
-    //     document.getElementById('period-search').clear;
-    //     // document.getElementById('merchandiser-search').value='';
-    //     // document.getElementById('location-search').value='';
-    //     // document.getElementById('store-search').value='';
-        
-    //     // convertingData(chartData);
-    //     // myChartJS.data.labels = labels;
-    //     // myChartJS.data.datasets[0].data = hoursWorked;
-    //     // myChartJS.update(); 
-    //     document.getElementById('period-search').value= 'Date Range';
 
-    // });
 </script>
 @endsection

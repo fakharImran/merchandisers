@@ -70,7 +70,7 @@
                 <select name="store-search" class="filter form-select" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
-                        @foreach ($stores->unique('name_of_store')->sort() as $store)
+                        @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
                             <option value="{{$store['name_of_store']}}">{{$store['name_of_store']}}</option>
                         @endforeach
                     @endif
@@ -130,6 +130,7 @@
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
+                        asort($uniqueMerchandisers); // Sort the array alphabetically
                     @endphp
                     @foreach($uniqueMerchandisers as $merchandiser)
                          <option value="{{$merchandiser}}">{{$merchandiser}}</option>
@@ -142,7 +143,7 @@
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select"  id="category-search">
                     <option value="" selected>--Select-- </option>
-                     @foreach($categories->unique('category')->sort() as $category)
+                     @foreach($categories->unique('category')->sortBy('category') as $category)
                      <option value="{{$category['category']}}">{{$category['category']}}</option>
                     @endforeach
                 </select>   
@@ -153,7 +154,7 @@
                 <label for="product-search" class="form-label filter product">Select product</label>
                 <select name="product-search" class=" filter form-select"  id="product-search">
                     <option value="" selected>--Select-- </option>
-                    @foreach($products->unique('product_name')->sort() as $product)
+                    @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
                     @endforeach
                 </select>   
@@ -181,7 +182,6 @@
                             <th class="thclass" scope="col">Message</th>
                             <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Image</th>
-                            <th class="thclass" scope="col">Date Created</th>
                             <th class="thclass" scope="col">Action</th>
                         </tr>
                     </thead>
@@ -198,8 +198,13 @@
                             @foreach($allNotifications as $notification)
                                 <tr>
                                     {{-- {{dd($notification)}} --}}
+                                    <td class="tdclass">
+                                        @php
+                                            $date= explode(' ', $notification->created_at);
+                                        @endphp
+                                        {{$date[0]}}
+                                    </td>
 
-                                    <td class="tdclass">{{$i++}}</td>
                                     <td class="tdclass">{{$notification->title}}</td>
                                     <td class="tdclass">{{$notification->message}}</td>
                                     <td class="tdclass">{{$notification->companyUser->user->name}}</td>
@@ -215,15 +220,7 @@
                                         }
                                     @endphp     
                                     </td>  
-                                     @php
-                                    // dd($userTimeZone);
-                                        $created_at = convertToTimeZone($notification->created_at, 'UTC', $userTimeZone);
-                                        $createdTime = new DateTime($created_at);
-                                
-                                        // Format the DateTime object in 12-hour format
-                                        $formattedCreatedTime = $createdTime->format("Y-m-d h:i:s A");
-                                    @endphp
-                                    <td class="tdclass">{{$formattedCreatedTime}}</td>
+
                                     <td class="tdclass">
 
                                         <form action={{ route('web_notification.destroy', $notification->id) }} method="post">

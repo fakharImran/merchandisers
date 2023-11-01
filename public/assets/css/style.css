@@ -816,7 +816,7 @@ label.form-label.filter.location::after{
 }
 
 /* manager dashboard style */
-.manager-card-style {
+.manager-card-style, .manager-card-style-header {
     border: none;
     border-radius: 1.25rem;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.09);
@@ -853,6 +853,18 @@ label.form-label.filter.location::after{
     bottom: 0px;
     position: absolute;
 }
+
+.merchandiser .manager-card-style {
+    min-height: 100px;
+    width: 215px;
+    /* width: 25% !important; */
+}
+
+.merchandiser  .content{
+    bottom: 0px;
+    position: absolute;
+}
+
 @media (min-width: 768px){
     .col-md-3-5 {
         flex: 0 0 auto;
@@ -864,7 +876,10 @@ label.form-label.filter.location::after{
     align-self: center;
 }
 .price-audit .manager-card-style {
-    min-height: 150px;
+    min-height: 125px;
+}
+.price-audit .manager-card-style-header {
+    min-height: 100px;
 }
 .price-audit  .content {
     bottom: 0px;
@@ -874,10 +889,13 @@ label.form-label.filter.location::after{
 .price-audit .percentage {
     text-align: center;
     color: #1892C0;
-    font-size: 45px;
+    font-size: 35px;
     font-family: Inter;
     font-weight: 700;
     word-wrap: break-word;
+    position: absolute;
+    bottom: 0;
+    width: 85%;
 }
 .manager-card-header{
     border-radius: calc(1.25rem - 1px) calc(1.25rem - 1px) 0 0 !important;
@@ -897,8 +915,8 @@ label.form-label.filter.location::after{
 
 .bullet {
     display: inline-block;
-    width: 30px;
-    height: 30px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     margin-right: 10px; /* Adjust margin as needed */
 }

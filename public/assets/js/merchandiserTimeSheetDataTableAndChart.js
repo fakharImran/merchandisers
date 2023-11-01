@@ -20,6 +20,37 @@ function formatDateYMD(date) {
 
     return `${year}-${month}-${day}`;
 }
+function setTimeWorkCard(table) {
+    var sumTotalTime = 0;
+    table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+        const data = this.data();
+        var timeValue = data[10]; // Assuming column 10 contains the time value like '9hrs, 52mins'
+        // Regular expression to extract temphours and tempminutes
+        var regex = /(\d+) hrs, (\d+) mins/;
+
+        // Use the regex to extract temphours and tempminutes
+        var match = timeValue.match(regex);
+        if (match) {
+            var hours = parseInt(match[1]);
+            var minutes = parseInt(match[2]);
+
+            // Convert hours to minutes and add to the total
+            sumTotalTime += hours * 60 + minutes;
+        }
+        else {
+            console.log('no matched');
+        }
+    });
+
+    if (!isNaN(sumTotalTime)) {
+        // Convert the total back to 'hrs, mins' format if needed
+        var totalHours = Math.floor(sumTotalTime / 60);
+        var totalMinutes = sumTotalTime % 60;
+        var totalWorkedTime = totalHours + 'hrs, ' + totalMinutes + 'mins';
+
+        document.getElementById('total_time_worked').innerHTML = totalWorkedTime;
+    }
+}
 // create weekly dates
 function convertingData(data, startDate = 0, endDate = 0) {
 
@@ -238,8 +269,9 @@ $(document).ready(function () {
             //     dropdown.append('<option value="' + location + '">' + location + '</option>');
             // });
         }
-        // Empty the dropdown to remove previous options
-
+        setTimeWorkCard(table);
+     
+        
         var convertedToChartData = changeGraph(table);
         convertingData(convertedToChartData , startDate, endDate);
         myChartJS.data.labels = labels;
@@ -254,6 +286,9 @@ $(document).ready(function () {
         // table.column(1).search(this.value).draw();
         var convertedToChartData = changeGraph(table);
 
+        setTimeWorkCard(table);
+
+
         convertingData(convertedToChartData , startDate, endDate);
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = hoursWorked;
@@ -263,6 +298,8 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(11).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(11).search(this.value).draw();
+        setTimeWorkCard(table);
+
         var convertedToChartData = changeGraph(table);
         convertingData(convertedToChartData , startDate, endDate);
         myChartJS.data.labels = labels;
@@ -302,6 +339,9 @@ $(document).ready(function () {
             var dateList = dateRange(startDate, endDate);
             table.column(8).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
             var convertedToChartData = changeGraph(table);
+
+             setTimeWorkCard(table);
+
             convertingData(convertedToChartData, startDate, endDate);
             myChartJS.data.labels = labels;
             myChartJS.data.datasets[0].data = hoursWorked;
