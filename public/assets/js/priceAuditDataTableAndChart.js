@@ -184,6 +184,8 @@ $(document).ready(function () {
         buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
         "pagingType": "full_numbers"
     });
+    setCardAndGrapgData(table);
+
     // Custom search input for 'Name' column
     $('#store-search').on('change', function () {
 
