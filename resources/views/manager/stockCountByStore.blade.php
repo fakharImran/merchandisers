@@ -217,7 +217,14 @@
 
                             @endphp 
                         </small>
-                        <div style="color: #37A849;"><h3><b id="opening_week_stock">0</b></h3></div>
+                        <div class="row">
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="opening_week_units">0 </b><sub style="font-size: small;"> Units</sub></h3>
+                            </div>
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="opening_week_cases">0</b><sub style="font-size: small;"> Cases</sub></h3>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -255,7 +262,14 @@
 
                             @endphp 
                         </small>
-                        <div style="color: #37A849;"><h3><b id="closing_week_stock">0</b></h3></div>
+                        <div class="row">
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="closing_week_units">0 </b><sub style="font-size: small;"> Units</sub></h3>
+                            </div>
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="closing_week_cases">0</b><sub style="font-size: small;"> Cases</sub></h3>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -265,9 +279,9 @@
                 <div class="card-header manager-card-header">Average Stock</div>    
                 <div class="card-body">
                     @if($sumOpeningWeekStock!= null || $sumClosingWeekStock !=null )
-                        <div  class="content" id="average_stock" style="color: #37A849;"><h3><b>0</b></h3></div>
+                        <div  class="content" id="average_stock" style="color: #37A849; height: 75px; padding-left: 10px;"><h3><b>0</b></h3></div>
                     @else
-                    <div  class="content" id="average_stock"  style="color: #37A849;"><h3><b>0</b></h3></div>
+                    <div  class="content" id="average_stock"  style="color: #37A849; height: 75px; padding-left: 10px;"><h3><b>0</b></h3></div>
 
                     @endif
                 </div>

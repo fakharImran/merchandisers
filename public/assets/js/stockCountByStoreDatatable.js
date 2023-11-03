@@ -21,8 +21,10 @@ function formatDateYMD(date) {
 }
 function setCards(table, startDate=0, endDate=0)
 {
-    var sumClosingweekStock = 0;
-    var sumOpeningWeekStock = 0;
+    var sumOpeningWeekStockUnits = 0;
+    var sumOpeningWeekStockCases = 0;
+    var sumClosingingWeekStockUnits = 0;
+    var sumClosingingWeekStockCaese = 0;
     var sumUnits=0;
     var sumCases=0;
     // Use a Set to keep track of unique stores
@@ -39,11 +41,12 @@ function setCards(table, startDate=0, endDate=0)
         const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
         // console.log('stockDate in table', stockDate,' date saven days ago', sevenDaysAgoString, 'xxxxxxxxxxxxxxxx');
         if (stockDate <= sevenDaysAgoString) {
-            sumOpeningWeekStock += units+cases;
+            sumOpeningWeekStockUnits += units;
+            sumOpeningWeekStockCases += cases;
         }
-        var tempTotal= units + cases;
-        // console.log(units,'units',cases, 'cases' );
-        sumClosingweekStock+=tempTotal;
+        sumClosingingWeekStockUnits+=units;
+        sumClosingingWeekStockCaese+=cases;
+
         var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
         
     });
@@ -59,10 +62,16 @@ function setCards(table, startDate=0, endDate=0)
 
     document.getElementById('total_stock_count_cases').innerHTML =sumCases;
     document.getElementById('total_stock_count').innerHTML =  sumUnits;
-    document.getElementById('opening_week_stock').innerHTML = sumOpeningWeekStock;
-    document.getElementById('closing_week_stock').innerHTML = sumClosingweekStock;
-    // document.getElementById('average_stock').innerHTML = sumOpeningWeekStock/sumClosingweekStock*100+'%';
+
+    document.getElementById('opening_week_units').innerHTML = sumOpeningWeekStockUnits;
+    document.getElementById('opening_week_cases').innerHTML = sumOpeningWeekStockUnits;
+    
+    document.getElementById('closing_week_units').innerHTML = sumClosingingWeekStockUnits;
+    document.getElementById('closing_week_cases').innerHTML = sumClosingingWeekStockCaese;    // document.getElementById('average_stock').innerHTML = sumOpeningWeekStock/sumClosingweekStock*100+'%';
    
+    var sumOpeningWeekStock= sumOpeningWeekStockUnits + sumOpeningWeekStockUnits;
+    var sumClosingweekStock= sumClosingingWeekStockUnits + sumClosingingWeekStockCaese;
+    
     const averageStockElement = document.getElementById('average_stock');
     if (averageStockElement) {
         if (sumOpeningWeekStock !== null && sumClosingweekStock !== null && sumClosingweekStock !== 0) {
