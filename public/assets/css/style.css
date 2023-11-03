@@ -640,21 +640,6 @@ span.select2-selection.select2-selection--multiple {
     min-height: 40px;
     cursor: pointer !important;
 }
-/* ul.select2-choices {
-    padding-right: 30px !important;
-}
-
-ul.select2-choices:after {
-    content: "";
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-top: 5px solid #333;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-} */
-
 
 .select2-container--default .select2-selection--multiple:before {
     content: ' ';
@@ -726,12 +711,6 @@ div {
     cursor: pointer;
   }
 
-
-  input.select2-search__field {
-    padding-top: 5px !important;
-    padding-left: 16px !important;
-    color: #80808038 !important;
-}
 .custom-file-upload {
     display: inline-block;
     position: relative;
@@ -951,4 +930,31 @@ label.form-label.filter.location::after{
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 26px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+}
+span.select2-selection.select2-selection--single {
+    background-color: #f1f1f1!important;
+    border: none;
+}
+.business-overview .select2 , .marketing-activity .select2 , .merchandiser .select2 , 
+.notification .select2 , 
+.opportunity .select2 , .out-of-stock .select2 , .planogram .select2 , 
+.price-audit .select2 , .product-expiry .select2, .stock-count .select2 {
+    border-radius: 30px !important;
+    padding: 10px;
+    text-align: center;
+    background-color: #f1f1f1!important;
+    font-size: revert;
+}
+input.select2-search__field {
+    padding-top: 5px !important;
+    padding-left: 16px !important;
+    color: #797979  !important;
 }

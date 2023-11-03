@@ -21,64 +21,93 @@ function formatDateYMD(date) {
 }
 
 
-function setCards(table)
-{
-    // console.log(allUniqueStores,'-------------------');
-    // console.log(allUniqueCategories,'-------------------');
-    // console.log(allUniqueProducts,'-------------------');
-  
-    const expiredStores = new Set(); // Use a Set to store unique store names
-    const expiredCategories = new Set(); // Use a Set to store unique store names
-    const expiredProducts = new Set(); // Use a Set to store unique store names
-    const currentDate = new Date(); // Get the current date
+// Assuming you have already loaded the `allStores` and `outOfStockData` variables
 
+// function setCards() {
+//     const todayDate = new Date();
+//     const formattedDate = todayDate.toISOString().split('T')[0];
+
+//     // Calculate the total number of unique stores
+//     const totalStores = allStores.reduce((count, store) => {
+//         if (!count.includes(store.name_of_store)) {
+//             count.push(store.name_of_store);
+//         }
+//         return count;
+//     }, []).length;
+
+//     // Calculate the number of unique stores in the outOfStockData
+//     const uniqueStores = outOfStockData.reduce((count, data) => {
+//         if (!count.includes(data.store_id)) {
+//             count.push(data.store_id);
+//         }
+//         return count;
+//     }, []);
+
+//     const uniqueStoreCount = uniqueStores.length;
+
+//     console.log('in set card',totalStores,  uniqueStoreCount);
+
+//     // Update the HTML content
+//     const dateSet = document.getElementById('date_set');
+//     const storesOutOfStock = document.getElementById('stores_out_of_stock');
+
+//     if (dateSet) {
+//         dateSet.textContent = formattedDate;
+//     }
+
+//     if (storesOutOfStock) {
+//         storesOutOfStock.innerHTML = `<span style="color: #CA371B">${uniqueStoreCount}</span> / ${totalStores}`;
+//     }
+// }
+
+function setCards(table, startDate=0, endDate=0)
+{
+    var sumClosingweekStock = 0;
+    var sumOpeningWeekStock = 0;
+    var sumUnits=0;
+    var sumCases=0;
+    // Use a Set to keep track of unique stores
+    // Iterate over the visible rows and calculate the minimum and maximum product prices
     table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
         const data = this.data();
-        const store = data[1]; // Assuming column 1 contains the store
-        const category= data[3];
-        const product= data[4];
-            
-        // Create a temporary element to parse the HTML content
-        const tempElement = document.createElement('div');
-        tempElement.innerHTML = data[8]; // Assuming data[8] contains the HTML content
-
-        // Extract the date from the temporary element
-        const extractedDate = tempElement.textContent.trim();
-        // console.log('Extracted Date:', extractedDate);
-
-        // Convert the extracted date to a JavaScript Date object
-        const expiryDate = new Date(extractedDate);
-        // console.log('JavaScript Date:', expiryDate);
-
-
-        // Check if the expiry date is greater than the current date
-        // console.log(expiryDate, currentDate, expiryDate < currentDate);
-        if (expiryDate < currentDate) {
-            if (!expiredStores.has(store)) {
-                expiredStores.add(store); // Add the store name to the Set if it's not already in the Set
-            }
-            if (!expiredCategories.has(category)) {
-                expiredCategories.add(category); // Add the category name to the Set if it's not already in the Set
-            }
-            if (!expiredProducts.has(product)) {
-                expiredProducts.add(product); // Add the product name to the Set if it's not already in the Set
-            }
+        var units = parseInt(data[13]); // Assuming column 1 contains the store
+        sumUnits+=units;
+        var cases = parseInt(data[14]); // Assuming column 1 contains the store
+        sumCases+=cases;
+        var stockDate= data[0];
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
+        // console.log('stockDate in table', stockDate,' date saven days ago', sevenDaysAgoString, 'xxxxxxxxxxxxxxxx');
+        if (stockDate <= sevenDaysAgoString) {
+            sumOpeningWeekStock += units+cases;
         }
+        var tempTotal= units + cases;
+        // console.log(units,'units',cases, 'cases' );
+        sumClosingweekStock+=tempTotal;
+        var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
+        
     });
 
-    const numberOfexpStores = expiredStores.size;
-    const numberOfexpCategories = expiredCategories.size;
-    const numberOfexpProduct = expiredProducts.size;
+    console.log('startDate', startDate, 'enddate', endDate);
+    
+    if(startDate!=0 && endDate!=0)
+    {
+        const dateRangeElements = document.getElementsByClassName('date_range_set');
 
-    console.log('Number of unique expired stores:', numberOfexpStores);
-    console.log('Number of unique expired categories:', numberOfexpCategories);
-    console.log('Number of unique expired stores:', numberOfexpProduct);
+        for (const element of dateRangeElements) {
+            element.innerHTML = startDate + ' to ' + endDate;
+        }   
+    }
+   
 
-
-    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfexpStores+' /</span> '+ allUniqueStores;
-    document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpCategories+' /</span> '+ allUniqueCategories;
-    document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpProduct+' /</span> '+ allUniqueProducts;
+    document.getElementById('total_stock_count_cases').innerHTML =sumCases;
+    document.getElementById('total_stock_count').innerHTML =  sumUnits;
+   
 }
+
+// Call the setCards function to update the card's content
+
 
 
 
@@ -557,6 +586,8 @@ $(document).ready(function () {
         buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
         "pagingType": "full_numbers"
     });
+setCards(table);
+
     // Custom search input for 'Name' column
     $('#store-search').on('change', function () {
 
@@ -564,6 +595,9 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
+        setCards(table);
+        
+
         var storeName = this.value;
 
         // Assuming you have a dropdown with ID 'location-search'
@@ -577,6 +611,7 @@ $(document).ready(function () {
                 dropdown.empty();
                 dropdown.append('<option value="" selected>--Select--</option>');
                 var storeLocations = store[1];
+                console.log(storeLocations, 'aaaa');
                 storeLocations.forEach(function (storeLocation) {
                     dropdown.append('<option value="' + storeLocation + '">' + storeLocation + '</option>');
                 });
@@ -615,6 +650,8 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(2).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(1).search(this.value).draw();
+        setCards(table);
+
         convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
@@ -639,6 +676,8 @@ $(document).ready(function () {
     $('#category-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCards(table);
+
         convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
@@ -662,6 +701,8 @@ $(document).ready(function () {
     $('#merchandiser-search').on('change', function () {
         // const searchValue = this.value.trim();
         table.column(5).search(this.value ? `^${this.value}$` : '', true, false).draw();
+        setCards(table);
+
         console.log(this.value);
         convertedToChartData = changeGraph(table);
 
@@ -688,6 +729,35 @@ $(document).ready(function () {
     $('#product-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCards(table);
+
+        // console.log("search product", searchValue);
+        convertedToChartData = changeGraph(table);
+
+        switch (graphFormat) {
+            case 'days':
+                createLastDaysDates(convertedToChartData);
+                break;
+            case 'weeks':
+                createLastWeeksDates(convertedToChartData);
+                break;
+            case 'months':
+                createLastMonthsDates(convertedToChartData);
+                break;
+            default:
+                createLastWeeksDates(convertedToChartData);
+                break;
+        }
+        myChartJS.data.labels = labels;
+        myChartJS.data.datasets[0].data = periodData;
+        myChartJS.update();
+    });
+
+    $('#category-search').on('change', function () {
+        const searchValue = this.value.trim();
+        table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        setCards(table);
+
         // console.log("search product", searchValue);
         convertedToChartData = changeGraph(table);
 
@@ -711,6 +781,7 @@ $(document).ready(function () {
     });
 
 
+
     $('#period-search').on('change', function () {
 
         if (this.value.includes('to')) {
@@ -727,6 +798,7 @@ $(document).ready(function () {
              endDate = formatDateYMD(endDate);
 
             table.column(0).search('', true, false).draw(); // Clear previous search
+            setCards(table,startDate,endDate);
 
             var searchTerms = []; // Initialize an array to store search terms
             function dateRange(startDate, endDate) {
@@ -772,6 +844,14 @@ $(document).ready(function () {
         document.getElementById('period-search').clear;
         endDate = 0;
         startDate = 0;
+        let todayDate = new Date();
+        const todayDateString = todayDate.toISOString().split('T')[0];
+        const dateRangeElements = document.getElementsByClassName('date_range_set');
+
+        for (const element of dateRangeElements) {
+            element.innerHTML = todayDateString;
+        }     
+        setCards(table);
         // table.column(0).search('').draw();
         convertedToChartData = changeGraph(table);
         switch (graphFormat) {

@@ -16,7 +16,7 @@ class PriceAudit extends Model
 {
     use HasFactory;
     protected $table= 'price_audits';
-    protected $fillable= ['store_location_id','store_id', 'company_user_id', 'category_id', 'product_id', 'Product_SKU', 'product_store_price', 'tax_in_percentage', 'competitor_product_name', 'competitor_product_price' ,'notes'];
+    protected $fillable= ['store_location_id','store_id', 'company_user_id', 'category_id', 'product_id', 'Product_SKU', 'product_store_price', 'tax_in_percentage', 'competitor_product_name', 'competitor_product_price','competitor_product_tax' ,'notes'];
 
    
     public function storeLocation(): BelongsTo

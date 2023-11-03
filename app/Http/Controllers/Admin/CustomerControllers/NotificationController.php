@@ -107,11 +107,9 @@ class NotificationController extends Controller
         $pageConfigs = ['pageSidebar' => 'notification'];    
 
         $validator = Validator::make($request->all(), [
-            'store_id'=> 'required',
             'company_user_id'=>'required',
             'title'=>'required',
             'message'=>'required',
-            'store_location_id'=>'required',
         ]);
         if ($validator->fails()) {
             // Validation failed

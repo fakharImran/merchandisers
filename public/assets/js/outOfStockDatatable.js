@@ -129,7 +129,7 @@ $(document).ready(function () {
     });
     $('#merchandiser-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(5).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(7).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         setCards(table);
 });
 

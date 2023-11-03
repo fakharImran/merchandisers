@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
              
-            $table->unsignedBigInteger('store_location_id');
+            $table->unsignedBigInteger('store_location_id')->nullable();
             $table->foreign('store_location_id')->references('id')->on('store_locations')->onDelete('cascade');
 
-            $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('store_id')->nullable();
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
 
             $table->unsignedBigInteger('company_user_id');

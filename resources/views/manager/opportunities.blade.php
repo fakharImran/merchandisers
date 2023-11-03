@@ -51,7 +51,7 @@
     }
     /* Define a CSS class to apply the background image */
 </style>
-<div class="container">
+<div class="container opportunity">
 
     {{-- {{dd($userArr)}} --}}
     <div  class="row d-flex align-items-center col-actions" style="max-width: 99%; margin: 1px auto;">
@@ -67,7 +67,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="store-search" class="form-label filter store">Select Store</label>
-                <select name="store-search" class="filter form-select" id="store-search">
+                <select name="store-search" class="filter form-select select2" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
                         @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
@@ -114,7 +114,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="location-search" class="form-label filter location">Select Location</label>
-                <select name="location-search" class="filter form-select" id="location-search">
+                <select name="location-search" class="filter form-select select2" id="location-search">
                     <option value="" selected>--Select--</option>
                     {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
@@ -126,7 +126,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
-                <select name="merchandiser-search" class=" filter form-select"  id="merchandiser-search">
+                <select name="merchandiser-search" class=" filter form-select select2"  id="merchandiser-search">
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
@@ -142,7 +142,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="category-search" class="form-label filter category">Select Category</label>
-                <select name="category-search" class=" filter form-select"  id="category-search">
+                <select name="category-search" class=" filter form-select select2"  id="category-search">
                     <option value="" selected>--Select-- </option>
                      @foreach($categories->unique('category')->sortBy('category') as $category)
                      <option value="{{$category['category']}}">{{$category['category']}}</option>
@@ -153,7 +153,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="product-search" class="form-label filter product">Select product</label>
-                <select name="product-search" class=" filter form-select"  id="product-search">
+                <select name="product-search" class=" filter form-select select2"  id="product-search">
                     <option value="" selected>--Select-- </option>
                     @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
@@ -183,10 +183,10 @@
                             <th class="thclass" scope="col">Type Of Opportunity</th>
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
-                            <th class="thclass" scope="col">Merchandiser</th>
                             <th class="thclass" scope="col">Product Number/SKU</th>
                             <th class="thclass" scope="col">Photo</th>
                             <th class="thclass" scope="col">Description Of Opportunity</th>
+                            <th class="thclass" scope="col">Merchandiser</th>
 
                         </tr>
                     </thead>
@@ -213,7 +213,6 @@
                                 <td class="tdclass">{{$opportunity->Opportunity_type}}</td>
                                 <td class="tdclass">{{$opportunity->category->category}}</td>
                                 <td class="tdclass">{{$opportunity->product->product_name}}</td>
-                                <td class="tdclass">{{$opportunity->companyUser->user->name}}</td>
                                 <td class="tdclass">{{$opportunity->product_sku}}</td>
                                 <td  class="tdclass">
                                     @php
@@ -228,6 +227,7 @@
                                     @endphp     
                                 </td>
                                 <td class="tdclass">{{$opportunity->Note}}</td>
+                                <td class="tdclass">{{$opportunity->companyUser->user->name}}</td>
                             </tr>
                         @endforeach
                     @endif
@@ -242,6 +242,11 @@
     
 </div>
 
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
 <script>
     function displayFullScreenImage(imagePath) {
         // Create a modal element

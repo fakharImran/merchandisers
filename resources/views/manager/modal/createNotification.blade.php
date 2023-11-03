@@ -33,6 +33,15 @@
                     <div class="form_title">
                         <h4>General</h4>
                     </div>
+                    @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <div class="user_form_content">
                         <div class="label">
                             <label>{{ __('Title:') }} <span class="text-danger">*</span></label>
@@ -60,6 +69,30 @@
                         </div>
                     </div>
 
+                    
+                    <div class="user_form_content">
+                        <div class="label">
+                            <label>{{ __('Select Merchandiser:') }}</label>
+                        </div>
+                        <div class="user_select_form">
+                            <select name="company_user_id" class=" form-select"  id="merchandiser-search">
+                                <option value="" selected>--Select-- </option>
+                                @foreach($userArr as $merchandiser)
+                                        <option value="{{$merchandiser->companyUser->id}}">{{$merchandiser->name}}</option>
+                                @endforeach
+                            </select>   
+                            @error('company_user_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        </div>
+                    </div>
+                    
+                    <div class="form_title">
+                        <h4>Attachment (Optional)</h4>
+                    </div>
+                    
                     <div class="user_form_content">
                         <div class="label">
                             <label>{{ __('Name of Store:') }}</label>
@@ -111,8 +144,8 @@
                             <label>{{ __('Location:') }}</label>
                         </div>
                         <div class="user_select_form">
-                            <select id="store_location_id" class="form-select " name="store_location_id" required>
-                                <option value disabled selected>--Select--</option>
+                            <select id="store_location_id" class="form-select " name="store_location_id" >
+                                <option value selected>--Select--</option>
                                 @if($locationArr!=null)
                                 @foreach ($locationArr as $location)
                                     <option value="{{$location['store_location_id']}}">{{$location['location']}}</option>
@@ -126,29 +159,6 @@
                         @enderror
                         </div>
                     </div>
-                    <div class="user_form_content">
-                        <div class="label">
-                            <label>{{ __('Select Merchandiser:') }}</label>
-                        </div>
-                        <div class="user_select_form">
-                            <select name="company_user_id" class=" form-select"  id="merchandiser-search">
-                                <option value="" selected>--Select-- </option>
-                                @foreach($userArr as $merchandiser)
-                                        <option value="{{$merchandiser->companyUser->id}}">{{$merchandiser->name}}</option>
-                                @endforeach
-                            </select>   
-                            @error('company_user_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                        </div>
-                    </div>
-                    
-                    <div class="form_title">
-                        <h4>Attachment (Optional)</h4>
-                    </div>
-                    
                     <div class="user_form_content">
                         <div class="label">
                             <label>{{ __('Attachment') }}</label>

@@ -663,7 +663,7 @@ $(document).ready(function () {
     });
     $('#merchandiser-search').on('change', function () {
         // const searchValue = this.value.trim();
-        table.column(5).search(this.value ? `^${this.value}$` : '', true, false).draw();
+        table.column(15).search(this.value ? `^${this.value}$` : '', true, false).draw();
         setCards(table);
 
         console.log(this.value);

@@ -74,7 +74,7 @@ $(document).ready(function () {
     });
     $('#merchandiser-search').on('change', function () {
         const searchValue = this.value.trim();
-        table.column(6).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
+        table.column(9).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
 
     });
     $('#category-search').on('change', function () {

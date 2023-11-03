@@ -79,6 +79,7 @@ class PriceAuditController extends BaseController
             'Product_SKU'=>'required',
             'product_store_price'=>'required',
             'tax_in_percentage'=>'required',
+            'competitor_product_tax'=>'required',
             'competitor_product_name'=>'required',
             'competitor_product_price'=>'required',
             'notes'=>'required',
@@ -97,7 +98,7 @@ class PriceAuditController extends BaseController
         $user = Auth::user();
         $company_user_id=$user->companyUser->id;
 
-        $priceAuditArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'Product_SKU'=>$request->Product_SKU, 'product_store_price'=>$request->product_store_price, 'tax_in_percentage'=>$request->tax_in_percentage, 'competitor_product_name'=>$request->competitor_product_name, 'competitor_product_price'=>$request->competitor_product_price, 'notes'=>$request->notes];
+        $priceAuditArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'Product_SKU'=>$request->Product_SKU, 'product_store_price'=>$request->product_store_price, 'tax_in_percentage'=>$request->tax_in_percentage, 'competitor_product_name'=>$request->competitor_product_name, 'competitor_product_price'=>$request->competitor_product_price,'competitor_product_tax'=>$request->competitor_product_tax, 'notes'=>$request->notes];
         // return $this->sendResponse(['priceAuditArr'=>$priceAuditArr], 'checking:');
         $responseofQuery= PriceAudit::create($priceAuditArr);
 

@@ -74,7 +74,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="store-search" class="form-label filter store">Select Store</label>
-                <select name="store-search" class="filter form-select" id="store-search">
+                <select name="store-search" class="filter form-select select2" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
                     @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
@@ -118,7 +118,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="location-search" class="form-label filter location">Select Location</label>
-                <select name="location-search" class="filter form-select" id="location-search">
+                <select name="location-search" class="filter form-select select2" id="location-search">
                     <option value="" selected>--Select--</option>
                     {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
@@ -130,7 +130,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
-                <select name="merchandiser-search" class=" filter form-select"  id="merchandiser-search">
+                <select name="merchandiser-search" class=" filter form-select select2"  id="merchandiser-search">
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
@@ -145,7 +145,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="category-search" class="form-label filter category">Select Category</label>
-                <select name="category-search" class=" filter form-select"  id="category-search">
+                <select name="category-search" class=" filter form-select select2"  id="category-search">
                     <option value="" selected>--Select-- </option>
                         @foreach($categories->unique('category')->sortBy('category') as $category)
                         <option value="{{$category['category']}}">{{$category['category']}}</option>
@@ -157,7 +157,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="product-search" class="form-label filter product">Select product</label>
-                <select name="product-search" class=" filter form-select"  id="product-search">
+                <select name="product-search" class=" filter form-select select2"  id="product-search">
                     <option value="" selected>--Select-- </option>
                     @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
@@ -192,7 +192,7 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Stores serviced</div>    
                 <div class="card-body content">
-                    <small class="text-secondary">
+                    <small   id="date_range_set" class="text-secondary date_range_set">
                         @php
                             $todayDate = (new DateTime());
                             echo $todayDate->format('Y-m-d');
@@ -202,7 +202,7 @@
                      @php
 
                         @endphp
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">{{count($userArr)}} / {{count($stores)}}</div>
+                    <div class="Link0" id="serviced_stores" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">{{count($userArr)}} / {{count($stores)}}</div>
                 
                 </div>
             </div>
@@ -211,7 +211,7 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Stores with out of stock</div>    
                 <div class="card-body content">
-                    <small class="text-secondary">
+                    <small id="date_range_set" class="text-secondary date_range_set">
                         @php
                             $todayDate = (new DateTime());
                             echo $todayDate->format('Y-m-d');
@@ -223,7 +223,7 @@
                             $uniqueStores = $outOfStockData->unique('store_id')->sort();
                             $uniqueStoreCount = $uniqueStores->count();
                         @endphp
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueStoreCount}}</span> / {{$totalStores}}</div>
+                    <div class="Link0" id="stores_out_of_stock" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueStoreCount}}</span> / {{$totalStores}}</div>
                 </div>
             </div>
         </div>
@@ -231,7 +231,7 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Products out of stock in stores</div>    
                 <div class="card-body content">
-                    <small class="text-secondary">
+                    <small class="text-secondary date_range_set">
                         @php
                             $todayDate = (new DateTime());
                             echo $todayDate->format('Y-m-d');
@@ -242,7 +242,7 @@
                         $uniqueProducts = $outOfStockData->unique('product_id')->sort();
                         $uniqueProductCount = $uniqueProducts->count();
                     @endphp 
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueProductCount}}</span> / {{$totalProducts}}</div>                
+                    <div class="Link0" id="products_out_of_stock" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{$uniqueProductCount}}</span> / {{$totalProducts}}</div>                
                 </div>
             </div>
         </div>
@@ -250,7 +250,7 @@
             <div class="card manager-card-style">
                 <div class="card-header manager-card-header">Number of Stores with Expired Products</div>    
                 <div class="card-body content">
-                    <small class="text-secondary">
+                    <small class="text-secondary date_range_set">
                         @php
                             $todayDate = (new DateTime());
                             echo $todayDate->format('Y-m-d');
@@ -267,7 +267,7 @@
                         }
 
                     @endphp
-                    <div class="Link0" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{count($expiredProduct)}} /</span> {{count($uniqueStoreCount)}}</div>                
+                    <div class="Link0" id="stores_with_exp_products" style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word"><span style="color: #CA371B">{{count($expiredProduct)}} /</span> {{count($uniqueStoreCount)}}</div>                
                 
                 </div>
             </div>
@@ -465,6 +465,12 @@
             </table>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
+    
 {{-- <script>
  
 
@@ -599,6 +605,8 @@
         { name: 'Trelawny', lat: 18.3554, lng: -77.5848 },
         { name: 'Westmoreland', lat: 18.1226, lng: -77.9710 }
     ];
+    // document.getElementById('total_stock_count_cases').innerHTML = {{$sumTotalStockCases}};
+    //  document.getElementById('total_stock_count').innerHTML = {{$sumTotalStock}};
 
     // Loop through the parishes and add markers with tooltips to the map
     parishes.forEach(parish => {
@@ -610,12 +618,24 @@
 
 
 <script>
-     document.getElementById('total_stock_count_cases').innerHTML = {{$sumTotalStockCases}};
-     document.getElementById('total_stock_count').innerHTML = {{$sumTotalStock}};
+    
     var startDate= 0;
     var endDate = 0;
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
+
+    var sumTotalStockUnit = {!! json_encode($sumTotalStock) !!};
+    var sumTotalStockCases = {!! json_encode($sumTotalStockCases) !!};
+
+    var storeServiced = {!! json_encode($userArr) !!};
+    var Stores = {!! json_encode($stores) !!};
+
+    var outOfStockData = {!! json_encode($outOfStockData) !!};
+    var products = {!! json_encode($products) !!};
+
+    var productExpiryTrackerData = {!! json_encode($productExpiryTrackerData) !!};
+
+    
     
     var graphFormat = 'weeks';
     var graphUnit = 'Unit';
@@ -676,6 +696,7 @@
     //     downloadTable(timeSheetTable);
     // });
 </script>
+
 
 
 @endsection

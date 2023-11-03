@@ -66,7 +66,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="store-search" class="form-label filter store">Select Store</label>
-                <select name="store-search" class="filter form-select" id="store-search">
+                <select name="store-search" class="filter form-select select2" id="store-search">
                     <option value="" selected>--Select--</option>
                     @if($stores!=null)
                         @foreach ($stores->unique('name_of_store')->sortBy('name_of_store') as $store)
@@ -113,7 +113,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="location-search" class="form-label filter location">Select Location</label>
-                <select name="location-search" class="filter form-select" id="location-search">
+                <select name="location-search" class="filter form-select select2" id="location-search">
                     <option value="" selected>--Select--</option>
                     {{-- @foreach ($locationArr as $location)
                         <option value="{{$location}}">{{$location}}</option>
@@ -125,7 +125,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
-                <select name="merchandiser-search" class=" filter form-select"  id="merchandiser-search">
+                <select name="merchandiser-search" class=" filter form-select select2"  id="merchandiser-search">
                     <option value="" selected>--Select-- </option>
                     @php
                         $uniqueMerchandisers = array_unique(array_column($userArr, 'name'));
@@ -140,7 +140,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="category-search" class="form-label filter category">Select Category</label>
-                <select name="category-search" class=" filter form-select"  id="category-search">
+                <select name="category-search" class=" filter form-select select2"  id="category-search">
                     <option value="" selected>--Select-- </option>
                      @foreach($categories->unique('category')->sortBy('category') as $category)
                      <option value="{{$category['category']}}">{{$category['category']}}</option>
@@ -151,7 +151,7 @@
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">
                 <label for="product-search" class="form-label filter product">Select product</label>
-                <select name="product-search" onchange="getProductData(this)" class=" filter form-select"  id="product-search">
+                <select name="product-search" onchange="getProductData(this)" class=" filter form-select select2"  id="product-search">
                     <option value="" selected>--Select-- </option>
                     @foreach($products->unique('product_name')->sortBy('product_name') as $product)
                     <option value="{{$product['product_name']}}">{{$product['product_name']}}</option>
@@ -317,7 +317,7 @@
                             <th class="thclass" scope="col">Total Price</th>
                             <th class="thclass" scope="col">Competitor Product Name</th>
                             <th class="thclass" scope="col">Competitor Product Price</th>
-                            <th class="thclass" scope="col">Tax</th>
+                            <th class="thclass" scope="col">Competitor Product Tax</th>
                             <th class="thclass" scope="col">Total Competitor Price</th>
 
                             <th class="thclass" scope="col">Merchandiser</th>
@@ -341,6 +341,7 @@
                         @if (!$priceAuditData->isEmpty())
                             @foreach ($priceAuditData as $priceAudit)
                                 <tr>
+                                    {{-- {{dd($priceAudit)}} --}}
                                     <td class="tdclass">
                                         @php
                                             $date= explode(' ', $priceAudit->created_at);
@@ -372,13 +373,13 @@
                                     <td class="tdclass">{{$priceAudit->competitor_product_price}}</td>
                                     <td class="tdclass">
                                         @php
-                                            $taxAmount= ($priceAudit->competitor_product_price/100) * $priceAudit->tax_in_percentage;
+                                            $taxAmount= ($priceAudit->competitor_product_price/100) * $priceAudit->competitor_product_tax;
                                         @endphp
                                         {{$taxAmount}}
                                     </td>
                                     <td class="tdclass">
                                         @php
-                                            $totalCompetetorPrice= $priceAudit->competitor_product_price + $priceAudit->competitor_product_price/100 * $priceAudit->tax_in_percentage;
+                                            $totalCompetetorPrice= $priceAudit->competitor_product_price + $priceAudit->competitor_product_price/100 * $priceAudit->competitor_product_tax;
                                             echo $totalCompetetorPrice;
                                         @endphp
                                     </td>
@@ -402,6 +403,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
 
 <script>
     var startDate= 0;

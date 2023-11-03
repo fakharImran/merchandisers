@@ -38,6 +38,7 @@ return new class extends Migration
             $table->integer('tax_in_percentage')->nullable();
             $table->string('competitor_product_name')->nullable();
             $table->bigInteger('competitor_product_price')->nullable();
+            $table->bigInteger('competitor_product_tax')->nullable();
             $table->string('notes')->nullable();
             $table->timestamps();
         });
