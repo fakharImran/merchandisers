@@ -31,9 +31,9 @@ function setCards(table, startDate=0, endDate=0)
     // Iterate over the visible rows and calculate the minimum and maximum product prices
     table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
         const data = this.data();
-        var units = parseInt(data[13]); // Assuming column 1 contains the store
+        var units = parseInt(data[12]); // Assuming column 1 contains the store
         sumUnits+=units;
-        var cases = parseInt(data[14]); // Assuming column 1 contains the store
+        var cases = parseInt(data[13]); // Assuming column 1 contains the store
         sumCases+=cases;
         var stockDate= data[0];
         const sevenDaysAgo = new Date();
@@ -61,7 +61,7 @@ function setCards(table, startDate=0, endDate=0)
    
 
     document.getElementById('total_stock_count_cases').innerHTML =sumCases;
-    document.getElementById('total_stock_count').innerHTML =  sumUnits;
+    document.getElementById('total_stock_count_unit').innerHTML =  sumUnits;
 
     document.getElementById('opening_week_units').innerHTML = sumOpeningWeekStockUnits;
     document.getElementById('opening_week_cases').innerHTML = sumOpeningWeekStockUnits;

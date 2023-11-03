@@ -170,11 +170,12 @@
                     <div  class="content">
                         <div class="row">
                             <div class="col-12" style="color: #37A849;">
-                                <h3><b id="total_stock_count">{{$sumTotalStock}}  </b><sub style="font-size: small;"> Units</sub></h3>
-                            </div>
-                            <div class="col-12" style="color: #37A849;">
                                 <h3><b id="total_stock_count_cases">{{$sumTotalStockCases}} </b><sub style="font-size: small;"> Cases</sub></h3>
                             </div>
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="total_stock_count_unit">{{$sumTotalStock}}  </b><sub style="font-size: small;"> Units</sub></h3>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -219,11 +220,12 @@
                         </small>
                         <div class="row">
                             <div class="col-12" style="color: #37A849;">
-                                <h3><b id="opening_week_units">0 </b><sub style="font-size: small;"> Units</sub></h3>
-                            </div>
-                            <div class="col-12" style="color: #37A849;">
                                 <h3><b id="opening_week_cases">0</b><sub style="font-size: small;"> Cases</sub></h3>
                             </div>
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="opening_week_units">0 </b><sub style="font-size: small;"> Units</sub></h3>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -264,11 +266,12 @@
                         </small>
                         <div class="row">
                             <div class="col-12" style="color: #37A849;">
-                                <h3><b id="closing_week_units">0 </b><sub style="font-size: small;"> Units</sub></h3>
-                            </div>
-                            <div class="col-12" style="color: #37A849;">
                                 <h3><b id="closing_week_cases">0</b><sub style="font-size: small;"> Cases</sub></h3>
                             </div>
+                            <div class="col-12" style="color: #37A849;">
+                                <h3><b id="closing_week_units">0 </b><sub style="font-size: small;"> Units</sub></h3>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
