@@ -281,7 +281,7 @@
                     @if($sumOpeningWeekStock!= null || $sumClosingWeekStock !=null )
                         <div  class="content" id="average_stock" style="color: #37A849; height: 75px; padding-left: 10px;"><h3><b>0</b></h3></div>
                     @else
-                    <div  class="content" id="average_stock"  style="color: #37A849; height: 75px; padding-left: 10px;"><h3><b>0</b></h3></div>
+                    <div  class="content" id="average_stock"  style="color: #37A849; height: 75px; padding-left: 10px;"><h3><b>0.00%</b></h3></div>
 
                     @endif
                 </div>

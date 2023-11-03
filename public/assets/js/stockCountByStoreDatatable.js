@@ -78,7 +78,7 @@ function setCards(table, startDate=0, endDate=0)
             const averageStockValue = (sumOpeningWeekStock / sumClosingweekStock) * 100;
             averageStockElement.innerHTML = `<h3><b>${averageStockValue.toFixed(2)}%</b></h3>`;
         } else {
-            averageStockElement.innerHTML = `<h3><b>0</b></h3>`;
+            averageStockElement.innerHTML = `<h3><b>0.00%</b></h3>`;
         }
     }
 }
