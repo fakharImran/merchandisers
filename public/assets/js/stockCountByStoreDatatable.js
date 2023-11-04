@@ -16,26 +16,24 @@ function formatDateYMD(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    console.log(`${year}-${month}-${day}`);
-    return `${year}-${month}-${day}`;
+     return `${year}-${month}-${day}`;
 }
-function setCards(table, startDate=0, endDate=0)
-{
+function setCards(table, startDate = 0, endDate = 0) {
     var sumOpeningWeekStockUnits = 0;
     var sumOpeningWeekStockCases = 0;
     var sumClosingingWeekStockUnits = 0;
     var sumClosingingWeekStockCaese = 0;
-    var sumUnits=0;
-    var sumCases=0;
+    var sumUnits = 0;
+    var sumCases = 0;
     // Use a Set to keep track of unique stores
     // Iterate over the visible rows and calculate the minimum and maximum product prices
     table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
         const data = this.data();
         var units = parseInt(data[12]); // Assuming column 1 contains the store
-        sumUnits+=units;
+        sumUnits += units;
         var cases = parseInt(data[13]); // Assuming column 1 contains the store
-        sumCases+=cases;
-        var stockDate= data[0];
+        sumCases += cases;
+        var stockDate = data[0];
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
         const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
@@ -44,34 +42,33 @@ function setCards(table, startDate=0, endDate=0)
             sumOpeningWeekStockUnits += units;
             sumOpeningWeekStockCases += cases;
         }
-        sumClosingingWeekStockUnits+=units;
-        sumClosingingWeekStockCaese+=cases;
+        sumClosingingWeekStockUnits += units;
+        sumClosingingWeekStockCaese += cases;
 
         var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
-        
+
     });
 
-    console.log('startDate', startDate, 'enddate', endDate);
-    
-    if(startDate!=0 && endDate!=0)
-    {
-        document.getElementById('opening_week_date').innerHTML =startDate;
-        document.getElementById('closing_week_date').innerHTML =endDate;
-    }
-   
+    // console.log('startDate', startDate, 'enddate', endDate);
 
-    document.getElementById('total_stock_count_cases').innerHTML =sumCases;
-    document.getElementById('total_stock_count_unit').innerHTML =  sumUnits;
+    if (startDate != 0 && endDate != 0) {
+        document.getElementById('opening_week_date').innerHTML = startDate;
+        document.getElementById('closing_week_date').innerHTML = endDate;
+    }
+
+
+    document.getElementById('total_stock_count_cases').innerHTML = sumCases;
+    document.getElementById('total_stock_count_unit').innerHTML = sumUnits;
 
     document.getElementById('opening_week_units').innerHTML = sumOpeningWeekStockUnits;
     document.getElementById('opening_week_cases').innerHTML = sumOpeningWeekStockUnits;
-    
+
     document.getElementById('closing_week_units').innerHTML = sumClosingingWeekStockUnits;
     document.getElementById('closing_week_cases').innerHTML = sumClosingingWeekStockCaese;    // document.getElementById('average_stock').innerHTML = sumOpeningWeekStock/sumClosingweekStock*100+'%';
-   
-    var sumOpeningWeekStock= sumOpeningWeekStockUnits + sumOpeningWeekStockUnits;
-    var sumClosingweekStock= sumClosingingWeekStockUnits + sumClosingingWeekStockCaese;
-    
+
+    var sumOpeningWeekStock = sumOpeningWeekStockUnits + sumOpeningWeekStockUnits;
+    var sumClosingweekStock = sumClosingingWeekStockUnits + sumClosingingWeekStockCaese;
+
     const averageStockElement = document.getElementById('average_stock');
     if (averageStockElement) {
         if (sumOpeningWeekStock !== null && sumClosingweekStock !== null && sumClosingweekStock !== 0) {
@@ -84,69 +81,67 @@ function setCards(table, startDate=0, endDate=0)
 }
 
 //create last days dates
-function createLastDaysDates(data, startDate = 0, endDate = 0)
-{
-    console.log("Data:_>>>>", data);
-     // Initialize an array to store the previous 7 days
-     const previousSevenDays = [];
-    
-     if (startDate == 0 && endDate == 0) {
-         // Calculate the end date (today)
-         endDate = new Date();
-         
-         // Calculate the start date (7 days ago from today)
-         startDate = new Date();
-         startDate.setDate(endDate.getDate() - 6);
-     } else {
-         // Parse provided start and end dates
-         startDate = new Date(startDate);
-         endDate = new Date(endDate);
-     }
- 
-     // Iterate for each day in the last 7 days
-     for (let i = 0; i < 7; i++) {
-         const currentDate = new Date(startDate);
-         currentDate.setDate(startDate.getDate() + i);
-         
-         // Calculate the start and end times for the current day
-         const dayStart = new Date(currentDate);
-         dayStart.setHours(0, 0, 0, 0);
-         const dayEnd = new Date(currentDate);
-         dayEnd.setHours(23, 59, 59, 999);
- 
-         // Filter data for the current day
-         const filteredData = data.filter(element => {
-             const elementDate = new Date(element['date']);
-             return elementDate >= dayStart && elementDate <= dayEnd;
-         });
-         console.log("filteredData->>>>>>>>", filteredData, "data->>>", data);
-         let totalStock;
-         // Calculate the total stock for the current day
-         if (graphUnit == "Unit") {
-            totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stock']), 0);
-         }
-         else{
-            totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stockCases']), 0);
-         }
-         console.log("totalStock->>>", totalStock);
-         previousSevenDays.push(totalStock);
-     }
- console.log('previousSevenDays', previousSevenDays);
-     // Format dates and reverse the arrays
-     const formattedDates = previousSevenDays.map((_, i) => {
-         const currentDate = new Date(startDate);
-         currentDate.setDate(startDate.getDate() + i);
-         return formatDate(currentDate);
-     });
-     console.log('formattedDates', formattedDates);
-     
-         labels= formattedDates;
-         periodData= previousSevenDays;
+function createLastDaysDates(data, startDate = 0, endDate = 0) {
+    // console.log("Data_days:_>>>>", data);
+    // Initialize an array to store the previous 7 days
+    const previousSevenDays = [];
+
+    if (startDate == 0 && endDate == 0) {
+        // Calculate the end date (today)
+        endDate = new Date();
+
+        // Calculate the start date (7 days ago from today)
+        startDate = new Date();
+        startDate.setDate(endDate.getDate() - 6);
+    } else {
+        // Parse provided start and end dates
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+    }
+    // console.log('startDate', startDate, 'endDate', endDate);
+    // Iterate for each day in the last 7 days
+    for (let i = 0; i < 7; i++) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(startDate.getDate() + i);
+
+        // Calculate the start and end times for the current day
+        const dayStart = new Date(currentDate);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(currentDate);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        // Filter data for the current day
+        const filteredData = data.filter(element => {
+            const elementDate = new Date(element['date']);
+            return elementDate >= dayStart && elementDate <= dayEnd;
+        });
+        let totalStock;
+        // Calculate the total stock for the current day
+        if (graphUnit == "Unit") {
+            totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['stock']), 0);
+        }
+        else {
+            totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['stockCases']), 0);
+        }
+        previousSevenDays.push(totalStock);
+    }
+    // console.log('previousSevenDays', previousSevenDays);
+    // Format dates and reverse the arrays
+    const formattedDates = previousSevenDays.map((_, i) => {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(startDate.getDate() + i);
+        return formatDate(currentDate);
+    });
+    // console.log('formattedDates', formattedDates);
+
+    labels = formattedDates;
+    periodData = previousSevenDays;
 }
 //create last week dates
-function createLastWeeksDates(data, startDate = 0, endDate = 0)
-{
-    
+function createLastWeeksDates(data, startDate = 0, endDate = 0) {
+
+    // console.log("Data_weeks:_>>>>", data);
+
     // Initialize an array to store the previous 6 weeks
     const previousWeeks = [];
 
@@ -191,7 +186,7 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0)
         }
     }
 
-//check the weeks arroding to their hours
+    //check the weeks arroding to their hours
     var totalStock = 0;
     var weekarray = [];
     previousWeeks.forEach(week => {
@@ -201,7 +196,7 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0)
                 if (graphUnit == "Unit") {
                     totalStock += parseInt(element['stock']);
                 }
-                else{
+                else {
                     totalStock += parseInt(element['stockCases']);
                 }
             } else {
@@ -223,8 +218,7 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0)
     labels = previousWeeksArray.reverse();
 }
 //create last months dates
-function createLastMonthsDates(data, startDate = 0, endDate = 0)
-{
+function createLastMonthsDates(data, startDate = 0, endDate = 0) {
     // Initialize an array to store the previous 7 months
     const previousMonths = [];
 
@@ -284,10 +278,10 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
             const chkDate = new Date(element.date);
             if (chkDate >= month.startDate && chkDate <= month.endDate) {
                 if (graphUnit == "Unit") {
-                    totalStock +=  parseInt(element.stock);
+                    totalStock += parseInt(element.stock);
                 }
-                else{
-                    totalStock +=  parseInt(element.stockCases);
+                else {
+                    totalStock += parseInt(element.stockCases);
                 }
             }
         });
@@ -386,9 +380,7 @@ createLastWeeksDates(convertedToChartData);
 function changePeriod(e) {
     switch (e.value) {
         case 'Daily':
-            
             createLastDaysDates(convertedToChartData);
-            console.log('labels, periodData)->>>', labels, periodData);
             myChartJS.data.labels = labels;
             myChartJS.data.datasets[0].data = periodData;
             myChartJS.update();
@@ -419,11 +411,10 @@ function changePeriod(e) {
 }
 
 function changeUnitCount(e) {
-    switch (e.value) 
-    {
+    switch (e.value) {
         case 'Unit':
             graphUnit = 'Unit';
-            
+
             break;
         case 'Case':
             graphUnit = 'Case';
@@ -434,13 +425,13 @@ function changeUnitCount(e) {
     }
     switch (graphFormat) {
         case 'days':
-            changePeriod({'value':"Daily"});
+            changePeriod({ 'value': "Daily" });
             break;
         case 'weeks':
-            changePeriod({'value':'Weekly'});
+            changePeriod({ 'value': 'Weekly' });
             break;
         case 'months':
-            changePeriod({'value':'Monthly'});
+            changePeriod({ 'value': 'Monthly' });
             break;
         default:
             break;
@@ -450,14 +441,14 @@ function changeUnitCount(e) {
 const data = {
     labels: labels,
     datasets: [{
-        label:'Stock Count',
+        label: 'Stock Count',
         backgroundColor: '#1892C0',
         borderColor: 'rgb(255, 99, 132)',
         // data: periodData,
         data: periodData,
     }]
 };
-       
+
 const config = {
     type: 'bar',
     data: data,
@@ -539,21 +530,20 @@ function changeGraph(table) {
     });
     var colData = [];
     filteredData.forEach(element => {
-        const dateTime = element[0].split('/'); // element[6] is date and time ex: 12-09-2023 7:50 PM
-        const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023 
-        console.log('element[0]->>>', element[0]);  
-        console.log('currentDate1->>>',currentDate1, new Date());
+        const dateTime = element[0]; // element[6] is date and time ex: 12-09-2023 7:50 PM
+        const currentDate2 = new Date(dateTime); // dateTime is only date ex: 12-09-2023 
+        const currentDate1 = currentDate2.toISOString();
+        // console.log('element[0]', element[0], 'currentDate1', currentDate1);
         var stockcase = element[13];
         var stockunits = element[12];
-        console.log(stockcase, stockunits);
-        colData.push({ 'date': formatDateYMD(currentDate1), 'stock': stockunits, 'stockCases': stockcase});
+        colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase });
     });
-    console.log(colData);
+    // console.log('colData',colData);
     return colData;
 }
 
 
-$(document).ready(function () { 
+$(document).ready(function () {
     var table = $('#stockCoutntByStoreDatatable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
@@ -567,25 +557,6 @@ $(document).ready(function () {
         "pagingType": "full_numbers"
     });
     setCards(table);
-
-    convertedToChartData = changeGraph(table);
-        switch (graphFormat) {
-            case 'days':
-                createLastDaysDates(convertedToChartData);
-                break;
-            case 'weeks':
-                createLastWeeksDates(convertedToChartData);
-                break;
-            case 'months':
-                createLastMonthsDates(convertedToChartData);
-                break;
-            default:
-                createLastWeeksDates(convertedToChartData);
-                break;
-        }
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = periodData;
-        myChartJS.update();
 
 
     // Custom search input for 'Name' column
@@ -621,7 +592,7 @@ $(document).ready(function () {
             table.column(2).search('', true, false).draw(); // Clear previous search
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
-           
+
         }
         // Empty the dropdown to remove previous options
         convertedToChartData = changeGraph(table);
@@ -703,7 +674,6 @@ $(document).ready(function () {
         table.column(15).search(this.value ? `^${this.value}$` : '', true, false).draw();
         setCards(table);
 
-        console.log(this.value);
         convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
@@ -762,12 +732,12 @@ $(document).ready(function () {
             var start = parts[0].trim(); // Remove leading/trailing spaces
             startDate = start.replace(/^\s+/, ''); // Remove the first space
             startDate = new Date(startDate);
-             startDate = formatDateYMD(startDate);
+            startDate = formatDateYMD(startDate);
 
             var end = parts[1].trim(); // Remove leading/trailing spaces
             endDate = end.replace(/^\s+/, ''); // Remove the first space
             endDate = new Date(endDate);
-             endDate = formatDateYMD(endDate);
+            endDate = formatDateYMD(endDate);
 
             table.column(0).search('', true, false).draw(); // Clear previous search
 
@@ -786,22 +756,22 @@ $(document).ready(function () {
             var dateList = dateRange(startDate, endDate);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
 
-        setCards(table, startDate, endDate);
+            setCards(table, startDate, endDate);
 
-        
+
             convertedToChartData = changeGraph(table);
             switch (graphFormat) {
                 case 'days':
-                    createLastDaysDates(convertedToChartData , startDate, endDate);
+                    createLastDaysDates(convertedToChartData, startDate, endDate);
                     break;
                 case 'weeks':
-                    createLastWeeksDates(convertedToChartData , startDate, endDate);
+                    createLastWeeksDates(convertedToChartData, startDate, endDate);
                     break;
                 case 'months':
-                    createLastMonthsDates(convertedToChartData , startDate, endDate);
+                    createLastMonthsDates(convertedToChartData, startDate, endDate);
                     break;
                 default:
-                    createLastWeeksDates(convertedToChartData , startDate, endDate);
+                    createLastWeeksDates(convertedToChartData, startDate, endDate);
                     break;
             }
             myChartJS.data.labels = labels;
@@ -824,8 +794,8 @@ $(document).ready(function () {
 
         let todayDate = new Date();
         let todayDateString = todayDate.toISOString().split('T')[0];
-    
-        document.getElementById('opening_week_date').innerHTML =sevenDaysAgoString;
+
+        document.getElementById('opening_week_date').innerHTML = sevenDaysAgoString;
         document.getElementById('closing_week_date').innerHTML = todayDateString;
 
         setCards(table);

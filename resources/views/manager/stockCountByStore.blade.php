@@ -449,7 +449,7 @@
                         @endphp
                             <tr>
                                 <td class="tdclass">
-                                    {{$stockCount->created_at}} / {{$stockCount->date}}
+                                    {{$stockCount->created_at}}
                                 </td>
                                 <td class="tdclass">{{$stockCount->store->name_of_store}}</td>
                                 <td class="tdclass">
@@ -476,7 +476,7 @@
                                 @endphp
                             </tr>
                             @php
-                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0], 'stockCases'=>$totalStockCases]);
+                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$stockCount->created_at, 'stockCases'=>$totalStockCases]);
                             @endphp
                         @endforeach
 
@@ -516,7 +516,7 @@
     var labels = [];
 
     var convertedToChartData =  {{ Js::from($chartStockArray) }};
-    // console.log(chartData, "chart datwaaaaaa");
+    // console.log(convertedToChartData, "chart datwaaaaaa");
 </script>
 
 <script src="{{ asset('assets/js/stockCountByStoreDatatable.js') }}"></script>

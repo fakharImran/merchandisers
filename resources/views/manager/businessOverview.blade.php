@@ -329,7 +329,7 @@
             $i = 1;
         @endphp
 
-        <div class="col-12" style="display: block">
+        <div class="col-12" style="display: none">
 
             <div class="table-responsive">
                 {{-- table-responsive --}}
@@ -412,10 +412,7 @@
                                 @endphp
                                 <tr>
                                     <td class="tdclass">
-                                        @php
-                                            $date = explode(' ', $stockCount->created_at);
-                                        @endphp
-                                        {{ $date[0] }}
+                                        {{ $stockCount->created_at }}
                                     </td>
                                     <td class="tdclass">{{ $stockCount->store->name_of_store }}</td>
                                     <td class="tdclass">
@@ -437,7 +434,7 @@
                                     @endphp
                                 </tr>
                                 @php
-                                    array_push($chartStockArray, ['stock' => $totalStock, 'date' => $date[0], 'stockCases' => $totalStockCases]);
+                                    array_push($chartStockArray, ['stock' => $totalStock, 'date' => $stockCount->created_at, 'stockCases' => $totalStockCases]);
                                 @endphp
                             @endforeach
 
@@ -446,10 +443,7 @@
                             @foreach ($outOfStockData as $outOfStock)
                                 <tr>
 									<td class="tdclass">
-                                        @php
-                                            $date = explode(' ', $outOfStock->created_at);
-                                        @endphp
-                                        {{ $date[0] }}
+                                        {{ $outOfStock->created_at }}
                                     </td>
 									<td class="tdclass">{{ $outOfStock->store->name_of_store }}</td>
 									<td class="tdclass">
@@ -478,10 +472,7 @@
                             @foreach ($productExpiryTrackerData as $productExpiryTracker)
                                 <tr>
 									<td class="tdclass">
-                                        @php
-                                            $date = explode(' ', $productExpiryTracker->created_at);
-                                        @endphp
-                                        {{ $date[0] }}
+                                        {{ $productExpiryTracker->created_at }}
                                     </td>
 									<td class="tdclass">{{ $productExpiryTracker->store->name_of_store }}</td>
 									<td class="tdclass">
@@ -510,10 +501,7 @@
 						@foreach ($uniqueServicedStoreLocation as $merchandiserLocation)
 							<tr>
 								<td class="tdclass">
-									@php
-										$date = explode(' ', $merchandiserLocation->created_at);
-									@endphp
-									{{ $date[0] }}
+									{{ $merchandiserLocation->created_at }}
 								</td>
 								<td  class="tdclass">{{$merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store}}</td>
                                 <td  class="tdclass">{{($merchandiserLocation->store_location($merchandiserLocation->store_location_id)->location)??null}}</td>

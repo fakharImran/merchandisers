@@ -60,67 +60,66 @@ function formatDateYMD(date) {
 //     }
 // }
 
-function setCards(table, startDate=0, endDate=0)
-{
+function setCards(table, startDate = 0, endDate = 0) {
     var sumClosingweekStock = 0;
     var sumOpeningWeekStock = 0;
-    var sumUnits=0;
-    var sumCases=0;
+    var sumUnits = 0;
+    var sumCases = 0;
 
 
     const storeServised = new Set(); // Use a Set to store unique store names
     const stores_out_of_stock = new Set(); // Use a Set to store unique store names
     const products_out_of_stock = new Set(); // Use a Set to store unique store names
     const stores_with_exp_products = new Set(); // Use a Set to store unique store names
-    
+
     // Use a Set to keep track of unique stores
     // Iterate over the visible rows and calculate the minimum and maximum product prices
     table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
         const data = this.data();
-        var units = parseInt((data[6] == '')?'0':data[6]); // Assuming column 1 contains the store
-        sumUnits+=units;
+        var units = parseInt((data[6] == '') ? '0' : data[6]); // Assuming column 1 contains the store
+        sumUnits += units;
         // console.log('untis ', units);
-        var cases =  parseInt((data[7] == '')?'0':data[7]); // Assuming column 1 contains the store
-        sumCases+=cases;
-        const tempStoreServised= data[11];
-        
+        var cases = parseInt((data[7] == '') ? '0' : data[7]); // Assuming column 1 contains the store
+        sumCases += cases;
+        const tempStoreServised = data[11];
+
         if (tempStoreServised.trim() !== "") {
             storeServised.add(tempStoreServised); // Add the store name to the Set if it's not an empty string
         }
 
-        const tempStoreOutOfStock= data[8];
-        
+        const tempStoreOutOfStock = data[8];
+
         if (tempStoreOutOfStock.trim() !== "") {
             products_out_of_stock.add(tempStoreOutOfStock); // Add the store name to the Set if it's not an empty string
         }
 
-        const tempProductOutOfStock= data[9];
-        
+        const tempProductOutOfStock = data[9];
+
         if (tempProductOutOfStock.trim() !== "") {
             stores_out_of_stock.add(tempProductOutOfStock); // Add the store name to the Set if it's not an empty string
         }
 
-        const tempStoreExpProduct= data[10];
-        
+        const tempStoreExpProduct = data[10];
+
         if (tempStoreExpProduct.trim() !== "") {
             stores_with_exp_products.add(tempStoreExpProduct); // Add the store name to the Set if it's not an empty string
         }
-       
 
-        var stockDate= data[0];
+
+        var stockDate = data[0];
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
         const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
         if (stockDate <= sevenDaysAgoString) {
-            sumOpeningWeekStock += units+cases;
+            sumOpeningWeekStock += units + cases;
         }
-        var tempTotal= units + cases;
+        var tempTotal = units + cases;
         // console.log(units,'units',cases, 'cases' );
-        sumClosingweekStock+=tempTotal;
-      
+        sumClosingweekStock += tempTotal;
+
     });
 
-     
+
     const numberOfStoreServised = storeServised.size;
     const numberStoreOfOutOfStock = stores_out_of_stock.size;
     const numberOfProductOutOfStock = products_out_of_stock.size;
@@ -132,26 +131,25 @@ function setCards(table, startDate=0, endDate=0)
     // console.log('Number of store exp product:', numberOfStoreExpProduct);
 
     // console.log('startDate', startDate, 'enddate', endDate);
-    
-    if(startDate!=0 && endDate!=0)
-    {
+
+    if (startDate != 0 && endDate != 0) {
         const dateRangeElements = document.getElementsByClassName('date_range_set');
 
         for (const element of dateRangeElements) {
             element.innerHTML = startDate + ' to ' + endDate;
-        }   
+        }
     }
-   
-    document.getElementById('total_stock_count').innerHTML =sumCases;
-    document.getElementById('total_stock_count_cases').innerHTML =  sumUnits;
 
-    document.getElementById('serviced_stores').innerHTML='<span style="color: #CA371B">'+numberOfStoreServised+' /</span> '+ allUniqueLocations.length;
-    document.getElementById('stores_out_of_stock').innerHTML='<span style="color: #CA371B">'+numberStoreOfOutOfStock+' /</span> '+ allUniqueLocations.length;
-    document.getElementById('products_out_of_stock').innerHTML='<span style="color: #CA371B">'+numberOfProductOutOfStock+' /</span> '+ products.length;
-    document.getElementById('stores_with_exp_products').innerHTML='<span style="color: #CA371B">'+numberOfStoreExpProduct+' /</span> '+ allUniqueLocations.length;
+    document.getElementById('total_stock_count').innerHTML = sumCases;
+    document.getElementById('total_stock_count_cases').innerHTML = sumUnits;
 
-    
-    
+    document.getElementById('serviced_stores').innerHTML = '<span style="color: #CA371B">' + numberOfStoreServised + ' /</span> ' + allUniqueLocations.length;
+    document.getElementById('stores_out_of_stock').innerHTML = '<span style="color: #CA371B">' + numberStoreOfOutOfStock + ' /</span> ' + allUniqueLocations.length;
+    document.getElementById('products_out_of_stock').innerHTML = '<span style="color: #CA371B">' + numberOfProductOutOfStock + ' /</span> ' + products.length;
+    document.getElementById('stores_with_exp_products').innerHTML = '<span style="color: #CA371B">' + numberOfStoreExpProduct + ' /</span> ' + allUniqueLocations.length;
+
+
+
 }
 
 // Call the setCards function to update the card's content
@@ -160,65 +158,63 @@ function setCards(table, startDate=0, endDate=0)
 
 
 //create last days dates
-function createLastDaysDates(data, startDate = 0, endDate = 0)
-{
-     // Initialize an array to store the previous 7 days
-     const previousSevenDays = [];
-    
-     if (startDate == 0 && endDate == 0) {
-         // Calculate the end date (today)
-         endDate = new Date();
-         
-         // Calculate the start date (7 days ago from today)
-         startDate = new Date();
-         startDate.setDate(endDate.getDate() - 6);
-     } else {
-         // Parse provided start and end dates
-         startDate = new Date(startDate);
-         endDate = new Date(endDate);
-     }
- 
-     // Iterate for each day in the last 7 days
-     for (let i = 0; i < 7; i++) {
-         const currentDate = new Date(startDate);
-         currentDate.setDate(startDate.getDate() + i);
-         
-         // Calculate the start and end times for the current day
-         const dayStart = new Date(currentDate);
-         dayStart.setHours(0, 0, 0, 0);
-         const dayEnd = new Date(currentDate);
-         dayEnd.setHours(23, 59, 59, 999);
- 
-         // Filter data for the current day
-         const filteredData = data.filter(element => {
-             const elementDate = new Date(element['date']);
-             return elementDate >= dayStart && elementDate <= dayEnd;
-         });
-         let totalStock;
-         // Calculate the total stock for the current day
-         if (graphUnit == "Unit") {
-            totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stock']), 0);
-         }
-         else{
-            totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stockCases']), 0);
-         }
-         previousSevenDays.push(totalStock);
-     }
- 
-     // Format dates and reverse the arrays
-     const formattedDates = previousSevenDays.map((_, i) => {
-         const currentDate = new Date(startDate);
-         currentDate.setDate(startDate.getDate() + i);
-         return formatDate(currentDate);
-     });
-     
-         labels= formattedDates;
-         periodData= previousSevenDays;
+function createLastDaysDates(data, startDate = 0, endDate = 0) {
+    // Initialize an array to store the previous 7 days
+    const previousSevenDays = [];
+
+    if (startDate == 0 && endDate == 0) {
+        // Calculate the end date (today)
+        endDate = new Date();
+
+        // Calculate the start date (7 days ago from today)
+        startDate = new Date();
+        startDate.setDate(endDate.getDate() - 6);
+    } else {
+        // Parse provided start and end dates
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+    }
+
+    // Iterate for each day in the last 7 days
+    for (let i = 0; i < 7; i++) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(startDate.getDate() + i);
+
+        // Calculate the start and end times for the current day
+        const dayStart = new Date(currentDate);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(currentDate);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        // Filter data for the current day
+        const filteredData = data.filter(element => {
+            const elementDate = new Date(element['date']);
+            return elementDate >= dayStart && elementDate <= dayEnd;
+        });
+        let totalStock;
+        // Calculate the total stock for the current day
+        if (graphUnit == "Unit") {
+            totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['stock']), 0);
+        }
+        else {
+            totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['stockCases']), 0);
+        }
+        previousSevenDays.push(totalStock);
+    }
+
+    // Format dates and reverse the arrays
+    const formattedDates = previousSevenDays.map((_, i) => {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(startDate.getDate() + i);
+        return formatDate(currentDate);
+    });
+
+    labels = formattedDates;
+    periodData = previousSevenDays;
 }
 //create last week dates
-function createLastWeeksDates(data, startDate = 0, endDate = 0)
-{
-    
+function createLastWeeksDates(data, startDate = 0, endDate = 0) {
+
     // Initialize an array to store the previous 6 weeks
     const previousWeeks = [];
 
@@ -263,7 +259,7 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0)
         }
     }
 
-//check the weeks arroding to their hours
+    //check the weeks arroding to their hours
     var totalStock = 0;
     var weekarray = [];
     previousWeeks.forEach(week => {
@@ -273,7 +269,7 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0)
                 if (graphUnit == "Unit") {
                     totalStock += parseInt(element['stock']);
                 }
-                else{
+                else {
                     totalStock += parseInt(element['stockCases']);
                 }
             } else {
@@ -295,8 +291,7 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0)
     labels = previousWeeksArray.reverse();
 }
 //create last months dates
-function createLastMonthsDates(data, startDate = 0, endDate = 0)
-{
+function createLastMonthsDates(data, startDate = 0, endDate = 0) {
     // Initialize an array to store the previous 7 months
     const previousMonths = [];
 
@@ -356,10 +351,10 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
             const chkDate = new Date(element.date);
             if (chkDate >= month.startDate && chkDate <= month.endDate) {
                 if (graphUnit == "Unit") {
-                    totalStock +=  parseInt(element.stock);
+                    totalStock += parseInt(element.stock);
                 }
-                else{
-                    totalStock +=  parseInt(element.stockCases);
+                else {
+                    totalStock += parseInt(element.stockCases);
                 }
             }
         });
@@ -383,7 +378,7 @@ createLastWeeksDates(convertedToChartData);
 function changePeriod(e) {
     switch (e.value) {
         case 'Daily':
-            
+
             createLastDaysDates(convertedToChartData);
             myChartJS.data.labels = labels;
             myChartJS.data.datasets[0].data = periodData;
@@ -415,11 +410,10 @@ function changePeriod(e) {
 }
 
 function changeUnitCount(e) {
-    switch (e.value) 
-    {
+    switch (e.value) {
         case 'Unit':
             graphUnit = 'Unit';
-            
+
             break;
         case 'Case':
             graphUnit = 'Case';
@@ -430,13 +424,13 @@ function changeUnitCount(e) {
     }
     switch (graphFormat) {
         case 'days':
-            changePeriod({'value':"Daily"});
+            changePeriod({ 'value': "Daily" });
             break;
         case 'weeks':
-            changePeriod({'value':'Weekly'});
+            changePeriod({ 'value': 'Weekly' });
             break;
         case 'months':
-            changePeriod({'value':'Monthly'});
+            changePeriod({ 'value': 'Monthly' });
             break;
         default:
             break;
@@ -446,14 +440,14 @@ function changeUnitCount(e) {
 const data = {
     labels: labels,
     datasets: [{
-        label:'Stock Count',
+        label: 'Stock Count',
         backgroundColor: '#1892C0',
         borderColor: 'rgb(255, 99, 132)',
         // data: periodData,
         data: periodData,
     }]
 };
-       
+
 const config = {
     type: 'bar',
     data: data,
@@ -535,21 +529,20 @@ function changeGraph(table) {
     });
     var colData = [];
     filteredData.forEach(element => {
-        const dateTime = element[0].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
-        const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
-        var stockcase = element[7];
-        var stockunits = element[6];
-
-        if (stockcase.trim() !== '' && stockunits.trim() !== '') {
-            colData.push({ date: formatDateYMD(currentDate1), stock: stockunits, stockCases: stockcase });
-        }
-        });
-    console.log('col data is ->>>>>>>>>>>>>>>>.',colData);
+        const dateTime = element[0]; // element[6] is date and time ex: 12-09-2023 7:50 PM
+        const currentDate2 = new Date(dateTime); // dateTime is only date ex: 12-09-2023 
+        const currentDate1 = currentDate2.toISOString();
+        // console.log('element[0]', element[0], 'currentDate1', currentDate1);
+        var stockcase = parseInt( (element[7] == '')?0:element[7]);
+        var stockunits = parseInt((element[6] == '')?0:element[6]);
+        colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase });
+    });
+    // console.log('col data is ->>>>>>>>>>>>>>>>.', colData);
     return colData;
 }
 
 
-$(document).ready(function () { 
+$(document).ready(function () {
     var table = $('#businessOverviewDatatable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
@@ -564,7 +557,7 @@ $(document).ready(function () {
     });
     setCards(table);
 
-    
+
 
 
     // Custom search input for 'Name' column
@@ -575,7 +568,7 @@ $(document).ready(function () {
         table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
         setCards(table);
-        
+
 
         var storeName = this.value;
 
@@ -601,7 +594,7 @@ $(document).ready(function () {
             table.column(2).search('', true, false).draw(); // Clear previous search
             dropdown.empty();
             dropdown.append('<option value="" selected>--Select--</option>');
-           
+
         }
         // Empty the dropdown to remove previous options
         convertedToChartData = changeGraph(table);
@@ -682,7 +675,7 @@ $(document).ready(function () {
         table.column(5).search(this.value ? `^${this.value}$` : '', true, false).draw();
         setCards(table);
 
-        console.log(this.value);
+        // console.log(this.value);
         convertedToChartData = changeGraph(table);
 
         switch (graphFormat) {
@@ -769,15 +762,15 @@ $(document).ready(function () {
             var start = parts[0].trim(); // Remove leading/trailing spaces
             startDate = start.replace(/^\s+/, ''); // Remove the first space
             startDate = new Date(startDate);
-             startDate = formatDateYMD(startDate);
+            startDate = formatDateYMD(startDate);
 
             var end = parts[1].trim(); // Remove leading/trailing spaces
             endDate = end.replace(/^\s+/, ''); // Remove the first space
             endDate = new Date(endDate);
-             endDate = formatDateYMD(endDate);
+            endDate = formatDateYMD(endDate);
 
             table.column(0).search('', true, false).draw(); // Clear previous search
-            setCards(table,startDate,endDate);
+            setCards(table, startDate, endDate);
 
             var searchTerms = []; // Initialize an array to store search terms
             function dateRange(startDate, endDate) {
@@ -798,16 +791,16 @@ $(document).ready(function () {
             convertedToChartData = changeGraph(table);
             switch (graphFormat) {
                 case 'days':
-                    createLastDaysDates(convertedToChartData , startDate, endDate);
+                    createLastDaysDates(convertedToChartData, startDate, endDate);
                     break;
                 case 'weeks':
-                    createLastWeeksDates(convertedToChartData , startDate, endDate);
+                    createLastWeeksDates(convertedToChartData, startDate, endDate);
                     break;
                 case 'months':
-                    createLastMonthsDates(convertedToChartData , startDate, endDate);
+                    createLastMonthsDates(convertedToChartData, startDate, endDate);
                     break;
                 default:
-                    createLastWeeksDates(convertedToChartData , startDate, endDate);
+                    createLastWeeksDates(convertedToChartData, startDate, endDate);
                     break;
             }
             myChartJS.data.labels = labels;
@@ -830,7 +823,7 @@ $(document).ready(function () {
 
         for (const element of dateRangeElements) {
             element.innerHTML = todayDateString;
-        }     
+        }
         setCards(table);
         // table.column(0).search('').draw();
         convertedToChartData = changeGraph(table);
