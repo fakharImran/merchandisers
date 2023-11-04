@@ -131,13 +131,14 @@ function createLastDaysDates(data, startDate = 0, endDate = 0)
          console.log("totalStock->>>", totalStock);
          previousSevenDays.push(totalStock);
      }
- 
+ console.log('previousSevenDays', previousSevenDays);
      // Format dates and reverse the arrays
      const formattedDates = previousSevenDays.map((_, i) => {
          const currentDate = new Date(startDate);
          currentDate.setDate(startDate.getDate() + i);
          return formatDate(currentDate);
      });
+     console.log('formattedDates', formattedDates);
      
          labels= formattedDates;
          periodData= previousSevenDays;
