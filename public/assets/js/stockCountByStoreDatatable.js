@@ -86,6 +86,7 @@ function setCards(table, startDate=0, endDate=0)
 //create last days dates
 function createLastDaysDates(data, startDate = 0, endDate = 0)
 {
+    console.log("Data:_>>>>", data);
      // Initialize an array to store the previous 7 days
      const previousSevenDays = [];
     
