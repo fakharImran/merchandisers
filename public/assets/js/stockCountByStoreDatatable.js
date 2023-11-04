@@ -536,9 +536,9 @@ function changeGraph(table) {
     filteredData.forEach(element => {
         const dateTime = element[0].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
         const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023   
-        console.log('date in stock count is ',  currentDate1);
-        var stockcase = element[14];
-        var stockunits = element[13];
+        var stockcase = element[13];
+        var stockunits = element[12];
+        console.log(stockcase, stockunits);
         colData.push({ 'date': formatDateYMD(currentDate1), 'stock': stockunits, 'stockCases': stockcase});
     });
     console.log(colData);
