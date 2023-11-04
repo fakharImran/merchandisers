@@ -79,6 +79,7 @@ function setCards(table, startDate=0, endDate=0)
         const data = this.data();
         var units = parseInt((data[6] == '')?0:data[6]); // Assuming column 1 contains the store
         sumUnits+=units;
+        console.log('untis ', units);
         var cases =  parseInt((data[7] == '')?0:data[7]); // Assuming column 1 contains the store
         sumCases+=cases;
         const tempStoreServised= data[11];

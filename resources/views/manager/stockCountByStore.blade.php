@@ -452,7 +452,7 @@
                                     @php
                                         $date= explode(' ', $stockCount->created_at);
                                     @endphp
-                                    {{$date[0]}}
+                                    {{$stockCount->created_at}}
                                 </td>
                                 <td class="tdclass">{{$stockCount->store->name_of_store}}</td>
                                 <td class="tdclass">
