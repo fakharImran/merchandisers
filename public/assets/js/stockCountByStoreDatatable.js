@@ -119,6 +119,7 @@ function createLastDaysDates(data, startDate = 0, endDate = 0)
              const elementDate = new Date(element['date']);
              return elementDate >= dayStart && elementDate <= dayEnd;
          });
+         console.log("filteredData->>>>>>>>", filteredData, "data->>>", data);
          let totalStock;
          // Calculate the total stock for the current day
          if (graphUnit == "Unit") {
@@ -127,6 +128,7 @@ function createLastDaysDates(data, startDate = 0, endDate = 0)
          else{
             totalStock = filteredData.reduce((acc, element) => acc +  parseInt(element['stockCases']), 0);
          }
+         console.log("totalStock->>>", totalStock);
          previousSevenDays.push(totalStock);
      }
  
