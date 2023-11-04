@@ -23,9 +23,9 @@ function formatDateYMD(date) {
 }
 function setCards(table)
 {
-    // console.log(allUniqueStores,'-------------------');
-    // console.log(allUniqueCategories,'-------------------');
-    // console.log(allUniqueProducts,'-------------------');
+    console.log(allUniqueLocations.length,'-------------------');
+    console.log(allUniqueCategories,'-------------------');
+    console.log(allUniqueProducts,'-------------------');
   
     const expiredStores = new Set(); // Use a Set to store unique store names
     const expiredCategories = new Set(); // Use a Set to store unique store names
@@ -42,28 +42,32 @@ function setCards(table)
         const tempElement = document.createElement('div');
         tempElement.innerHTML = data[8]; // Assuming data[8] contains the HTML content
 
+        expiredStores.add(store); 
+        expiredCategories.add(category); 
+        expiredProducts.add(product); 
+        
         // Extract the date from the temporary element
-        const extractedDate = tempElement.textContent.trim();
-        // console.log('Extracted Date:', extractedDate);
+        // const extractedDate = tempElement.textContent.trim();
+        // // console.log('Extracted Date:', extractedDate);
 
-        // Convert the extracted date to a JavaScript Date object
-        const expiryDate = new Date(extractedDate);
-        // console.log('JavaScript Date:', expiryDate);
+        // // Convert the extracted date to a JavaScript Date object
+        // const expiryDate = new Date(extractedDate);
+        // // console.log('JavaScript Date:', expiryDate);
 
 
-        // Check if the expiry date is greater than the current date
-        // console.log(expiryDate, currentDate, expiryDate < currentDate);
-        if (expiryDate < currentDate) {
-            if (!expiredStores.has(store)) {
-                expiredStores.add(store); // Add the store name to the Set if it's not already in the Set
-            }
-            if (!expiredCategories.has(category)) {
-                expiredCategories.add(category); // Add the category name to the Set if it's not already in the Set
-            }
-            if (!expiredProducts.has(product)) {
-                expiredProducts.add(product); // Add the product name to the Set if it's not already in the Set
-            }
-        }
+        // // Check if the expiry date is greater than the current date
+        // // console.log(expiryDate, currentDate, expiryDate < currentDate);
+        // if (expiryDate < currentDate) {
+        //     if (!expiredStores.has(store)) {
+        //         expiredStores.add(store); // Add the store name to the Set if it's not already in the Set
+        //     }
+        //     if (!expiredCategories.has(category)) {
+        //         expiredCategories.add(category); // Add the category name to the Set if it's not already in the Set
+        //     }
+        //     if (!expiredProducts.has(product)) {
+        //         expiredProducts.add(product); // Add the product name to the Set if it's not already in the Set
+        //     }
+        // }
     });
 
     const numberOfexpStores = expiredStores.size;
@@ -75,7 +79,7 @@ function setCards(table)
     console.log('Number of unique expired stores:', numberOfexpProduct);
 
 
-    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfexpStores+' /</span> '+ allUniqueStores;
+    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfexpStores+' /</span> '+ allUniqueLocations.length;
     document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpCategories+' /</span> '+ allUniqueCategories;
     document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpProduct+' /</span> '+ allUniqueProducts;
 }

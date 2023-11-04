@@ -61,12 +61,20 @@ class OutOfStockController extends Controller
         // dd($outOfStockIDArr);
         $outOfStockData = OutOfStock::whereIn('id', $outOfStockIDArr)->get();
         
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($outOfStockData as $key => $outOfStock) {
+            $outOfStock->created_at = convertToTimeZone($outOfStock->created_at, 'UTC', $userTimeZone);
+            $outOfStock->date_modified = convertToTimeZone($outOfStock->date_modified, 'UTC', $userTimeZone);        
+        }
         
         // dd($outOfStockData);
         
         $userId=$user->id;
         $name=$user->name;
      
+        
         return view('manager.outOfStock', compact('outOfStockData','userArr', 'name',  'stores','allLocations','categories', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 

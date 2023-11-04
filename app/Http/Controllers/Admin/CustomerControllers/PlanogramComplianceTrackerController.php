@@ -61,6 +61,13 @@ class PlanogramComplianceTrackerController extends Controller
         // dd($planogramArr);
         $planogramComplianceData = PlanogramComplianceTracker::whereIn('id', $planogramArr)->get();
         
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($planogramComplianceData as $key => $planogram) {
+            $planogram->created_at = convertToTimeZone($planogram->created_at, 'UTC', $userTimeZone);
+            $planogram->date_modified = convertToTimeZone($planogram->date_modified, 'UTC', $userTimeZone);        
+        }
         
         // dd($planogramComplianceData);
         

@@ -58,6 +58,16 @@ class PriceAuditController extends Controller
         }
         // dd($priceAuditIdsArr);
         $priceAuditData = PriceAudit::whereIn('id', $priceAuditIdsArr)->get();
+        
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($priceAuditData as $key => $priceAudit) {
+            $priceAudit->created_at = convertToTimeZone($priceAudit->created_at, 'UTC', $userTimeZone);
+            $priceAudit->date_modified = convertToTimeZone($priceAudit->date_modified, 'UTC', $userTimeZone);        
+        }
+
+        
         $competitorProductDetail=array();
         foreach ($priceAuditData as $key => $PriceAudit) {
             array_push($competitorProductDetail, ['c_product_name'=>$PriceAudit->competitor_product_name, 'c_product_price'=>$PriceAudit->competitor_product_price]);

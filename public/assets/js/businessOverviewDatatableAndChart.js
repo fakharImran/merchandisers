@@ -66,28 +66,69 @@ function setCards(table, startDate=0, endDate=0)
     var sumOpeningWeekStock = 0;
     var sumUnits=0;
     var sumCases=0;
+
+
+    const storeServised = new Set(); // Use a Set to store unique store names
+    const stores_out_of_stock = new Set(); // Use a Set to store unique store names
+    const products_out_of_stock = new Set(); // Use a Set to store unique store names
+    const stores_with_exp_products = new Set(); // Use a Set to store unique store names
+    
     // Use a Set to keep track of unique stores
     // Iterate over the visible rows and calculate the minimum and maximum product prices
     table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
         const data = this.data();
-        var units = parseInt(data[13]); // Assuming column 1 contains the store
+        var units = parseInt((data[6] == '')?0:data[6]); // Assuming column 1 contains the store
         sumUnits+=units;
-        var cases = parseInt(data[14]); // Assuming column 1 contains the store
+        var cases =  parseInt((data[7] == '')?0:data[7]); // Assuming column 1 contains the store
         sumCases+=cases;
+        const tempStoreServised= data[11];
+        
+        if (tempStoreServised.trim() !== "") {
+            storeServised.add(tempStoreServised); // Add the store name to the Set if it's not an empty string
+        }
+
+        const tempStoreOutOfStock= data[8];
+        
+        if (tempStoreOutOfStock.trim() !== "") {
+            products_out_of_stock.add(tempStoreOutOfStock); // Add the store name to the Set if it's not an empty string
+        }
+
+        const tempProductOutOfStock= data[9];
+        
+        if (tempProductOutOfStock.trim() !== "") {
+            stores_out_of_stock.add(tempProductOutOfStock); // Add the store name to the Set if it's not an empty string
+        }
+
+        const tempStoreExpProduct= data[10];
+        
+        if (tempStoreExpProduct.trim() !== "") {
+            stores_with_exp_products.add(tempStoreExpProduct); // Add the store name to the Set if it's not an empty string
+        }
+       
+
         var stockDate= data[0];
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
         const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
-        // console.log('stockDate in table', stockDate,' date saven days ago', sevenDaysAgoString, 'xxxxxxxxxxxxxxxx');
         if (stockDate <= sevenDaysAgoString) {
             sumOpeningWeekStock += units+cases;
         }
         var tempTotal= units + cases;
         // console.log(units,'units',cases, 'cases' );
         sumClosingweekStock+=tempTotal;
-        var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
-        
+      
     });
+
+     
+    const numberOfStoreServised = storeServised.size;
+    const numberStoreOfOutOfStock = stores_out_of_stock.size;
+    const numberOfProductOutOfStock = products_out_of_stock.size;
+    const numberOfStoreExpProduct = stores_with_exp_products.size;
+
+    console.log('Number of service stores: ', numberOfStoreServised);
+    console.log('Number of store out of stock:', numberStoreOfOutOfStock);
+    console.log('Number of product out of stock:', numberOfProductOutOfStock);
+    console.log('Number of store exp product:', numberOfStoreExpProduct);
 
     console.log('startDate', startDate, 'enddate', endDate);
     
@@ -100,10 +141,16 @@ function setCards(table, startDate=0, endDate=0)
         }   
     }
    
+    document.getElementById('total_stock_count').innerHTML =sumCases;
+    document.getElementById('total_stock_count_cases').innerHTML =  sumUnits;
 
-    document.getElementById('total_stock_count_cases').innerHTML =sumCases;
-    document.getElementById('total_stock_count').innerHTML =  sumUnits;
-   
+    document.getElementById('serviced_stores').innerHTML='<span style="color: #CA371B">'+numberOfStoreServised+' /</span> '+ allUniqueLocations.length;
+    document.getElementById('stores_out_of_stock').innerHTML='<span style="color: #CA371B">'+numberStoreOfOutOfStock+' /</span> '+ allUniqueLocations.length;
+    document.getElementById('products_out_of_stock').innerHTML='<span style="color: #CA371B">'+numberOfProductOutOfStock+' /</span> '+ products.length;
+    document.getElementById('stores_with_exp_products').innerHTML='<span style="color: #CA371B">'+numberOfStoreExpProduct+' /</span> '+ allUniqueLocations.length;
+
+    
+    
 }
 
 // Call the setCards function to update the card's content
@@ -329,82 +376,7 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0)
     periodData = monthArray.reverse();
     labels = previousMonthsArray.reverse();
 }
-// create weekly dates
-// function createLastWeeksDates(data, startDate = 0, endDate = 0) {
 
-//     // Initialize an array to store the previous 6 weeks
-//     const previousWeeks = [];
-
-//     if (startDate == 0 && endDate == 0) {
-//         // Calculate the start date of the current week (Sunday)
-//         const currentWeekStartDate = new Date();
-//         currentWeekStartDate.setDate(currentWeekStartDate.getDate() - currentWeekStartDate.getDay());
-
-
-//         // Calculate the start and end dates for each of the previous 6 weeks
-//         for (let i = 0; i < 6; i++) {
-//             startDate = new Date(currentWeekStartDate);
-//             startDate.setDate(currentWeekStartDate.getDate() - 7 * i); // Subtract 7 days for each previous week
-//             endDate = new Date(startDate);
-//             endDate.setDate(startDate.getDate() + 6); // Add 6 days to get the end of the week
-//             previousWeeks.push({ startDate, endDate });
-//         }
-//     }
-//     else {
-//         startDate = new Date(startDate);
-//         endDate = new Date(endDate);
-//         // startDate.setDate(startDate.getDate() - startDate.getDay());
-//         startDate.setDate(startDate.getDate() - 7);
-//         let currentWeekStartDate = endDate; // Initialize with the provided end date
-//         currentWeekStartDate.setDate(currentWeekStartDate.getDate() + currentWeekStartDate.getDay());
-
-//         // Calculate the difference in milliseconds
-//         const timeDifference = currentWeekStartDate.getTime() - startDate.getTime();
-//         // Convert milliseconds to weeks (1 week = 7 days)
-//         const weeks = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
-
-//         for (let i = 0; i <= weeks; i++) {
-//             const weekEndDate = new Date(currentWeekStartDate);
-//             weekEndDate.setDate(currentWeekStartDate.getDate() - 1); // Subtract 1 day to get the week's end date
-//             const weekStartDate = new Date(weekEndDate);
-//             weekStartDate.setDate(weekEndDate.getDate() - 6); // Subtract 6 days to get the start date
-//             // Check if the week's start date is within the provided range
-//             if (weekStartDate >= startDate) {
-//                 previousWeeks.push({ startDate: weekStartDate, endDate: weekEndDate });
-//             }
-
-//             currentWeekStartDate = weekStartDate; // Set the next week's start date
-//         }
-
-
-//     }
-
-//     //check the weeks arroding to their hours
-//     var workedHrs = 0;
-//     var weekarray = [];
-//     previousWeeks.forEach(week => {
-//         data.forEach(element => {
-//             chkDate = element['date'];
-//             if (formatDateYMD(week.startDate) <= chkDate && formatDateYMD(week.endDate) >= chkDate) {
-//                 workedHrs += element['hours'];
-//             } else {
-//             }
-//         });
-//         weekarray.push(workedHrs);
-//         workedHrs = 0;
-//     });
-//     previousWeeks.forEach(function (element) {
-//         element.startDate = formatDate(element.startDate);
-//         element.endDate = formatDate(element.endDate);
-//     });
-//     const previousWeeksArray = [];
-//     previousWeeks.forEach(function (element) {
-//         previousWeeksArray.push(element.startDate + ' - ' + element.endDate);
-//     });
-
-//     periodData = weekarray.reverse();
-//     labels = previousWeeksArray.reverse();
-// }
 createLastWeeksDates(convertedToChartData);
 
 function changePeriod(e) {
@@ -564,8 +536,8 @@ function changeGraph(table) {
     filteredData.forEach(element => {
         const dateTime = element[0].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
         const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
-        var stockcase = element[14];
-        var stockunits = element[13];
+        var stockcase = element[7];
+        var stockunits = element[6];
         colData.push({ 'date': formatDateYMD(currentDate1), 'stock': stockunits, 'stockCases': stockcase});
     });
     console.log(colData);

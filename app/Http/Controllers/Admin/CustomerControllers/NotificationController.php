@@ -58,6 +58,14 @@ class NotificationController extends Controller
         $name=$user->name;
         $userTimeZone  = $user->time_zone;
         $allNotifications= Notification::all();
+
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($allNotifications as $key => $notification) {
+            $notification->created_at = convertToTimeZone($notification->created_at, 'UTC', $userTimeZone);
+            $notification->date_modified = convertToTimeZone($notification->date_modified, 'UTC', $userTimeZone);        
+        }
      
         return view('manager.notifications', compact('userTimeZone','allNotifications','userArr', 'name',  'stores','allLocations','categories', 'products'), ['pageConfigs' => $pageConfigs]);
     }

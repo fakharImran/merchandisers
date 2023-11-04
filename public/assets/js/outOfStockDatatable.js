@@ -23,7 +23,7 @@ function formatDateYMD(date) {
 
 function setCards(table, startDate=0, endDate=0)
 {
-    console.log(allUniqueStores,'-------------------');
+    console.log(allUniqueLocations.length,'-------------------');
     console.log(allUniqueCategories,'-------------------');
     console.log(allUniqueProducts,'-------------------');
   
@@ -65,7 +65,7 @@ if(startDate!=0 && endDate!=0)
 //     document.getElementById('out_of_stock_product').innerHTML =todayDateString;
 // }
 
-    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockStores+' /</span> '+ allUniqueStores;
+    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockStores+' /</span> '+ allUniqueLocations.length;
     document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockCategories+' /</span> '+ allUniqueCategories;
     document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockProduct+' /</span> '+ allUniqueProducts;
 }

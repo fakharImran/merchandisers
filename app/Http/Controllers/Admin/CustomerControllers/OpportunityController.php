@@ -62,6 +62,13 @@ class OpportunityController extends Controller
         // dd($opportunityIDArr);
         $opportunityData = Opportunity::whereIn('id', $opportunityIDArr)->get();
         
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($opportunityData as $key => $opportunity) {
+            $opportunity->created_at = convertToTimeZone($opportunity->created_at, 'UTC', $userTimeZone);
+            $opportunity->date_modified = convertToTimeZone($opportunity->date_modified, 'UTC', $userTimeZone);        
+        }
         
         // dd($opportunityData);
         

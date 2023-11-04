@@ -60,6 +60,14 @@ class ProductExpiryTrackerController extends Controller
         // dd($productExpiryTrackerIDArr);
         $productExpiryTrackerData = ProductExpiryTracker::whereIn('id', $productExpiryTrackerIDArr)->get();
         
+                
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($productExpiryTrackerData as $key => $productExpiry) {
+            $productExpiry->created_at = convertToTimeZone($productExpiry->created_at, 'UTC', $userTimeZone);
+            $productExpiry->date_modified = convertToTimeZone($productExpiry->date_modified, 'UTC', $userTimeZone);        
+        }
         
         // dd($productExpiryTrackerData);
         

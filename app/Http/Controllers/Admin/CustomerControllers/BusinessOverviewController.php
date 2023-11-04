@@ -13,6 +13,7 @@ use App\Models\StockCountByStores;
 use App\Http\Controllers\Controller;
 use App\Models\ProductExpiryTracker;
 use Illuminate\Support\Facades\Auth;
+use App\Models\MerchandiserTimeSheet;
 
 class BusinessOverviewController extends Controller
 {
@@ -63,6 +64,15 @@ class BusinessOverviewController extends Controller
         // dd($stockCountByStoreArr);
         $stockCountData = StockCountByStores::whereIn('id', $stockCountByStoreArr)->get();
         
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($stockCountData as $key => $stockCount) {
+            $stockCount->created_at = convertToTimeZone($stockCount->created_at, 'UTC', $userTimeZone);
+            $stockCount->date_modified = convertToTimeZone($stockCount->date_modified, 'UTC', $userTimeZone);        
+        }
+        
+
         $outOfStockIDArr = [];
         foreach ($stores as $store) {
             $outOfStocksData = $store->outOfStocks->pluck('id')->toArray(); // Pluck product IDs
@@ -70,6 +80,11 @@ class BusinessOverviewController extends Controller
         }
         // dd($outOfStockIDArr);
         $outOfStockData = OutOfStock::whereIn('id', $outOfStockIDArr)->get();
+
+        foreach ($outOfStockData as $key => $outOfStock) {
+            $outOfStock->created_at = convertToTimeZone($outOfStock->created_at, 'UTC', $userTimeZone);
+            $outOfStock->date_modified = convertToTimeZone($outOfStock->date_modified, 'UTC', $userTimeZone);        
+        }
 
         $productExpiryTrackerIDArr = [];
         foreach ($stores as $store) {
@@ -79,12 +94,24 @@ class BusinessOverviewController extends Controller
         // dd($productExpiryTrackerIDArr);
         $productExpiryTrackerData = ProductExpiryTracker::whereIn('id', $productExpiryTrackerIDArr)->get();
         
-        $systemStoreCount = Store::count();
-        
+        foreach ($productExpiryTrackerData as $key => $productExpiry) {
+            $productExpiry->created_at = convertToTimeZone($productExpiry->created_at, 'UTC', $userTimeZone);
+            $productExpiry->date_modified = convertToTimeZone($productExpiry->date_modified, 'UTC', $userTimeZone);        
+        }
+
         $userId=$user->id;
         $name=$user->name;
-     
-        return view('manager.businessOverview', compact('systemStoreCount','productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories'), ['pageConfigs' => $pageConfigs]);
+        
+        $merchandiserTimeSheetData=MerchandiserTimeSheet::all();
+        $uniqueServicedStoreLocation = $merchandiserTimeSheetData;
+        
+        foreach ($uniqueServicedStoreLocation as $key => $merchandiser) {
+            $merchandiser->created_at = convertToTimeZone($merchandiser->created_at, 'UTC', $userTimeZone);
+            $merchandiser->date_modified = convertToTimeZone($merchandiser->date_modified, 'UTC', $userTimeZone);        
+        }
+
+        // dd($uniqueServicedStoreLocation);
+        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories', 'uniqueServicedStoreLocation'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

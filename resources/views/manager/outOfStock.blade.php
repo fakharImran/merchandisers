@@ -265,7 +265,7 @@
                                 <td class="tdclass">{{$outOfStock->companyUser->user->name}}</td>
                             </tr>
                         @endforeach
-                    @endif
+                        @endif
                     </tbody>
                 </table>
             </div>

@@ -31,6 +31,7 @@ class StockCountByStoreController extends Controller
         $compnay_users = $user->companyUser->company->companyUsers;
         $userArr = array();
         foreach ($compnay_users as $key => $compnay_user) {
+            
             if($compnay_user->user->hasRole('merchandiser')){
                 array_push($userArr, $compnay_user->user)  ;
             }
@@ -59,6 +60,14 @@ class StockCountByStoreController extends Controller
         // dd($stockCountByStoreArr);
         $stockCountData = StockCountByStores::whereIn('id', $stockCountByStoreArr)->get();
         
+        
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($stockCountData as $key => $stockCount) {
+            $stockCount->created_at = convertToTimeZone($stockCount->created_at, 'UTC', $userTimeZone);
+            $stockCount->date_modified = convertToTimeZone($stockCount->date_modified, 'UTC', $userTimeZone);        
+        }
         
         // dd($stockCountData);
         

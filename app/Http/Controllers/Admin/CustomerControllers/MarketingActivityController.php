@@ -60,6 +60,13 @@ class MarketingActivityController extends Controller
         // dd($marketingActivityIDArr);
         $marketingActivityData = MarketingActivity::whereIn('id', $marketingActivityIDArr)->get();
         
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($marketingActivityData as $key => $marketingActivity) {
+            $marketingActivity->created_at = convertToTimeZone($marketingActivity->created_at, 'UTC', $userTimeZone);
+            $marketingActivity->date_modified = convertToTimeZone($marketingActivity->date_modified, 'UTC', $userTimeZone);        
+        }
         
         // dd($marketingActivityData);
         
