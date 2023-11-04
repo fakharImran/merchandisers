@@ -534,8 +534,10 @@ function changeGraph(table) {
     });
     var colData = [];
     filteredData.forEach(element => {
-        const dateTime = element[0].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
-        const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023   
+        const dateTime = element[0].split('/'); // element[6] is date and time ex: 12-09-2023 7:50 PM
+        const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023 
+        console.log('element[0]->>>', element[0]);  
+        console.log('currentDate1->>>',currentDate1, new Date());
         var stockcase = element[13];
         var stockunits = element[12];
         console.log(stockcase, stockunits);
@@ -580,7 +582,7 @@ $(document).ready(function () {
         myChartJS.data.datasets[0].data = periodData;
         myChartJS.update();
 
-        
+
     // Custom search input for 'Name' column
     $('#store-search').on('change', function () {
 
