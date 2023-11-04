@@ -449,9 +449,6 @@
                         @endphp
                             <tr>
                                 <td class="tdclass">
-                                    @php
-                                        $date= explode(' ', $stockCount->created_at);
-                                    @endphp
                                     {{$stockCount->created_at}}
                                 </td>
                                 <td class="tdclass">{{$stockCount->store->name_of_store}}</td>
