@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\CustomerControllers;
 
+use DateTime;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
@@ -60,16 +61,16 @@ class StockCountByStoreController extends Controller
         // dd($stockCountByStoreArr);
         $stockCountData = StockCountByStores::whereIn('id', $stockCountByStoreArr)->get();
         
-        
         $currentUser = Auth::user();
         $userTimeZone  = $currentUser->time_zone;
-
         foreach ($stockCountData as $key => $stockCount) {
+            // dd($stockCount->created_at);
+            $stockCount->date =      new DateTime(  $stockCount->created_at);  
+            $stockCount->date =  $stockCount->date->format('Y-m-d H:i:s');
             $stockCount->created_at = convertToTimeZone($stockCount->created_at, 'UTC', $userTimeZone);
             $stockCount->date_modified = convertToTimeZone($stockCount->date_modified, 'UTC', $userTimeZone);        
         }
         
-        // dd($stockCountData);
         
         $userId=$user->id;
         $name=$user->name;

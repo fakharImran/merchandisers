@@ -449,7 +449,7 @@
                         @endphp
                             <tr>
                                 <td class="tdclass">
-                                    {{$stockCount->created_at}}
+                                    {{$stockCount->created_at}} / {{$stockCount->date}}
                                 </td>
                                 <td class="tdclass">{{$stockCount->store->name_of_store}}</td>
                                 <td class="tdclass">
@@ -479,6 +479,7 @@
                                 array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$date[0], 'stockCases'=>$totalStockCases]);
                             @endphp
                         @endforeach
+
                       @endif                     
                         
                     </tbody>
