@@ -649,6 +649,7 @@
         });
 </script> --}}
 
+
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
         <script>
@@ -749,7 +750,7 @@
             var endDate = 0;
             var allStores = {!! json_encode($storesArr) !!};
             var allUniqueLocations = {!! json_encode($locationArr) !!};
-            console.log(allUniqueLocations);
+            // console.log(allUniqueLocations);
             var sumTotalStockUnit = {!! json_encode($sumTotalStock) !!};
             var sumTotalStockCases = {!! json_encode($sumTotalStockCases) !!};
 
@@ -769,6 +770,7 @@
             var labels = [];
 
             var convertedToChartData = {{ Js::from($chartStockArray) }};
+			console.log('convertedToChartData-------------------', convertedToChartData);
         </script>
 
 

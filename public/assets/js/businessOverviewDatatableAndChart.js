@@ -79,7 +79,7 @@ function setCards(table, startDate=0, endDate=0)
         const data = this.data();
         var units = parseInt((data[6] == '')?'0':data[6]); // Assuming column 1 contains the store
         sumUnits+=units;
-        console.log('untis ', units);
+        // console.log('untis ', units);
         var cases =  parseInt((data[7] == '')?'0':data[7]); // Assuming column 1 contains the store
         sumCases+=cases;
         const tempStoreServised= data[11];
@@ -126,12 +126,12 @@ function setCards(table, startDate=0, endDate=0)
     const numberOfProductOutOfStock = products_out_of_stock.size;
     const numberOfStoreExpProduct = stores_with_exp_products.size;
 
-    console.log('Number of service stores: ', numberOfStoreServised);
-    console.log('Number of store out of stock:', numberStoreOfOutOfStock);
-    console.log('Number of product out of stock:', numberOfProductOutOfStock);
-    console.log('Number of store exp product:', numberOfStoreExpProduct);
+    // console.log('Number of service stores: ', numberOfStoreServised);
+    // console.log('Number of store out of stock:', numberStoreOfOutOfStock);
+    // console.log('Number of product out of stock:', numberOfProductOutOfStock);
+    // console.log('Number of store exp product:', numberOfStoreExpProduct);
 
-    console.log('startDate', startDate, 'enddate', endDate);
+    // console.log('startDate', startDate, 'enddate', endDate);
     
     if(startDate!=0 && endDate!=0)
     {
@@ -539,9 +539,12 @@ function changeGraph(table) {
         const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
         var stockcase = element[7];
         var stockunits = element[6];
-        colData.push({ 'date': formatDateYMD(currentDate1), 'stock': stockunits, 'stockCases': stockcase});
-    });
-    console.log(colData);
+
+        if (stockcase.trim() !== '' && stockunits.trim() !== '') {
+            colData.push({ date: formatDateYMD(currentDate1), stock: stockunits, stockCases: stockcase });
+        }
+        });
+    console.log('col data is ->>>>>>>>>>>>>>>>.',colData);
     return colData;
 }
 
@@ -559,7 +562,10 @@ $(document).ready(function () {
         buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
         "pagingType": "full_numbers"
     });
-setCards(table);
+    setCards(table);
+
+    
+
 
     // Custom search input for 'Name' column
     $('#store-search').on('change', function () {
@@ -584,7 +590,7 @@ setCards(table);
                 dropdown.empty();
                 dropdown.append('<option value="" selected>--Select--</option>');
                 var storeLocations = store[1];
-                console.log(storeLocations, 'aaaa');
+                // console.log(storeLocations, 'aaaa');
                 storeLocations.forEach(function (storeLocation) {
                     dropdown.append('<option value="' + storeLocation + '">' + storeLocation + '</option>');
                 });
@@ -787,6 +793,7 @@ setCards(table);
             }
             var dateList = dateRange(startDate, endDate);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+            setCards(table, startDate, endDate);
 
             convertedToChartData = changeGraph(table);
             switch (graphFormat) {

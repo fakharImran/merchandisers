@@ -561,6 +561,26 @@ $(document).ready(function () {
     });
     setCards(table);
 
+    convertedToChartData = changeGraph(table);
+        switch (graphFormat) {
+            case 'days':
+                createLastDaysDates(convertedToChartData);
+                break;
+            case 'weeks':
+                createLastWeeksDates(convertedToChartData);
+                break;
+            case 'months':
+                createLastMonthsDates(convertedToChartData);
+                break;
+            default:
+                createLastWeeksDates(convertedToChartData);
+                break;
+        }
+        myChartJS.data.labels = labels;
+        myChartJS.data.datasets[0].data = periodData;
+        myChartJS.update();
+
+        
     // Custom search input for 'Name' column
     $('#store-search').on('change', function () {
 
