@@ -868,7 +868,7 @@ label.form-label.filter.location::after{
 .price-audit .percentage {
     text-align: center;
     color: #1892C0;
-    font-size: 35px;
+    font-size: 30px;
     font-family: Inter;
     font-weight: 700;
     word-wrap: break-word;
@@ -957,4 +957,7 @@ input.select2-search__field {
     padding-top: 5px !important;
     padding-left: 16px !important;
     color: #797979  !important;
+}
+sub {
+    bottom: 0.1em !important;
 }

@@ -25,13 +25,11 @@ function setCardAndGrapgData(table)
     var maxProductPrice = Number.MIN_VALUE;
 
     console.log(minProductPrice, maxProductPrice);
-    console.log("Initial minProductPrice:", minProductPrice);
-    console.log("Initial maxProductPrice:", maxProductPrice);
 
     var sumProductPrices = 0;
     var sumCompititorProductPrices = 0;
     var numberOfStore = 0; // Initialize the count of unique stores
-
+    var sumCompititorProductPrices=0;  
     // Use a Set to keep track of unique stores
     var uniqueStores = new Set();
     var uniqueLocation = new Set();
@@ -45,8 +43,8 @@ function setCardAndGrapgData(table)
 
         var tempStoreLoc= store +' '+ location;
 
-        var productPrice = parseFloat(data[8]); // Assuming column 6 contains the product price
-        var compititorProductPrice = parseFloat(data[12]); // Assuming column 6 contains the product price
+        var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
+        var compititorProductPrice = parseFloat(data[10]); // Assuming column 6 contains the product price
         sumCompititorProductPrices+=compititorProductPrice;
 
         // console.log('dataaa', data);
@@ -79,8 +77,9 @@ function setCardAndGrapgData(table)
         numberOfStore = uniqueStores.size; // Count of unique stores
         numberOfLocation = uniqueLocation.size; // Count of unique stores
         numberOfStoreLocation = storeLocation.size; // Count of unique stores
-
-        // console.log('numberOfStore',numberOfStore, ' numberOfLocation ', numberOfLocation, 'storeLocation', numberOfStoreLocation);
+console.log('sumProductPrices', sumProductPrices);
+console.log('sumCompititorProductPrices', sumCompititorProductPrices);
+        console.log('numberOfStore',numberOfStore, ' numberOfLocation ', numberOfLocation, 'storeLocation', numberOfStoreLocation);
 
         var averageProductPrice = sumProductPrices / numberOfStoreLocation;
         var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStoreLocation;
@@ -91,31 +90,30 @@ function setCardAndGrapgData(table)
         document.getElementById('compititorProductPrice').innerHTML = '$'+averageCompititorProductPrice;
     }
     var convertedToChartData = changeGraph(table, averageCompititorProductPrice);
+    console.log("convertedToChartData", convertedToChartData);
     myChartJS.data.labels = convertedToChartData[0].products_name;
-    myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
-    myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
+    
+    myChartJS.data.datasets[0].data = convertedToChartData[0].products_price;
+    // myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
     myChartJS.update();
 }
 
 const data = {
     labels: products_name,
     datasets: [{
-        label: 'Our Product',
-        backgroundColor: '#1BC018',
-        borderColor: 'rgb(255, 99, 132)',
-        data: our_products_price,
-        barPercentage: 0.4,  // Adjust the width of the bars (0.4 means 40% of the available space)
-        categoryPercentage: 0.5  // Adjust the space between the bars (0.5 means 50% of the available space)
-    },
-    {
-        label: 'Competitor Product',
-        backgroundColor: '#1892C0',
-        borderColor: 'rgb(255, 99, 132)',
-        data: competitor_products_price,
-        barPercentage: 0.4,  // Adjust the width of the bars (0.4 means 40% of the available space)
-        categoryPercentage: 0.5  // Adjust the space between the bars (0.5 means 50% of the available space)
+      label: 'Price',
+      data: products_price,
+      backgroundColor: [
+        '#1BC018',
+        '#1892C0'
+      ],
+      borderColor: [
+        '#000',
+        '#000'
+      ],
+      borderWidth: 1
     }]
-};
+  };
 const config = {
     type: 'bar',
 
@@ -126,6 +124,9 @@ const config = {
             display: false
          }, 
         scales: {
+            xAxes: [{
+                barPercentage: 0.4
+            }],
             yAxes: [{
                 scaleLabel: {
                     display: true,
@@ -140,7 +141,7 @@ const config = {
         tooltips: {
             callbacks: {
                 label: function (tooltipItem, data) {
-                    return data.datasets[tooltipItem.datasetIndex].label + ' Price: $' + tooltipItem.yLabel
+                    return data.datasets[tooltipItem.datasetIndex].label + ': $' + tooltipItem.yLabel
                 }
             }
         },
@@ -209,16 +210,16 @@ function changeGraph(table, averageCompititorProductPrice) {
     });
     let colData = [];
     let products_name = [];
-    let our_products_price = [];
-    let competitor_products_price = [];
+    let products_price = [];
 
-    products_name.push(latest_row[4] + " | " + latest_row[9]);
-    our_products_price.push(latest_row[6]);
-    competitor_products_price.push(latest_row[10]);
+    products_name.push(latest_row[4]);
+    products_name.push(latest_row[9]);
+    products_price.push(latest_row[6]);
+    products_price.push(latest_row[10]);
 
     update_price_comparison_card(latest_row, averageCompititorProductPrice);
 
-    colData.push({'products_name':products_name, 'our_products_price':our_products_price, 'competitor_products_price':competitor_products_price});
+    colData.push({'products_name':products_name, 'products_price':products_price});
     return colData;
 }
 

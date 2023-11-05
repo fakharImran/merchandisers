@@ -54,7 +54,7 @@
 <div class="container price-audit">
 
     <div  class="row d-flex align-items-center col-actions" style="   max-width: 99%; margin: 1px auto;">
-        <div class="col-md-3 col-3 p-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-3">
             
             <div class="form-group" >
                 <label for="period-search" class="form-label filter period filter-search">Period</label>
@@ -63,7 +63,7 @@
 
             </div>
         </div>
-        <div class="col-md-3 col-3 p-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-3">
             <div class="form-group">
                 <label for="store-search" class="form-label filter store">Select Store</label>
                 <select name="store-search" class="filter form-select select2" id="store-search">
@@ -110,7 +110,7 @@
             sort($locationArr);
         @endphp
         {{-- end sorting and unique location value in filter search --}}
-        <div class="col-md-3 col-3 p-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-3">
             <div class="form-group">
                 <label for="location-search" class="form-label filter location">Select Location</label>
                 <select name="location-search" class="filter form-select select2" id="location-search">
@@ -122,7 +122,7 @@
             </div>
 
         </div>
-        <div class="col-md-3 col-3 p-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-3">
             <div class="form-group">
                 <label for="merchandiser-search" class="form-label filter merchandiser">Select Merchandiser</label>
                 <select name="merchandiser-search" class=" filter form-select select2"  id="merchandiser-search">
@@ -137,7 +137,7 @@
                 </select>   
             </div>
         </div>
-        <div class="col-md-3 col-3 p-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-3">
             <div class="form-group">
                 <label for="category-search" class="form-label filter category">Select Category</label>
                 <select name="category-search" class=" filter form-select select2"  id="category-search">
@@ -148,7 +148,7 @@
                 </select>   
             </div>
         </div>
-        <div class="col-md-3 col-3 p-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 p-3">
             <div class="form-group">
                 <label for="product-search" class="form-label filter product">Select product</label>
                 <select name="product-search" onchange="getProductData(this)" class=" filter form-select select2"  id="product-search">
@@ -159,7 +159,7 @@
                 </select>   
             </div>
         </div>
-        <div class="col-md-3 col-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <div class="card manager-card-style-header "  data-toggle="tooltip" title="Price Comparison index = ((Store Price ➗ Competitor Product Price) x 100) - 100">
                     <div class="card-header manager-card-header">Price Comparison Index</div>    
                     <div class="card-body">
@@ -169,7 +169,7 @@
                     </div>     
             </div>
         </div>
-        <div class="col-3 " style="padding-top:41px;">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 " style="padding-top:41px;">
 
             <div style=" padding-bottom: 14px; pt-10; font-size: small;">
                 <label for=""><b style="    color: #929293">= Equal Than Competitor Average Price  </b></label>
@@ -221,32 +221,32 @@
     </div>
     <div class="row pt-5" style=" ">
 
-        <div class="col-md-3 col-3">
-            <div class="card manager-card-style">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
+            <div class="card manager-card-style m-1">
                 <div class="card-header manager-card-header">Max. Product Price</div>    
                 <div class="card-body">
                     <div class="percentage" id="maxProductPrice">$0</div>
                 </div>     
             </div>
         </div>
-        <div class="col-md-3 col-3">
-            <div class="card manager-card-style">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
+            <div class="card manager-card-style m-1">
                 <div class="card-header manager-card-header">Min. Product Price</div>    
                 <div class="card-body">
                     <div class="percentage" id="minProductPrice">$0</div>
                 </div>     
             </div>
         </div> 
-        <div class="col-md-3 col-3">
-            <div class="card manager-card-style"  data-toggle="tooltip" title="Average Price = Sum of store price to date ➗ Number of Stores to date For example (($75 + $34 + $25 + $10) ➗ 4 stores) = $85">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
+            <div class="card manager-card-style m-1"  data-toggle="tooltip" title="Average Price = Sum of store price to date ➗ Number of Stores to date For example (($75 + $34 + $25 + $10) ➗ 4 stores) = $85">
                 <div class="card-header manager-card-header">Average Product Price</div>    
                 <div class="card-body">
                     <div class="percentage" id="averageProductPrice">$0</div>
                 </div>     
             </div>
         </div> 
-        <div class="col-md-3 col-3">
-            <div class="card manager-card-style"  data-toggle="tooltip" title="Competitor Average Price = Sum of Competitor Product price to date ➗ Number of Stores to date For example (($65 + $20 + $30 + $50) ➗ 4 stores) = $41.25">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
+            <div class="card manager-card-style m-1"  data-toggle="tooltip" title="Competitor Average Price = Sum of Competitor Product price to date ➗ Number of Stores to date For example (($65 + $20 + $30 + $50) ➗ 4 stores) = $41.25">
                 <div class="card-header manager-card-header">Competitor Product Average Price</div>    
                 <div class="card-body">
                     <div class="percentage" id="compititorProductPrice">$0</div>
@@ -384,8 +384,7 @@
     var priceAuditData = {!! json_encode($priceAuditData) !!};
     
     var products_name = [];
-    var our_products_price = [];
-    var competitor_products_price =[];
+    var products_price = [];
     var labels = [];
    
 // console.log('productsss', products_name, our_products_price, competitor_products_price);
