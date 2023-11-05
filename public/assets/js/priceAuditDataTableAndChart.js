@@ -34,20 +34,28 @@ function setCardAndGrapgData(table)
 
     // Use a Set to keep track of unique stores
     var uniqueStores = new Set();
+    var uniqueLocation = new Set();
+    var storeLocation= new Set();
 
     // Iterate over the visible rows and calculate the minimum and maximum product prices
     table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
         const data = this.data();
         var store = data[1]; // Assuming column 1 contains the store
-        var productPrice = parseFloat(data[6]); // Assuming column 6 contains the product price
+        var location = data[2]; // Assuming column 1 contains the store
+
+        var tempStoreLoc= store +' '+ location;
+
+        var productPrice = parseFloat(data[8]); // Assuming column 6 contains the product price
         var compititorProductPrice = parseFloat(data[12]); // Assuming column 6 contains the product price
         sumCompititorProductPrices+=compititorProductPrice;
 
-        console.log('dataaa', data);
+        // console.log('dataaa', data);
 
         if (!isNaN(productPrice)) {
             sumProductPrices += productPrice;
             uniqueStores.add(store);
+            uniqueLocation.add(location);
+            storeLocation.add(tempStoreLoc);
 
             if (productPrice < minProductPrice) {
                 minProductPrice = productPrice;
@@ -69,15 +77,20 @@ function setCardAndGrapgData(table)
     {
             // Calculate the average product price after the loop
         numberOfStore = uniqueStores.size; // Count of unique stores
-        var averageProductPrice = sumProductPrices / numberOfStore;
-        var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStore;
+        numberOfLocation = uniqueLocation.size; // Count of unique stores
+        numberOfStoreLocation = storeLocation.size; // Count of unique stores
+
+        // console.log('numberOfStore',numberOfStore, ' numberOfLocation ', numberOfLocation, 'storeLocation', numberOfStoreLocation);
+
+        var averageProductPrice = sumProductPrices / numberOfStoreLocation;
+        var averageCompititorProductPrice = sumCompititorProductPrices / numberOfStoreLocation;
 
         document.getElementById('minProductPrice').innerHTML = '$'+minProductPrice;
         document.getElementById('maxProductPrice').innerHTML = '$'+maxProductPrice;
         document.getElementById('averageProductPrice').innerHTML = '$'+averageProductPrice;
         document.getElementById('compititorProductPrice').innerHTML = '$'+averageCompititorProductPrice;
     }
-    var convertedToChartData = changeGraph(table);
+    var convertedToChartData = changeGraph(table, averageCompititorProductPrice);
     myChartJS.data.labels = convertedToChartData[0].products_name;
     myChartJS.data.datasets[0].data = convertedToChartData[0].our_products_price;
     myChartJS.data.datasets[1].data = convertedToChartData[0].competitor_products_price;
@@ -109,6 +122,9 @@ const config = {
     // type: 'bar',
     data: data,
     options: {
+        legend: {
+            display: false
+         }, 
         scales: {
             yAxes: [{
                 scaleLabel: {
@@ -143,29 +159,65 @@ var myChartJS = new Chart(
     config
 );
 
+function update_price_comparison_card(row, averageCompititorProductPrice) {
+    console.log(averageCompititorProductPrice);
+   
+    let total_product_price = row[6];
+    let total_competetor_price= row[10];
+
+    // dd($totalCompetetorPrice);
+    
+    let price_comparisan = ((total_product_price/total_competetor_price)*100)-100;
+    price_comparisan= price_comparisan.toFixed(1);
+
+    console.log('total_product_price', total_product_price, 'total_competetor_price', total_competetor_price, 'price_comparisan', price_comparisan );
+    let element = document.getElementById('price_comparison');
+    if(!isNaN(price_comparisan)){
+        if(price_comparisan>averageCompititorProductPrice )
+        {
+            element.innerHTML = '<span style="color:  #1892C0">' + price_comparisan + '%</span>';                                
+        }
+        else if(price_comparisan<averageCompititorProductPrice) {
+            element.innerHTML =  '<span style="color:  #1BC018">' + price_comparisan + '%</span>';                                
+        }
+        else
+        {
+            element.innerHTML =  '<span style="color:  #929293">' + price_comparisan + '%</span>';                                
+        }
+    }
+    else{
+        element.innerHTML =  '<span style="color:  #929293">' + '0' + '%</span>';  
+    }
+    
+}
 
 // datatable
 
 //function for change the data it is comming from datatable search filters nnd getting it as required
-function changeGraph(table) {
+function changeGraph(table, averageCompititorProductPrice) {
     var filteredIndexes = table.rows({ search: 'applied' }).indexes();
     var filteredData = [];
+    let latest_row = [];
+    let latest_date = new Date('2022');
     filteredIndexes.each(function (index) {
-        var rowData = table.row(index).data();
-        filteredData.push(rowData);
+        let rowData = table.row(index).data();
+        let current_date = new Date(rowData[0]);
+        if(latest_date < current_date){
+            latest_date = current_date;
+            latest_row = rowData;
+        }
     });
     let colData = [];
     let products_name = [];
     let our_products_price = [];
     let competitor_products_price = [];
-    console.log('umerrrr', filteredData);
 
-    filteredData.forEach(element => {
-        products_name.push(element[4] + " | " + element[9]);
-        our_products_price.push(element[8]);
-        competitor_products_price.push(element[12]);
-        
-    });
+    products_name.push(latest_row[4] + " | " + latest_row[9]);
+    our_products_price.push(latest_row[6]);
+    competitor_products_price.push(latest_row[10]);
+
+    update_price_comparison_card(latest_row, averageCompititorProductPrice);
+
     colData.push({'products_name':products_name, 'our_products_price':our_products_price, 'competitor_products_price':competitor_products_price});
     return colData;
 }
@@ -255,12 +307,12 @@ $(document).ready(function () {
             var start = parts[0].trim(); // Remove leading/trailing spaces
             startDate = start.replace(/^\s+/, ''); // Remove the first space
             startDate = new Date(startDate);
-             startDate = formatDateYMD(startDate);
+             startDate = (startDate);
 
             var end = parts[1].trim(); // Remove leading/trailing spaces
             endDate = end.replace(/^\s+/, ''); // Remove the first space
             endDate = new Date(endDate);
-             endDate = formatDateYMD(endDate);
+             endDate = (endDate);
 
             table.column(0).search('', true, false).draw(); // Clear previous search
 
@@ -282,7 +334,28 @@ $(document).ready(function () {
             setCardAndGrapgData(table);
 
         } else {
-            console.log("The substring 'to' does not exist in the original string.");
+             startDate = new Date(this.value);
+             endDate = startDate;
+
+            table.column(0).search('', true, false).draw(); // Clear previous search
+
+            var searchTerms = []; // Initialize an array to store search terms
+            function dateRange(startDate, endDate) {
+                var currentDate = new Date(startDate);
+                var endDateObj = new Date(endDate);
+                var dates = [];
+
+                while (currentDate <= endDateObj) {
+                    dates.push(formatDateYMD(new Date(currentDate)));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                return dates;
+            }
+            var dateList = dateRange(startDate, endDate);
+            table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+
+            setCardAndGrapgData(table);
+        
         }
 
     });
@@ -290,6 +363,7 @@ $(document).ready(function () {
     document.getElementById('clearDate').addEventListener('click', function (element) {
         table.column(0).search('', true, false).draw(); // Clear previous search
         document.getElementById('period-search').clear;
+        setCardAndGrapgData(table);
         document.getElementById('period-search').value = 'Date Range';
 
     });

@@ -30,14 +30,18 @@ function setCards(table)
     const expiredStores = new Set(); // Use a Set to store unique store names
     const expiredCategories = new Set(); // Use a Set to store unique store names
     const expiredProducts = new Set(); // Use a Set to store unique store names
+    const storeLocation = new Set(); // Use a Set to store unique store names
     const currentDate = new Date(); // Get the current date
 
     table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
         const data = this.data();
         const store = data[1]; // Assuming column 1 contains the store
+        const location = data[2]; // Assuming column 1 contains the store
         const category= data[3];
         const product= data[4];
             
+        var tempStoreLocation = store+ ' '+ location;
+        storeLocation.add(tempStoreLocation);
         // Create a temporary element to parse the HTML content
         const tempElement = document.createElement('div');
         tempElement.innerHTML = data[8]; // Assuming data[8] contains the HTML content
@@ -69,17 +73,20 @@ function setCards(table)
         //     }
         // }
     });
-
+    // console.log('storeLocation:', storeLocation);
+    
+    const numberOfStoreLocation = storeLocation.size;
     const numberOfexpStores = expiredStores.size;
     const numberOfexpCategories = expiredCategories.size;
     const numberOfexpProduct = expiredProducts.size;
 
+    console.log('Number of unique expired stores Location:', numberOfStoreLocation);
     console.log('Number of unique expired stores:', numberOfexpStores);
     console.log('Number of unique expired categories:', numberOfexpCategories);
     console.log('Number of unique expired stores:', numberOfexpProduct);
 
 
-    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfexpStores+' /</span> '+ allUniqueLocations.length;
+    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfStoreLocation+' /</span> '+ allUniqueLocations.length;
     document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpCategories+' /</span> '+ allUniqueCategories;
     document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpProduct+' /</span> '+ allUniqueProducts;
 }
@@ -170,12 +177,12 @@ $(document).ready(function () {
             var start = parts[0].trim(); // Remove leading/trailing spaces
             startDate = start.replace(/^\s+/, ''); // Remove the first space
             startDate = new Date(startDate);
-             startDate = formatDateYMD(startDate);
+             startDate = (startDate);
 
             var end = parts[1].trim(); // Remove leading/trailing spaces
             endDate = end.replace(/^\s+/, ''); // Remove the first space
             endDate = new Date(endDate);
-             endDate = formatDateYMD(endDate);
+             endDate = (endDate);
 
             table.column(0).search('', true, false).draw(); // Clear previous search
 
@@ -196,7 +203,28 @@ $(document).ready(function () {
             setCards(table);
          
         } else {
-            console.log("The substring 'to' does not exist in the original string.");
+             startDate = new Date(this.value);
+
+             endDate = startDate;
+
+            table.column(0).search('', true, false).draw(); // Clear previous search
+
+            var searchTerms = []; // Initialize an array to store search terms
+            function dateRange(startDate, endDate) {
+                var currentDate = new Date(startDate);
+                var endDateObj = new Date(endDate);
+                var dates = [];
+
+                while (currentDate <= endDateObj) {
+                    dates.push(formatDateYMD(new Date(currentDate)));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                return dates;
+            }
+            var dateList = dateRange(startDate, endDate);
+            table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+            setCards(table);
+
         }
 
     });

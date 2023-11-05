@@ -49,11 +49,11 @@ function setCards(table, startDate = 0, endDate = 0) {
 
     });
 
-    // console.log('startDate', startDate, 'enddate', endDate);
+    console.log('startDate', startDate, 'enddate', endDate);
 
     if (startDate != 0 && endDate != 0) {
-        document.getElementById('opening_week_date').innerHTML = startDate;
-        document.getElementById('closing_week_date').innerHTML = endDate;
+        document.getElementById('opening_week_date').innerHTML = formatDateYMD(startDate);
+        document.getElementById('closing_week_date').innerHTML = formatDateYMD(endDate);
     }
 
 
@@ -533,12 +533,12 @@ function changeGraph(table) {
         const dateTime = element[0]; // element[6] is date and time ex: 12-09-2023 7:50 PM
         const currentDate2 = new Date(dateTime); // dateTime is only date ex: 12-09-2023 
         const currentDate1 = currentDate2.toISOString();
-        // console.log('element[0]', element[0], 'currentDate1', currentDate1);
+        console.log('element[0]', element[0], 'currentDate1', currentDate1);
         var stockcase = element[13];
         var stockunits = element[12];
         colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase });
     });
-    // console.log('colData',colData);
+    console.log('colData',colData);
     return colData;
 }
 
@@ -732,19 +732,23 @@ $(document).ready(function () {
             var start = parts[0].trim(); // Remove leading/trailing spaces
             startDate = start.replace(/^\s+/, ''); // Remove the first space
             startDate = new Date(startDate);
-            startDate = formatDateYMD(startDate);
+            startDate = (startDate);
 
             var end = parts[1].trim(); // Remove leading/trailing spaces
             endDate = end.replace(/^\s+/, ''); // Remove the first space
             endDate = new Date(endDate);
-            endDate = formatDateYMD(endDate);
+            endDate = (endDate);
+
+            // console.log('startDate', startDate, 'endDate', endDate);
 
             table.column(0).search('', true, false).draw(); // Clear previous search
 
             var searchTerms = []; // Initialize an array to store search terms
+            
             function dateRange(startDate, endDate) {
                 var currentDate = new Date(startDate);
                 var endDateObj = new Date(endDate);
+                console.log('currentDate',currentDate, ' endDateObj',endDateObj);
                 var dates = [];
 
                 while (currentDate <= endDateObj) {
@@ -753,7 +757,10 @@ $(document).ready(function () {
                 }
                 return dates;
             }
+
             var dateList = dateRange(startDate, endDate);
+
+            // console.log('dateList', dateList);
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
 
             setCards(table, startDate, endDate);
@@ -778,7 +785,52 @@ $(document).ready(function () {
             myChartJS.data.datasets[0].data = periodData;
             myChartJS.update();
         } else {
-            console.log("The substring 'to' does not exist in the original string.");
+            startDate = new Date(this.value);
+            endDate = startDate;
+
+            table.column(0).search('', true, false).draw(); // Clear previous search
+
+            var searchTerms = []; // Initialize an array to store search terms
+            
+            function dateRange(startDate, endDate) {
+                var currentDate = new Date(startDate);
+                var endDateObj = new Date(endDate);
+                console.log('currentDate',currentDate, ' endDateObj',endDateObj);
+                var dates = [];
+
+                while (currentDate <= endDateObj) {
+                    dates.push(formatDateYMD(new Date(currentDate)));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                return dates;
+            }
+
+            var dateList = dateRange(startDate, endDate);
+
+            // console.log('dateList', dateList);
+            table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+
+            setCards(table, startDate, endDate);
+
+
+            convertedToChartData = changeGraph(table);
+            switch (graphFormat) {
+                case 'days':
+                    createLastDaysDates(convertedToChartData, startDate, endDate);
+                    break;
+                case 'weeks':
+                    createLastWeeksDates(convertedToChartData, startDate, endDate);
+                    break;
+                case 'months':
+                    createLastMonthsDates(convertedToChartData, startDate, endDate);
+                    break;
+                default:
+                    createLastWeeksDates(convertedToChartData, startDate, endDate);
+                    break;
+            }
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = periodData;
+            myChartJS.update();
         }
 
     });

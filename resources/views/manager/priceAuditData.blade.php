@@ -164,41 +164,6 @@
                     <div class="card-header manager-card-header">Price Comparison Index</div>    
                     <div class="card-body">
                         <div class="percentage" id="price_comparison" style="font-size: 35px;">
-                            @php
-                            
-                                if (!$priceAuditData->isEmpty())
-                                {
-
-                                    $latestPriceAudit = null;
-                                    $latestCreatedAt = null;
-                            
-                                    // Iterate through each price audit in the array
-                                    foreach ($priceAuditData as $priceAudit) 
-                                    {
-                                        // Check if this price audit has a later created_at timestamp than the current latest
-                                        if ($latestPriceAudit == null || $priceAudit->created_at > $latestCreatedAt) 
-                                        {
-                                            $latestPriceAudit = $priceAudit;
-                                            $latestCreatedAt = $priceAudit->created_at;
-                                        }
-                                    }
-                                        // $priceComparison=number_format((($sumStorePrice/$sumCompititorProductPrice)*100)-100, 2);
-                            
-                                    // At this point, $latestPriceAudit will contain the latest PriceAudit object
-                                    $priceComarison= number_format((($latestPriceAudit->product_store_price/$latestPriceAudit->competitor_product_price)*100)-100, 2);
-                                    if($priceComarison>0)
-                                    {
-                                        echo '<span style="color:  #1892C0">'.$priceComarison.'%</span>';                                
-                                    }
-                                    elseif ($priceComarison<0) {
-                                        echo '<span style="color:  #1BC018">'.$priceComarison.'%</span>';                                
-                                    }
-                                    else
-                                    {
-                                        echo '<span style="color:  #929293">'.$priceComarison.'%</span>';                                
-                                    }
-                                }
-                            @endphp
 
                         </div>
                     </div>     
@@ -346,7 +311,7 @@
                                         @php
                                             $date= explode(' ', $priceAudit->created_at);
                                         @endphp
-                                        {{$date[0]}}
+                                        {{$priceAudit->created_at}}
                                     </td>
                                     <td class="tdclass">{{$priceAudit->store->name_of_store}}</td>
                                     <td class="tdclass">
@@ -416,6 +381,8 @@
     var allStores = {!! json_encode($storesArr) !!};
     var allUniqueLocations = {!! json_encode($locationArr) !!};
     var allProducts = {!! json_encode($products) !!};
+    var priceAuditData = {!! json_encode($priceAuditData) !!};
+    
     var products_name = [];
     var our_products_price = [];
     var competitor_products_price =[];

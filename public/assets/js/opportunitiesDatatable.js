@@ -95,12 +95,12 @@ $(document).ready(function () {
             var start = parts[0].trim(); // Remove leading/trailing spaces
             startDate = start.replace(/^\s+/, ''); // Remove the first space
             startDate = new Date(startDate);
-             startDate = formatDateYMD(startDate);
+             startDate = (startDate);
 
             var end = parts[1].trim(); // Remove leading/trailing spaces
             endDate = end.replace(/^\s+/, ''); // Remove the first space
             endDate = new Date(endDate);
-             endDate = formatDateYMD(endDate);
+             endDate = (endDate);
 
             table.column(0).search('', true, false).draw(); // Clear previous search
 
@@ -120,8 +120,31 @@ $(document).ready(function () {
             table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
          
         } else {
-            console.log("The substring 'to' does not exist in the original string.");
+
+           
+             startDate = new Date(this.value);
+
+             endDate = startDate;
+
+            table.column(0).search('', true, false).draw(); // Clear previous search
+
+            var searchTerms = []; // Initialize an array to store search terms
+            function dateRange(startDate, endDate) {
+                var currentDate = new Date(startDate);
+                var endDateObj = new Date(endDate);
+                var dates = [];
+
+                while (currentDate <= endDateObj) {
+                    dates.push(formatDateYMD(new Date(currentDate)));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                return dates;
+            }
+            var dateList = dateRange(startDate, endDate);
+            table.column(0).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+               
         }
+
 
     });
 

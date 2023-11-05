@@ -148,8 +148,8 @@ const config = {
         scales: {
             yAxes: [{
                 ticks: {
-                    userCallback: function (v) { 
-                        return epoch_to_hh_mm_ss(v) 
+                    userCallback: function (v) {
+                        return epoch_to_hh_mm_ss(v)
                     },
                     stepSize: 60 * 60,
                     beginAtZero: true
@@ -207,7 +207,7 @@ function changeGraph(table) {
             var beforeComma = match[1]; // The first set of integers before the comma
             var afterComma = match[2]; // The first set of integers after the comma
             var Hours = (beforeComma * 1) + (afterComma / 60);
-            var seconds= beforeComma * 60 * 60 + afterComma *60;
+            var seconds = beforeComma * 60 * 60 + afterComma * 60;
         } else {
             console.log('No match found.');
         }
@@ -219,7 +219,7 @@ function changeGraph(table) {
 }
 
 
-$(document).ready(function () { 
+$(document).ready(function () {
     var table = $('#mechandiserDatatable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
@@ -270,10 +270,10 @@ $(document).ready(function () {
             // });
         }
         setTimeWorkCard(table);
-     
-        
+
+
         var convertedToChartData = changeGraph(table);
-        convertingData(convertedToChartData , startDate, endDate);
+        convertingData(convertedToChartData, startDate, endDate);
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = hoursWorked;
         myChartJS.update();
@@ -289,7 +289,7 @@ $(document).ready(function () {
         setTimeWorkCard(table);
 
 
-        convertingData(convertedToChartData , startDate, endDate);
+        convertingData(convertedToChartData, startDate, endDate);
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = hoursWorked;
         myChartJS.update();
@@ -301,7 +301,7 @@ $(document).ready(function () {
         setTimeWorkCard(table);
 
         var convertedToChartData = changeGraph(table);
-        convertingData(convertedToChartData , startDate, endDate);
+        convertingData(convertedToChartData, startDate, endDate);
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = hoursWorked;
         myChartJS.update();
@@ -315,12 +315,12 @@ $(document).ready(function () {
             var start = parts[0].trim(); // Remove leading/trailing spaces
             startDate = start.replace(/^\s+/, ''); // Remove the first space
             startDate = new Date(startDate);
-             startDate = formatDateYMD(startDate);
+            startDate = (startDate);
 
             var end = parts[1].trim(); // Remove leading/trailing spaces
             endDate = end.replace(/^\s+/, ''); // Remove the first space
             endDate = new Date(endDate);
-             endDate = formatDateYMD(endDate);
+            endDate = (endDate);
 
             table.column(8).search('', true, false).draw(); // Clear previous search
 
@@ -340,14 +340,40 @@ $(document).ready(function () {
             table.column(8).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
             var convertedToChartData = changeGraph(table);
 
-             setTimeWorkCard(table);
+            setTimeWorkCard(table);
 
             convertingData(convertedToChartData, startDate, endDate);
             myChartJS.data.labels = labels;
             myChartJS.data.datasets[0].data = hoursWorked;
             myChartJS.update();
         } else {
-            console.log("The substring 'to' does not exist in the original string.");
+            startDate = new Date(this.value);
+            endDate = startDate;
+
+            table.column(8).search('', true, false).draw(); // Clear previous search
+
+            var searchTerms = []; // Initialize an array to store search terms
+            function dateRange(startDate, endDate) {
+                var currentDate = new Date(startDate);
+                var endDateObj = new Date(endDate);
+                var dates = [];
+
+                while (currentDate <= endDateObj) {
+                    dates.push(formatDateYMD(new Date(currentDate)));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                return dates;
+            }
+            var dateList = dateRange(startDate, endDate);
+            table.column(8).search(dateList.join('|'), true, false, true).draw(); // Join and apply search terms
+            var convertedToChartData = changeGraph(table);
+
+            setTimeWorkCard(table);
+
+            convertingData(convertedToChartData, startDate, endDate);
+            myChartJS.data.labels = labels;
+            myChartJS.data.datasets[0].data = hoursWorked;
+            myChartJS.update();
         }
 
     });
