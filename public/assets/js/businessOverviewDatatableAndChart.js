@@ -136,17 +136,47 @@ function setCards(table, startDate = 0, endDate = 0) {
         const dateRangeElements = document.getElementsByClassName('date_range_set');
 
         for (const element of dateRangeElements) {
-            element.innerHTML = formatDateYMD(startDate) + ' to ' + formatDateYMD(endDate);
+            // element.innerHTML = formatDateYMD(startDate) + ' to ' + formatDateYMD(endDate);
         }
     }
 
     document.getElementById('total_stock_count').innerHTML = sumCases;
     document.getElementById('total_stock_count_cases').innerHTML = sumUnits;
 
-    document.getElementById('serviced_stores').innerHTML = '<span style="color: #CA371B">' + numberOfStoreServised + ' /</span> ' + allUniqueLocations.length;
-    document.getElementById('stores_out_of_stock').innerHTML = '<span style="color: #CA371B">' + numberStoreOfOutOfStock + ' /</span> ' + allUniqueLocations.length;
-    document.getElementById('products_out_of_stock').innerHTML = '<span style="color: #CA371B">' + numberOfProductOutOfStock + ' /</span> ' + products.length;
-    document.getElementById('stores_with_exp_products').innerHTML = '<span style="color: #CA371B">' + numberOfStoreExpProduct + ' /</span> ' + allUniqueLocations.length;
+    if(numberOfStoreServised==allUniqueLocations.length)
+    {
+        document.getElementById('serviced_stores').innerHTML =  numberOfStoreServised + ' / ' + allUniqueLocations.length;
+    }
+    else
+    {
+        document.getElementById('serviced_stores').innerHTML = '<span style="color: #CA371B">' + numberOfStoreServised + ' /</span> ' + allUniqueLocations.length;
+    }
+    if(numberStoreOfOutOfStock==0)
+    {
+        document.getElementById('stores_out_of_stock').innerHTML =  numberStoreOfOutOfStock + ' / ' + allUniqueLocations.length;
+    }
+    else
+    {
+        document.getElementById('stores_out_of_stock').innerHTML = '<span style="color: #CA371B">' + numberStoreOfOutOfStock + ' /</span> ' + allUniqueLocations.length;
+    }
+
+    if(numberOfProductOutOfStock==0)
+    {
+        document.getElementById('products_out_of_stock').innerHTML = numberOfProductOutOfStock + ' / ' + products.length;
+    }
+    else
+    {
+        document.getElementById('products_out_of_stock').innerHTML = '<span style="color: #CA371B">' + numberOfProductOutOfStock + ' /</span> ' + products.length;
+    }
+   
+    if(numberOfStoreExpProduct==0)
+    {
+        document.getElementById('stores_with_exp_products').innerHTML = numberOfStoreExpProduct + ' / ' + allUniqueLocations.length;
+    }
+    else
+    {
+        document.getElementById('stores_with_exp_products').innerHTML = '<span style="color: #CA371B">' + numberOfStoreExpProduct + ' /</span> ' + allUniqueLocations.length;
+    }
 
 
 
@@ -195,6 +225,13 @@ function createLastDaysDates(data, startDate = 0, endDate = 0) {
         // Calculate the total stock for the current day
         if (graphUnit == "Unit") {
             totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['stock']), 0);
+        }
+         else if(graphUnit=='UnitAndCase')
+        {
+            // let tempStock= parseInt(element['stockCases']) + parseInt(element['stock']);
+            totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['sumUnitCase']), 0);
+
+            console.log('totalStock',totalStock);
         }
         else {
             totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['stockCases']), 0);
@@ -265,10 +302,15 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0) {
     previousWeeks.forEach(week => {
         data.forEach(element => {
             chkDate = element['date'];
-            if (formatDateYMD(week.startDate) <= chkDate && formatDateYMD(week.endDate) >= chkDate) {
+            if (formatDateYMD(week.startDate) <= (chkDate) && formatDateYMD(week.endDate) >= (chkDate)) {
                 if (graphUnit == "Unit") {
                     totalStock += parseInt(element['stock']);
                 }
+                else if(graphUnit=='UnitAndCase')
+                {
+                    totalStock += parseInt(element['sumUnitCase']);
+                    console.log('totalStock>>>>>>.',totalStock);
+                }   
                 else {
                     totalStock += parseInt(element['stockCases']);
                 }
@@ -349,10 +391,14 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0) {
         let totalStock = 0;
         data.forEach(element => {
             const chkDate = new Date(element.date);
-            if (chkDate >= month.startDate && chkDate <= month.endDate) {
+            if (formatDateYMD(month.startDate) <= formatDateYMD(chkDate) && formatDateYMD(month.endDate) >= formatDateYMD(chkDate)) {
                 if (graphUnit == "Unit") {
                     totalStock += parseInt(element.stock);
                 }
+                else if(graphUnit=='UnitAndCase')
+                {
+                    totalStock += parseInt(element['sumUnitCase']);
+                }  
                 else {
                     totalStock += parseInt(element.stockCases);
                 }
@@ -417,6 +463,9 @@ function changeUnitCount(e) {
             break;
         case 'Case':
             graphUnit = 'Case';
+            break;
+        case 'UnitAndCase':
+            graphUnit = 'UnitAndCase';
             break;
         default:
             graphUnit = 'Unit';
@@ -535,9 +584,13 @@ function changeGraph(table) {
         // console.log('element[0]', element[0], 'currentDate1', currentDate1);
         var stockcase = parseInt( (element[7] == '')?0:element[7]);
         var stockunits = parseInt((element[6] == '')?0:element[6]);
-        colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase });
+
+        var sumUnitCase=parseInt((element[12] == '')?0:element[12]);
+        colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase, 'sumUnitCase':sumUnitCase });
+
+        // colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase });
     });
-    // console.log('col data is ->>>>>>>>>>>>>>>>.', colData);
+    console.log('col data is ->>>>>>>>>>>>>>>>.', colData);
     return colData;
 }
 
@@ -858,12 +911,12 @@ $(document).ready(function () {
         endDate = 0;
         startDate = 0;
         let todayDate = new Date();
-        const todayDateString = todayDate.toISOString().split('T')[0];
-        const dateRangeElements = document.getElementsByClassName('date_range_set');
+        // const todayDateString = todayDate.toISOString().split('T')[0];
+        // const dateRangeElements = document.getElementsByClassName('date_range_set');
 
-        for (const element of dateRangeElements) {
-            element.innerHTML = todayDateString;
-        }
+        // for (const element of dateRangeElements) {
+        //     element.innerHTML = todayDateString;
+        // }
         setCards(table);
         // table.column(0).search('').draw();
         convertedToChartData = changeGraph(table);

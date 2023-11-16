@@ -143,6 +143,12 @@ Route::group(['middleware' => ['auth', 'role:admin']], function() {
     Route::get('/export-product',[ProductController::class,
             'exportUsers'])->name('export-product');
             
+            //for category
+    Route::post('/importCategory',[CategoryController::class,
+    'importCategory'])->name('import-category');
+
+    Route::get('/export-category',[CategoryController::class,
+            'exportUsers'])->name('export-category');
 });
 
 

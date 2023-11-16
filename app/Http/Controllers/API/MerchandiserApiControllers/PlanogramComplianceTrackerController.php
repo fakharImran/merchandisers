@@ -119,7 +119,7 @@ class PlanogramComplianceTrackerController extends BaseController
        
         $activity= new Activity;
         $activity->company_user_id= $company_user_id;
-        $activity->activity_description= 'You did a Planogram Compliance Tracker of  check and set initial photo of stocking shelf'. $product->product_name. ' Click Here to see what you captured';
+        $activity->activity_description= 'You add initial photo in Planogram Compliance Tracker stocking shelf'. $product->product_name;
         $activity->activity_type= 'Planogram Compliance Tracker';
         $activity->activity_detail= json_encode($responseofQuery);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
@@ -180,7 +180,8 @@ class PlanogramComplianceTrackerController extends BaseController
         $company_user_id=$user->companyUser->id;
         $activity= new Activity;
         $activity->company_user_id= $company_user_id;
-        $activity->activity_description= 'You did a Planogram Compliance Tracker of check and set after photo of stocking shelf'. $product->product_name. ' Click Here to see what you captured';
+        $activity->activity_description= 'You add Planogram Compliance Tracker after photo of stocking shelf'. $product->product_name;
+        // $activity->activity_description= 'You did a Planogram Compliance Tracker of check and set after photo of stocking shelf'. $product->product_name. ' Click Here to see what you captured';
         $activity->activity_type= 'Planogram Compliance Tracker';        
         $activity->activity_detail= json_encode($updatedPlanogram);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');

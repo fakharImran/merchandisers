@@ -170,6 +170,7 @@
         @php
             $sumTotalStock = 0;
             $sumTotalStockCases = 0;
+            $sumStockUnitCases=0;
         @endphp
         <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
             <div class="col-md-3-5 col-sm-3 col-6 pt-2">
@@ -198,7 +199,7 @@
                         <small id="date_range_set" class="text-secondary date_range_set">
                             @php
                                 $todayDate = new DateTime();
-                                echo $todayDate->format('Y-m-d');
+                                // echo $todayDate->format('Y-m-d');
                             @endphp
                         </small>
 
@@ -207,7 +208,8 @@
                         @endphp
                         <div class="Link0" id="serviced_stores"
                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                            {{ count($uniqueServicedStoreLocation) }} / {{ count($locationArr) }}</div>
+                            {{-- {{ count($uniqueServicedStoreLocation) }} / {{ count($locationArr) }} --}}
+                        </div>
 
                     </div>
                 </div>
@@ -219,7 +221,7 @@
                         <small id="date_range_set" class="text-secondary date_range_set">
                             @php
                                 $todayDate = new DateTime();
-                                echo $todayDate->format('Y-m-d');
+                                // echo $todayDate->format('Y-m-d');
                             @endphp
                         </small>
                         @php
@@ -242,7 +244,7 @@
                         <small class="text-secondary date_range_set">
                             @php
                                 $todayDate = new DateTime();
-                                echo $todayDate->format('Y-m-d');
+                                // echo $todayDate->format('Y-m-d');
                             @endphp
                         </small>
                         @php
@@ -264,7 +266,7 @@
                         <small class="text-secondary date_range_set">
                             @php
                                 $todayDate = new DateTime();
-                                echo $todayDate->format('Y-m-d');
+                                // echo $todayDate->format('Y-m-d');
                             @endphp
                         </small>
                         @php
@@ -295,6 +297,7 @@
                                 </option>
                                 <option value="Unit">Unit</option>
                                 <option value="Case">Case</option>
+                                <option value="UnitAndCase">Unit + Case</option>
                             </select>
                         </div>
                         <div class="col-4">
@@ -329,7 +332,7 @@
             $i = 1;
         @endphp
 
-        <div class="col-12" style="display: none">
+        <div class="col-12" style="display: block">
 
             <div class="table-responsive">
                 {{-- table-responsive --}}
@@ -353,6 +356,8 @@
 
                             <th class="thclass" scope="col">Product_expiry Name of Store</th>
                             <th class="thclass" scope="col">merchandiser_time_sheet Location</th>
+                            
+                            <th  class="thclass" scope="col">sum Unit+Case</th>
 
                         </tr>
                     </thead>
@@ -427,14 +432,18 @@
 									<td class="tdclass"></td>
 									<td class="tdclass"></td>
 									<td class="tdclass"></td>
+                                    <td  class="tdclass">{{$totalStock+$totalStockCases}}</td>
 
                                     @php
                                         $sumTotalStock += $totalStock;
-                                        $sumTotalStockCases += $totalStockCases;
+                                        $sumTotalStockCases += $totalStockCases;   
+                                        
+                                        $sumStockUnitCases=  $totalStock+$totalStockCases;
+                                        
                                     @endphp
                                 </tr>
                                 @php
-                                    array_push($chartStockArray, ['stock' => $totalStock, 'date' => $stockCount->created_at, 'stockCases' => $totalStockCases]);
+                                    array_push($chartStockArray, ['stock' => $totalStock, 'date' => $stockCount->created_at, 'stockCases' => $totalStockCases, 'sumUnitCase'=>$sumStockUnitCases]);
                                 @endphp
                             @endforeach
 
@@ -464,6 +473,7 @@
 
 									<td class="tdclass"></td>
 									<td class="tdclass"></td>
+									<td class="tdclass"></td>
 
                                 </tr>
                             @endforeach
@@ -487,6 +497,7 @@
 									<td class="tdclass"></td>
                                     
                                     <td class="tdclass">{{ $productExpiryTracker->store->name_of_store }}</td>
+									<td class="tdclass"></td>
 									<td class="tdclass"></td>
 
                                     
@@ -515,6 +526,7 @@
 								
 								<td  class="tdclass">{{$merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store}}</td>
                                 <td  class="tdclass">{{($merchandiserLocation->store_location($merchandiserLocation->store_location_id)->location)??null}}</td>
+                                <td  class="tdclass"></td>
 
 							   
 							</tr>

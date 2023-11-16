@@ -252,20 +252,20 @@ updatePaginationButtons();
                 </div>
 
                 <!-- Modal -->
-                {{-- <div id="upload" class="modal fade" role="dialog">
+                <div id="upload" class="modal fade" role="dialog">
                   <div class="modal-dialog">
 
                     <!-- Modal content-->
                     <div class="modal-content">
                       
                       <div class="modal-header">
-                        <h4 class="modal-title">Upload Product</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Upload Store</h4>
+                        {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
 
                       </div>
                       <div class="modal-body">
-                        <p>Please select file to import Product data.</p>
-                        <form action="{{ route('import-product') }}"
+                        <p>Please select file to import store data.</p>
+                        <form action="{{ route('import-category') }}"
                             method="POST"
                             enctype="multipart/form-data">
                           @csrf
@@ -275,10 +275,10 @@ updatePaginationButtons();
                           <button class="btn btn-success">
                                 Upload
                             </button>
-                          <a class="btn btn-warning"
-                            href="{{ route('export') }}">
+                          {{-- <a class="btn btn-warning"
+                            href="{{ route('export-category') }}">
                                     Export User Data
-                            </a>
+                            </a> --}}
                       </form>
                       </div>
                       <div class="modal-footer">
@@ -288,7 +288,6 @@ updatePaginationButtons();
 
                   </div>
                 </div>
-             --}}
             
                 <div class="search_bar">
                     <div class="search_field">

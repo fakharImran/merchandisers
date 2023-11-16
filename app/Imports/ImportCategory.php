@@ -2,28 +2,23 @@
 
 namespace App\Imports;
 
-use App\Models\Product;
+use App\Models\Category;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ImportProduct implements ToModel, WithHeadingRow
+class ImportCategory implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        // dd($row);
         try {
-            $competitorArr= explode(',', $row['competitor_product_name']);
-            // dd($row ,json_encode($competitorArr));
             // Process the data
-            $product = new Product([
+            $category = new Category([
                 'company_id' => $row['company_id'],
-                'store_id' => $row['store_id'],
-                'category_id' => $row['category_id'],
-                'product_name' => $row['product_name'],
-                'product_number_sku' => $row['product_number_sku'],
-                'competitor_product_name' => json_encode($competitorArr),
+                'category' => $row['category'],
             ]);
 
-            return $product;
+            return $category;
         } catch (\Throwable $e) {
             // Handle the exception, log or display an error message
             // For example, you can log the error using `error_log` or use Laravel's logger: \Illuminate\Support\Facades\Log::error($e);

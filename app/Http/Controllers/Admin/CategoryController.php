@@ -1,14 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use Validator;
+use Exception;
 
+use Validator;
 use App\Models\Company;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Exports\ExportCategory;
+use App\Imports\ImportCategory;
 use App\Rules\UniqueCategoryName;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
 class CategoryController extends Controller
@@ -137,5 +141,38 @@ class CategoryController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Something went wrong while deleting the item']);
         }
+    }
+
+    public function importCategory(Request $request){
+        // dd($request);
+        try {
+            // Validate the uploaded file before processing
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls|max:100000',
+            ]);
+
+            // Store the uploaded file
+            $filePath = $request->file('file')->store('files');
+            // dd($filePath);
+            // Import the data from the Excel file using the ImportStore class
+            Excel::import(new ImportCategory, $filePath);
+
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'File imported successfully.');
+        } 
+        // catch (ValidationException $e) {
+        //     // Handle validation exceptions (e.g., invalid data in the Excel file)
+        //     return redirect()->back()->withErrors($e->errors())->withInput();
+        // } 
+        catch (Exception $e) {
+            // Handle other exceptions that occur during the import process
+            return redirect()->back()->with('error', 'Error occurred during file import please upload again with valid format.  ' );
+            // $e->getMessage()
+        }
+    }
+
+    public function exportUsers(Request $request){
+        // dd($request->all());
+        return Excel::download(new ExportCategory, 'categories.xlsx');
     }
 }

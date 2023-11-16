@@ -102,7 +102,7 @@ class MarketingActivityController extends BaseController
 
         $activity= new Activity;
         $activity->company_user_id= $company_user_id;
-        $activity->activity_description= 'You just submitted a photo of some Marketing Activity for '. $request->promotion_type. ' You can view what you entered by clicking here';
+        $activity->activity_description= 'You add photo of Marketing Activity for '. $request->promotion_type;
         $activity->activity_type= 'Marketing Activity';
         $activity->activity_detail= json_encode($responseofQuery);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');

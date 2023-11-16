@@ -120,6 +120,13 @@ function createLastDaysDates(data, startDate = 0, endDate = 0) {
         if (graphUnit == "Unit") {
             totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['stock']), 0);
         }
+        else if(graphUnit=='UnitAndCase')
+        {
+            // let tempStock= parseInt(element['stockCases']) + parseInt(element['stock']);
+            totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['sumUnitCase']), 0);
+
+            console.log('totalStock',totalStock);
+        }
         else {
             totalStock = filteredData.reduce((acc, element) => acc + parseInt(element['stockCases']), 0);
         }
@@ -192,14 +199,22 @@ function createLastWeeksDates(data, startDate = 0, endDate = 0) {
     previousWeeks.forEach(week => {
         data.forEach(element => {
             chkDate = element['date'];
-            if (formatDateYMD(week.startDate) <= chkDate && formatDateYMD(week.endDate) >= chkDate) {
+            if (formatDateYMD(week.startDate) <= (chkDate) && formatDateYMD(week.endDate) >= (chkDate)) {
+            // if (formatDateYMD(week.startDate) <= chkDate && formatDateYMD(week.endDate) >= chkDate) {
                 if (graphUnit == "Unit") {
                     totalStock += parseInt(element['stock']);
                 }
+                else if(graphUnit=='UnitAndCase')
+                {
+                    totalStock += parseInt(element['sumUnitCase']);
+                    console.log('totalStock>>>>>>.',totalStock);
+                }   
                 else {
                     totalStock += parseInt(element['stockCases']);
                 }
-            } else {
+            } 
+            else {
+                console.log('dates are not correct');
             }
         });
         weekarray.push(totalStock);
@@ -276,10 +291,15 @@ function createLastMonthsDates(data, startDate = 0, endDate = 0) {
         let totalStock = 0;
         data.forEach(element => {
             const chkDate = new Date(element.date);
-            if (chkDate >= month.startDate && chkDate <= month.endDate) {
+            // if (chkDate >= month.startDate && chkDate <= month.endDate) {
+            if (formatDateYMD(month.startDate) <= formatDateYMD(chkDate) && formatDateYMD(month.endDate) >= formatDateYMD(chkDate)) {
                 if (graphUnit == "Unit") {
                     totalStock += parseInt(element.stock);
                 }
+                else if(graphUnit=='UnitAndCase')
+                {
+                    totalStock += parseInt(element['sumUnitCase']);
+                }  
                 else {
                     totalStock += parseInt(element.stockCases);
                 }
@@ -392,6 +412,7 @@ function changePeriod(e) {
             myChartJS.data.datasets[0].data = periodData;
             myChartJS.update();
             graphFormat = 'weeks';
+            console.log('convertedToChartData',convertedToChartData);
             break;
         case 'Monthly':
             createLastMonthsDates(convertedToChartData);
@@ -411,6 +432,7 @@ function changePeriod(e) {
 }
 
 function changeUnitCount(e) {
+    // console.log(e.value);
     switch (e.value) {
         case 'Unit':
             graphUnit = 'Unit';
@@ -419,10 +441,14 @@ function changeUnitCount(e) {
         case 'Case':
             graphUnit = 'Case';
             break;
+        case 'UnitAndCase':
+            graphUnit = 'UnitAndCase';
+            break;
         default:
             graphUnit = 'Unit';
             break;
     }
+
     switch (graphFormat) {
         case 'days':
             changePeriod({ 'value': "Daily" });
@@ -536,7 +562,8 @@ function changeGraph(table) {
         console.log('element[0]', element[0], 'currentDate1', currentDate1);
         var stockcase = element[13];
         var stockunits = element[12];
-        colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase });
+        var sumUnitCase= element[16];
+        colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase, 'sumUnitCase':sumUnitCase });
     });
     console.log('colData',colData);
     return colData;
@@ -596,6 +623,7 @@ $(document).ready(function () {
         }
         // Empty the dropdown to remove previous options
         convertedToChartData = changeGraph(table);
+        console.log('convertedToChartData..........',convertedToChartData);
         switch (graphFormat) {
             case 'days':
                 createLastDaysDates(convertedToChartData);

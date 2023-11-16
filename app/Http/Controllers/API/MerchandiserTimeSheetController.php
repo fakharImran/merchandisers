@@ -5,6 +5,7 @@ use DateTime;
 
 use Validator;
 use DateTimeZone;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Store;
 use App\Models\Activity;
@@ -146,7 +147,11 @@ class MerchandiserTimeSheetController extends BaseController
             $MerchData= array_merge($storeArr,$recordArray);
             $activity= new Activity;
             $activity->company_user_id= $company_user_id;
-            $activity->activity_description= 'you just '. $request->status.' to '.$store->name_of_store. ' at time '.$merchandiserTimeSheet->created_at ;
+           
+            $time = $merchandiserTimeSheet->created_at;
+            $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+
+            $activity->activity_description= 'you just '. $request->status.' to '.$store->name_of_store. ' at time '.$formattedTime ;
             $activity->activity_type= 'Merchandiser Timesheet';
             $activity->activity_detail= json_encode($merchandiserTimeSheet);
 
@@ -273,7 +278,14 @@ class MerchandiserTimeSheetController extends BaseController
 
                 $activity= new Activity;
                 $activity->company_user_id= $timeSheet->company_user_id;
-                $activity->activity_description= 'you just '. $request->status.' to '.$timeSheet->store($timeSheet->store_id)->name_of_store. ' at time '.$timeSheetRecord->created_at ;
+                
+                $time = $timeSheetRecord->created_at;
+                $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+
+                // return $this->sendResponse(["time"=>$time,"formattedTime"=>$formattedTime], 'time sheet testing.');
+
+
+                $activity->activity_description= 'you just '. $request->status.' to '.$timeSheet->store($timeSheet->store_id)->name_of_store. ' at time '.$formattedTime ;
                 $activity->activity_type= 'Merchandiser Timesheet';
                 $activity->activity_detail= json_encode($timeSheet);
                 // return $this->sendResponse(['activity'=>$activity], 'activity at time sheet check-out updated successfully.');
@@ -286,7 +298,11 @@ class MerchandiserTimeSheetController extends BaseController
 
             $activity= new Activity;
             $activity->company_user_id= $timeSheet->company_user_id;
-            $activity->activity_description= 'you just '. $request->status.' to '.$timeSheet->store($timeSheet->store_id)->name_of_store. ' at time '.$timeSheetRecord->created_at ;
+           
+            $time = $timeSheetRecord->created_at;
+            $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+
+            $activity->activity_description= 'you just '. $request->status.' to '.$timeSheet->store($timeSheet->store_id)->name_of_store. ' at time '.$formattedTime ;
             $activity->activity_type= 'Merchandiser Timesheet';
             $activity->activity_detail= json_encode($timeSheet);
             // return $this->sendResponse(['activity'=>$activity], 'activity at time sheet check-out updated successfully.');

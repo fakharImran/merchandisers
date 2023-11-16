@@ -161,6 +161,8 @@
     @php
         $sumTotalStock=0;
         $sumTotalStockCases=0;
+        $sumStockUnitCases=0;
+        $tempStock=0;
     @endphp
     <div class='row  d-flex align-items-center col-actions ' style="max-width: 99%; margin: 1px auto; padding-top:20px">
         <div class="col-md-3 col-3 p-3">
@@ -303,6 +305,7 @@
                             <option class="text-secondary" value="" selected disabled>Select Case or Units </option>
                             <option value="Unit">Unit</option>
                             <option value="Case">Case</option>
+                            <option value="UnitAndCase">Unit + Case</option>
                         </select>              
                     </div>
                     <div class="col-md-4 col-6">
@@ -379,6 +382,7 @@
                             <th class="thclass" scope="col">Total Stocks (cases)</th>
                             <th class="thclass" scope="col">Total Stock Count</th>
                             <th class="thclass" scope="col">Merchandiser</th>
+                            <th hidden class="thclass" scope="col">sum Unit+Case</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -469,15 +473,18 @@
                                 <td class="tdclass">{{$totalStockCases}}</td>
                                 <td class="tdclass">{{$totalStock}} Units, {{$totalStockCases}} Cases</td>
                                 <td class="tdclass">{{$stockCount->companyUser->user->name}}</td>
-
+                                <td hidden class="tdclass">{{$totalStock+$totalStockCases}}</td>
                                 @php
                                     $sumTotalStock+= $totalStock;
                                     $sumTotalStockCases += $totalStockCases;
+
+                                    $sumStockUnitCases=  $totalStock+$totalStockCases;
                                 @endphp
                             </tr>
                             @php
-                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$stockCount->created_at, 'stockCases'=>$totalStockCases]);
-                            @endphp
+                                array_push($chartStockArray, ['stock'=>$totalStock, 'date'=>$stockCount->created_at, 'stockCases'=>$totalStockCases, 'sumUnitCase'=>$sumStockUnitCases]);
+                           @endphp
+                            
                         @endforeach
 
                       @endif                     

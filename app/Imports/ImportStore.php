@@ -13,6 +13,8 @@ class ImportStore implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        // dd($row);
+        
         //   // Validate the row data
         //   $validator = Validator::make($row, [
         //     'company_id' => 'required',
@@ -29,16 +31,17 @@ class ImportStore implements ToModel, WithHeadingRow
         // }
         try {
             $company_id = $row['company_id'];
+            $parishArr= explode(',', $row['parish']);
 
             $store = new Store([
                 'company_id' => $company_id,
                 'name_of_store' => $row['name_of_store'],
-                'parish' => $row['parish'],
+                'parish' => json_encode($parishArr),
                 'channel' => $row['channel'],
             ]);
             $store->save();
 
-            $locations = explode('|', $row['locations']);
+            $locations = explode(',', $row['locations']);
             foreach ($locations as $key => $location) {
                 $store->locations()->create(['location' => $location]);
             }

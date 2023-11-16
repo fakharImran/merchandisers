@@ -181,7 +181,7 @@ public function importProduct(Request $request)
 
         // Store the uploaded file
         $filePath = $request->file('file')->store('files');
-
+        // dd($filePath);
         // Import the data from the Excel file using the ImportStore class
         Excel::import(new ImportProduct, $filePath);
 

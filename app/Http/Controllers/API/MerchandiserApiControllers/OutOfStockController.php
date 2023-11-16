@@ -96,7 +96,7 @@ class OutOfStockController extends BaseController
         
         $activity= new Activity;
         $activity->company_user_id= $company_user_id;
-        $activity->activity_description= 'You have entered that '. $product->product_name. ' is out of stock. Click Here to see what you entered';
+        $activity->activity_description= 'You have entered out of stock product '. $product->product_name;
         $activity->activity_type= 'Out of Stock';
         $activity->activity_detail= json_encode($responseofQuery);
         // return $this->sendResponse(['activity'=>$activity], 'activity to be stored successfully.');
