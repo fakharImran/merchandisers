@@ -70,6 +70,7 @@ class ProductExpiryTrackerController extends BaseController
             'store_location_id'=>'required',
             'category_id'=>'required',
             'product_id'=>'required',
+            'exp_or_damage'=>'required',
             'product_sku'=>'required',
             'amount_expired'=>'required',
             'batchNumber'=>'required',
@@ -93,7 +94,7 @@ class ProductExpiryTrackerController extends BaseController
         $user = Auth::user();
         $company_user_id=$user->companyUser->id;
 
-        $productExpiryTrackerArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku, 'amount_expired'=>$request->amount_expired, 'batchNumber'=>$request->batchNumber, 'expiry_date'=>$request->expiry_date, 'action_taken'=>$request->action_taken, 'photo'=>$photo_path];
+        $productExpiryTrackerArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku,'exp_or_damage'=>$request->exp_or_damage, 'amount_expired'=>$request->amount_expired, 'batchNumber'=>$request->batchNumber, 'expiry_date'=>$request->expiry_date, 'action_taken'=>$request->action_taken, 'photo'=>$photo_path];
         
         $responseofQuery= ProductExpiryTracker::create($productExpiryTrackerArr);
         

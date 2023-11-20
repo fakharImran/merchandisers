@@ -50,28 +50,7 @@ function setCards(table)
         expiredCategories.add(category); 
         expiredProducts.add(product); 
         
-        // Extract the date from the temporary element
-        // const extractedDate = tempElement.textContent.trim();
-        // // console.log('Extracted Date:', extractedDate);
-
-        // // Convert the extracted date to a JavaScript Date object
-        // const expiryDate = new Date(extractedDate);
-        // // console.log('JavaScript Date:', expiryDate);
-
-
-        // // Check if the expiry date is greater than the current date
-        // // console.log(expiryDate, currentDate, expiryDate < currentDate);
-        // if (expiryDate < currentDate) {
-        //     if (!expiredStores.has(store)) {
-        //         expiredStores.add(store); // Add the store name to the Set if it's not already in the Set
-        //     }
-        //     if (!expiredCategories.has(category)) {
-        //         expiredCategories.add(category); // Add the category name to the Set if it's not already in the Set
-        //     }
-        //     if (!expiredProducts.has(product)) {
-        //         expiredProducts.add(product); // Add the product name to the Set if it's not already in the Set
-        //     }
-        // }
+   
     });
     // console.log('storeLocation:', storeLocation);
     
@@ -81,14 +60,37 @@ function setCards(table)
     const numberOfexpProduct = expiredProducts.size;
 
     console.log('Number of unique expired stores Location:', numberOfStoreLocation);
-    console.log('Number of unique expired stores:', numberOfexpStores);
+    // console.log('Number of unique expired stores:', numberOfexpStores);
     console.log('Number of unique expired categories:', numberOfexpCategories);
     console.log('Number of unique expired stores:', numberOfexpProduct);
 
-
-    document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfStoreLocation+' /</span> '+ allUniqueLocations.length;
-    document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpCategories+' /</span> '+ allUniqueCategories;
-    document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpProduct+' /</span> '+ allUniqueProducts;
+    if(numberOfStoreLocation==0)
+    {
+        document.getElementById('no_of_exp_store').innerHTML=numberOfStoreLocation+' / '+ allUniqueLocations.length;
+    }
+    else
+    {
+        document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfStoreLocation+' /</span> '+ allUniqueLocations.length;
+    }
+    if(numberOfexpCategories==0)
+    {
+        document.getElementById('category_of_exp_product').innerHTML=numberOfexpCategories+' / '+ allUniqueCategories;
+    }
+    else
+    {
+        document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpCategories+' /</span> '+ allUniqueCategories;
+    }
+    if(numberOfexpProduct==0)
+    {
+        document.getElementById('no_of_exp_product').innerHTML=numberOfexpProduct+' / '+ allUniqueProducts;
+    }
+    else
+    {
+        document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpProduct+' /</span> '+ allUniqueProducts;
+    }
+    // document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfStoreLocation+' /</span> '+ allUniqueLocations.length;
+    // document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpCategories+' /</span> '+ allUniqueCategories;
+    // document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfexpProduct+' /</span> '+ allUniqueProducts;
 }
 $(document).ready(function () { 
     var table = $('#productExpiryTrackerDatatable').DataTable({

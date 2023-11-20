@@ -239,7 +239,7 @@ div#pricaAuditDatatable_filter {
     height:30px !important;
 }
 #repeater-container {
-    width: 446px;
+    /* width: 446px; */
     min-height: 40px;
     border: 1px solid #ccc;
     padding: 5px;

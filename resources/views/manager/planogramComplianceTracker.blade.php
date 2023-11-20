@@ -182,6 +182,7 @@
                             <th class="thclass" scope="col">Category</th>
                             <th class="thclass" scope="col">Product Name</th>
                             <th class="thclass" scope="col">Product Number/SKU</th>
+                            <th class="thclass" scope="col">Is Planogram Compliance</th>
                             <th class="thclass" scope="col">Before Photo</th>
                             <th class="thclass" scope="col">After Photo</th>
                             <th class="thclass" scope="col">Action</th>
@@ -211,6 +212,7 @@
                             <td class="tdclass">{{$planogram->category->category}}</td>
                             <td class="tdclass">{{$planogram->product->product_name}}</td>
                             <td class="tdclass">{{$planogram->product_number_sku}}</td>
+                            <td class="tdclass">{{$planogram->is_planogram_compliance}}</td>
 
                             <td class="tdclass">
                                 @php

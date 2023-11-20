@@ -33,6 +33,7 @@ return new class extends Migration
 
 
             $table->string('product_number_sku')->nullable();
+            $table->string('is_planogram_compliance')->nullable();
             $table->string('photo_before_stocking_shelf')->nullable();
             $table->string('photo_after_stocking_shelf')->nullable();
             $table->string('action')->nullable();

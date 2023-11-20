@@ -78,6 +78,7 @@ class PlanogramComplianceTrackerController extends BaseController
             'category_id'=>'required',
             'product_id'=>'required',
             'product_number_sku'=>'required',
+            'is_planogram_compliance'=>'required',
             'photo_before_stocking_shelf'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
             // 'photo_after_stocking_shelf'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
             'action'=>'required',
@@ -112,7 +113,7 @@ class PlanogramComplianceTrackerController extends BaseController
         $user = Auth::user();
         $company_user_id=$user->companyUser->id;
         
-        $planogramComplianceTracker= ['store_location_id'=>$store_location->id, 'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_number_sku'=>$request->product_number_sku, 'photo_before_stocking_shelf'=>$photo_path_before, 'photo_after_stocking_shelf'=>$photo_path_after, 'action'=>$request->action];
+        $planogramComplianceTracker= ['store_location_id'=>$store_location->id, 'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_number_sku'=>$request->product_number_sku,'is_planogram_compliance'=>$request->is_planogram_compliance , 'photo_before_stocking_shelf'=>$photo_path_before, 'photo_after_stocking_shelf'=>$photo_path_after, 'action'=>$request->action];
         // return $this->sendResponse(['planogramComplianceTracker'=>$planogramComplianceTracker], 'checking:');
         $responseofQuery= PlanogramComplianceTracker::create($planogramComplianceTracker);
 

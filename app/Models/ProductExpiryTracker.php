@@ -16,7 +16,7 @@ class ProductExpiryTracker extends Model
 {
     use HasFactory;
     protected $table= 'product_expiry_trackers';
-    protected $fillable= ['store_location_id','store_id','company_user_id','category_id', 'product_id', 'product_sku', 'amount_expired', 'batchNumber', 'expiry_date','action_taken','photo'];
+    protected $fillable= ['store_location_id','store_id','company_user_id','category_id', 'product_id','exp_or_damage', 'product_sku', 'amount_expired', 'batchNumber', 'expiry_date','action_taken','photo'];
 
     public function storeLocation(): BelongsTo
     {

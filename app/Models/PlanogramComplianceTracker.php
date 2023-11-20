@@ -16,7 +16,7 @@ class PlanogramComplianceTracker extends Model
 {
     use HasFactory;
     protected $table= 'planogram_compliance_trackers';
-    protected $fillable= ['store_location_id','store_id','company_user_id','category_id', 'product_id', 'product_number_sku', 'photo_before_stocking_shelf', 'photo_after_stocking_shelf', 'action'];
+    protected $fillable= ['store_location_id','store_id','company_user_id','category_id', 'product_id', 'product_number_sku','is_planogram_compliance', 'photo_before_stocking_shelf', 'photo_after_stocking_shelf', 'action'];
 
     public function storeLocation(): BelongsTo
     {

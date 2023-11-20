@@ -64,10 +64,35 @@ if(startDate!=0 && endDate!=0)
 //     document.getElementById('out_of_stock_categories').innerHTML =todayDateString;
 //     document.getElementById('out_of_stock_product').innerHTML =todayDateString;
 // }
-
+if(numberOfOutOfStockStores==0)
+{
+    document.getElementById('no_of_exp_store').innerHTML=numberOfOutOfStockStores+' / '+ allUniqueLocations.length;
+}
+else
+{
     document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockStores+' /</span> '+ allUniqueLocations.length;
+}
+if(numberOfOutOfStockCategories==0)
+{
+    document.getElementById('category_of_exp_product').innerHTML=numberOfOutOfStockCategories+' / '+ allUniqueCategories;
+}
+else
+{
     document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockCategories+' /</span> '+ allUniqueCategories;
+}
+if(numberOfOutOfStockProduct==0)
+{
+    document.getElementById('no_of_exp_product').innerHTML=numberOfOutOfStockProduct+' / '+ allUniqueProducts;
+}
+else
+{
     document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockProduct+' /</span> '+ allUniqueProducts;
+}
+
+
+    // document.getElementById('no_of_exp_store').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockStores+' /</span> '+ allUniqueLocations.length;
+    // document.getElementById('category_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockCategories+' /</span> '+ allUniqueCategories;
+    // document.getElementById('no_of_exp_product').innerHTML='<span style="color: #CA371B">'+numberOfOutOfStockProduct+' /</span> '+ allUniqueProducts;
 }
 
 
