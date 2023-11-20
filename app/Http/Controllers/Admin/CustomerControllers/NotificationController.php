@@ -111,11 +111,11 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        // dd($request->all()); 
         $pageConfigs = ['pageSidebar' => 'notification'];    
 
         $validator = Validator::make($request->all(), [
-            'company_user_id'=>'required',
+            'user_id'=>'required',
             'title'=>'required',
             'message'=>'required',
         ]);
@@ -138,16 +138,19 @@ class NotificationController extends Controller
 
         $notification->store_location_id =$data['store_location_id'];
         $notification->store_id =$data['store_id'];
-        $notification->company_user_id =$data['company_user_id'];
+        $notification->user_ids =json_encode($data['user_id']);
         $notification->title =$data['title'];
         $notification->message =$data['message'];
         $notification->attachment =$url;
         $notification->save();
 
+        foreach ($data['user_id'] as $key => $value) {
+            $notification->userNotification()->create(['user_id'=>$value, 'notification_id'=>$notification->id]);
+        }
+
         
         $fcm_url = 'https://fcm.googleapis.com/fcm/send';
-        $FcmToken = User::whereNotNull('device_token')->pluck('device_token')->all();
-          
+        $FcmToken = User::whereNotNull('device_token')->whereIn('id', $data['user_id'])->pluck('device_token')->all();
         $serverKey = 'AAAAZ7dCL_c:APA91bEp8yX6CiX_Jxj0iHC0tdR4Bow6maEr0Lv3vluMlSdv-XdJfVYMAlW_5ZqWYSTl0go1Iut7vx4fZYQl8XlgNJgp6COt35fhpwy4UdyQeGHz9Gi1beoRewEOeLzCB1OpRQU20S2h';
         $baseUrl = Config::get('app.url');
         $data = [
@@ -270,7 +273,7 @@ class NotificationController extends Controller
 
         $validator = Validator::make($request->all(), [
             'store_id'=> 'required',
-            'company_user_id'=>'required',
+            'user_id'=>'required',
             'title'=>'required',
             'message'=>'required',
             'store_location_id'=>'required',
@@ -296,7 +299,7 @@ class NotificationController extends Controller
         // Update notification attributes
         $notification->store_location_id =$data['store_location_id'];
         $notification->store_id =$data['store_id'];
-        $notification->company_user_id =$data['company_user_id'];
+        $notification->user_ids =json_encode($data['user_id']);
         $notification->title =$data['title'];
         $notification->message =$data['message'];
 

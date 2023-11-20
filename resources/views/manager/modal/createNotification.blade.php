@@ -75,13 +75,13 @@
                             <label>{{ __('Select Merchandiser:') }}</label>
                         </div>
                         <div class="user_select_form">
-                            <select name="company_user_id" class=" form-select"  id="merchandiser-search">
-                                <option value="" selected>--Select-- </option>
+                            <select name="user_id[]" class=" form-select select2" multiple  id="merchandiser-search">
+                                {{-- <option value="" selected>--Select-- </option> --}}
                                 @foreach($userArr as $merchandiser)
-                                        <option value="{{$merchandiser->companyUser->id}}">{{$merchandiser->name}}</option>
+                                        <option value="{{$merchandiser->id}}">{{$merchandiser->name}}</option>
                                 @endforeach
                             </select>   
-                            @error('company_user_id')
+                            @error('user_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -200,5 +200,10 @@
     //  {
     //     alert(data.value)
     //  }
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#merchandiser-search').select2();
+        });
     </script>
 @endsection
