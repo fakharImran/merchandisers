@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\StoreLocation;
 use App\Rules\UniqueStoreName;
 use App\Http\Controllers\Controller;
+use App\Rules\UniqueLocationInStore;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
@@ -70,8 +71,8 @@ class StoreController extends Controller
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'company_id' => 'required',
-            'name_of_store' => ['required', new UniqueStoreName($request->company_id)],
-            'locations' => 'required',
+            'name_of_store' => 'required',
+            'location' => ['required',new UniqueLocationInStore($request->location,$request->name_of_store)],
             'parish' => 'required',
             'channel' => 'required',
         ]);
@@ -82,21 +83,41 @@ class StoreController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $tempUser = new Store();
-        $tempUser->company_id = $request->company_id ?? null;
-        $tempUser->name_of_store = $request->name_of_store ?? null;
-        $tempUser->parish = json_encode($request->parish);
-        $tempUser->channel = $request->channel ?? null;
-        $tempUser->save();
-        $store_id= $tempUser->id;
-        // Store the locations
-        if ($request->has('locations')) {
-            foreach ($request->locations as $location) {
+        $storeExists = Store::where('name_of_store', $request->name_of_store)->exists();
 
-                $tempUser->locations()->create(['location' => $location]);
-            }
+        // dd($storeExists);
+
+        if($storeExists)
+        {
+            $store = Store::where('name_of_store', $request->name_of_store)->first();
+            $store_id=$store->id;
+            $existingParish= json_decode($store->parish);
+            array_push($existingParish, $request->parish);
+
+            // dd($uniqueCheck);
+            $store->parish= json_encode($existingParish);
+            $store->save();
+
+            $store->locations()->create(['location' => $request->location]);
+            // dd($store);
         }
-
+        else
+        {
+            $tempUser = new Store();
+            $tempUser->company_id = $request->company_id ?? null;
+            $tempUser->name_of_store = $request->name_of_store ?? null;
+            $tempUser->parish = json_encode([$request->parish]);
+            $tempUser->channel = $request->channel ?? null;
+            $tempUser->save();
+            $store_id= $tempUser->id;
+            // Store the locations
+    
+            if ($request->has('location')) 
+            {
+                $tempUser->locations()->create(['location' => $request->location]);
+            }
+    
+        }
         
         return redirect()->route('store.index');
     }

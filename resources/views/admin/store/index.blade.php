@@ -320,6 +320,7 @@ updatePaginationButtons();
                     @if($stores!=null)
                     @foreach ($stores as $store)
                         <tr>
+                          {{-- {{dd($store)}} --}}
                             <td class="tdclass">{{ $i}}</td>
                             <td class="tdclass">{{ $store->company->company }}</td>
                             <td class="tdclass">{{ $store['name_of_store'] }}</td>

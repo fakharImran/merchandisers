@@ -5,6 +5,7 @@ use Validator;
 use App\Models\Store;
 use App\Models\StoreLocation;
 use App\Rules\UniqueStoreName;
+use App\Rules\UniqueLocationInStore;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -15,37 +16,54 @@ class ImportStore implements ToModel, WithHeadingRow
     {
         // dd($row);
         
-        //   // Validate the row data
-        //   $validator = Validator::make($row, [
-        //     'company_id' => 'required',
-        //     'name_of_store' => ['required', new UniqueStoreName($row['company_id'])],
-        //     'locations' => 'required',
-        //     'parish' => 'required',
-        //     'channel' => 'required',
-        // ]);
+      // dd($request->all());
+    //   $validator = Validator::make($row, [
+    //     'company_id' => 'required',
+    //     'name_of_store' => 'required',
+    //     'location' => ['required',new UniqueLocationInStore($request->location,$request->name_of_store)],
+    //     'parish' => 'required',
+    //     'channel' => 'required',
+    // ]);
+    
 
-        // if ($validator->fails()) {
-        //     // Validation failed
-        //     // Log::error('Validation errors for row:', ['row' => $row, 'errors' => $validator->errors()]);
-        //     return null;        
-        // }
+    // if ($validator->fails()) {
+    //     // Validation failed
+    //     return redirect()->back()->withErrors($validator)->withInput();
+    // }
+
         try {
-            $company_id = $row['company_id'];
-            $parishArr= explode(',', $row['parish']);
 
-            $store = new Store([
-                'company_id' => $company_id,
-                'name_of_store' => $row['name_of_store'],
-                'parish' => json_encode($parishArr),
-                'channel' => $row['channel'],
-            ]);
-            $store->save();
+            $storeExists = Store::where('name_of_store', $row['name_of_store'])->exists();
+            if($storeExists)
+            {
+                $store = Store::where('name_of_store', $row['name_of_store'])->first();
+            
+                $existingParish= json_decode($store->parish);
+                array_push($existingParish, $row['parish']);
+    
+                $store->parish= json_encode($existingParish);
+                $store->save();
+    
+                $store->locations()->create(['location' =>  $row['locations']]);
+                // dd($store);
 
-            $locations = explode(',', $row['locations']);
-            foreach ($locations as $key => $location) {
-                $store->locations()->create(['location' => $location]);
             }
-
+            else
+            {
+                $company_id = $row['company_id'];
+    
+                $store = new Store([
+                    'company_id' => $company_id,
+                    'name_of_store' => $row['name_of_store'],
+                    'parish' => json_encode([$row['parish']]),
+                    'channel' => $row['channel'],
+                ]);
+                $store->save();
+    
+                $store->locations()->create(['location' => $row['locations']]);
+            }
+           
+            // dd($store,'fakhaee');
             return $store;
         } catch (Throwable $e) {
             // Handle the exception, log or display an error message

@@ -295,8 +295,8 @@
                                                 <label>{{ __('Parish') }} <span class="text-danger">*</span></label>
                                             </div>
                                             <div class="user_select_form">
-                                                <select id="parish" name="parish[]" class="form-select"
-                                                    placeholder="Select Parish" required multiple>
+                                                <select id="parish" name="parish" class="form-select"
+                                                    placeholder="Select Parish" required>
                                                     <option value="" disabled selected>Select Parish</option>
                                                     <option value="Clarendon">Clarendon</option>
                                                     <option value="Hanover">Hanover</option>
@@ -324,18 +324,14 @@
                                             <div class="label">
                                                 <label>{{ __('Search Location') }}</label>
                                             </div>
-                                            <div class=" user_input_form d-flex ">
+                                            <div class=" user_input_form ">
 
-                                                <div class="col-9">
-                                                    <input id="pac-input" class="form-control" type="text"
+                                                <div class="col-12">
+                                                    <input id="pac-input" name="location" class="form-control" type="text"
                                                         placeholder="Enter a location" />
                                                 </div>
                                                 <div class="col-3">
                                                     <div id="map" style="display: none"></div>
-                                                    <div class=" user_btn myborder ">
-                                                        <div class=" user_btn_style submit clickable-element"
-                                                            onclick="addRepeaterItem()">Add Location</div>
-                                                    </div>
                                                 </div>
                                             </div>
 
@@ -385,36 +381,7 @@
                                                 <span id="place-address"></span>
                                             </div>
                                         </div> --}}
-
-
-
-                                        <div class="user_form_content">
-                                            <div class="label">
-                                                <label>{{ __('Location') }} <span class="text-danger">*</span></label>
-                                            </div>
-                                            <div class="user_input_form row " id="repeater-container">
-                                                {{-- <div class="col-6 p-1">
-                                                    <div class="w-100">
-                                                        <div class="user_btn myborder"
-                                                            style="border: 1px solid #37A849 !important">
-                                                            <input type="text" required
-                                                                class="border-none user_input_form_90 height-30px"
-                                                                name="locations[]" required autocomplete="location"
-                                                                autofocus placeholder="" readonly>
-                                                        </div>
-                                                    </div>
-                                                    <div class="text-danger cross-btn clickable-element p-1"
-                                                        onclick="removeRepeaterItem(this)">x</div>
-
-                                                </div> --}}
-                                                <!-- This is the container for the repeater items -->
-                                            </div>
-
-
-
-                                        </div>
-
-                                        
+                                       
 
                                         <div class="user_form_content">
                                             <div class="label">
@@ -473,38 +440,3 @@
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAob5VEgwOWzV91Q7y4ZncX5XrM33Fa-eo&callback=initMap&libraries=places&v=weekly"
     defer></script>
-<script>
-    function addRepeaterItem() {
-        
-        const searchInput = document.getElementById('pac-input');
-       
-        const repeaterContainer = document.getElementById('repeater-container');
-        const newItem = document.createElement('div');
-        newItem.classList.add("col-6");
-        newItem.classList.add("p-1");
-        newItem.innerHTML = `
-        <div class="w-100">
-            <div class="user_btn myborder" style="border: 1px solid #37A849 !important">
-                <input type="text" required class="border-none user_input_form_90 height-30px" name="locations[]" required autocomplete="location" autofocus placeholder="" readonly value="` + searchInput.value + `">
-            </div>
-        </div>
-        <div  class="text-danger cross-btn clickable-element p-1" onclick="removeRepeaterItem(this)">x</div>
-       
-    `;
-        // user_input_form
-        repeaterContainer.appendChild(newItem);
-
-        console.log(searchInput.value);
-
-        searchInput.value = "";
-    }
-
-    function removeRepeaterItem(button) {
-        button.parentElement.remove();
-    }
-</script>
-<script>
-    $(document).ready(function() {
-        $('#parish').select2();
-    });
-</script>

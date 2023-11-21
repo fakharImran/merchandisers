@@ -89,6 +89,7 @@ class ProductExpiryTrackerController extends BaseController
         $product_id= $request->product_id;
         $product= Product::where('id', $product_id)->first();
         $store_location= StoreLocation::where ('id', $request->store_location_id)->first();
+        // return $this->sendResponse(['responseofQuery'=>$store_location], 'testig:');
         $store = $store_location->store;
         
         $user = Auth::user();
