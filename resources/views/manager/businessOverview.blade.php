@@ -332,7 +332,7 @@
             $i = 1;
         @endphp
 
-        <div class="col-12" style="display: block">
+        <div class="col-12" style="display: none">
 
             <div class="table-responsive">
                 {{-- table-responsive --}}
@@ -654,7 +654,7 @@
 
         <script>
             // Initialize the map
-            const map = L.map('map').setView([18.1096, -77.2975], 9); // Set the initial center and zoom level for Jamaica
+            const map = L.map('map').setView([18.1393314,-77.4034311], 10); // Set the initial center and zoom level for Jamaica
 
             // Add a tile layer for the map
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

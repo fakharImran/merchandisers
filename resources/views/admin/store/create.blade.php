@@ -290,7 +290,36 @@
                                                 @enderror
                                             </div>
                                         </div>
-
+                                        <div class="user_form_content">
+                                            <div class="label">
+                                                <label>{{ __('Parish') }} <span class="text-danger">*</span></label>
+                                            </div>
+                                            <div class="user_select_form">
+                                                <select id="parish" name="parish[]" class="form-select"
+                                                    placeholder="Select Parish" required multiple>
+                                                    <option value="" disabled selected>Select Parish</option>
+                                                    <option value="Clarendon">Clarendon</option>
+                                                    <option value="Hanover">Hanover</option>
+                                                    <option value="Kingston">Kingston</option>
+                                                    <option value="Manchester">Manchester</option>
+                                                    <option value="Portland">Portland</option>
+                                                    <option value="St. Andrew">St. Andrew</option>
+                                                    <option value="St. Ann">St. Ann</option>
+                                                    <option value="St. Catherine">St. Catherine</option>
+                                                    <option value="St. Elizabeth">St. Elizabeth</option>
+                                                    <option value="St. James">St. James</option>
+                                                    <option value="St. Mary">St. Mary</option>
+                                                    <option value="St. Thomas">St. Thomas</option>
+                                                    <option value="Trelawny">Trelawny</option>
+                                                    <option value="Westmoreland">Westmoreland</option>
+                                                </select>
+                                                @error('parish')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="user_form_content">
                                             <div class="label">
                                                 <label>{{ __('Search Location') }}</label>
@@ -385,36 +414,7 @@
 
                                         </div>
 
-                                        <div class="user_form_content">
-                                            <div class="label">
-                                                <label>{{ __('Parish') }} <span class="text-danger">*</span></label>
-                                            </div>
-                                            <div class="user_select_form">
-                                                <select id="parish" name="parish[]" class="form-select"
-                                                    placeholder="Select Parish" required multiple>
-                                                    <option value="" disabled selected>Select Parish</option>
-                                                    <option value="Clarendon">Clarendon</option>
-                                                    <option value="Hanover">Hanover</option>
-                                                    <option value="Kingston">Kingston</option>
-                                                    <option value="Manchester">Manchester</option>
-                                                    <option value="Portland">Portland</option>
-                                                    <option value="St. Andrew">St. Andrew</option>
-                                                    <option value="St. Ann">St. Ann</option>
-                                                    <option value="St. Catherine">St. Catherine</option>
-                                                    <option value="St. Elizabeth">St. Elizabeth</option>
-                                                    <option value="St. James">St. James</option>
-                                                    <option value="St. Mary">St. Mary</option>
-                                                    <option value="St. Thomas">St. Thomas</option>
-                                                    <option value="Trelawny">Trelawny</option>
-                                                    <option value="Westmoreland">Westmoreland</option>
-                                                </select>
-                                                @error('parish')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
+                                        
 
                                         <div class="user_form_content">
                                             <div class="label">

@@ -332,6 +332,7 @@ updatePaginationButtons();
                               @endif
                               @endforeach
                               @endif
+                            </td>
                               <td class="tdclass">
                               @php
                                   $parishArr= json_decode($store['parish'])
