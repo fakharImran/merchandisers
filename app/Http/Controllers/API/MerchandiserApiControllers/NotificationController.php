@@ -22,7 +22,9 @@ class NotificationController extends BaseController
         $notifications = UserNotification::select('*')->where('user_id',$user->id )->orderBy('created_at', 'desc')->get();
         $arr = array();
         foreach ($notifications as $key => $value) {
-            array_push($arr,  $value->notifications);
+            $temp =  $value->notification;
+            unset($temp['user_ids']);
+            array_push($arr,   $temp);
         }
         
         if($notifications)
@@ -41,7 +43,9 @@ class NotificationController extends BaseController
         $notifications = UserNotification::select('*')->where('user_id',$user->id )->whereRaw("DATE(created_at) = ?", [$date])->orderBy('created_at', 'desc')->get();
         $arr = array();
         foreach ($notifications as $key => $value) {
-            array_push($arr,  $value->notifications);
+            $temp =  $value->notification;
+            unset($temp['user_ids']);
+            array_push($arr,   $temp);
         }
 
         return $this->sendResponse(['date'=>$date, 'notifications'=>$arr], 'this is the Notification date Data');
