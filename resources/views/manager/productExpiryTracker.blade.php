@@ -237,7 +237,8 @@
                                 <th class="thclass" scope="col">Product Name</th>
                                 <th class="thclass" scope="col">Product Number/SKU</th>
                                 <th class="thclass" scope="col">Expired or Damaged</th>
-                                <th class="thclass" scope="col">Amount Expired (units)</th>
+                                <th class="thclass" scope="col">Amount of Products (units)</th>
+                                <th class="thclass" scope="col">Amount of Products (cases)</th>
                                 <th class="thclass" scope="col">Batch No</th>
                                 <th class="thclass" scope="col">Expiry Date</th>
                                 <th class="thclass" scope="col">Action</th>
@@ -266,6 +267,7 @@
                                         <td class="tdclass">{{ $productExpiryTracker->product_sku }}</td>
                                         <td class="tdclass">{{ $productExpiryTracker->exp_or_damage }}</td>
                                         <td class="tdclass">{{ $productExpiryTracker->amount_expired }}</td>
+                                        <td class="tdclass">Cases will set soon</td>
                                         <td class="tdclass">{{ $productExpiryTracker->batchNumber }}</td>
                                         <td class="tdclass">
                                             @php

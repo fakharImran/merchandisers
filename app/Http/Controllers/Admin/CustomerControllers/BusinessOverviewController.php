@@ -111,7 +111,29 @@ class BusinessOverviewController extends Controller
         }
 
         // dd($uniqueServicedStoreLocation);
-        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories', 'uniqueServicedStoreLocation'), ['pageConfigs' => $pageConfigs]);
+        // dd($stores);
+        $arr = array();
+        foreach ($stores as $value) {
+            $val = json_decode($value->parish);
+            // dd($value->channel);
+            foreach ($val as $key => $parish) {
+            // dd($parish);
+            $val[$key] = $parish . " " . $value->channel;
+                
+            }
+            $arr = array_merge($arr, $val);
+        }
+        // dd($arr);
+
+        // Count the occurrences of each element
+$parishChannelCount = array_count_values($arr);
+// dd($parishChannelCount);
+// Output the unique parishChannelCount
+// foreach ($parishChannelCount as $element => $count) {
+//     echo "$element: $count\n";
+// }
+
+        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

@@ -170,7 +170,7 @@
         @php
             $sumTotalStock = 0;
             $sumTotalStockCases = 0;
-            $sumStockUnitCases=0;
+            $sumStockUnitCases = 0;
         @endphp
         <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
             <div class="col-md-3-5 col-sm-3 col-6 pt-2">
@@ -270,11 +270,12 @@
                             @endphp
                         </small>
                         @php
-							$uniqueExpProduct = $productExpiryTrackerData->unique('store_id')->sort();
+                            $uniqueExpProduct = $productExpiryTrackerData->unique('store_id')->sort();
                         @endphp
                         <div class="Link0" id="stores_with_exp_products"
                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                            <span style="color: #CA371B">{{ count($uniqueExpProduct) }} /</span> {{ count($locationArr) }}
+                            <span style="color: #CA371B">{{ count($uniqueExpProduct) }} /</span>
+                            {{ count($locationArr) }}
                         </div>
 
                     </div>
@@ -356,8 +357,8 @@
 
                             <th class="thclass" scope="col">Product_expiry Name of Store</th>
                             <th class="thclass" scope="col">merchandiser_time_sheet Location</th>
-                            
-                            <th  class="thclass" scope="col">sum Unit+Case</th>
+
+                            <th class="thclass" scope="col">sum Unit+Case</th>
 
                         </tr>
                     </thead>
@@ -428,22 +429,22 @@
                                     <td class="tdclass">{{ $stockCount->companyUser->user->name }}</td>
                                     <td class="tdclass">{{ $totalStock }}</td>
                                     <td class="tdclass">{{ $totalStockCases }}</td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
-                                    <td  class="tdclass">{{$totalStock+$totalStockCases}}</td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass">{{ $totalStock + $totalStockCases }}</td>
 
                                     @php
                                         $sumTotalStock += $totalStock;
-                                        $sumTotalStockCases += $totalStockCases;   
-                                        
-                                        $sumStockUnitCases=  $totalStock+$totalStockCases;
-                                        
+                                        $sumTotalStockCases += $totalStockCases;
+
+                                        $sumStockUnitCases = $totalStock + $totalStockCases;
+
                                     @endphp
                                 </tr>
                                 @php
-                                    array_push($chartStockArray, ['stock' => $totalStock, 'date' => $stockCount->created_at, 'stockCases' => $totalStockCases, 'sumUnitCase'=>$sumStockUnitCases]);
+                                    array_push($chartStockArray, ['stock' => $totalStock, 'date' => $stockCount->created_at, 'stockCases' => $totalStockCases, 'sumUnitCase' => $sumStockUnitCases]);
                                 @endphp
                             @endforeach
 
@@ -451,29 +452,29 @@
                         @if ($outOfStockData != null)
                             @foreach ($outOfStockData as $outOfStock)
                                 <tr>
-									<td class="tdclass">
+                                    <td class="tdclass">
                                         {{ $outOfStock->created_at }}
                                     </td>
-									<td class="tdclass">{{ $outOfStock->store->name_of_store }}</td>
-									<td class="tdclass">
+                                    <td class="tdclass">{{ $outOfStock->store->name_of_store }}</td>
+                                    <td class="tdclass">
                                         {{ $outOfStock->storeLocation->location }}
                                     </td>
-									<td class="tdclass">{{ $outOfStock->category->category }}</td>
-									<td class="tdclass">{{ $outOfStock->product->product_name }}</td>
-									<td class="tdclass">{{ $outOfStock->companyUser->user->name }}</td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
-									
-                                   
-                                    <td class="tdclass">{{ $outOfStock->store->name_of_store }}</td>
-                                    
-                                    
+                                    <td class="tdclass">{{ $outOfStock->category->category }}</td>
                                     <td class="tdclass">{{ $outOfStock->product->product_name }}</td>
-                                    
+                                    <td class="tdclass">{{ $outOfStock->companyUser->user->name }}</td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
 
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
+
+                                    <td class="tdclass">{{ $outOfStock->store->name_of_store }}</td>
+
+
+                                    <td class="tdclass">{{ $outOfStock->product->product_name }}</td>
+
+
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
 
                                 </tr>
                             @endforeach
@@ -481,57 +482,65 @@
                         @if (!$productExpiryTrackerData->isEmpty())
                             @foreach ($productExpiryTrackerData as $productExpiryTracker)
                                 <tr>
-									<td class="tdclass">
+                                    <td class="tdclass">
                                         {{ $productExpiryTracker->created_at }}
                                     </td>
-									<td class="tdclass">{{ $productExpiryTracker->store->name_of_store }}</td>
-									<td class="tdclass">
+                                    <td class="tdclass">{{ $productExpiryTracker->store->name_of_store }}</td>
+                                    <td class="tdclass">
                                         {{ $productExpiryTracker->storeLocation->location }}
                                     </td>
-									<td class="tdclass">{{ $productExpiryTracker->category->category }}</td>
-									<td class="tdclass">{{ $productExpiryTracker->product->product_name }}</td>
-									<td class="tdclass">{{ $productExpiryTracker->companyUser->user->name }}</td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
-                                    
-                                    <td class="tdclass">{{ $productExpiryTracker->store->name_of_store }}</td>
-									<td class="tdclass"></td>
-									<td class="tdclass"></td>
+                                    <td class="tdclass">{{ $productExpiryTracker->category->category }}</td>
+                                    <td class="tdclass">{{ $productExpiryTracker->product->product_name }}</td>
+                                    <td class="tdclass">{{ $productExpiryTracker->companyUser->user->name }}</td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
 
-                                    
-                                    
-                                  
-                                   
+                                    <td class="tdclass">{{ $productExpiryTracker->store->name_of_store }}</td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+
+
+
+
+
                                 </tr>
                             @endforeach
                         @endif
 
-						@if (!$uniqueServicedStoreLocation->isEmpty())
-						@foreach ($uniqueServicedStoreLocation as $merchandiserLocation)
-							<tr>
-								<td class="tdclass">
-									{{ $merchandiserLocation->created_at }}
-								</td>
-								<td  class="tdclass">{{$merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store}}</td>
-                                <td  class="tdclass">{{($merchandiserLocation->store_location($merchandiserLocation->store_location_id)->location)??null}}</td>
-								<td class="tdclass"></td>
-								<td class="tdclass"></td>
-								<td class="tdclass">{{ $merchandiserLocation->companyUser->user->name }}</td>
-								<td class="tdclass"></td>
-								<td class="tdclass"></td>
-								<td class="tdclass"></td>
-								<td class="tdclass"></td>
-								
-								<td  class="tdclass">{{$merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store}}</td>
-                                <td  class="tdclass">{{($merchandiserLocation->store_location($merchandiserLocation->store_location_id)->location)??null}}</td>
-                                <td  class="tdclass"></td>
+                        @if (!$uniqueServicedStoreLocation->isEmpty())
+                            @foreach ($uniqueServicedStoreLocation as $merchandiserLocation)
+                                <tr>
+                                    <td class="tdclass">
+                                        {{ $merchandiserLocation->created_at }}
+                                    </td>
+                                    <td class="tdclass">
+                                        {{ $merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store }}
+                                    </td>
+                                    <td class="tdclass">
+                                        {{ $merchandiserLocation->store_location($merchandiserLocation->store_location_id)->location ?? null }}
+                                    </td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass">{{ $merchandiserLocation->companyUser->user->name }}</td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
+                                    <td class="tdclass"></td>
 
-							   
-							</tr>
-						@endforeach
-						@endif
+                                    <td class="tdclass">
+                                        {{ $merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store }}
+                                    </td>
+                                    <td class="tdclass">
+                                        {{ $merchandiserLocation->store_location($merchandiserLocation->store_location_id)->location ?? null }}
+                                    </td>
+                                    <td class="tdclass"></td>
+
+
+                                </tr>
+                            @endforeach
+                        @endif
 
                     </tbody>
                 </table>
@@ -653,8 +662,11 @@
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
         <script>
+             var parishChannelCount = {!! json_encode($parishChannelCount) !!};
+             console.log(parishChannelCount);
             // Initialize the map
-            const map = L.map('map').setView([18.1393314,-77.4034311], 10); // Set the initial center and zoom level for Jamaica
+            const map = L.map('map').setView([18.1393314, -77.4034311],
+                10); // Set the initial center and zoom level for Jamaica
 
             // Add a tile layer for the map
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -662,84 +674,811 @@
             }).addTo(map);
 
             // Define the locations and popup content for Jamaican parishes
+            // const parishes = [{
+            //         name: 'Clarendon Bar',
+            //         lat: 17.9649,
+            //         lng: -77.2992,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Clarendon Pharmacy',
+            //         lat: 17.9949,
+            //         lng: -77.2552,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Clarendon Wholesale',
+            //         lat: 17.9349,
+            //         lng: -77.2552,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Clarendon Super Market',
+            //         lat: 17.9649,
+            //         lng: -77.2092,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'Hanover Bar',
+            //         lat: 18.4354,
+            //         lng: -78.0992,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Hanover Pharmacy',
+            //         lat: 18.3754,
+            //         lng: -78.0572,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Hanover Wholesale',
+            //         lat: 18.4054,
+            //         lng: -78.1572,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Hanover Super Market',
+            //         lat: 18.4054,
+            //         lng: -78.0092,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'Kingston',
+            //         lat: 17.9702,
+            //         lng: -76.7936
+            //     },
+            //     {
+            //         name: 'Manchester',
+            //         lat: 18.0362,
+            //         lng: -77.5071
+            //     },
+            //     {
+            //         name: 'Portland',
+            //         lat: 18.1597,
+            //         lng: -76.5346
+            //     },
+            //     {
+            //         name: 'St. Andrew',
+            //         lat: 18.0340,
+            //         lng: -76.7495
+            //     },
+            //     {
+            //         name: 'St. Ann',
+            //         lat: 18.1096,
+            //         lng: -77.2975
+            //     },
+            //     {
+            //         name: 'St. Catherine',
+            //         lat: 17.9641,
+            //         lng: -76.8674
+            //     },
+            //     {
+            //         name: 'St. Elizabeth',
+            //         lat: 18.1352,
+            //         lng: -77.2177
+            //     },
+            //     {
+            //         name: 'St. James',
+            //         lat: 18.4153,
+            //         lng: -77.0810
+            //     },
+            //     {
+            //         name: 'St. Mary',
+            //         lat: 18.1026,
+            //         lng: -76.9873
+            //     },
+            //     {
+            //         name: 'St. Thomas',
+            //         lat: 17.9394,
+            //         lng: -76.7952
+            //     },
+            //     {
+            //         name: 'Trelawny',
+            //         lat: 18.3554,
+            //         lng: -77.5848
+            //     },
+            //     {
+            //         name: 'Westmoreland',
+            //         lat: 18.1226,
+            //         lng: -77.9710
+            //     }
+            // ];
+            // const parishes = [{
+            //         name: 'Clarendon Bar',
+            //         lat: 17.9649,
+            //         lng: -77.2992,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Clarendon Pharmacy',
+            //         lat: 17.9949,
+            //         lng: -77.2552,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Clarendon Wholesale',
+            //         lat: 17.9349,
+            //         lng: -77.2552,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Clarendon Super Market',
+            //         lat: 17.9649,
+            //         lng: -77.2092,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'Hanover Bar',
+            //         lat: 18.4354,
+            //         lng: -78.0992,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Hanover Pharmacy',
+            //         lat: 18.3754,
+            //         lng: -78.0572,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Hanover Wholesale',
+            //         lat: 18.4054,
+            //         lng: -78.1572,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Hanover Super Market',
+            //         lat: 18.4054,
+            //         lng: -78.0092,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'Kingston Bar',
+            //         lat: 17.9702,
+            //         lng: -76.7936,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Kingston Pharmacy',
+            //         lat: 17.9702,
+            //         lng: -76.7936,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Kingston Wholesale',
+            //         lat: 17.9702,
+            //         lng: -76.7936,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Kingston Super Market',
+            //         lat: 17.9702,
+            //         lng: -76.7936,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'Manchester Bar',
+            //         lat: 18.0362,
+            //         lng: -77.5071,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Manchester Pharmacy',
+            //         lat: 18.0362,
+            //         lng: -77.5071,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Manchester Wholesale',
+            //         lat: 18.0362,
+            //         lng: -77.5071,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Manchester Super Market',
+            //         lat: 18.0362,
+            //         lng: -77.5071,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'Portland Bar',
+            //         lat: 18.1597,
+            //         lng: -76.5346,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Portland Pharmacy',
+            //         lat: 18.1597,
+            //         lng: -76.5346,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Portland Wholesale',
+            //         lat: 18.1597,
+            //         lng: -76.5346,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Portland Super Market',
+            //         lat: 18.1597,
+            //         lng: -76.5346,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'St. Andrew Bar',
+            //         lat: 18.0340,
+            //         lng: -76.7495,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'St. Andrew Pharmacy',
+            //         lat: 18.0340,
+            //         lng: -76.7495,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'St. Andrew Wholesale',
+            //         lat: 18.0340,
+            //         lng: -76.7495,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'St. Andrew Super Market',
+            //         lat: 18.0340,
+            //         lng: -76.7495,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'St. Ann Bar',
+            //         lat: 18.1096,
+            //         lng: -77.2975,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'St. Ann Pharmacy',
+            //         lat: 18.1096,
+            //         lng: -77.2975,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'St. Ann Wholesale',
+            //         lat: 18.1096,
+            //         lng: -77.2975,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'St. Ann Super Market',
+            //         lat: 18.1096,
+            //         lng: -77.2975,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'St. Catherine Bar',
+            //         lat: 17.9641,
+            //         lng: -76.8674,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'St. Catherine Pharmacy',
+            //         lat: 17.9641,
+            //         lng: -76.8674,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'St. Catherine Wholesale',
+            //         lat: 17.9641,
+            //         lng: -76.8674,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'St. Catherine Super Market',
+            //         lat: 17.9641,
+            //         lng: -76.8674,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'St. Elizabeth Bar',
+            //         lat: 18.1352,
+            //         lng: -77.2177,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'St. Elizabeth Pharmacy',
+            //         lat: 18.1352,
+            //         lng: -77.2177,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'St. Elizabeth Wholesale',
+            //         lat: 18.1352,
+            //         lng: -77.2177,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'St. Elizabeth Super Market',
+            //         lat: 18.1352,
+            //         lng: -77.2177,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'St. James Bar',
+            //         lat: 18.4153,
+            //         lng: -77.0810,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'St. James Pharmacy',
+            //         lat: 18.4153,
+            //         lng: -77.0810,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'St. James Wholesale',
+            //         lat: 18.4153,
+            //         lng: -77.0810,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'St. James Super Market',
+            //         lat: 18.4153,
+            //         lng: -77.0810,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'St. Mary Bar',
+            //         lat: 18.1026,
+            //         lng: -76.9873,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'St. Mary Pharmacy',
+            //         lat: 18.1026,
+            //         lng: -76.9873,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'St. Mary Wholesale',
+            //         lat: 18.1026,
+            //         lng: -76.9873,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'St. Mary Super Market',
+            //         lat: 18.1026,
+            //         lng: -76.9873,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'St. Thomas Bar',
+            //         lat: 17.9394,
+            //         lng: -76.7952,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'St. Thomas Pharmacy',
+            //         lat: 17.9394,
+            //         lng: -76.7952,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'St. Thomas Wholesale',
+            //         lat: 17.9394,
+            //         lng: -76.7952,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'St. Thomas Super Market',
+            //         lat: 17.9394,
+            //         lng: -76.7952,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'Trelawny Bar',
+            //         lat: 18.3554,
+            //         lng: -77.5848,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Trelawny Pharmacy',
+            //         lat: 18.3554,
+            //         lng: -77.5848,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Trelawny Wholesale',
+            //         lat: 18.3554,
+            //         lng: -77.5848,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Trelawny Super Market',
+            //         lat: 18.3554,
+            //         lng: -77.5848,
+            //         image: 'yellow.png'
+            //     },
+            //     {
+            //         name: 'Westmoreland Bar',
+            //         lat: 18.1226,
+            //         lng: -77.9710,
+            //         image: 'red.png'
+            //     },
+            //     {
+            //         name: 'Westmoreland Pharmacy',
+            //         lat: 18.1226,
+            //         lng: -77.9710,
+            //         image: 'green.png'
+            //     },
+            //     {
+            //         name: 'Westmoreland Wholesale',
+            //         lat: 18.1226,
+            //         lng: -77.9710,
+            //         image: 'blue.png'
+            //     },
+            //     {
+            //         name: 'Westmoreland Super Market',
+            //         lat: 18.1226,
+            //         lng: -77.9710,
+            //         image: 'yellow.png'
+            //     }
+            // ];
+
+            // Define a custom icon with a specific color
+
             const parishes = [{
-                    name: 'Clarendon',
+                    name: 'Clarendon Bar',
                     lat: 17.9649,
-                    lng: -77.2452
+                    lng: -77.2992,
+                    image: 'red.png'
                 },
                 {
-                    name: 'Hanover',
+                    name: 'Clarendon Pharmacy',
+                    lat: 17.9949,
+                    lng: -77.2552,
+                    image: 'green.png'
+                },
+                {
+                    name: 'Clarendon Wholesale',
+                    lat: 17.9349,
+                    lng: -77.2552,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'Clarendon Supermarket',
+                    lat: 17.9749,
+                    lng: -77.2092,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'Hanover Bar',
+                    lat: 18.4354,
+                    lng: -78.0992,
+                    image: 'red.png'
+                },
+                {
+                    name: 'Hanover Pharmacy',
+                    lat: 18.3754,
+                    lng: -78.0572,
+                    image: 'green.png'
+                },
+                {
+                    name: 'Hanover Wholesale',
                     lat: 18.4054,
-                    lng: -78.0572
+                    lng: -78.1572,
+                    image: 'blue.png'
                 },
                 {
-                    name: 'Kingston',
-                    lat: 17.9702,
-                    lng: -76.7936
+                    name: 'Hanover Supermarket',
+                    lat: 18.4054,
+                    lng: -78.0092,
+                    image: 'yellow.png'
                 },
                 {
-                    name: 'Manchester',
-                    lat: 18.0362,
-                    lng: -77.5071
+                    name: 'Kingston Bar',
+                    lat: 17.9902,
+                    lng: -76.7936,
+                    image: 'red.png'
                 },
                 {
-                    name: 'Portland',
+                    name: 'Kingston Pharmacy',
+                    lat: 17.9905,
+                    lng: -76.7833,
+                    image: 'green.png'
+                },
+                {
+                    name: 'Kingston Wholesale',
+                    lat: 17.9908,
+                    lng: -76.7730,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'Kingston Supermarket',
+                    lat: 17.9911,
+                    lng: -76.7627,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'Manchester Bar',
+                    lat: 18.0662,
+                    lng: -77.5071,
+                    image: 'red.png'
+                },
+                {
+                    name: 'Manchester Pharmacy',
+                    lat: 18.0365,
+                    lng: -77.5068,
+                    image: 'green.png'
+                },
+                {
+                    name: 'Manchester Wholesale',
+                    lat: 18.0368,
+                    lng: -77.5365,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'Manchester Supermarket',
+                    lat: 18.0371,
+                    lng: -77.4862,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'Portland Bar',
                     lat: 18.1597,
-                    lng: -76.5346
+                    lng: -76.5346,
+                    image: 'red.png'
                 },
                 {
-                    name: 'St. Andrew',
+                    name: 'Portland Pharmacy',
+                    lat: 18.1600,
+                    lng: -76.5643,
+                    image: 'green.png'
+                },
+                {
+                    name: 'Portland Wholesale',
+                    lat: 18.1303,
+                    lng: -76.5340,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'Portland Supermarket',
+                    lat: 18.1606,
+                    lng: -76.5037,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'St. Andrew Bar',
                     lat: 18.0340,
-                    lng: -76.7495
+                    lng: -76.7495,
+                    image: 'red.png'
                 },
                 {
-                    name: 'St. Ann',
-                    lat: 18.1096,
-                    lng: -77.2975
+                    name: 'St. Andrew Pharmacy',
+                    lat: 18.0343,
+                    lng: -76.7692,
+                    image: 'green.png'
                 },
                 {
-                    name: 'St. Catherine',
+                    name: 'St. Andrew Wholesale',
+                    lat: 18.0556,
+                    lng: -76.7489,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'St. Andrew Supermarket',
+                    lat: 18.0349,
+                    lng: -76.7286,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'St. Ann Bar',
+                    lat: 18.1416,
+                    lng: -77.2975,
+                    image: 'red.png'
+                },
+                {
+                    name: 'St. Ann Pharmacy',
+                    lat: 18.1099,
+                    lng: -77.2972,
+                    image: 'green.png'
+                },
+                {
+                    name: 'St. Ann Wholesale',
+                    lat: 18.1102,
+                    lng: -77.3269,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'St. Ann Supermarket',
+                    lat: 18.1105,
+                    lng: -77.2666,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'St. Catherine Bar',
                     lat: 17.9641,
-                    lng: -76.8674
+                    lng: -76.9274,
+                    image: 'red.png'
                 },
                 {
-                    name: 'St. Elizabeth',
-                    lat: 18.1352,
-                    lng: -77.2177
+                    name: 'St. Catherine Pharmacy',
+                    lat: 17.9944,
+                    lng: -76.8881,
+                    image: 'green.png'
                 },
                 {
-                    name: 'St. James',
+                    name: 'St. Catherine Wholesale',
+                    lat: 17.9647,
+                    lng: -76.8968,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'St. Catherine Supermarket',
+                    lat: 17.9650,
+                    lng: -76.8665,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'St. Elizabeth Bar',
+                    lat: 18.1552,
+                    lng: -77.2177,
+                    image: 'red.png'
+                },
+                {
+                    name: 'St. Elizabeth Pharmacy',
+                    lat: 18.1755,
+                    lng: -77.2174,
+                    image: 'green.png'
+                },
+                {
+                    name: 'St. Elizabeth Wholesale',
+                    lat: 18.1558,
+                    lng: -77.1871,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'St. Elizabeth Supermarket',
+                    lat: 18.1361,
+                    lng: -77.2168,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'St. James Bar',
                     lat: 18.4153,
-                    lng: -77.0810
+                    lng: -77.0810,
+                    image: 'red.png'
                 },
                 {
-                    name: 'St. Mary',
+                    name: 'St. James Pharmacy',
+                    lat: 18.3756,
+                    lng: -77.0807,
+                    image: 'green.png'
+                },
+                {
+                    name: 'St. James Wholesale',
+                    lat: 18.3359,
+                    lng: -77.0804,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'St. James Supermarket',
+                    lat: 18.3762,
+                    lng: -77.0301,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'St. Mary Bar',
                     lat: 18.1026,
-                    lng: -76.9873
+                    lng: -76.9873,
+                    image: 'red.png'
                 },
                 {
-                    name: 'St. Thomas',
+                    name: 'St. Mary Pharmacy',
+                    lat: 18.1429,
+                    lng: -76.9870,
+                    image: 'green.png'
+                },
+                {
+                    name: 'St. Mary Wholesale',
+                    lat: 18.1832,
+                    lng: -76.9867,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'St. Mary Supermarket',
+                    lat: 18.1435,
+                    lng: -76.9364,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'St. Thomas Bar',
                     lat: 17.9394,
-                    lng: -76.7952
+                    lng: -76.8352,
+                    image: 'red.png'
                 },
                 {
-                    name: 'Trelawny',
+                    name: 'St. Thomas Pharmacy',
+                    lat: 17.9397,
+                    lng: -76.8049,
+                    image: 'green.png'
+                },
+                {
+                    name: 'St. Thomas Wholesale',
+                    lat: 17.9400,
+                    lng: -76.7746,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'St. Thomas Supermarket',
+                    lat: 17.9403,
+                    lng: -76.7443,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'Trelawny Bar',
                     lat: 18.3554,
-                    lng: -77.5848
+                    lng: -77.5848,
+                    image: 'red.png'
                 },
                 {
-                    name: 'Westmoreland',
+                    name: 'Trelawny Pharmacy',
+                    lat: 18.3557,
+                    lng: -77.5345,
+                    image: 'green.png'
+                },
+                {
+                    name: 'Trelawny Wholesale',
+                    lat: 18.3560,
+                    lng: -77.4842,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'Trelawny Supermarket',
+                    lat: 18.4060,
+                    lng: -77.5339,
+                    image: 'yellow.png'
+                },
+                {
+                    name: 'Westmoreland Bar',
                     lat: 18.1226,
-                    lng: -77.9710
+                    lng: -77.9710,
+                    image: 'red.png'
+                },
+                {
+                    name: 'Westmoreland Pharmacy',
+                    lat: 18.1229,
+                    lng: -77.9307,
+                    image: 'green.png'
+                },
+                {
+                    name: 'Westmoreland Wholesale',
+                    lat: 18.1232,
+                    lng: -77.8904,
+                    image: 'blue.png'
+                },
+                {
+                    name: 'Westmoreland Supermarket',
+                    lat: 18.1635,
+                    lng: -77.9301,
+                    image: 'yellow.png'
                 }
             ];
+
             // document.getElementById('total_stock_count_cases').innerHTML = {{ $sumTotalStockCases }};
             //  document.getElementById('total_stock_count').innerHTML = {{ $sumTotalStock }};
 
             // Loop through the parishes and add markers with tooltips to the map
             parishes.forEach(parish => {
-                const marker = L.marker([parish.lat, parish.lng]).addTo(map);
-                marker.bindTooltip(`<strong>${parish.name}</strong>`);
+                var myIcon = L.icon({
+                    iconUrl: "/assets/images/mapicons/" + parish.image,
+                    iconSize: [35, 41],
+                    iconAnchor: [15, 11],
+                    popupAnchor: [25, -34],
+                    // shadowUrl: 'path/to/marker-shadow.png',
+                    // shadowSize: [41, 41],
+                });
+
+                const marker = L.marker([parish.lat, parish.lng], {
+                    icon: myIcon
+                }).addTo(map);
+                marker.bindTooltip(`<strong>${parishChannelCount[parish.name]??0} - ${parish.name}</strong>`);
             });
         </script>
 
@@ -770,7 +1509,7 @@
             var labels = [];
 
             var convertedToChartData = {{ Js::from($chartStockArray) }};
-			console.log('convertedToChartData-------------------', convertedToChartData);
+            console.log('convertedToChartData-------------------', convertedToChartData);
         </script>
 
 
