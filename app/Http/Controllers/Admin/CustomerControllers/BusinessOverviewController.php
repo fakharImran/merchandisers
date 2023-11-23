@@ -118,7 +118,7 @@ class BusinessOverviewController extends Controller
             // dd($value->channel);
             foreach ($val as $key => $parish) {
             // dd($parish);
-            $val[$key] = $parish . " " . $value->channel;
+            $val[$key] = strtolower(str_replace([' ', '.'], '', $parish)) . "_" . strtolower(str_replace(' ', '', $value->channel));
                 
             }
             $arr = array_merge($arr, $val);
@@ -126,12 +126,8 @@ class BusinessOverviewController extends Controller
         // dd($arr);
 
         // Count the occurrences of each element
-$parishChannelCount = array_count_values($arr);
-// dd($parishChannelCount);
-// Output the unique parishChannelCount
-// foreach ($parishChannelCount as $element => $count) {
-//     echo "$element: $count\n";
-// }
+        $parishChannelCount = array_count_values($arr);
+        // dd($parishChannelCount);
 
         return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount'), ['pageConfigs' => $pageConfigs]);
     }

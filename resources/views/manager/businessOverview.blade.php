@@ -319,12 +319,99 @@
             </div>
             <div class="col-12">
                 <div class="card manager-card-style">
+                    <div class="card-header manager-card-header" >Number of Stores serviced by Channel</div>
+                    <div class="card-body">
+                        <img src="{{asset('/assets/images/mapicons/map.png')}}" style="width: 931px; margin-bottom: 15%;">
+                        <div class="hanover" style="position:absolute; left:0; top:0;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['hanover_supermarket']??0}} Super Markets in Hanover" style="z-index: 999; position: absolute; left: 69px; width: 23px; top: 74px;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['hanover_wholesale']??0}} Wholesales in Hanover"  style="z-index: 999; position: absolute; left: 40px; width: 23px; top: 79px;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['hanover_bar']??0}} Bars in Hanover"  style="z-index: 999; position: absolute; left: 144px; width: 23px; top: 50px;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['hanover_pharmacy']??0}} Pharmacies in Hanover"  style="z-index: 999; position: absolute; left: 115px; width: 23px; top: 50px;">
+                        </div>
+                        <div class="stjames" style="position:absolute; left:124; top:0;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stjames_supermarket']??0}} Super Markets in Saint James"  style="z-index: 999; position: absolute; left: 116px; width: 23px; top: 90px;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stjames_wholesale']??0}} Wholesales in Saint James"  style="z-index: 999; position: absolute; left: 86px; width: 23px; top: 90px;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stjames_bar']??0}} Bars in Saint James"  style="z-index: 999; position: absolute; left: 85px; width: 23px; top: 50px;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stjames_pharmacy']??0}} Pharmacies in Saint James"  style="z-index: 999; position: absolute; left: 115px; width: 23px; top: 50px;">
+                        </div>
+                        <div class="trelawny" style="position:absolute; left:300; top:0;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['trelawny_supermarket']??0}} Super Markets in Trelawny"  style="z-index: 999; position: absolute; left: 55; width: 23px; top: 100px;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['trelawny_wholesale']??0}} Wholesales in Trelawny"  style="z-index: 999; position: absolute; left: 1px; width: 23px; top: 100px;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['trelawny_bar']??0}} Bars in Trelawny"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 50px;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['trelawny_pharmacy']??0}} Pharmacies in Trelawny"  style="z-index: 999; position: absolute; left: 55; width: 23px; top: 50px;">
+                        </div>
+                        <div class="stann" style="position:absolute; left:437; top:19;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stann_supermarket']??0}} Super Markets in Saint Ann"  style="z-index: 999; position: absolute; left: 60; width: 23px; top: 100px;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stann_wholesale']??0}} Wholesales in Saint Ann"  style="z-index: 999; position: absolute; left: 1px; width: 23px; top: 100px;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stann_bar']??0}} Bars in Saint Ann"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 50px;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stann_pharmacy']??0}} Pharmacies in Saint Ann"  style="z-index: 999; position: absolute; left: 60; width: 23px; top: 50px;">
+                        </div>
+                        <div class="stmary" style="position:absolute; left:619; top:34;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stmary_supermarket']??0}} Super Markets in Saint Mary"  style="z-index: 999; position: absolute; left: 46px; width: 23px; top: 92px;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stmary_wholesale']??0}} Wholesales in Saint Mary"  style="z-index: 999; position: absolute; left: 10px; width: 23px; top: 92px;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stmary_bar']??0}} Bars in Saint Mary"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 50px;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stmary_pharmacy']??0}} Pharmacies in Saint Mary"  style="z-index: 999; position: absolute; left: -31px; width: 23px; top: 50px;">
+                        </div>
+                        <div class="portland" style="position:absolute; left:755; top:120;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['portland_supermarket']??0}} Super Markets in Portland"  style="z-index: 999; position: absolute; left: 115; width: 23px; top: 90;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['portland_wholesale']??0}} Wholesales in Portland"  style="z-index: 999; position: absolute; left: 88; width: 23px; top: 70;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['portland_bar']??0}} Bars in Portland"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 50px;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['portland_pharmacy']??0}} Pharmacies in Portland"  style="z-index: 999; position: absolute; left: -31px; width: 23px; top: 50px;">
+                        </div>
+                        <div class="westmoreland" style="position:absolute; left:54; top:73;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['westmoreland_supermarket']??0}} Super Markets in Westmoreland"  style="z-index: 999; position: absolute; left: 115; width: 23px; top: 92;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['westmoreland_wholesale']??0}} Wholesales in Westmoreland"  style="z-index: 999; position: absolute; left: 103; width: 23px; top: 60;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['westmoreland_bar']??0}} Bars in Westmoreland"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 50px;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['westmoreland_pharmacy']??0}} Pharmacies in Westmoreland"  style="z-index: 999; position: absolute; left: -31px; width: 23px; top: 50px;">
+                        </div>
+                        <div class="stelizabeth" style="position:absolute; left:244; top:157;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stelizabeth_supermarket']??0}} Super Markets in Saint Elizabeth"  style="z-index: 999; position: absolute; left: 46; width: 23px; top: 81;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stelizabeth_wholesale']??0}} Wholesales in Saint Elizabeth"  style="z-index: 999; position: absolute; left: 1px; width: 23px; top: 50;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stelizabeth_bar']??0}} Bars in Saint Elizabeth"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 0;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stelizabeth_pharmacy']??0}} Pharmacies in Saint Elizabeth"  style="z-index: 999; position: absolute; left: 40; width: 23px; top: 0;">
+                        </div>
+                        <div class="manchester" style="position:absolute; left:336; top:186;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['manchester_supermarket']??0}} Super Markets in Manchester"  style="z-index: 999; position: absolute; left: 51px; width: 23px; top: 50;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['manchester_wholesale']??0}} Wholesales in Manchester"  style="z-index: 999; position: absolute; left: 11px; width: 23px; top: 50;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['manchester_bar']??0}} Bars in Manchester"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: -30;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['manchester_pharmacy']??0}} Pharmacies in Manchester"  style="z-index: 999; position: absolute; left: 30px; width: 23px; top: 0;">
+                        </div>
+                        <div class="clarendon" style="position:absolute; left:439; top:168;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['clarendon_supermarket']??0}} Super Markets in Clarendon"  style="z-index: 999; position: absolute; left: 49; width: 23px; top: 119;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['clarendon_wholesale']??0}} Wholesales in Clarendon"  style="z-index: 999; position: absolute; left: 1px; width: 23px; top: 73;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['clarendon_bar']??0}} Bars in Clarendon"  style="z-index: 999; position: absolute; left: -19; width: 23px; top: 0;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['clarendon_pharmacy']??0}} Pharmacies in Clarendon"  style="z-index: 999; position: absolute; left: 30px; width: 23px; top: 0;">
+                        </div>
+                        <div class="stcatherine" style="position:absolute; left:542; top:196;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stcatherine_supermarket']??0}} Super Markets in Saint Catherine"  style="z-index: 999; position: absolute; left: 9; width: 23px; top: 58;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stcatherine_wholesale']??0}} Wholesales in Saint Catherine"  style="z-index: 999; position: absolute; left: 1px; width: 23px; top: 30;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stcatherine_bar']??0}} Bars in Saint Catherine"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 0;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stcatherine_pharmacy']??0}} Pharmacies in Saint Catherine"  style="z-index: 999; position: absolute; left: 40; width: 23px; top: 8;">
+                        </div>
+                        <div class="standrew" style="position:absolute; left:656; top:188;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['standrew_supermarket']??0}} Super Markets in Saint Andrew"  style="z-index: 999; position: absolute; left: 27; width: 23px; top: 39;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['standrew_wholesale']??0}} Wholesales in Saint Andrew"  style="z-index: 999; position: absolute; left: 1px; width: 23px; top: 39;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['standrew_bar']??0}} Bars in Saint Andrew"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 0;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['standrew_pharmacy']??0}} Pharmacies in Saint Andrew"  style="z-index: 999; position: absolute; left: 30px; width: 23px; top: 0;">
+                        </div>
+                        <div class="stthomas" style="position:absolute; left:766; top:231;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stthomas_supermarket']??0}} Super Markets in Saint Thomas"  style="z-index: 999; position: absolute; left: 114; width: 23px; top: 32;">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stthomas_wholesale']??0}} Wholesales in Saint Thomas"  style="z-index: 999; position: absolute; left: 67; width: 23px; top: 32;">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stthomas_bar']??0}} Bars in Saint Thomas"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 0;">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stthomas_pharmacy']??0}} Pharmacies in Saint Thomas"  style="z-index: 999; position: absolute; left: 15; width: 23px; top: 37;">
+                        </div>
+                        <img src="{{asset('/assets/images/mapicons/tips.png')}}"  style="width: 30%; position: absolute; left: 0; top: 57%;" >
+                    </div>
+                </div>
+            </div>
+            {{-- <div class="col-12">
+                <div class="card manager-card-style">
                     <div class="card-header manager-card-header">Number of Stores serviced by Channel</div>
 
                     <div id="map" style="height: 600px;"></div>
 
                 </div>
-            </div>
+            </div> --}}
         </div>
         @php
             $totalHourworked = 0;
@@ -547,942 +634,391 @@
             </div>
         </div>
         <script>
+            $(document).ready(function(){
+              $('[data-toggle="tooltip"]').tooltip({
+                    placement: 'bottom'
+                });
+            });
+        </script>
+        <script>
             $(document).ready(function() {
                 $('.select2').select2();
             });
         </script>
 
-        {{-- <script>
- 
+    {{--    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    function initMap() {
-        const map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 37.7749, lng: -122.4194 }, // Example: San Francisco coordinates
-        zoom: 3 // Adjust the zoom level as needed
-        });
+    <script>
+        var parishChannelCount = {!! json_encode($parishChannelCount) !!};
+        console.log(parishChannelCount);
+        // Initialize the map
+        const map = L.map('map').setView([18.1393314, -77.4034311],
+            10); // Set the initial center and zoom level for Jamaica
 
-        // Define an array of locations with latitude and longitude
-        const locations = [
-            { lat: 40.7128, lng: -74.0060 },  // New York, NY
-            { lat: 34.0522, lng: -118.2437 }, // Los Angeles, CA
-            { lat: 41.8781, lng: -87.6298 },  // Chicago, IL
-            { lat: 29.7604, lng: -95.3698 },  // Houston, TX
-            { lat: 33.4484, lng: -112.0740 }, // Phoenix, AZ
-            { lat: 41.2524, lng: -95.9980 },  // Omaha, NE
-            { lat: 37.7749, lng: -122.4194 }, // San Francisco, CA
-            { lat: 32.7767, lng: -96.7970 },  // Dallas, TX
-            { lat: 39.7392, lng: -104.9903 }, // Denver, CO
-            { lat: 35.2271, lng: -80.8431 },  // Charlotte, NC
-            { lat: 42.3601, lng: -71.0589 },  // Boston, MA
-            { lat: 47.6062, lng: -122.3321 }, // Seattle, WA
-            { lat: 37.3382, lng: -121.8863 }, // San Jose, CA
-            { lat: 33.7490, lng: -84.3880 },  // Atlanta, GA
-            { lat: 30.2672, lng: -97.7431 },  // Austin, TX
-            { lat: 38.8951, lng: -77.0364 },  // Washington, D.C.
-            { lat: 42.3314, lng: -83.0458 },  // Detroit, MI
-            { lat: 46.6034, lng: -120.3226 }, // Yakima, WA
-            { lat: 38.6270, lng: -90.1994 },  // St. Louis, MO
-            { lat: 44.9778, lng: -93.2650 },  // Minneapolis, MN
-            { lat: 37.3541, lng: -121.9552 }, // San Jose, CA
-            { lat: 38.0293, lng: -78.4767 },  // Charlottesville, VA
-            { lat: 33.7774, lng: -117.8726 }, // Riverside, CA
-            { lat: 38.5805, lng: -121.4944 }, // Sacramento, CA
-            { lat: 40.4406, lng: -79.9959 },  // Pittsburgh, PA
-            { lat: 27.9506, lng: -82.4572 },  // Tampa, FL
-            { lat: 35.1495, lng: -90.0490 },  // Memphis, TN
-            { lat: 34.7465, lng: -92.2896 },  // Little Rock, AR
-            { lat: 30.2672, lng: -97.7431 },  // Austin, TX
-            { lat: 37.7749, lng: -122.4194 }  // San Francisco, CA
+        // Add a tile layer for the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+    
+        const parishes = [{
+                name: 'Clarendon Bar',
+                lat: 17.9649,
+                lng: -77.2992,
+                image: 'red.png'
+            },
+            {
+                name: 'Clarendon Pharmacy',
+                lat: 17.9949,
+                lng: -77.2552,
+                image: 'green.png'
+            },
+            {
+                name: 'Clarendon Wholesale',
+                lat: 17.9349,
+                lng: -77.2552,
+                image: 'blue.png'
+            },
+            {
+                name: 'Clarendon Supermarket',
+                lat: 17.9749,
+                lng: -77.2092,
+                image: 'yellow.png'
+            },
+            {
+                name: 'Hanover Bar',
+                lat: 18.4354,
+                lng: -78.0992,
+                image: 'red.png'
+            },
+            {
+                name: 'Hanover Pharmacy',
+                lat: 18.3754,
+                lng: -78.0572,
+                image: 'green.png'
+            },
+            {
+                name: 'Hanover Wholesale',
+                lat: 18.4054,
+                lng: -78.1572,
+                image: 'blue.png'
+            },
+            {
+                name: 'Hanover Supermarket',
+                lat: 18.4054,
+                lng: -78.0092,
+                image: 'yellow.png'
+            },
+            {
+                name: 'Kingston Bar',
+                lat: 17.9902,
+                lng: -76.7936,
+                image: 'red.png'
+            },
+            {
+                name: 'Kingston Pharmacy',
+                lat: 17.9905,
+                lng: -76.7833,
+                image: 'green.png'
+            },
+            {
+                name: 'Kingston Wholesale',
+                lat: 17.9908,
+                lng: -76.7730,
+                image: 'blue.png'
+            },
+            {
+                name: 'Kingston Supermarket',
+                lat: 17.9911,
+                lng: -76.7627,
+                image: 'yellow.png'
+            },
+            {
+                name: 'Manchester Bar',
+                lat: 18.0662,
+                lng: -77.5071,
+                image: 'red.png'
+            },
+            {
+                name: 'Manchester Pharmacy',
+                lat: 18.0365,
+                lng: -77.5068,
+                image: 'green.png'
+            },
+            {
+                name: 'Manchester Wholesale',
+                lat: 18.0368,
+                lng: -77.5365,
+                image: 'blue.png'
+            },
+            {
+                name: 'Manchester Supermarket',
+                lat: 18.0371,
+                lng: -77.4862,
+                image: 'yellow.png'
+            },
+            {
+                name: 'Portland Bar',
+                lat: 18.1597,
+                lng: -76.5346,
+                image: 'red.png'
+            },
+            {
+                name: 'Portland Pharmacy',
+                lat: 18.1600,
+                lng: -76.5643,
+                image: 'green.png'
+            },
+            {
+                name: 'Portland Wholesale',
+                lat: 18.1303,
+                lng: -76.5340,
+                image: 'blue.png'
+            },
+            {
+                name: 'Portland Supermarket',
+                lat: 18.1606,
+                lng: -76.5037,
+                image: 'yellow.png'
+            },
+            {
+                name: 'St. Andrew Bar',
+                lat: 18.0340,
+                lng: -76.7495,
+                image: 'red.png'
+            },
+            {
+                name: 'St. Andrew Pharmacy',
+                lat: 18.0343,
+                lng: -76.7692,
+                image: 'green.png'
+            },
+            {
+                name: 'St. Andrew Wholesale',
+                lat: 18.0556,
+                lng: -76.7489,
+                image: 'blue.png'
+            },
+            {
+                name: 'St. Andrew Supermarket',
+                lat: 18.0349,
+                lng: -76.7286,
+                image: 'yellow.png'
+            },
+            {
+                name: 'St. Ann Bar',
+                lat: 18.1416,
+                lng: -77.2975,
+                image: 'red.png'
+            },
+            {
+                name: 'St. Ann Pharmacy',
+                lat: 18.1099,
+                lng: -77.2972,
+                image: 'green.png'
+            },
+            {
+                name: 'St. Ann Wholesale',
+                lat: 18.1102,
+                lng: -77.3269,
+                image: 'blue.png'
+            },
+            {
+                name: 'St. Ann Supermarket',
+                lat: 18.1105,
+                lng: -77.2666,
+                image: 'yellow.png'
+            },
+            {
+                name: 'St. Catherine Bar',
+                lat: 17.9641,
+                lng: -76.9274,
+                image: 'red.png'
+            },
+            {
+                name: 'St. Catherine Pharmacy',
+                lat: 17.9944,
+                lng: -76.8881,
+                image: 'green.png'
+            },
+            {
+                name: 'St. Catherine Wholesale',
+                lat: 17.9647,
+                lng: -76.8968,
+                image: 'blue.png'
+            },
+            {
+                name: 'St. Catherine Supermarket',
+                lat: 17.9650,
+                lng: -76.8665,
+                image: 'yellow.png'
+            },
+            {
+                name: 'St. Elizabeth Bar',
+                lat: 18.1552,
+                lng: -77.2177,
+                image: 'red.png'
+            },
+            {
+                name: 'St. Elizabeth Pharmacy',
+                lat: 18.1755,
+                lng: -77.2174,
+                image: 'green.png'
+            },
+            {
+                name: 'St. Elizabeth Wholesale',
+                lat: 18.1558,
+                lng: -77.1871,
+                image: 'blue.png'
+            },
+            {
+                name: 'St. Elizabeth Supermarket',
+                lat: 18.1361,
+                lng: -77.2168,
+                image: 'yellow.png'
+            },
+            {
+                name: 'St. James Bar',
+                lat: 18.4153,
+                lng: -77.0810,
+                image: 'red.png'
+            },
+            {
+                name: 'St. James Pharmacy',
+                lat: 18.3756,
+                lng: -77.0807,
+                image: 'green.png'
+            },
+            {
+                name: 'St. James Wholesale',
+                lat: 18.3359,
+                lng: -77.0804,
+                image: 'blue.png'
+            },
+            {
+                name: 'St. James Supermarket',
+                lat: 18.3762,
+                lng: -77.0301,
+                image: 'yellow.png'
+            },
+            {
+                name: 'St. Mary Bar',
+                lat: 18.1026,
+                lng: -76.9873,
+                image: 'red.png'
+            },
+            {
+                name: 'St. Mary Pharmacy',
+                lat: 18.1429,
+                lng: -76.9870,
+                image: 'green.png'
+            },
+            {
+                name: 'St. Mary Wholesale',
+                lat: 18.1832,
+                lng: -76.9867,
+                image: 'blue.png'
+            },
+            {
+                name: 'St. Mary Supermarket',
+                lat: 18.1435,
+                lng: -76.9364,
+                image: 'yellow.png'
+            },
+            {
+                name: 'St. Thomas Bar',
+                lat: 17.9394,
+                lng: -76.8352,
+                image: 'red.png'
+            },
+            {
+                name: 'St. Thomas Pharmacy',
+                lat: 17.9397,
+                lng: -76.8049,
+                image: 'green.png'
+            },
+            {
+                name: 'St. Thomas Wholesale',
+                lat: 17.9400,
+                lng: -76.7746,
+                image: 'blue.png'
+            },
+            {
+                name: 'St. Thomas Supermarket',
+                lat: 17.9403,
+                lng: -76.7443,
+                image: 'yellow.png'
+            },
+            {
+                name: 'Trelawny Bar',
+                lat: 18.3554,
+                lng: -77.5848,
+                image: 'red.png'
+            },
+            {
+                name: 'Trelawny Pharmacy',
+                lat: 18.3557,
+                lng: -77.5345,
+                image: 'green.png'
+            },
+            {
+                name: 'Trelawny Wholesale',
+                lat: 18.3560,
+                lng: -77.4842,
+                image: 'blue.png'
+            },
+            {
+                name: 'Trelawny Supermarket',
+                lat: 18.4060,
+                lng: -77.5339,
+                image: 'yellow.png'
+            },
+            {
+                name: 'Westmoreland Bar',
+                lat: 18.1226,
+                lng: -77.9710,
+                image: 'red.png'
+            },
+            {
+                name: 'Westmoreland Pharmacy',
+                lat: 18.1229,
+                lng: -77.9307,
+                image: 'green.png'
+            },
+            {
+                name: 'Westmoreland Wholesale',
+                lat: 18.1232,
+                lng: -77.8904,
+                image: 'blue.png'
+            },
+            {
+                name: 'Westmoreland Supermarket',
+                lat: 18.1635,
+                lng: -77.9301,
+                image: 'yellow.png'
+            }
         ];
 
-        // Loop through the locations and create a marker for each
-        for (const location of locations) {
-        new google.maps.Marker({
-            position: location,
-            map: map
-        });
-        }
-    }
-</script> --}}
-        {{-- <script>
-  // Call the initMap function after the Google Maps API is loaded
-  google.maps.event.addDomListener(window, 'load', initMap);
-</script> --}}
-        {{-- <script>
-    // Initialize the map
-    const map = L.map('map').setView([41.2524, -95.9980], 4); // Set the initial center and zoom level
 
-    // Add a tile layer for the map (you can choose different tile providers)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Define the locations and popup content for your pins
-    const locations = [
-        { lat: 40.7128, lng: -74.0060, title: 'New York, NY', description: 'The Big Apple' },  // New York, NY
-        { lat: 34.0522, lng: -118.2437, title: 'New York, NY', description: 'The Big Apple' }, // Los Angeles, CA
-        { lat: 41.8781, lng: -87.6298, title: 'New York, NY', description: 'The Big Apple' },  // Chicago, IL
-        { lat: 29.7604, lng: -95.3698, title: 'New York, NY', description: 'The Big Apple' },  // Houston, TX
-        { lat: 33.4484, lng: -112.0740, title: 'New York, NY', description: 'The Big Apple' }, // Phoenix, AZ
-        { lat: 41.2524, lng: -95.9980, title: 'New York, NY', description: 'The Big Apple' },  // Omaha, NE
-        { lat: 37.7749, lng: -122.4194, title: 'New York, NY', description: 'The Big Apple' }, // San Francisco, CA
-        { lat: 32.7767, lng: -96.7970, title: 'New York, NY', description: 'The Big Apple' },  // Dallas, TX
-        { lat: 39.7392, lng: -104.9903, title: 'New York, NY', description: 'The Big Apple' }, // Denver, CO
-        { lat: 35.2271, lng: -80.8431, title: 'New York, NY', description: 'The Big Apple' },  // Charlotte, NC
-        { lat: 42.3601, lng: -71.0589, title: 'New York, NY', description: 'The Big Apple' },  // Boston, MA
-        { lat: 47.6062, lng: -122.3321, title: 'New York, NY', description: 'The Big Apple' }, // Seattle, WA
-        { lat: 37.3382, lng: -121.8863, title: 'New York, NY', description: 'The Big Apple' }, // San Jose, CA
-        { lat: 33.7490, lng: -84.3880, title: 'New York, NY', description: 'The Big Apple' },  // Atlanta, GA
-        { lat: 30.2672, lng: -97.7431, title: 'New York, NY', description: 'The Big Apple' },  // Austin, TX
-        { lat: 38.8951, lng: -77.0364, title: 'New York, NY', description: 'The Big Apple' },  // Washington, D.C.
-        { lat: 42.3314, lng: -83.0458, title: 'New York, NY', description: 'The Big Apple' },  // Detroit, MI
-        { lat: 46.6034, lng: -120.3226, title: 'New York, NY', description: 'The Big Apple' }, // Yakima, WA
-        { lat: 38.6270, lng: -90.1994, title: 'New York, NY', description: 'The Big Apple' },  // St. Louis, MO
-        { lat: 44.9778, lng: -93.2650, title: 'New York, NY', description: 'The Big Apple' },  // Minneapolis, MN
-        { lat: 37.3541, lng: -121.9552, title: 'New York, NY', description: 'The Big Apple' }, // San Jose, CA
-        { lat: 38.0293, lng: -78.4767, title: 'New York, NY', description: 'The Big Apple' },  // Charlottesville, VA
-        { lat: 33.7774, lng: -117.8726, title: 'New York, NY', description: 'The Big Apple' }, // Riverside, CA
-        { lat: 38.5805, lng: -121.4944, title: 'New York, NY', description: 'The Big Apple' }, // Sacramento, CA
-        { lat: 40.4406, lng: -79.9959, title: 'New York, NY', description: 'The Big Apple' },  // Pittsburgh, PA
-        { lat: 27.9506, lng: -82.4572, title: 'New York, NY', description: 'The Big Apple' },  // Tampa, FL
-        { lat: 35.1495, lng: -90.0490, title: 'New York, NY', description: 'The Big Apple' },  // Memphis, TN
-        { lat: 34.7465, lng: -92.2896, title: 'New York, NY', description: 'The Big Apple' },  // Little Rock, AR
-        { lat: 30.2672, lng: -97.7431, title: 'New York, NY', description: 'The Big Apple' },  // Austin, TX
-        { lat: 37.7749, lng: -122.4194, title: 'New York, NY', description: 'The Big Apple' }  // San Francisco, CA
-    ];
-
-     // Loop through the locations and add markers with tooltips to the map
-     locations.forEach(location => {
-            const marker = L.marker([location.lat, location.lng]).addTo(map);
-            marker.bindTooltip(`<strong>${location.title}</strong><br>${location.description}`);
-        });
-</script> --}}
-
-
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-        <script>
-             var parishChannelCount = {!! json_encode($parishChannelCount) !!};
-             console.log(parishChannelCount);
-            // Initialize the map
-            const map = L.map('map').setView([18.1393314, -77.4034311],
-                10); // Set the initial center and zoom level for Jamaica
-
-            // Add a tile layer for the map
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            // Define the locations and popup content for Jamaican parishes
-            // const parishes = [{
-            //         name: 'Clarendon Bar',
-            //         lat: 17.9649,
-            //         lng: -77.2992,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Clarendon Pharmacy',
-            //         lat: 17.9949,
-            //         lng: -77.2552,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Clarendon Wholesale',
-            //         lat: 17.9349,
-            //         lng: -77.2552,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Clarendon Super Market',
-            //         lat: 17.9649,
-            //         lng: -77.2092,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'Hanover Bar',
-            //         lat: 18.4354,
-            //         lng: -78.0992,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Hanover Pharmacy',
-            //         lat: 18.3754,
-            //         lng: -78.0572,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Hanover Wholesale',
-            //         lat: 18.4054,
-            //         lng: -78.1572,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Hanover Super Market',
-            //         lat: 18.4054,
-            //         lng: -78.0092,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'Kingston',
-            //         lat: 17.9702,
-            //         lng: -76.7936
-            //     },
-            //     {
-            //         name: 'Manchester',
-            //         lat: 18.0362,
-            //         lng: -77.5071
-            //     },
-            //     {
-            //         name: 'Portland',
-            //         lat: 18.1597,
-            //         lng: -76.5346
-            //     },
-            //     {
-            //         name: 'St. Andrew',
-            //         lat: 18.0340,
-            //         lng: -76.7495
-            //     },
-            //     {
-            //         name: 'St. Ann',
-            //         lat: 18.1096,
-            //         lng: -77.2975
-            //     },
-            //     {
-            //         name: 'St. Catherine',
-            //         lat: 17.9641,
-            //         lng: -76.8674
-            //     },
-            //     {
-            //         name: 'St. Elizabeth',
-            //         lat: 18.1352,
-            //         lng: -77.2177
-            //     },
-            //     {
-            //         name: 'St. James',
-            //         lat: 18.4153,
-            //         lng: -77.0810
-            //     },
-            //     {
-            //         name: 'St. Mary',
-            //         lat: 18.1026,
-            //         lng: -76.9873
-            //     },
-            //     {
-            //         name: 'St. Thomas',
-            //         lat: 17.9394,
-            //         lng: -76.7952
-            //     },
-            //     {
-            //         name: 'Trelawny',
-            //         lat: 18.3554,
-            //         lng: -77.5848
-            //     },
-            //     {
-            //         name: 'Westmoreland',
-            //         lat: 18.1226,
-            //         lng: -77.9710
-            //     }
-            // ];
-            // const parishes = [{
-            //         name: 'Clarendon Bar',
-            //         lat: 17.9649,
-            //         lng: -77.2992,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Clarendon Pharmacy',
-            //         lat: 17.9949,
-            //         lng: -77.2552,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Clarendon Wholesale',
-            //         lat: 17.9349,
-            //         lng: -77.2552,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Clarendon Super Market',
-            //         lat: 17.9649,
-            //         lng: -77.2092,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'Hanover Bar',
-            //         lat: 18.4354,
-            //         lng: -78.0992,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Hanover Pharmacy',
-            //         lat: 18.3754,
-            //         lng: -78.0572,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Hanover Wholesale',
-            //         lat: 18.4054,
-            //         lng: -78.1572,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Hanover Super Market',
-            //         lat: 18.4054,
-            //         lng: -78.0092,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'Kingston Bar',
-            //         lat: 17.9702,
-            //         lng: -76.7936,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Kingston Pharmacy',
-            //         lat: 17.9702,
-            //         lng: -76.7936,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Kingston Wholesale',
-            //         lat: 17.9702,
-            //         lng: -76.7936,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Kingston Super Market',
-            //         lat: 17.9702,
-            //         lng: -76.7936,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'Manchester Bar',
-            //         lat: 18.0362,
-            //         lng: -77.5071,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Manchester Pharmacy',
-            //         lat: 18.0362,
-            //         lng: -77.5071,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Manchester Wholesale',
-            //         lat: 18.0362,
-            //         lng: -77.5071,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Manchester Super Market',
-            //         lat: 18.0362,
-            //         lng: -77.5071,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'Portland Bar',
-            //         lat: 18.1597,
-            //         lng: -76.5346,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Portland Pharmacy',
-            //         lat: 18.1597,
-            //         lng: -76.5346,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Portland Wholesale',
-            //         lat: 18.1597,
-            //         lng: -76.5346,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Portland Super Market',
-            //         lat: 18.1597,
-            //         lng: -76.5346,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'St. Andrew Bar',
-            //         lat: 18.0340,
-            //         lng: -76.7495,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'St. Andrew Pharmacy',
-            //         lat: 18.0340,
-            //         lng: -76.7495,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'St. Andrew Wholesale',
-            //         lat: 18.0340,
-            //         lng: -76.7495,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'St. Andrew Super Market',
-            //         lat: 18.0340,
-            //         lng: -76.7495,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'St. Ann Bar',
-            //         lat: 18.1096,
-            //         lng: -77.2975,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'St. Ann Pharmacy',
-            //         lat: 18.1096,
-            //         lng: -77.2975,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'St. Ann Wholesale',
-            //         lat: 18.1096,
-            //         lng: -77.2975,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'St. Ann Super Market',
-            //         lat: 18.1096,
-            //         lng: -77.2975,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'St. Catherine Bar',
-            //         lat: 17.9641,
-            //         lng: -76.8674,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'St. Catherine Pharmacy',
-            //         lat: 17.9641,
-            //         lng: -76.8674,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'St. Catherine Wholesale',
-            //         lat: 17.9641,
-            //         lng: -76.8674,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'St. Catherine Super Market',
-            //         lat: 17.9641,
-            //         lng: -76.8674,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'St. Elizabeth Bar',
-            //         lat: 18.1352,
-            //         lng: -77.2177,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'St. Elizabeth Pharmacy',
-            //         lat: 18.1352,
-            //         lng: -77.2177,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'St. Elizabeth Wholesale',
-            //         lat: 18.1352,
-            //         lng: -77.2177,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'St. Elizabeth Super Market',
-            //         lat: 18.1352,
-            //         lng: -77.2177,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'St. James Bar',
-            //         lat: 18.4153,
-            //         lng: -77.0810,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'St. James Pharmacy',
-            //         lat: 18.4153,
-            //         lng: -77.0810,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'St. James Wholesale',
-            //         lat: 18.4153,
-            //         lng: -77.0810,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'St. James Super Market',
-            //         lat: 18.4153,
-            //         lng: -77.0810,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'St. Mary Bar',
-            //         lat: 18.1026,
-            //         lng: -76.9873,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'St. Mary Pharmacy',
-            //         lat: 18.1026,
-            //         lng: -76.9873,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'St. Mary Wholesale',
-            //         lat: 18.1026,
-            //         lng: -76.9873,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'St. Mary Super Market',
-            //         lat: 18.1026,
-            //         lng: -76.9873,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'St. Thomas Bar',
-            //         lat: 17.9394,
-            //         lng: -76.7952,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'St. Thomas Pharmacy',
-            //         lat: 17.9394,
-            //         lng: -76.7952,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'St. Thomas Wholesale',
-            //         lat: 17.9394,
-            //         lng: -76.7952,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'St. Thomas Super Market',
-            //         lat: 17.9394,
-            //         lng: -76.7952,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'Trelawny Bar',
-            //         lat: 18.3554,
-            //         lng: -77.5848,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Trelawny Pharmacy',
-            //         lat: 18.3554,
-            //         lng: -77.5848,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Trelawny Wholesale',
-            //         lat: 18.3554,
-            //         lng: -77.5848,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Trelawny Super Market',
-            //         lat: 18.3554,
-            //         lng: -77.5848,
-            //         image: 'yellow.png'
-            //     },
-            //     {
-            //         name: 'Westmoreland Bar',
-            //         lat: 18.1226,
-            //         lng: -77.9710,
-            //         image: 'red.png'
-            //     },
-            //     {
-            //         name: 'Westmoreland Pharmacy',
-            //         lat: 18.1226,
-            //         lng: -77.9710,
-            //         image: 'green.png'
-            //     },
-            //     {
-            //         name: 'Westmoreland Wholesale',
-            //         lat: 18.1226,
-            //         lng: -77.9710,
-            //         image: 'blue.png'
-            //     },
-            //     {
-            //         name: 'Westmoreland Super Market',
-            //         lat: 18.1226,
-            //         lng: -77.9710,
-            //         image: 'yellow.png'
-            //     }
-            // ];
-
-            // Define a custom icon with a specific color
-
-            const parishes = [{
-                    name: 'Clarendon Bar',
-                    lat: 17.9649,
-                    lng: -77.2992,
-                    image: 'red.png'
-                },
-                {
-                    name: 'Clarendon Pharmacy',
-                    lat: 17.9949,
-                    lng: -77.2552,
-                    image: 'green.png'
-                },
-                {
-                    name: 'Clarendon Wholesale',
-                    lat: 17.9349,
-                    lng: -77.2552,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'Clarendon Supermarket',
-                    lat: 17.9749,
-                    lng: -77.2092,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'Hanover Bar',
-                    lat: 18.4354,
-                    lng: -78.0992,
-                    image: 'red.png'
-                },
-                {
-                    name: 'Hanover Pharmacy',
-                    lat: 18.3754,
-                    lng: -78.0572,
-                    image: 'green.png'
-                },
-                {
-                    name: 'Hanover Wholesale',
-                    lat: 18.4054,
-                    lng: -78.1572,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'Hanover Supermarket',
-                    lat: 18.4054,
-                    lng: -78.0092,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'Kingston Bar',
-                    lat: 17.9902,
-                    lng: -76.7936,
-                    image: 'red.png'
-                },
-                {
-                    name: 'Kingston Pharmacy',
-                    lat: 17.9905,
-                    lng: -76.7833,
-                    image: 'green.png'
-                },
-                {
-                    name: 'Kingston Wholesale',
-                    lat: 17.9908,
-                    lng: -76.7730,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'Kingston Supermarket',
-                    lat: 17.9911,
-                    lng: -76.7627,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'Manchester Bar',
-                    lat: 18.0662,
-                    lng: -77.5071,
-                    image: 'red.png'
-                },
-                {
-                    name: 'Manchester Pharmacy',
-                    lat: 18.0365,
-                    lng: -77.5068,
-                    image: 'green.png'
-                },
-                {
-                    name: 'Manchester Wholesale',
-                    lat: 18.0368,
-                    lng: -77.5365,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'Manchester Supermarket',
-                    lat: 18.0371,
-                    lng: -77.4862,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'Portland Bar',
-                    lat: 18.1597,
-                    lng: -76.5346,
-                    image: 'red.png'
-                },
-                {
-                    name: 'Portland Pharmacy',
-                    lat: 18.1600,
-                    lng: -76.5643,
-                    image: 'green.png'
-                },
-                {
-                    name: 'Portland Wholesale',
-                    lat: 18.1303,
-                    lng: -76.5340,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'Portland Supermarket',
-                    lat: 18.1606,
-                    lng: -76.5037,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'St. Andrew Bar',
-                    lat: 18.0340,
-                    lng: -76.7495,
-                    image: 'red.png'
-                },
-                {
-                    name: 'St. Andrew Pharmacy',
-                    lat: 18.0343,
-                    lng: -76.7692,
-                    image: 'green.png'
-                },
-                {
-                    name: 'St. Andrew Wholesale',
-                    lat: 18.0556,
-                    lng: -76.7489,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'St. Andrew Supermarket',
-                    lat: 18.0349,
-                    lng: -76.7286,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'St. Ann Bar',
-                    lat: 18.1416,
-                    lng: -77.2975,
-                    image: 'red.png'
-                },
-                {
-                    name: 'St. Ann Pharmacy',
-                    lat: 18.1099,
-                    lng: -77.2972,
-                    image: 'green.png'
-                },
-                {
-                    name: 'St. Ann Wholesale',
-                    lat: 18.1102,
-                    lng: -77.3269,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'St. Ann Supermarket',
-                    lat: 18.1105,
-                    lng: -77.2666,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'St. Catherine Bar',
-                    lat: 17.9641,
-                    lng: -76.9274,
-                    image: 'red.png'
-                },
-                {
-                    name: 'St. Catherine Pharmacy',
-                    lat: 17.9944,
-                    lng: -76.8881,
-                    image: 'green.png'
-                },
-                {
-                    name: 'St. Catherine Wholesale',
-                    lat: 17.9647,
-                    lng: -76.8968,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'St. Catherine Supermarket',
-                    lat: 17.9650,
-                    lng: -76.8665,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'St. Elizabeth Bar',
-                    lat: 18.1552,
-                    lng: -77.2177,
-                    image: 'red.png'
-                },
-                {
-                    name: 'St. Elizabeth Pharmacy',
-                    lat: 18.1755,
-                    lng: -77.2174,
-                    image: 'green.png'
-                },
-                {
-                    name: 'St. Elizabeth Wholesale',
-                    lat: 18.1558,
-                    lng: -77.1871,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'St. Elizabeth Supermarket',
-                    lat: 18.1361,
-                    lng: -77.2168,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'St. James Bar',
-                    lat: 18.4153,
-                    lng: -77.0810,
-                    image: 'red.png'
-                },
-                {
-                    name: 'St. James Pharmacy',
-                    lat: 18.3756,
-                    lng: -77.0807,
-                    image: 'green.png'
-                },
-                {
-                    name: 'St. James Wholesale',
-                    lat: 18.3359,
-                    lng: -77.0804,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'St. James Supermarket',
-                    lat: 18.3762,
-                    lng: -77.0301,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'St. Mary Bar',
-                    lat: 18.1026,
-                    lng: -76.9873,
-                    image: 'red.png'
-                },
-                {
-                    name: 'St. Mary Pharmacy',
-                    lat: 18.1429,
-                    lng: -76.9870,
-                    image: 'green.png'
-                },
-                {
-                    name: 'St. Mary Wholesale',
-                    lat: 18.1832,
-                    lng: -76.9867,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'St. Mary Supermarket',
-                    lat: 18.1435,
-                    lng: -76.9364,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'St. Thomas Bar',
-                    lat: 17.9394,
-                    lng: -76.8352,
-                    image: 'red.png'
-                },
-                {
-                    name: 'St. Thomas Pharmacy',
-                    lat: 17.9397,
-                    lng: -76.8049,
-                    image: 'green.png'
-                },
-                {
-                    name: 'St. Thomas Wholesale',
-                    lat: 17.9400,
-                    lng: -76.7746,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'St. Thomas Supermarket',
-                    lat: 17.9403,
-                    lng: -76.7443,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'Trelawny Bar',
-                    lat: 18.3554,
-                    lng: -77.5848,
-                    image: 'red.png'
-                },
-                {
-                    name: 'Trelawny Pharmacy',
-                    lat: 18.3557,
-                    lng: -77.5345,
-                    image: 'green.png'
-                },
-                {
-                    name: 'Trelawny Wholesale',
-                    lat: 18.3560,
-                    lng: -77.4842,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'Trelawny Supermarket',
-                    lat: 18.4060,
-                    lng: -77.5339,
-                    image: 'yellow.png'
-                },
-                {
-                    name: 'Westmoreland Bar',
-                    lat: 18.1226,
-                    lng: -77.9710,
-                    image: 'red.png'
-                },
-                {
-                    name: 'Westmoreland Pharmacy',
-                    lat: 18.1229,
-                    lng: -77.9307,
-                    image: 'green.png'
-                },
-                {
-                    name: 'Westmoreland Wholesale',
-                    lat: 18.1232,
-                    lng: -77.8904,
-                    image: 'blue.png'
-                },
-                {
-                    name: 'Westmoreland Supermarket',
-                    lat: 18.1635,
-                    lng: -77.9301,
-                    image: 'yellow.png'
-                }
-            ];
-
-            // document.getElementById('total_stock_count_cases').innerHTML = {{ $sumTotalStockCases }};
-            //  document.getElementById('total_stock_count').innerHTML = {{ $sumTotalStock }};
-
-            // Loop through the parishes and add markers with tooltips to the map
-            parishes.forEach(parish => {
-                var myIcon = L.icon({
-                    iconUrl: "/assets/images/mapicons/" + parish.image,
-                    iconSize: [35, 41],
-                    iconAnchor: [15, 11],
-                    popupAnchor: [25, -34],
-                    // shadowUrl: 'path/to/marker-shadow.png',
-                    // shadowSize: [41, 41],
-                });
-
-                const marker = L.marker([parish.lat, parish.lng], {
-                    icon: myIcon
-                }).addTo(map);
-                marker.bindTooltip(`<strong>${parishChannelCount[parish.name]??0} - ${parish.name}</strong>`);
+        // Loop through the parishes and add markers with tooltips to the map
+        parishes.forEach(parish => {
+            var myIcon = L.icon({
+                iconUrl: "/assets/images/mapicons/" + parish.image,
+                iconSize: [35, 41],
+                iconAnchor: [15, 11],
+                popupAnchor: [25, -34],
+                // shadowUrl: 'path/to/marker-shadow.png',
+                // shadowSize: [41, 41],
             });
-        </script>
 
-
+            const marker = L.marker([parish.lat, parish.lng], {
+                icon: myIcon
+            }).addTo(map);
+            marker.bindTooltip(`<strong>${parishChannelCount[parish.name]??0} - ${parish.name}</strong>`);
+        });
+    </script>
+    --}}
 
         <script>
             var startDate = 0;
