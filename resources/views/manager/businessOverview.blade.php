@@ -317,10 +317,61 @@
                     <canvas id="myChart"></canvas>
                 </div>
             </div>
-            <div class="col-12">
+        </div>
+       
+        <div class="row pt-5">
+                <div class="col-12">
                 <div class="card manager-card-style">
                     <div class="card-header manager-card-header" >Number of Stores serviced by Channel</div>
                     <div class="card-body">
+                        <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
+                            <div class="col-md-3 col-sm-3 col-6 pt-2">
+                                <div class="card manager-card-style"  style="min-height: 133px;">
+                                    <div class="card-header manager-card-header text-center mt-3">Super Market</div>
+                                    <div class="card-body content w-100 text-center">
+                                        <div class="Link0" id="stores_out_of_stock"
+                                            style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
+                                            <span>{{ $parishChannelTotalCount['supermarket'] }}</span> / 100
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-6 pt-2">
+                                <div class="card manager-card-style"  style="min-height: 133px;">
+                                    <div class="card-header manager-card-header text-center mt-3">Wholesale</div>
+                                    <div class="card-body content w-100 text-center">
+                                        <div class="Link0" id="products_out_of_stock"
+                                            style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
+                                            <span>{{ $parishChannelTotalCount['wholesale'] }}</span> / 100
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-6 pt-2">
+                                <div class="card manager-card-style"  style="min-height: 133px;">
+                                    <div class="card-header manager-card-header text-center mt-3">Bar</div>
+                                    <div class="card-body content w-100 text-center">
+                                        <div class="Link0" id="stores_out_of_stock"
+                                            style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
+                                            <span>{{ $parishChannelTotalCount['bar'] }}</span> / 100
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-6 pt-2">
+                                <div class="card manager-card-style"  style="min-height: 133px;">
+                                    <div class="card-header manager-card-header text-center mt-3">Pharmacy</div>
+                                    <div class="card-body content w-100 text-center">
+                                        <div class="Link0" id="products_out_of_stock"
+                                            style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
+                                            <span>{{ $parishChannelTotalCount['pharmacy'] }}</span> / 100
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body mt-5">
                         <img src="{{asset('/assets/images/mapicons/map.png')}}" style="width: 931px; margin-bottom: 15%;">
                         <div class="hanover" style="position:absolute; left:0; top:0;">
                             <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['hanover_supermarket']??0}} Super Markets in Hanover" style="z-index: 999; position: absolute; left: 69px; width: 23px; top: 74px;">

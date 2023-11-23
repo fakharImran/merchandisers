@@ -113,23 +113,25 @@ class BusinessOverviewController extends Controller
         // dd($uniqueServicedStoreLocation);
         // dd($stores);
         $arr = array();
+        $channel_arr = array();
         foreach ($stores as $value) {
             $val = json_decode($value->parish);
             // dd($value->channel);
             foreach ($val as $key => $parish) {
             // dd($parish);
             $val[$key] = strtolower(str_replace([' ', '.'], '', $parish)) . "_" . strtolower(str_replace(' ', '', $value->channel));
-                
+            $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $value->channel))]);
             }
             $arr = array_merge($arr, $val);
         }
-        // dd($arr);
+        // dd($channel_arr);
 
         // Count the occurrences of each element
         $parishChannelCount = array_count_values($arr);
-        // dd($parishChannelCount);
+        $parishChannelTotalCount = array_count_values($channel_arr);
+        // dd($parishChannelTotalCount);
 
-        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'parishChannelTotalCount'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
