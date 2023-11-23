@@ -400,7 +400,7 @@
                             <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stthomas_bar']??0}} Bars in Saint Thomas"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 0;">
                             <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stthomas_pharmacy']??0}} Pharmacies in Saint Thomas"  style="z-index: 999; position: absolute; left: 15; width: 23px; top: 37;">
                         </div>
-                        <img src="{{asset('/assets/images/mapicons/tips.png')}}"  style="width: 30%; position: absolute; left: 0; top: 57%;" >
+                        <img src="{{asset('/assets/images/mapicons/tips.PNG')}}"  style="width: 30%; position: absolute; left: 0; top: 57%;" >
                     </div>
                 </div>
             </div>
