@@ -81,6 +81,12 @@
                                         <option value="{{$merchandiser->id}}">{{$merchandiser->name}}</option>
                                 @endforeach
                             </select>   
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="chkall">
+                                <label class="form-check-label" for="chkall">
+                                    Select All
+                                </label>
+                            </div>
                             @error('user_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -204,6 +210,15 @@
     <script>
         $(document).ready(function() {
             $('#merchandiser-search').select2();
+            $("#chkall").click(function(){
+                if($("#chkall").is(':checked')){
+                    $("#merchandiser-search > option").prop("selected", "selected");
+                    $("#merchandiser-search").trigger("change");
+                } else {
+                    $("#merchandiser-search > option").removeAttr("selected");
+                    $("#merchandiser-search").trigger("change");
+                }
+            });
         });
     </script>
 @endsection

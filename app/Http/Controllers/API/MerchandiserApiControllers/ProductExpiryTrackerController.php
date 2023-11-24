@@ -72,12 +72,12 @@ class ProductExpiryTrackerController extends BaseController
             'product_id'=>'required',
             'exp_or_damage'=>'required',
             'product_sku'=>'required',
-            'amount_expired'=>'required',
+            'amount_expired_unit_or_case'=>'required',
+            'amount_expired_qty'=>'required',
             'batchNumber'=>'required',
             'expiry_date'=>'required',
             'action_taken'=>'required',
             'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:100000',
-
         ]);
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
@@ -95,7 +95,7 @@ class ProductExpiryTrackerController extends BaseController
         $user = Auth::user();
         $company_user_id=$user->companyUser->id;
 
-        $productExpiryTrackerArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku,'exp_or_damage'=>$request->exp_or_damage, 'amount_expired'=>$request->amount_expired, 'batchNumber'=>$request->batchNumber, 'expiry_date'=>$request->expiry_date, 'action_taken'=>$request->action_taken, 'photo'=>$photo_path];
+        $productExpiryTrackerArr= ['store_location_id'=>$store_location->id,'store_id'=>$store->id, 'company_user_id'=>$company_user_id, 'category_id'=>$request->category_id, 'product_id'=>$request->product_id, 'product_sku'=>$request->product_sku,'exp_or_damage'=>$request->exp_or_damage, 'amount_expired_unit_or_case'=>$request->amount_expired_unit_or_case, 'amount_expired_qty'=>$request->amount_expired_qty, 'batchNumber'=>$request->batchNumber, 'expiry_date'=>$request->expiry_date, 'action_taken'=>$request->action_taken, 'photo'=>$photo_path];
         
         $responseofQuery= ProductExpiryTracker::create($productExpiryTrackerArr);
         

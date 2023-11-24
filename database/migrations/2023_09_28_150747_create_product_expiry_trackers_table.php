@@ -33,7 +33,8 @@ return new class extends Migration
 
             $table->string('product_sku')->nullable();
             $table->string('exp_or_damage')->nullable();
-            $table->bigInteger('amount_expired')->nullable();
+            $table->string('amount_expired_unit_or_case')->nullable();
+            $table->bigInteger('amount_expired_qty')->nullable();
             $table->string('batchNumber')->nullable();
             $table->date('expiry_date')->nullable();
             $table->string('action_taken')->nullable();

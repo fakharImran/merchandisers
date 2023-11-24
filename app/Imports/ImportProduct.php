@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Company;
 use App\Models\Product;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -10,6 +11,10 @@ class ImportProduct implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        // dd($row);
+        $company= Company::where('id', $row['company_id'])->first();
+
+        dd($company->stores);
         try {
             $competitorArr= explode(',', $row['competitor_product_name']);
             // dd($row ,json_encode($competitorArr));

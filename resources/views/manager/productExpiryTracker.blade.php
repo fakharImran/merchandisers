@@ -248,10 +248,30 @@
                         </thead>
                         {{-- {{dd($productExpiryTrackerData)}} --}}
                         <tbody>
+                            @php
+                                $amount_expired_unit_qty=0;
+                                $amount_expired_case_qty=0;
+                            @endphp
                             @if (!$productExpiryTrackerData->isEmpty())
                                 @foreach ($productExpiryTrackerData as $productExpiryTracker)
+                                @php
+                                    if ($productExpiryTracker->amount_expired_unit_or_case=='Unit' || $productExpiryTracker->amount_expired_unit_or_case=='unit')
+                                    {    
+                                        $amount_expired_unit_qty=$productExpiryTracker->amount_expired_qty;
+                                        $amount_expired_case_qty= 0;
+                                    }
+                                    else if ($productExpiryTracker->amount_expired_unit_or_case=='Case' || $productExpiryTracker->amount_expired_unit_or_case=='case')
+                                    {
+                                        $amount_expired_case_qty= $productExpiryTracker->amount_expired_qty;
+                                        $amount_expired_unit_qty=0;
+                                    }
+                                    else {
+                                        $amount_expired_case_qty= 0;
+                                        $amount_expired_unit_qty=0;
+                                    }
+                                @endphp
                                     <tr>
-                                        {{-- {{dd($productExpiryTracker   )}} --}}
+                                        {{-- {{dd($productExpiryTracker, $amount_expired_unit_qty, $amount_expired_case_qty   )}} --}}
                                         <td class="tdclass">
                                             @php
                                                 $date = explode(' ', $productExpiryTracker->created_at);
@@ -266,8 +286,11 @@
                                         <td class="tdclass">{{ $productExpiryTracker->product->product_name }}</td>
                                         <td class="tdclass">{{ $productExpiryTracker->product_sku }}</td>
                                         <td class="tdclass">{{ $productExpiryTracker->exp_or_damage }}</td>
-                                        <td class="tdclass">{{ $productExpiryTracker->amount_expired }}</td>
-                                        <td class="tdclass">Cases will set soon</td>
+
+                                        <td class="tdclass">{{ $amount_expired_unit_qty }}</td>
+
+                                        <td class="tdclass">{{ $amount_expired_case_qty }}</td>
+
                                         <td class="tdclass">{{ $productExpiryTracker->batchNumber }}</td>
                                         <td class="tdclass">
                                             @php
