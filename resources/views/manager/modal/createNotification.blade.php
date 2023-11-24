@@ -84,7 +84,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="chkall">
                                 <label class="form-check-label" for="chkall">
-                                    Select All
+                                    Select All Merchandisers
                                 </label>
                             </div>
                             @error('user_id')
