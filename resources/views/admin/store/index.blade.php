@@ -327,7 +327,7 @@ updatePaginationButtons();
                             <td class="tdclass">
                               @if($store->locations!=null)
                               @foreach($store->locations as $location)
-                              {{$location->location}}
+                              <label class="badge text-bg-dark">{{$location->location}}</label>
                               @if(!$loop->last)
                               ,
                               @endif

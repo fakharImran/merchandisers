@@ -327,7 +327,7 @@
                         <div class='row  d-flex align-items-center col-actions' style="max-width: 99%; margin: 1px auto;">
                             <div class="col-md-3 col-sm-3 col-6 pt-2">
                                 <div class="card manager-card-style"  style="min-height: 133px;">
-                                    <div class="card-header manager-card-header text-center mt-3">Supermerket</div>
+                                    <div class="card-header manager-card-header text-center mt-3">Supermarket</div>
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="stores_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
