@@ -657,7 +657,7 @@
                                         {{ $merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store }}
                                     </td>
                                     <td class="tdclass">
-                                        {{dd($merchandiserLocation->store_location_id )}}
+                                        {{dd($merchandiserLocation->store_location_id, "umeerrrrrrrrrrrrrrr" )}}
                                         {{ $merchandiserLocation->store_location($merchandiserLocation->store_location_id??null)->location ?? null }}
                                     </td>
                                     <td class="tdclass"></td>
