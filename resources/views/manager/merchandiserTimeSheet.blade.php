@@ -127,48 +127,6 @@
                 </select>                
             </div>
 
-            {{-- <script>
-            function updateLocations() {
-                const selectedStore = document.getElementById('store-search').value;
-                const locationDropdown = document.getElementById('location-search');
-                const allLocations = {!! json_encode($stores) !!};
-                const uniqueLocations = [];
-
-                // Clear existing options
-                locationDropdown.innerHTML = '<option value="" selected>--Select--</option>';
-
-                if (selectedStore === '') {
-                    // If no store is selected, show all locations
-                    for (const store of allLocations) {
-                        for (const location of store.locations) {
-                            if (!uniqueLocations.includes(location.location)) {
-                                uniqueLocations.push(location.location);
-                                const option = document.createElement('option');
-                                option.value = location.location;
-                                option.textContent = location.location;
-                                locationDropdown.appendChild(option);
-                            }
-                        }
-                    }
-                } else {
-                    // If a store is selected, filter locations based on the selected store
-                    for (const store of allLocations) {
-                        if (store.name_of_store === selectedStore) {
-                            for (const location of store.locations) {
-                                if (!uniqueLocations.includes(location.location)) {
-                                    uniqueLocations.push(location.location);
-                                    const option = document.createElement('option');
-                                    option.value = location.location;
-                                    option.textContent = location.location;
-                                    locationDropdown.appendChild(option);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            </script> --}}
         </div>
         <div class="col-md-3 col-3 p-3">
             <div class="form-group">

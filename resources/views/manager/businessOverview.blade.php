@@ -208,7 +208,7 @@
                         @endphp
                         <div class="Link0" id="serviced_stores"
                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                            {{-- {{ count($uniqueServicedStoreLocation) }} / {{ count($locationArr) }} --}}
+                            {{-- {{ count($todayUniqueServicedStoreLocation) }} / {{ count($locationArr) }} --}}
                         </div>
 
                     </div>
@@ -556,7 +556,7 @@
                                 @endphp
                                 <tr>
                                     <td class="tdclass">
-                                        {{ $stockCount->created_at }}
+                                        {{-- {{ $stockCount->created_at }} --}}
                                     </td>
                                     <td class="tdclass">{{ $stockCount->store->name_of_store }}</td>
                                     <td class="tdclass">
@@ -591,7 +591,7 @@
                             @foreach ($outOfStockData as $outOfStock)
                                 <tr>
                                     <td class="tdclass">
-                                        {{ $outOfStock->created_at }}
+                                        {{-- {{ $outOfStock->created_at }} --}}
                                     </td>
                                     <td class="tdclass">{{ $outOfStock->store->name_of_store }}</td>
                                     <td class="tdclass">
@@ -621,7 +621,7 @@
                             @foreach ($productExpiryTrackerData as $productExpiryTracker)
                                 <tr>
                                     <td class="tdclass">
-                                        {{ $productExpiryTracker->created_at }}
+                                        {{-- {{ $productExpiryTracker->created_at }} --}}
                                     </td>
                                     <td class="tdclass">{{ $productExpiryTracker->store->name_of_store }}</td>
                                     <td class="tdclass">
@@ -647,7 +647,7 @@
                             @endforeach
                         @endif
 
-                        @if (!$uniqueServicedStoreLocation->isEmpty())
+                        @if (!empty($uniqueServicedStoreLocation))
                             @foreach ($uniqueServicedStoreLocation as $merchandiserLocation)
                                 <tr>
                                     <td class="tdclass">
@@ -1074,6 +1074,11 @@
         <script>
             var startDate = 0;
             var endDate = 0;
+
+            
+            var todayUniqueServicedStoreLocation = {!! json_encode($todayUniqueServicedStoreLocation) !!};
+
+            
             var allStores = {!! json_encode($storesArr) !!};
             var allUniqueLocations = {!! json_encode($locationArr) !!};
             // console.log(allUniqueLocations);

@@ -72,7 +72,7 @@ class StoreController extends Controller
         $validator = Validator::make($request->all(), [
             'company_id' => 'required',
             'name_of_store' => 'required',
-            'location' => ['required',new UniqueLocationInStore($request->location,$request->name_of_store)],
+            'location' => ['required',new UniqueLocationInStore($request->company_id,$request->name_of_store)],
             'parish' => 'required',
             'channel' => 'required',
         ]);

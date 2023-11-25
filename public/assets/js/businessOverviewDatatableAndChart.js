@@ -83,6 +83,14 @@ function setCards(table, startDate = 0, endDate = 0) {
         sumCases += cases;
         const tempStoreServised = data[11];
 
+        // created_at = data[0]?new Date(data[0]):null;
+        // created_at_date = created_at?formatDateYMD(created_at):null;
+        // date_now = formatDateYMD(new Date());
+        // if(created_at_date == date_now){
+        //     console.log(created_at?formatDateYMD(created_at):null, formatDateYMD(new Date()));
+        //     const tempStoreServised = data[11];
+        // }
+
         if (tempStoreServised.trim() !== "") {
             storeServised.add(tempStoreServised); // Add the store name to the Set if it's not an empty string
         }
@@ -608,10 +616,16 @@ $(document).ready(function () {
         buttons: ['copy', 'excel', 'pdf', 'print'], // Add some custom buttons (optional)
         "pagingType": "full_numbers"
     });
-    setCards(table);
+    setCards(table); 
 
-
-
+    if(todayUniqueServicedStoreLocation.length == allUniqueLocations.length)
+    {
+        document.getElementById('serviced_stores').innerHTML =  todayUniqueServicedStoreLocation.length + ' / ' + allUniqueLocations.length;
+    }
+    else
+    {
+        document.getElementById('serviced_stores').innerHTML = '<span style="color: #CA371B">' + todayUniqueServicedStoreLocation.length + ' /</span> ' + allUniqueLocations.length;
+    }
 
     // Custom search input for 'Name' column
     $('#store-search').on('change', function () {

@@ -327,7 +327,7 @@ updatePaginationButtons();
                             <td class="tdclass">
                               @if($store->locations!=null)
                               @foreach($store->locations as $location)
-                              <label class="badge text-bg-dark">{{$location->location}}</label>
+                              <label class="badge text-bg-secondary">{{$location->location}}</label>
                               @if(!$loop->last)
                               ,
                               @endif
@@ -336,11 +336,13 @@ updatePaginationButtons();
                             </td>
                               <td class="tdclass">
                               @php
-                                  $parishArr= json_decode($store['parish'])
+                                  $parishArr= json_decode($store['parish'],true);
+                              // dd($parishArr);
+
                               @endphp
                               @if ($parishArr)
                                 @foreach($parishArr as $parish)
-                                  {{$parish}}
+                                  <label class="badge bg-secondary">{{$parish}}</label>
                                   @if(!$loop->last)
                                     ,
                                   @endif

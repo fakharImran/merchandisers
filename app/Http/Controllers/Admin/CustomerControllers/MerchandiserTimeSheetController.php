@@ -96,9 +96,9 @@ class MerchandiserTimeSheetController extends Controller
         $pageConfigs = ['pageSidebar' => 'merchandiser-timeSheet'];    
 
         $user= Auth::user();    
+        $userTimeZone  = $user->time_zone;
        
         $merchandiserArray = array();
-        $allLocations=StoreLocation::all();
         $compnay_users = $user->companyUser->company->companyUsers;
         $userArr = array();
         foreach ($compnay_users as $key => $compnay_user) {
@@ -123,7 +123,6 @@ class MerchandiserTimeSheetController extends Controller
         }
         $categories = Category::whereIn('id', $categories)->get();
         // dd($categories);
-        
         foreach ($compnay_users as $key => $compnay_user) {
             $merchandiser_user = $compnay_user->user;
             $timeSheetArray=array();
@@ -140,7 +139,8 @@ class MerchandiserTimeSheetController extends Controller
 
                             if($time_sheets && $time_sheets->count() > 0){
                                 foreach ($time_sheets as $key => $time_sheet) {
-
+                                    $time_sheet->created_at = convertToTimeZone($time_sheet->created_at, 'UTC', $userTimeZone);
+                                    $time_sheet->date_modified = convertToTimeZone($time_sheet->date_modified, 'UTC', $userTimeZone);        
                                     $checkoutFound = false; // Flag to check if "check-out" status is found
                                     foreach ($time_sheet->timeSheetRecords as $key => $timeSheetRecord) {
                                         if($timeSheetRecord->status=="check-out")
@@ -166,7 +166,7 @@ class MerchandiserTimeSheetController extends Controller
                 }
             }
         }
-        return view('manager.merchandiserTimeSheet', compact('merchandiserArray','user','userArr', 'stores','products', 'categories','allLocations'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.merchandiserTimeSheet', compact('merchandiserArray','user','userArr', 'stores','products', 'categories'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

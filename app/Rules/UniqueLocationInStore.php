@@ -13,12 +13,12 @@ class UniqueLocationInStore implements Rule
      *
      * @return void
      */
-    protected $location;
+    protected $company_id;
     protected $store_id;
 
-    public function __construct($location,$name_of_store)
+    public function __construct($company_id,$name_of_store)
     {
-        $this->location = $location;
+        $this->company_id = $company_id;
         $storeExists = Store::where('name_of_store', $name_of_store)->exists();
 
         if($storeExists)
@@ -38,9 +38,15 @@ class UniqueLocationInStore implements Rule
     {
         // dd($location);
         // Check if the store name is unique for the given company_id
-        return !StoreLocation::where('location', $location)
+        $storelocation = StoreLocation::where('location', $location)
             ->where('store_id', $this->store_id)
             ->exists();
+
+         $store = Store::where('company_id', $this->company_id)
+            ->where('id', $this->store_id)
+            ->exists();
+
+        return !($storelocation==true && $store == true)?true:false;
     }
 
     public function message()

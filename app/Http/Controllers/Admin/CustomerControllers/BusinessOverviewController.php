@@ -32,7 +32,6 @@ class BusinessOverviewController extends Controller
 
         //   dd($merchandiserUsers);
         $merchandiserArray = array();
-        $allLocations=StoreLocation::all();
         $compnay_users = $user->companyUser->company->companyUsers;
         $userArr = array();
         foreach ($compnay_users as $key => $compnay_user) {
@@ -101,17 +100,28 @@ class BusinessOverviewController extends Controller
 
         $userId=$user->id;
         $name=$user->name;
-        
-        $merchandiserTimeSheetData=MerchandiserTimeSheet::all();
-        $uniqueServicedStoreLocation = $merchandiserTimeSheetData;
-        
-        foreach ($uniqueServicedStoreLocation as $key => $merchandiser) {
-            $merchandiser->created_at = convertToTimeZone($merchandiser->created_at, 'UTC', $userTimeZone);
-            $merchandiser->date_modified = convertToTimeZone($merchandiser->date_modified, 'UTC', $userTimeZone);        
-        }
+        $currentUser=$user->companyUser->company->companyUsers;
 
-        // dd($uniqueServicedStoreLocation);
-        // dd($stores);
+        $uniqueServicedStoreLocation = array();
+        $todayUniqueServicedStoreLocation = array();
+        foreach ($currentUser as $key => $userData) {
+            // dd($user->companyUser->company->companyUsers);
+            // $merchandiserTimeSheetData=MerchandiserTimeSheet::all();
+            $uniqueServicedStore = $userData->timeSheets;
+            // dd($userData->timeSheets);
+            foreach ($uniqueServicedStore as $key => $merchandiser) {
+                $merchandiser->created_at = convertToTimeZone($merchandiser->created_at, 'UTC', $userTimeZone);
+                $merchandiser->date_modified = convertToTimeZone($merchandiser->date_modified, 'UTC', $userTimeZone);  
+                // dd(date('Y-m-d'), date("Y-m-d", strtotime($merchandiser->created_at))    );
+                if(date("Y-m-d", strtotime($merchandiser->created_at)) == date('Y-m-d')){
+                    array_push($todayUniqueServicedStoreLocation, $merchandiser);
+                }
+
+                array_push($uniqueServicedStoreLocation, $merchandiser);
+
+            }
+        }
+       
         $arr = array();
         $channel_arr = array();
         foreach ($stores as $value) {
@@ -131,7 +141,7 @@ class BusinessOverviewController extends Controller
         $parishChannelTotalCount = array_count_values($channel_arr);
         // dd($parishChannelTotalCount);
 
-        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores','allLocations', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'parishChannelTotalCount'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'parishChannelTotalCount', 'todayUniqueServicedStoreLocation'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
