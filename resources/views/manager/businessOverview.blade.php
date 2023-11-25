@@ -657,7 +657,7 @@
                                         {{ $merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store }}
                                     </td>
                                     <td class="tdclass">
-                                        {{ $merchandiserLocation->store_location($merchandiserLocation->store_location_id)->location ?? null }}
+                                        {{ $merchandiserLocation->store_location($merchandiserLocation->store_location_id??null)->location ?? null }}
                                     </td>
                                     <td class="tdclass"></td>
                                     <td class="tdclass"></td>
@@ -671,7 +671,7 @@
                                         {{ $merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store }}
                                     </td>
                                     <td class="tdclass">
-                                        {{ $merchandiserLocation->store_location($merchandiserLocation->store_location_id)->location ?? null }}
+                                        {{ $merchandiserLocation->store_location($merchandiserLocation->store_location_id??null)->location ?? null }}
                                     </td>
                                     <td class="tdclass"></td>
 
