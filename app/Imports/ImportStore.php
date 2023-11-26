@@ -14,6 +14,7 @@ class ImportStore implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        // dd($row);
       $store = Store::select('name_of_store')->where('name_of_store', $row['name_of_store'])->first();
       $store_location_id = StoreLocation::select('id')->where('location', $row['location'])->first();
       
@@ -29,12 +30,34 @@ class ImportStore implements ToModel, WithHeadingRow
         {
             // Validation failed
 
-            try {
+            $storeExists = Store::where('name_of_store', $row['name_of_store'])->exists();
 
+            // dd($storeExists);
+    
+            if($storeExists)
+            {
+                $store = Store::where('name_of_store', $row['name_of_store'])->first();
+                $store_id=$store->id;
+                $existingParish= json_decode($store->parish, true);
+                $parish= explode(',', $row['parish']);
+                $existingParish = array_merge($existingParish,  $parish);
+                // dd($existingParish, $parish );
+
+                $existingParish = array_unique($existingParish);
+                // dd($existingParish);
+                $store->parish= json_encode($existingParish);
+                $store->save();
+    
+                $store->locations()->create(['location' => $row['location']]);
+                // dd($store);
+                return $store;
+            }
+            else
+            {
                 $company_id = $row['company_id'];
         
-                $parish= explode(',', $row['parish']);
-
+                $parish=array_unique(explode(',', $row['parish']));
+                // dd($parish);
                     $store = new Store([
                         'company_id' => $company_id,
                         'name_of_store' => $row['name_of_store'],
@@ -49,12 +72,7 @@ class ImportStore implements ToModel, WithHeadingRow
 
                 // dd($store,'fakhaee');
                 return $store;
-            } catch (Throwable $e) {
-                // Handle the exception, log or display an error message
-                // For example, you can log the error using `error_log` or use Laravel's logger: \Illuminate\Support\Facades\Log::error($e);
-
-                // Return null or throw a custom exception, depending on your needs
-                return ;
+        
             }
         }
         else
