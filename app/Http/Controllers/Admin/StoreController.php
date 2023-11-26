@@ -91,7 +91,7 @@ class StoreController extends Controller
         {
             $store = Store::where('name_of_store', $request->name_of_store)->first();
             $store_id=$store->id;
-            $existingParish= json_decode($store->parish);
+            $existingParish= json_decode($store->parish, true);
             array_push($existingParish, $request->parish);
 
             // dd($uniqueCheck);

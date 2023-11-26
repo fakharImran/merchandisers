@@ -97,7 +97,7 @@
                         $tempLocation = [];
                     @endphp
 
-                    @foreach ($store->locations->unique('location')->sort() as $location)
+                    @foreach ($store->locations->sort() as $location)
                         @php
                             array_push($locationArr, $location['location']);
                             array_push($tempLocation, $location['location']);
@@ -112,7 +112,8 @@
                 @endforeach
             @endif
             @php
-                $locationArr = array_unique($locationArr);
+                // $locationArr = array_unique($locationArr);
+                // dd($locationArr);    
                 sort($locationArr);
             @endphp
             {{-- end sorting and unique location value in filter search --}}
@@ -331,7 +332,7 @@
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="stores_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                                            <span>{{ $parishChannelTotalCount['supermarket']??0 }}</span> / {{count($locationArr)}}
+                                            <span>{{ $parishChannelTotalCount['supermarket']??0 }}</span> / {{$totalNumberOfParish}}
                                         </div>
                                     </div>
                                 </div>
@@ -342,7 +343,7 @@
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="products_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                                            <span>{{ $parishChannelTotalCount['wholesale']??0 }}</span> /  {{count($locationArr)}}
+                                            <span>{{ $parishChannelTotalCount['wholesale']??0 }}</span> /  {{$totalNumberOfParish}}
                                         </div>
                                     </div>
                                 </div>
@@ -353,7 +354,7 @@
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="stores_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                                            <span>{{ $parishChannelTotalCount['bar']??0 }}</span> /  {{count($locationArr)}}
+                                            <span>{{ $parishChannelTotalCount['bar']??0 }}</span> /  {{$totalNumberOfParish}}
                                         </div>
                                     </div>
                                 </div>
@@ -364,7 +365,7 @@
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="products_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                                            <span>{{ $parishChannelTotalCount['pharmacy']??0 }}</span> /  {{count($locationArr)}}
+                                            <span>{{ $parishChannelTotalCount['pharmacy']??0 }}</span> /  {{$totalNumberOfParish}}
                                         </div>
                                     </div>
                                 </div>
@@ -444,6 +445,12 @@
                             <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['standrew_wholesale']??0}} Wholesales in Saint Andrew"  style="z-index: 999; position: absolute; left: 1px; width: 23px; top: 39; display:{{$parishChannelCount['standrew_wholesale']??'none'}};">
                             <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['standrew_bar']??0}} Bars in Saint Andrew"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 0; display:{{$parishChannelCount['standrew_bar']??'none'}};">
                             <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['standrew_pharmacy']??0}} Pharmacy in Saint Andrew"  style="z-index: 999; position: absolute; left: 30px; width: 23px; top: 0; display:{{$parishChannelCount['standrew_pharmacy']??'none'}};">
+                        </div>
+                        <div class="kingston" style="position:absolute; left:673; top:250;">
+                            <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['kingston_supermarket']??0}} Supermarkets in Kingston"  style="z-index: 999; position: absolute; left: 30; width: 23px; top: 23; display:{{$parishChannelCount['kingston_supermarket']??'none'}};">
+                            <img src="{{asset('/assets/images/mapicons/wholesale.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['kingston_wholesale']??0}} Wholesales in Kingston"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 23; display:{{$parishChannelCount['kingston_wholesale']??'none'}};">
+                            <img src="{{asset('/assets/images/mapicons/bar.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['kingston_bar']??0}} Bars in Kingston"  style="z-index: 999; position: absolute; left: 0px; width: 23px; top: 0; display:{{$parishChannelCount['kingston_bar']??'none'}};">
+                            <img src="{{asset('/assets/images/mapicons/pharmacy.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['kingston_pharmacy']??0}} Pharmacy in Kingston"  style="z-index: 999; position: absolute; left: 30px; width: 23px; top: 0; display:{{$parishChannelCount['kingston_pharmacy']??'none'}};">
                         </div>
                         <div class="stthomas" style="position:absolute; left:766; top:231;">
                             <img src="{{asset('/assets/images/mapicons/supermarket.png')}}" data-toggle="tooltip" title="{{$parishChannelCount['stthomas_supermarket']??0}} Supermarkets in Saint Thomas"  style="z-index: 999; position: absolute; left: 114; width: 23px; top: 32; display:{{$parishChannelCount['stthomas_supermarket']??'none'}};">

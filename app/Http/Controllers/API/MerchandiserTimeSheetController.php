@@ -148,8 +148,9 @@ class MerchandiserTimeSheetController extends BaseController
             $activity= new Activity;
             $activity->company_user_id= $company_user_id;
            
-            $time = $merchandiserTimeSheet->created_at;
-            $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+            // $time = $merchandiserTimeSheet->created_at;
+            // $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+            $formattedTime = convertToTimeZone($merchandiserTimeSheet->created_at, 'UTC',$userTimeZone );
 
             $activity->activity_description= 'you just '. $request->status.' to '.$store->name_of_store. ' at time '.$formattedTime ;
             $activity->activity_type= 'Merchandiser Timesheet';
@@ -279,8 +280,9 @@ class MerchandiserTimeSheetController extends BaseController
                 $activity= new Activity;
                 $activity->company_user_id= $timeSheet->company_user_id;
                 
-                $time = $timeSheetRecord->created_at;
-                $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+                // $time = $timeSheetRecord->created_at;
+                // $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+                $formattedTime = convertToTimeZone($timeSheetRecord->created_at, 'UTC', $userTimeZone );
 
                 // return $this->sendResponse(["time"=>$time,"formattedTime"=>$formattedTime], 'time sheet testing.');
 
@@ -299,8 +301,10 @@ class MerchandiserTimeSheetController extends BaseController
             $activity= new Activity;
             $activity->company_user_id= $timeSheet->company_user_id;
            
-            $time = $timeSheetRecord->created_at;
-            $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+            // $time = $timeSheetRecord->created_at;
+            // $formattedTime = Carbon::parse($time)->format('M j, Y h:i A');
+            $formattedTime = convertToTimeZone($timeSheetRecord->created_at, 'UTC', $userTimeZone );
+
 
             $activity->activity_description= 'you just '. $request->status.' to '.$timeSheet->store($timeSheet->store_id)->name_of_store. ' at time '.$formattedTime ;
             $activity->activity_type= 'Merchandiser Timesheet';
