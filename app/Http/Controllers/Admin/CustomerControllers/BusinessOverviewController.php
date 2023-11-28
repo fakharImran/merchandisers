@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\CustomerControllers;
 
+use DateTime;
+use DateTimeZone;
 use App\Models\User;
 use App\Models\Store;
 use App\Models\Product;
@@ -121,39 +123,71 @@ class BusinessOverviewController extends Controller
 
             }
         }
-       
+       $uniqueNumberOfStoreServicedCount=0;
         $arr = array();
         $channel_arr = array();
-        $TempLocationArr=array();
-        foreach ($stores as $value) {
-            $val = json_decode($value->parish, true);
-            
-            // dd($value->channel);
-            foreach ($val as $key => $parish) {
-            // dd($parish);
-                $val[$key] = strtolower(str_replace([' ', '.'], '', $parish)) . "_" . strtolower(str_replace(' ', '', $value->channel));
-                // $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $value->channel))]);
+        $servicedChannel_arr = array();
+        foreach ($stores as $store) {
+            $store_parish = json_decode($store->parish, true);
+            //for map
+            foreach ($store_parish as $key => $parish) {
+                $store_parish[$key] = strtolower(str_replace([' ', '.'], '', $parish)) . "_" . strtolower(str_replace(' ', '', $store->channel));
+                // $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $store->channel))]);
             }
-            foreach ($value->locations as $location) {
+            $arr = array_merge($arr, $store_parish);
+
+            //for card after slash value
+            foreach ($store->locations as $location) {
                 // dd($location->location);
-                array_push($TempLocationArr , strtolower(str_replace([' ', '.'], '', $location->location)) . "_" . strtolower(str_replace(' ', '', $value->channel)));
-
-                $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $value->channel))]);
-
+                $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $store->channel))]);
             }
-            $arr = array_merge($arr, $val);
+
+            //for card before slash value
+            $merchandiserTimeSheets = $store->merchandiserTimeSheets;
+                // Initialize an array to store unique dates
+            $uniqueDates = [];
+
+            foreach ($merchandiserTimeSheets as $key => $merchandiserTimeSheet) {
+                // Convert the created_at timestamp to the desired timezone (UTC)
+                $createdAt = new DateTime($merchandiserTimeSheet->created_at);
+                $createdAt->setTimezone(new DateTimeZone('UTC'));
+
+                // Format the created_at timestamp to compare with today's date
+                $createdAtFormatted = $createdAt->format('Y-m-d');
+
+                // Get today's date in UTC
+                $todayInUTC = (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d');
+
+                // Compare the formatted dates to check if the created_at is today
+                if ($createdAtFormatted == $todayInUTC) {
+                    // Check if the date is not already processed
+                    if (!in_array($createdAtFormatted, $uniqueDates)) {
+                        // The created_at timestamp is from today and has not been processed yet
+                        // Your code here
+
+                        $servicedChannel_arr = array_merge($servicedChannel_arr, [strtolower(str_replace(' ', '', $store->channel))]);
+                        $uniqueNumberOfStoreServicedCount++;
+                        // Add the date to the list of processed dates
+                        $uniqueDates[] = $createdAtFormatted;
+                    }
+                }
+            }
+            // dd($uniqueDates, $todayInUTC);
+
+
         }
         // dd($channel_arr, $arr);
-        $totalNumberOfParish = count($TempLocationArr);
+        // these below values for cards
+        $totalNumberServicedChannelbyLocation = array_count_values($servicedChannel_arr);
+        $locationChannelTotalCount = array_count_values($channel_arr);
 
         // Count the occurrences of each element
+        // display parish channel values for map
         $parishChannelCount = array_count_values($arr);
-        $TempLocationArrChannelCount = array_count_values($TempLocationArr);
-        
-        $locationChannelTotalCount = array_count_values($channel_arr);
+        // dd($uniqueNumberOfStoreServicedCount);
         // dd($parishChannelTotalCount, $channel_arr, $parishChannelCount, $totalNumberOfParish);
 
-        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'locationChannelTotalCount', 'todayUniqueServicedStoreLocation', 'totalNumberOfParish','TempLocationArrChannelCount'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'locationChannelTotalCount', 'todayUniqueServicedStoreLocation', 'totalNumberServicedChannelbyLocation','uniqueNumberOfStoreServicedCount'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

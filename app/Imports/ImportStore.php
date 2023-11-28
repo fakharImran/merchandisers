@@ -39,11 +39,12 @@ class ImportStore implements ToModel, WithHeadingRow
                 $store = Store::where('name_of_store', $row['name_of_store'])->first();
                 $store_id=$store->id;
                 $existingParish= json_decode($store->parish, true);
-                $parish= explode(',', $row['parish']);
+                $parish= [$row['parish']];
+                // dd($existingParish, $parish );
+
                 $existingParish = array_merge($existingParish,  $parish);
                 // dd($existingParish, $parish );
 
-                $existingParish = array_unique($existingParish);
                 // dd($existingParish);
                 $store->parish= json_encode($existingParish);
                 $store->save();
@@ -56,7 +57,7 @@ class ImportStore implements ToModel, WithHeadingRow
             {
                 $company_id = $row['company_id'];
         
-                $parish=array_unique(explode(',', $row['parish']));
+                $parish=[$row['parish']];
                 // dd($parish);
                     $store = new Store([
                         'company_id' => $company_id,

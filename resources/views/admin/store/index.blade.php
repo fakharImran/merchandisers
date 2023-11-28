@@ -328,6 +328,7 @@ updatePaginationButtons();
                               @if($store->locations!=null)
                               @foreach($store->locations as $location)
                               <label class="badge text-bg-secondary">{{$location->location}}</label>
+                              <br>
                               @if(!$loop->last)
                               ,
                               @endif
@@ -343,6 +344,7 @@ updatePaginationButtons();
                               @if ($parishArr)
                                 @foreach($parishArr as $parish)
                                   <label class="badge bg-secondary">{{$parish}}</label>
+                                  <br>
                                   @if(!$loop->last)
                                     ,
                                   @endif

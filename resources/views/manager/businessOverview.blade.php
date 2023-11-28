@@ -209,7 +209,7 @@
                         @endphp
                         <div class="Link0" id="serviced_stores"
                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                            {{-- {{ count($todayUniqueServicedStoreLocation) }} / {{ count($locationArr) }} --}}
+                            {{ $uniqueNumberOfStoreServicedCount }} / {{ count($locationArr) }}
                         </div>
 
                     </div>
@@ -332,7 +332,7 @@
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="stores_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                                            <span>{{ $locationChannelTotalCount['supermarket']??0 }}</span> / {{$totalNumberOfParish}}
+                                            <span>{{ $totalNumberServicedChannelbyLocation['supermarket']??0 }}</span> / {{ $locationChannelTotalCount['supermarket']??0 }}
                                         </div>
                                     </div>
                                 </div>
@@ -343,7 +343,7 @@
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="products_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                                            <span>{{ $locationChannelTotalCount['wholesale']??0 }}</span> /  {{$totalNumberOfParish}}
+                                            <span>{{ $totalNumberServicedChannelbyLocation['wholesale']??0 }}</span> /  {{ $locationChannelTotalCount['wholesale']??0 }}
                                         </div>
                                     </div>
                                 </div>
@@ -354,7 +354,7 @@
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="stores_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                                            <span>{{ $locationChannelTotalCount['bar']??0 }}</span> /  {{$totalNumberOfParish}}
+                                            <span>{{ $totalNumberServicedChannelbyLocation['bar']??0 }}</span> /  {{ $locationChannelTotalCount['bar']??0 }}
                                         </div>
                                     </div>
                                 </div>
@@ -365,7 +365,7 @@
                                     <div class="card-body content w-100 text-center">
                                         <div class="Link0" id="products_out_of_stock"
                                             style="width: 100%; height: 100%; color: #37A849; font-size: 35px; font-family: Inter; font-weight: 700; line-height: 37.50px; word-wrap: break-word">
-                                            <span>{{ $locationChannelTotalCount['pharmacy']??0 }}</span> /  {{$totalNumberOfParish}}
+                                            <span>{{ $totalNumberServicedChannelbyLocation['pharmacy']??0 }}</span> /  {{ $locationChannelTotalCount['pharmacy']??0 }}
                                         </div>
                                     </div>
                                 </div>
