@@ -478,7 +478,7 @@
             $i = 1;
         @endphp
 
-        <div class="col-12" style="display: none">
+        <div class="col-12" style="display: block">
 
             <div class="table-responsive">
                 {{-- table-responsive --}}
@@ -664,6 +664,7 @@
                                         {{ $merchandiserLocation->store($merchandiserLocation->store_id)->name_of_store }}
                                     </td>
                                     <td class="tdclass">
+                                        {{dd($merchandiserLocation->store_location_id)}}
                                         {{ $merchandiserLocation->store_location($merchandiserLocation->store_location_id??null)->location ?? null }}
                                     </td>
                                     <td class="tdclass"></td>
