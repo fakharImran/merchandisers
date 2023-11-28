@@ -145,7 +145,7 @@ class BusinessOverviewController extends Controller
         // Count the occurrences of each element
         $parishChannelCount = array_count_values($arr);
         $parishChannelTotalCount = array_count_values($channel_arr);
-        dd($parishChannelTotalCount, $channel_arr, $parishChannelCount, $totalNumberOfParish);
+        // dd($parishChannelTotalCount, $channel_arr, $parishChannelCount, $totalNumberOfParish);
 
         return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'parishChannelTotalCount', 'todayUniqueServicedStoreLocation', 'totalNumberOfParish'), ['pageConfigs' => $pageConfigs]);
     }
