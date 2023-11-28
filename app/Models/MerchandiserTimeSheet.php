@@ -50,7 +50,7 @@ class MerchandiserTimeSheet extends Model
 
     public function store_location($id=null)
     {
-        $store_location= StoreLocation::findOrFail($id);
+        $store_location= StoreLocation::select('*')->where('id',$id)->first();
         return $store_location;
     }
     
