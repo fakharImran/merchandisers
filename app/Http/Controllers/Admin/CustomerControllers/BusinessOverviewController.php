@@ -124,30 +124,36 @@ class BusinessOverviewController extends Controller
        
         $arr = array();
         $channel_arr = array();
+        $TempLocationArr=array();
         foreach ($stores as $value) {
             $val = json_decode($value->parish, true);
+            
             // dd($value->channel);
             foreach ($val as $key => $parish) {
             // dd($parish);
-            $val[$key] = strtolower(str_replace([' ', '.'], '', $parish)) . "_" . strtolower(str_replace(' ', '', $value->channel));
-            $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $value->channel))]);
+                $val[$key] = strtolower(str_replace([' ', '.'], '', $parish)) . "_" . strtolower(str_replace(' ', '', $value->channel));
+                // $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $value->channel))]);
             }
             foreach ($value->locations as $location) {
                 // dd($location->location);
-                // $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $value->channel))]);
+                array_push($TempLocationArr , strtolower(str_replace([' ', '.'], '', $location->location)) . "_" . strtolower(str_replace(' ', '', $value->channel)));
+
+                $channel_arr = array_merge($channel_arr, [strtolower(str_replace(' ', '', $value->channel))]);
 
             }
             $arr = array_merge($arr, $val);
         }
         // dd($channel_arr, $arr);
-        $totalNumberOfParish = count($arr);
+        $totalNumberOfParish = count($TempLocationArr);
 
         // Count the occurrences of each element
         $parishChannelCount = array_count_values($arr);
-        $parishChannelTotalCount = array_count_values($channel_arr);
+        $TempLocationArrChannelCount = array_count_values($TempLocationArr);
+        
+        $locationChannelTotalCount = array_count_values($channel_arr);
         // dd($parishChannelTotalCount, $channel_arr, $parishChannelCount, $totalNumberOfParish);
 
-        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'parishChannelTotalCount', 'todayUniqueServicedStoreLocation', 'totalNumberOfParish'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'locationChannelTotalCount', 'todayUniqueServicedStoreLocation', 'totalNumberOfParish','TempLocationArrChannelCount'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**
