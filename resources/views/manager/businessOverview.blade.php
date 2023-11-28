@@ -478,7 +478,7 @@
             $i = 1;
         @endphp
 
-        <div class="col-12" style="display: block">
+        <div class="col-12" style="display: none">
 
             <div class="table-responsive">
                 {{-- table-responsive --}}
