@@ -127,6 +127,9 @@ class BusinessOverviewController extends Controller
         $arr = array();
         $channel_arr = array();
         $servicedChannel_arr = array();
+        $uniqueDates = [];
+        $uniqueLocation = [];
+
         foreach ($stores as $store) {
             $store_parish = json_decode($store->parish, true);
             //for map
@@ -145,9 +148,9 @@ class BusinessOverviewController extends Controller
             //for card before slash value
             $merchandiserTimeSheets = $store->merchandiserTimeSheets;
                 // Initialize an array to store unique dates
-            $uniqueDates = [];
-
+            
             foreach ($merchandiserTimeSheets as $key => $merchandiserTimeSheet) {
+                // dd($merchandiserTimeSheet);
                 // Convert the created_at timestamp to the desired timezone (UTC)
                 $createdAt = new DateTime($merchandiserTimeSheet->created_at);
                 $createdAt->setTimezone(new DateTimeZone('UTC'));
@@ -157,22 +160,22 @@ class BusinessOverviewController extends Controller
 
                 // Get today's date in UTC
                 $todayInUTC = (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d');
-
+                // dd($todayInUTC, $createdAtFormatted);
                 // Compare the formatted dates to check if the created_at is today
                 if ($createdAtFormatted == $todayInUTC) {
                     // Check if the date is not already processed
-                    if (!in_array($createdAtFormatted, $uniqueDates)) {
+                    if ((!in_array($createdAtFormatted, $uniqueDates)) ||  (!in_array($merchandiserTimeSheet->store_location_id, $uniqueLocation))) {
                         // The created_at timestamp is from today and has not been processed yet
                         // Your code here
 
                         $servicedChannel_arr = array_merge($servicedChannel_arr, [strtolower(str_replace(' ', '', $store->channel))]);
                         $uniqueNumberOfStoreServicedCount++;
                         // Add the date to the list of processed dates
-                        $uniqueDates[] = $createdAtFormatted;
+                        array_push($uniqueDates,$createdAtFormatted);
+                        array_push($uniqueLocation,$merchandiserTimeSheet->store_location_id);
                     }
                 }
             }
-            // dd($uniqueDates, $todayInUTC);
 
 
         }
@@ -180,6 +183,7 @@ class BusinessOverviewController extends Controller
         // these below values for cards
         $totalNumberServicedChannelbyLocation = array_count_values($servicedChannel_arr);
         $locationChannelTotalCount = array_count_values($channel_arr);
+            // dd($uniqueDates,$uniqueLocation, $todayInUTC, $servicedChannel_arr);
 
         // Count the occurrences of each element
         // display parish channel values for map

@@ -81,7 +81,7 @@ function setCards(table, startDate = 0, endDate = 0) {
         // console.log('untis ', units);
         var cases = parseInt((data[7] == '') ? '0' : data[7]); // Assuming column 1 contains the store
         sumCases += cases;
-        const tempStoreServised = data[11];
+        const tempStoreServised = data[12];
 
         // created_at = data[0]?new Date(data[0]):null;
         // created_at_date = created_at?formatDateYMD(created_at):null;
@@ -140,14 +140,6 @@ function setCards(table, startDate = 0, endDate = 0) {
 
     // console.log('startDate', formatDateYMD(startDate), 'enddate', formatDateYMD(endDate));
 
-    if (startDate != 0 && endDate != 0) {
-        const dateRangeElements = document.getElementsByClassName('date_range_set');
-
-        for (const element of dateRangeElements) {
-            // element.innerHTML = formatDateYMD(startDate) + ' to ' + formatDateYMD(endDate);
-        }
-    }
-
     document.getElementById('total_stock_count').innerHTML = sumCases;
     document.getElementById('total_stock_count_cases').innerHTML = sumUnits;
 
@@ -186,7 +178,21 @@ function setCards(table, startDate = 0, endDate = 0) {
         document.getElementById('stores_with_exp_products').innerHTML = '<span style="color: #CA371B">' + numberOfStoreExpProduct + ' /</span> ' + allUniqueLocations.length;
     }
 
+    if (startDate != 0 && endDate != 0) {
+        const dateRangeElements = document.getElementsByClassName('date_range_set');
 
+        for (const element of dateRangeElements) {
+            // element.innerHTML = formatDateYMD(startDate) + ' to ' + formatDateYMD(endDate);
+        }
+              if(uniqueNumberOfStoreServicedCount == allUniqueLocations.length)
+                {
+                    document.getElementById('serviced_stores').innerHTML =  uniqueNumberOfStoreServicedCount + ' / ' + allUniqueLocations.length;
+                }
+                else
+                {
+                    document.getElementById('serviced_stores').innerHTML = '<span style="color: #CA371B">' + uniqueNumberOfStoreServicedCount + ' /</span> ' + allUniqueLocations.length;
+                }   
+    }
 
 }
 
@@ -593,7 +599,7 @@ function changeGraph(table) {
         var stockcase = parseInt( (element[7] == '')?0:element[7]);
         var stockunits = parseInt((element[6] == '')?0:element[6]);
 
-        var sumUnitCase=parseInt((element[12] == '')?0:element[12]);
+        var sumUnitCase=parseInt((element[13] == '')?0:element[13]);
         colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase, 'sumUnitCase':sumUnitCase });
 
         // colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase });
@@ -618,13 +624,13 @@ $(document).ready(function () {
     });
     setCards(table); 
 
-    if(todayUniqueServicedStoreLocation.length == allUniqueLocations.length)
+    if(uniqueNumberOfStoreServicedCount == allUniqueLocations.length)
     {
-        document.getElementById('serviced_stores').innerHTML =  todayUniqueServicedStoreLocation.length + ' / ' + allUniqueLocations.length;
+        document.getElementById('serviced_stores').innerHTML =  uniqueNumberOfStoreServicedCount + ' / ' + allUniqueLocations.length;
     }
     else
     {
-        document.getElementById('serviced_stores').innerHTML = '<span style="color: #CA371B">' + todayUniqueServicedStoreLocation.length + ' /</span> ' + allUniqueLocations.length;
+        document.getElementById('serviced_stores').innerHTML = '<span style="color: #CA371B">' + uniqueNumberOfStoreServicedCount + ' /</span> ' + allUniqueLocations.length;
     }
 
     // Custom search input for 'Name' column
@@ -634,7 +640,13 @@ $(document).ready(function () {
         const searchValue = this.value.trim();
         table.column(1).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
         // table.column(0).search(this.value).draw();
-        setCards(table);
+        if (this.value == '') {
+
+            setCards(table, new Date(), new Date());
+        }
+        else{
+            setCards(table);
+        }
 
 
         var storeName = this.value;
@@ -715,7 +727,12 @@ $(document).ready(function () {
     $('#category-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        setCards(table);
+        if (this.value == '') {
+            setCards(table, new Date(), new Date());
+        }
+        else{
+            setCards(table);
+        }
 
         convertedToChartData = changeGraph(table);
 
@@ -740,7 +757,12 @@ $(document).ready(function () {
     $('#merchandiser-search').on('change', function () {
         // const searchValue = this.value.trim();
         table.column(5).search(this.value ? `^${this.value}$` : '', true, false).draw();
-        setCards(table);
+        if (this.value == '') {
+            setCards(table, new Date(), new Date());
+        }
+        else{
+            setCards(table);
+        }
 
         // console.log(this.value);
         convertedToChartData = changeGraph(table);
@@ -768,7 +790,12 @@ $(document).ready(function () {
     $('#product-search').on('change', function () {
         const searchValue = this.value.trim();
         table.column(4).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        setCards(table);
+        if (this.value == '') {
+            setCards(table, new Date(), new Date());
+        }
+        else{
+            setCards(table);
+        }
 
         // console.log("search product", searchValue);
         convertedToChartData = changeGraph(table);
@@ -790,36 +817,8 @@ $(document).ready(function () {
         myChartJS.data.labels = labels;
         myChartJS.data.datasets[0].data = periodData;
         myChartJS.update();
+
     });
-
-    $('#category-search').on('change', function () {
-        const searchValue = this.value.trim();
-        table.column(3).search(searchValue ? `^${searchValue}$` : '', true, false).draw();
-        setCards(table);
-
-        // console.log("search product", searchValue);
-        convertedToChartData = changeGraph(table);
-
-        switch (graphFormat) {
-            case 'days':
-                createLastDaysDates(convertedToChartData);
-                break;
-            case 'weeks':
-                createLastWeeksDates(convertedToChartData);
-                break;
-            case 'months':
-                createLastMonthsDates(convertedToChartData);
-                break;
-            default:
-                createLastWeeksDates(convertedToChartData);
-                break;
-        }
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = periodData;
-        myChartJS.update();
-    });
-
-
 
     $('#period-search').on('change', function () {
 
@@ -931,7 +930,7 @@ $(document).ready(function () {
         // for (const element of dateRangeElements) {
         //     element.innerHTML = todayDateString;
         // }
-        setCards(table);
+        setCards(table, new Date(), new Date());
         // table.column(0).search('').draw();
         convertedToChartData = changeGraph(table);
         switch (graphFormat) {

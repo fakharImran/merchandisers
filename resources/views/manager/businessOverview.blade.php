@@ -501,6 +501,7 @@
                             <th class="thclass" scope="col">Out_of_stock Product Name</th>
 
                             <th class="thclass" scope="col">Product_expiry Name of Store</th>
+                            <th class="thclass" scope="col">merchandiser_time_sheet Store</th>
                             <th class="thclass" scope="col">merchandiser_time_sheet Location</th>
 
                             <th class="thclass" scope="col">sum Unit+Case</th>
@@ -577,6 +578,8 @@
                                     <td class="tdclass"></td>
                                     <td class="tdclass"></td>
                                     <td class="tdclass"></td>
+                                    
+                                    <td class="tdclass"></td>
                                     <td class="tdclass"></td>
                                     <td class="tdclass">{{ $totalStock + $totalStockCases }}</td>
 
@@ -616,6 +619,7 @@
 
                                     <td class="tdclass">{{ $outOfStock->product->product_name }}</td>
 
+                                    <td class="tdclass"></td>
 
                                     <td class="tdclass"></td>
                                     <td class="tdclass"></td>
@@ -644,6 +648,8 @@
 
                                     <td class="tdclass">{{ $productExpiryTracker->store->name_of_store }}</td>
                                     <td class="tdclass"></td>
+
+                                    <td class="tdclass"></td>
                                     <td class="tdclass"></td>
 
 
@@ -669,6 +675,7 @@
                                     <td class="tdclass"></td>
                                     <td class="tdclass"></td>
                                     <td class="tdclass">{{ $merchandiserLocation->companyUser->user->name }}</td>
+                                    <td class="tdclass"></td>
                                     <td class="tdclass"></td>
                                     <td class="tdclass"></td>
                                     <td class="tdclass"></td>
@@ -1084,6 +1091,7 @@
 
             
             var todayUniqueServicedStoreLocation = {!! json_encode($todayUniqueServicedStoreLocation) !!};
+            var uniqueNumberOfStoreServicedCount = {!! json_encode($uniqueNumberOfStoreServicedCount) !!};
 
             
             var allStores = {!! json_encode($storesArr) !!};
