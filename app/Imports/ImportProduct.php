@@ -15,10 +15,12 @@ class ImportProduct implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        // dd($row);
+        // dd($row['company_id']);
         $company= Company::where('id', $row['company_id'])->first();
         if (!($row['store_name'] == 'all' || $row['store_name'] == 'All')) {
-            $store_id = Store::select('*')->where('name_of_store', $row['store_name'])->first();
+            $store_id = Store::select('*')->where('name_of_store', $row['store_name'])
+            ->where('company_id',$row['company_id'])->first();
+            // dd($store_id);
             $category_id = Category::select('*')->where('category', $row['category_name'])->first();
             $validator = Validator::make($row, [
                 'company_id' => 'required',
@@ -28,6 +30,7 @@ class ImportProduct implements ToModel, WithHeadingRow
                 'product_number_sku' => 'required',
                 'competitor_product_name' => 'required',
             ]);
+            // dd($validator);
             if (!$validator->fails()) {
                 // Validation failed
     
@@ -66,7 +69,9 @@ class ImportProduct implements ToModel, WithHeadingRow
                 'competitor_product_name' => 'required',
             ]);
             if (!$validator->fails()) {
-                $stores = Store::all();
+                // $stores = Store::all();
+                $stores = Store::select('*')->where('company_id', $row['company_id'])->get();
+                // dd($stores);
                 $category_id = Category::select('id')->where('category', $row['category_name'])->first();
                 foreach ($stores as $key => $store) {
                     $validator = Validator::make($row, [

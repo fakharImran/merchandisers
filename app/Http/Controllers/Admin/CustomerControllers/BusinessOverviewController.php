@@ -152,14 +152,15 @@ class BusinessOverviewController extends Controller
             foreach ($merchandiserTimeSheets as $key => $merchandiserTimeSheet) {
                 // dd($merchandiserTimeSheet);
                 // Convert the created_at timestamp to the desired timezone (UTC)
-                $createdAt = new DateTime($merchandiserTimeSheet->created_at);
-                $createdAt->setTimezone(new DateTimeZone('UTC'));
+                $createdAt = $merchandiserTimeSheet->created_at;
+                $createdAt->setTimezone(new DateTimeZone($userTimeZone));
+                // dd($createdAt,$merchandiserTimeSheet->created_at );
 
                 // Format the created_at timestamp to compare with today's date
                 $createdAtFormatted = $createdAt->format('Y-m-d');
 
                 // Get today's date in UTC
-                $todayInUTC = (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d');
+                $todayInUTC = (new DateTime())->setTimezone(new DateTimeZone($userTimeZone))->format('Y-m-d');
                 // dd($todayInUTC, $createdAtFormatted);
                 // Compare the formatted dates to check if the created_at is today
                 if ($createdAtFormatted == $todayInUTC) {
