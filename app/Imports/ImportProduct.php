@@ -21,7 +21,7 @@ class ImportProduct implements ToModel, WithHeadingRow
             $store_id = Store::select('*')->where('name_of_store', $row['store_name'])
             ->where('company_id',$row['company_id'])->first();
             // dd($store_id);
-            $category_id = Category::select('*')->where('category', $row['category_name'])->first();
+            $category_id = Category::select('*')->where('category', $row['category_name']) ->where('company_id',$row['company_id'])->first();
             $validator = Validator::make($row, [
                 'company_id' => 'required',
                 'store_name' => 'required',
@@ -72,7 +72,7 @@ class ImportProduct implements ToModel, WithHeadingRow
                 // $stores = Store::all();
                 $stores = Store::select('*')->where('company_id', $row['company_id'])->get();
                 // dd($stores);
-                $category_id = Category::select('id')->where('category', $row['category_name'])->first();
+            $category_id = Category::select('*')->where('category', $row['category_name']) ->where('company_id',$row['company_id'])->first();
                 foreach ($stores as $key => $store) {
                     $validator = Validator::make($row, [
                         'product_name' => ['required',new UniqueProductName($row['company_id'], $stores[$key]->id??null ,$category_id->id??null)],

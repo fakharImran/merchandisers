@@ -731,11 +731,12 @@
 
         // Add headers as bold and uppercase
         const headers = table.querySelectorAll('thead th');
+        // console.log('headers ', headers);
         const headerText = Array.from(headers)
             .map(header => header.innerText.toUpperCase())
             .join(',');
         csvContent += headerText + '\r\n';
-
+// console.log('in csv header', csvContent);
 
         for (let i = 0; i < rows.length; i++) 
         {
@@ -751,11 +752,17 @@
                     const imageUrl = image.getAttribute('src');
                     csvContent += cell.innerText +  imageUrl; // Combine text and image URL in the same column
                 } else {
-                    csvContent += cell.innerText; // Add the cell's text if there's no image
+                    // if (j == 1 || j==10) {
+                    //     csvContent = csvContent + "\"" + cell.innerText+ "\""; // Add the cell's text if there's no image
+                    // }
+                    // else{
+                        csvContent +="\"" + cell.innerText+ "\""; // Add the cell's text if there's no image
+                    // }
                 }
             }
             csvContent += '\r\n';
         }
+        // console.log('content ->>>>>>>>>>>>>>>>', csvContent);
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);

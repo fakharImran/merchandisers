@@ -424,7 +424,8 @@
                         const imageUrl = image.getAttribute('src');
                         csvContent += cell.innerText + imageUrl; // Combine text and image URL in the same column
                     } else {
-                        csvContent += cell.innerText; // Add the cell's text if there's no image
+                        csvContent +="\"" + cell.innerText+ "\""; // Add the cell's text if there's no image
+                        // csvContent += cell.innerText; // Add the cell's text if there's no image
                     }
                 }
                 csvContent += '\r\n';

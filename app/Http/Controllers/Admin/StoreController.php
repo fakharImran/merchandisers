@@ -157,10 +157,11 @@ class StoreController extends Controller
     public function update(Request $request, $id)
 {
     // Validate the input data
+    // dd($request->all());
     $validator = Validator::make($request->all(), [
         'company_id' => 'required',
-        // 'name_of_store' => ['required', new UniqueStoreName($request->company_id, $id)],
-        'locations' => 'required',
+        'name_of_store' => 'required',
+        'locations' => ['required',new UniqueLocationInStore($request->company_id,$request->name_of_store)],
         'parish' => 'required',
         'channel' => 'required',
     ]);
@@ -189,6 +190,7 @@ class StoreController extends Controller
 
     // Update store locations
     if ($request->has('locations')) {
+        // dd($request->locations);
         $store->locations()->delete(); // Remove existing locations
         foreach ($request->locations as $location) {
             $store->locations()->create(['location' => $location]);

@@ -38,13 +38,25 @@ class UniqueLocationInStore implements Rule
     {
         // dd($location);
         // Check if the store name is unique for the given company_id
-        $storelocation = StoreLocation::where('location', $location)
-            ->where('store_id', $this->store_id)
-            ->exists();
+        // $storelocation = StoreLocation::where('location', $location)
+        //     ->where('store_id', $this->store_id)
+        //     ->exists();
 
-         $store = Store::where('company_id', $this->company_id)
-            ->where('id', $this->store_id)
-            ->exists();
+        //  $store = Store::where('company_id', $this->company_id)
+        //     ->where('id', $this->store_id)
+        //     ->exists();
+
+        $storelocation = StoreLocation::where('location', $location)
+        ->where('store_id', $this->store_id)
+        ->exists();
+
+    // Check if the location is the same as the current store's location
+    $store = Store::where('id', $this->store_id)
+        ->where('company_id', $this->company_id)
+        ->whereDoesntHave('locations', function ($query) use ($location) {
+            $query->where('location', $location);
+        })
+         ->exists();
 
         return !($storelocation==true && $store == true)?true:false;
     }
