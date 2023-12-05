@@ -78,17 +78,25 @@ class CompanyUserController extends Controller
        
         $user = User::create($input);
         $tempRole=array();
-        if($request->input('roles')[0]=="Merchandiser & Manager")
+       
+        if($request->access_privilege=="Deactivated")
         {
-            $tempRole[0] = 'manager';
-            $tempRole[1] = 'merchandiser';
-            $user->assignRole($tempRole);
+            $user->assignRole('no_access');
+
         }
         else
         {
-            $user->assignRole($request->input('roles'));
+            if($request->input('roles')[0]=="Merchandiser & Manager")
+            {
+                $tempRole[0] = 'manager';
+                $tempRole[1] = 'merchandiser';
+                $user->assignRole($tempRole);
+            }
+            else
+            {
+                $user->assignRole($request->input('roles'));
+            }
         }
-        
         $tempUser= new CompanyUser();
         $tempUser->company_id= $request->company_id;
         $tempUser->user_id=  $user->id;
@@ -162,16 +170,26 @@ class CompanyUserController extends Controller
         DB::table('model_has_roles')->where('model_id',$companyUser->user_id)->delete();
 
         $tempRole=array();
-        if($request->input('roles')[0]=="Merchandiser & Manager")
+        if($request->access_privilege=="Deactivated")
         {
-            $tempRole[0] = 'manager';
-            $tempRole[1] = 'merchandiser';
-            $user->assignRole($tempRole);
+            $user->assignRole('no_access');
+
         }
         else
         {
-            $user->assignRole($request->input('roles'));
+            if($request->input('roles')[0]=="Merchandiser & Manager")
+            {
+                $tempRole[0] = 'manager';
+                $tempRole[1] = 'merchandiser';
+                $user->assignRole($tempRole);
+            }
+            else
+            {
+                $user->assignRole($request->input('roles'));
+            }
         }
+       
+
 
         $companyUser->company_id= $request->company_id;
         $companyUser->user_id=  $user->id;

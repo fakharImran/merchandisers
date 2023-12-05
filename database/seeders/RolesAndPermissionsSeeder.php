@@ -20,6 +20,7 @@ class RolesAndPermissionsSeeder extends Seeder
          Role::create(['name' => 'admin']);
          Role::create(['name' => 'merchandiser']);
          Role::create(['name' => 'manager']);
+         Role::create(['name' => 'no_access']);
  
          // Permissions
          Permission::create(['name' => 'mobile']);
@@ -35,5 +36,10 @@ class RolesAndPermissionsSeeder extends Seeder
 
          $managerRole = Role::findByName('manager');
          $managerRole->givePermissionTo('website');
+
+         $no_access= Role::findByName('no_access');
+         $no_access->givePermissionTo(
+            
+        );
     }
 }

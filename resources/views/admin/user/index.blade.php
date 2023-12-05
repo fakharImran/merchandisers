@@ -294,7 +294,7 @@ updatePaginationButtons();
                             <td class="tdclass">
                               @if($user->user !== null) 
                               @foreach( $user->user->getRoleNames() as $role)
-                                <label class="badge text-bg-success">{{ $role }}</label><br>
+                                <label class="badge text-bg-success @if($role == "no_access") text-bg-danger @endif ">{{ $role }}</label><br>
                               @endforeach
                               @endif
                             </td>
