@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->String('company');
-            $table->bigInteger('code')->nullable()->default(12);
+            $table->string('code')->nullable()->default(12);
             $table->timestamps();
         });
         DB::statement('ALTER TABLE companies ENGINE = InnoDB');
