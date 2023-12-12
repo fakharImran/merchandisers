@@ -57,7 +57,7 @@
     <div  class="row d-flex align-items-center col-actions" style="max-width: 99%; margin: 1px auto;">
         <div class="col-md-3 col-3 p-3">
             
-            <div class="form-group" >
+            <div class="form-group" id="preiodSearch" >
                 <label for="period-search" class="form-label filter period filter-search">Period</label>
                 <input type="text" id="period-search" value="Date Range" class=" form-control filter">
                 <i class="fas fa-times-circle clear-icon" id="clearDate"></i>

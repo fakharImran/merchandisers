@@ -4,32 +4,51 @@ namespace App\Http\Controllers\Admin\CustomerControllers;
 
 use DateTime;
 use DateTimeZone;
-use App\Models\User;
-use App\Models\Store;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\OutOfStock;
+use App\Models\PriceAudit;
+use App\Models\Opportunity;
 use Illuminate\Http\Request;
-use App\Models\StoreLocation;
+use App\Models\MarketingActivity;
 use App\Models\StockCountByStores;
 use App\Http\Controllers\Controller;
 use App\Models\ProductExpiryTracker;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MerchandiserTimeSheet;
+use App\Models\PlanogramComplianceTracker;
 
-class BusinessOverviewController extends Controller
+class reportController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-     public function index()
+    public function index()
     {
-        $pageConfigs = ['pageSidebar' => 'business-overview'];    
+        dd('hello');
+        //
+    }
+    public function generateReport(Request $request)
+    {
+        $reportGeneratedRange=explode(' to ',$request->date_range);
+        $startDate1 = new DateTime($reportGeneratedRange[0]);
+        $startDate = $startDate1->format('F j, Y');
 
-        $user= Auth::user();  
+        $endDate1 = new DateTime($reportGeneratedRange[1]);
+        $endDate = $endDate1->format('F j, Y');
+
+        // $reportGeneratedRange= $startDate.' to '.$endDate; //for showing in report header
+
+        $user= Auth::user();
+
+        $company_name=$user->companyUser->company->company; // company name for showing in report header
+
+        $todayDate = new DateTime();
+        $todayDate = $todayDate->format('F j, Y'); // today date for showing in report header
+
+
 
         $compnay_users = $user->companyUser->company->companyUsers;
 
@@ -60,9 +79,11 @@ class BusinessOverviewController extends Controller
             $storestockCountByStoreData = $store->stockCountByStores->pluck('id')->toArray(); // Pluck product IDs
             $stockCountByStoreArr = array_merge($stockCountByStoreArr, $storestockCountByStoreData); // Merge product IDs
         }
-        // dd($stockCountByStoreArr);
-        $stockCountData = StockCountByStores::whereIn('id', $stockCountByStoreArr)->get();  //these are stock count by store data of this company
-        
+        // dd($startDate);
+        $stockCountData = StockCountByStores::whereIn('id', $stockCountByStoreArr)
+        ->whereBetween('created_at', [$startDate1, $endDate1])
+        ->get();
+
         $currentUser = Auth::user();
         $userTimeZone  = $currentUser->time_zone;
 
@@ -70,6 +91,7 @@ class BusinessOverviewController extends Controller
             $stockCount->created_at = convertToTimeZone($stockCount->created_at, 'UTC', $userTimeZone);
             $stockCount->date_modified = convertToTimeZone($stockCount->date_modified, 'UTC', $userTimeZone);        
         }
+        // dd($stockCountData);
         
 
         $outOfStockIDArr = [];  
@@ -78,7 +100,9 @@ class BusinessOverviewController extends Controller
             $outOfStockIDArr = array_merge($outOfStockIDArr, $outOfStocksData); // Merge product IDs
         }
         // dd($outOfStockIDArr);
-        $outOfStockData = OutOfStock::whereIn('id', $outOfStockIDArr)->get();   //these are Out of stock data of this company
+        $outOfStockData = OutOfStock::whereIn('id', $outOfStockIDArr) 
+        ->whereBetween('created_at', [$startDate1, $endDate1])
+        ->get();   //these are Out of stock data of this company
 
         foreach ($outOfStockData as $key => $outOfStock) {
             $outOfStock->created_at = convertToTimeZone($outOfStock->created_at, 'UTC', $userTimeZone);
@@ -91,7 +115,8 @@ class BusinessOverviewController extends Controller
             $productExpiryTrackerIDArr = array_merge($productExpiryTrackerIDArr, $productExpiryTrackersData); // Merge product IDs
         }
         // dd($productExpiryTrackerIDArr);
-        $productExpiryTrackerData = ProductExpiryTracker::whereIn('id', $productExpiryTrackerIDArr)->get();  //these are Product expiry dracker data of this company
+        $productExpiryTrackerData = ProductExpiryTracker::whereIn('id', $productExpiryTrackerIDArr)
+        ->whereBetween('created_at', [$startDate1, $endDate1])->get();  //these are Product expiry dracker data of this company
         
         foreach ($productExpiryTrackerData as $key => $productExpiry) {
             $productExpiry->created_at = convertToTimeZone($productExpiry->created_at, 'UTC', $userTimeZone);
@@ -191,7 +216,98 @@ class BusinessOverviewController extends Controller
         // dd($uniqueNumberOfStoreServicedCount);
         // dd($parishChannelTotalCount, $channel_arr, $parishChannelCount, $totalNumberOfParish);
 
-        return view('manager.businessOverview', compact('productExpiryTrackerData','outOfStockData','stockCountData','userArr', 'name',  'stores', 'products','categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'locationChannelTotalCount', 'todayUniqueServicedStoreLocation', 'totalNumberServicedChannelbyLocation','uniqueNumberOfStoreServicedCount'), ['pageConfigs' => $pageConfigs]);
+
+        //below data fro price audit
+        $priceAuditIdsArr = [];
+        foreach ($stores as $store) {
+            $priceAuditData = $store->priceAudits->pluck('id')->toArray(); // Pluck product IDs
+            $priceAuditIdsArr = array_merge($priceAuditIdsArr, $priceAuditData); // Merge product IDs
+        }
+        // dd($priceAuditIdsArr);
+        $priceAuditData = PriceAudit::whereIn('id', $priceAuditIdsArr)
+        ->whereBetween('created_at', [$startDate1, $endDate1])->get();
+        
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($priceAuditData as $key => $priceAudit) {
+            $priceAudit->created_at = convertToTimeZone($priceAudit->created_at, 'UTC', $userTimeZone);
+            $priceAudit->date_modified = convertToTimeZone($priceAudit->date_modified, 'UTC', $userTimeZone);        
+        }
+
+        
+        $competitorProductDetail=array();
+        foreach ($priceAuditData as $key => $PriceAudit) {
+            array_push($competitorProductDetail, ['c_product_name'=>$PriceAudit->competitor_product_name, 'c_product_price'=>$PriceAudit->competitor_product_price]);
+            # code...
+        }
+        // dd($priceAuditData);
+        
+        // dd($priceAuditData->isEmpty());
+         
+        //below data fro Planogram Compliance Tracker
+
+        $planogramArr = [];
+        foreach ($stores as $store) {
+            $planogramComplianceData = $store->planogramComplianceTrackers->pluck('id')->toArray(); // Pluck product IDs
+            $planogramArr = array_merge($planogramArr, $planogramComplianceData); // Merge product IDs
+        }
+        // dd($planogramArr);
+        $planogramComplianceData = PlanogramComplianceTracker::whereIn('id', $planogramArr)
+        ->whereBetween('created_at', [$startDate1, $endDate1])->get();
+        
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($planogramComplianceData as $key => $planogram) {
+            $planogram->created_at = convertToTimeZone($planogram->created_at, 'UTC', $userTimeZone);
+            $planogram->date_modified = convertToTimeZone($planogram->date_modified, 'UTC', $userTimeZone);        
+        }
+
+        //below data for Marketing Activity
+
+        $marketingActivityIDArr = [];
+        foreach ($stores as $store) {
+            $marketingActivitiesData = $store->marketingActivities->pluck('id')->toArray(); // Pluck product IDs
+            $marketingActivityIDArr = array_merge($marketingActivityIDArr, $marketingActivitiesData); // Merge product IDs
+        }
+        // dd($marketingActivityIDArr);
+        $marketingActivityData = MarketingActivity::whereIn('id', $marketingActivityIDArr)
+        ->whereBetween('created_at', [$startDate1, $endDate1])->get();
+        
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($marketingActivityData as $key => $marketingActivity) {
+            $marketingActivity->created_at = convertToTimeZone($marketingActivity->created_at, 'UTC', $userTimeZone);
+            $marketingActivity->date_modified = convertToTimeZone($marketingActivity->date_modified, 'UTC', $userTimeZone);        
+        }
+
+
+        //below data for Opportunity
+         
+        $opportunityIDArr = [];
+        foreach ($stores as $store) {
+            $opportunitiesData = $store->opportunities->pluck('id')->toArray(); // Pluck product IDs
+            $opportunityIDArr = array_merge($opportunityIDArr, $opportunitiesData); // Merge product IDs
+        }
+        // dd($opportunityIDArr);
+        $opportunityData = Opportunity::whereIn('id', $opportunityIDArr)
+        ->whereBetween('created_at', [$startDate1, $endDate1])->get();
+        
+        $currentUser = Auth::user();
+        $userTimeZone  = $currentUser->time_zone;
+
+        foreach ($opportunityData as $key => $opportunity) {
+            $opportunity->created_at = convertToTimeZone($opportunity->created_at, 'UTC', $userTimeZone);
+            $opportunity->date_modified = convertToTimeZone($opportunity->date_modified, 'UTC', $userTimeZone);        
+        }
+        
+
+        
+        return view('manager.report')
+        ->with(compact('startDate','endDate', 'todayDate', 'company_name', 'productExpiryTrackerData', 'outOfStockData', 'stockCountData', 'userArr', 'name', 'stores', 'products', 'categories', 'uniqueServicedStoreLocation', 'parishChannelCount', 'locationChannelTotalCount', 'todayUniqueServicedStoreLocation', 'totalNumberServicedChannelbyLocation', 'uniqueNumberOfStoreServicedCount', 'priceAuditData', 'planogramComplianceData', 'marketingActivityData', 'opportunityData'));
+        
     }
 
     /**

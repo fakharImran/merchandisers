@@ -27,7 +27,7 @@ class OutOfStockController extends Controller
 
         //   dd($merchandiserUsers);
         $merchandiserArray = array();
-        $allLocations=StoreLocation::all();
+        // $allLocations=StoreLocation::all();
         $compnay_users = $user->companyUser->company->companyUsers;
         $userArr = array();
         foreach ($compnay_users as $key => $compnay_user) {
@@ -75,7 +75,7 @@ class OutOfStockController extends Controller
         $name=$user->name;
      
         
-        return view('manager.outOfStock', compact('outOfStockData','userArr', 'name',  'stores','allLocations','categories', 'products'), ['pageConfigs' => $pageConfigs]);
+        return view('manager.outOfStock', compact('outOfStockData','userArr', 'name',  'stores','categories', 'products'), ['pageConfigs' => $pageConfigs]);
     }
 
     /**

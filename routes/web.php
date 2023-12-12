@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Admin\StoreController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyUserController;
 use App\Http\Controllers\Manager\DashboardController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Admin\CustomerControllers\reportController;
 use App\Http\Controllers\Admin\CustomerControllers\OutOfStockController;
 use App\Http\Controllers\Admin\CustomerControllers\PriceAuditController;
 use App\Http\Controllers\Admin\CustomerControllers\OpportunityController;
@@ -23,7 +25,6 @@ use App\Http\Controllers\Admin\CustomerControllers\StockCountByStoreController;
 use App\Http\Controllers\Admin\CustomerControllers\ProductExpiryTrackerController;
 use App\Http\Controllers\Admin\CustomerControllers\MerchandiserTimeSheetController;
 use App\Http\Controllers\Admin\CustomerControllers\PlanogramComplianceTrackerController;
-use Illuminate\Support\Facades\Session;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -154,7 +155,9 @@ Route::group(['middleware' => ['auth', 'role:admin']], function() {
 
 Route::group(['middleware' => ['auth', 'role:manager']], function() {
    
-    
+   
+    Route::get('generatePeport', [reportController::class, 'generateReport'])->name('generate-report');
+
     Route::resource('manager-dashboard', DashboardController::class);
     Route::resource('business_overview', BusinessOverviewController::class);
     Route::resource('merchandiser_time_sheet', MerchandiserTimeSheetController::class);

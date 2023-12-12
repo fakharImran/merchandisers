@@ -65,7 +65,6 @@ function setCards(table, startDate = 0, endDate = 0) {
     var sumOpeningWeekStock = 0;
     var sumUnits = 0;
     var sumCases = 0;
-    
 
 
     const storeServised = new Set(); // Use a Set to store unique store names
@@ -82,7 +81,7 @@ function setCards(table, startDate = 0, endDate = 0) {
         // console.log('untis ', units);
         var cases = parseInt((data[7] == '') ? '0' : data[7]); // Assuming column 1 contains the store
         sumCases += cases;
-        const tempStoreServised = data[12]??'';
+        const tempStoreServised = data[12];
 
         // created_at = data[0]?new Date(data[0]):null;
         // created_at_date = created_at?formatDateYMD(created_at):null;
@@ -129,10 +128,10 @@ function setCards(table, startDate = 0, endDate = 0) {
     });
 
 
-    const numberOfStoreServised = storeServised.size??'';
-    const numberStoreOfOutOfStock = stores_out_of_stock.size??'';
-    const numberOfProductOutOfStock = products_out_of_stock.size??'';
-    const numberOfStoreExpProduct = stores_with_exp_products.size??'';
+    const numberOfStoreServised = storeServised.size;
+    const numberStoreOfOutOfStock = stores_out_of_stock.size;
+    const numberOfProductOutOfStock = products_out_of_stock.size;
+    const numberOfStoreExpProduct = stores_with_exp_products.size;
 
     // console.log('Number of service stores: ', numberOfStoreServised);
     // console.log('Number of store out of stock:', numberStoreOfOutOfStock);
@@ -564,25 +563,6 @@ var myChartJS = new Chart(
 );
 
 
-// // datatable
-// function changeGraphCases(table) {
-//     var filteredIndexes = table.rows({ search: 'applied' }).indexes();
-//     var filteredData = [];
-//     filteredIndexes.each(function (index) {
-//         var rowData = table.row(index).data();
-//         filteredData.push(rowData);
-//     });
-//     var colData = [];
-//     filteredData.forEach(element => {
-//         const dateTime = element[0].split(' '); // element[6] is date and time ex: 12-09-2023 7:50 PM
-//         const currentDate1 = new Date(dateTime[0]); // dateTime is only date ex: 12-09-2023
-//         var inputString = element[14];
-//         colData.push({ 'date': formatDateYMD(currentDate1), 'stock': inputString });
-//     });
-//     console.log(colData);
-//     return colData;
-// }
-
 //function for change the graph it is comming from datatable search filters 
 function changeGraph(table) {
     var filteredIndexes = table.rows({ search: 'applied' }).indexes();
@@ -593,18 +573,16 @@ function changeGraph(table) {
     });
     var colData = [];
     filteredData.forEach(element => {
-        var dateTime = element[0]; // element[0] is date and time ex: 12-09-2023 7:50 PM
-        if(element[7] || element[6])
-        {
-            const currentDate2 = new Date(dateTime); // dateTime is only date ex: 12-09-2023 
-            const currentDate1 = currentDate2.toISOString();
-            // console.log('element[0]', element[0], 'currentDate1', currentDate1);
-            var stockcase = parseInt( (element[7] == '')?0:element[7]);
-            var stockunits = parseInt((element[6] == '')?0:element[6]);
+        const dateTime = element[0]; // element[0] is date and time ex: 12-09-2023 7:50 PM
+        const currentDate2 = new Date(dateTime); // dateTime is only date ex: 12-09-2023 
+        const currentDate1 = currentDate2.toISOString();
+        // console.log('element[0]', element[0], 'currentDate1', currentDate1);
+        var stockcase = parseInt( (element[7] == '')?0:element[7]);
+        var stockunits = parseInt((element[6] == '')?0:element[6]);
 
-            var sumUnitCase=parseInt((element[13] == '')?0:element[13]);
-            colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase, 'sumUnitCase':sumUnitCase });
-        }
+        var sumUnitCase=parseInt((element[13] == '')?0:element[13]);
+        colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase, 'sumUnitCase':sumUnitCase });
+
         // colData.push({ 'date': currentDate1, 'stock': stockunits, 'stockCases': stockcase });
     });
     console.log('col data is ->>>>>>>>>>>>>>>>.', colData);
@@ -613,7 +591,7 @@ function changeGraph(table) {
 
 
 $(document).ready(function () {
-    var table = $('#businessOverviewDatatable').DataTable({
+    var table = $('#businessSummaryDatatable').DataTable({
         // Add your custom options here
         scrollX: true, // scroll horizontally
         paging: true, // Enable pagination
@@ -757,38 +735,7 @@ $(document).ready(function () {
         myChartJS.data.datasets[0].data = periodData;
         myChartJS.update();
     });
-    $('#merchandiser-search').on('change', function () {
-        // const searchValue = this.value.trim();
-        table.column(5).search(this.value ? `^${this.value}$` : '', true, false).draw();
-        if (this.value == '') {
-            setCards(table, new Date(), new Date());
-        }
-        else{
-            setCards(table);
-        }
-
-        // console.log(this.value);
-        convertedToChartData = changeGraph(table);
-
-        switch (graphFormat) {
-            case 'days':
-                createLastDaysDates(convertedToChartData);
-                break;
-            case 'weeks':
-                createLastWeeksDates(convertedToChartData);
-                break;
-            case 'months':
-                createLastMonthsDates(convertedToChartData);
-                break;
-            default:
-                createLastWeeksDates(convertedToChartData);
-                break;
-        }
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = periodData;
-        myChartJS.update();
-
-    });
+    
 
     $('#product-search').on('change', function () {
         const searchValue = this.value.trim();
@@ -921,48 +868,5 @@ $(document).ready(function () {
 
     });
 
-    document.getElementById('clearDate').addEventListener('click', function (element) {
-        table.column(0).search('', true, false).draw(); // Clear previous search
-        console.log("in clear dtae");
-        document.getElementById('period-search').clear;
-        endDate = 0;
-        startDate = 0;
-        let todayDate = new Date();
-        // const todayDateString = todayDate.toISOString().split('T')[0];
-        // const dateRangeElements = document.getElementsByClassName('date_range_set');
-
-        // for (const element of dateRangeElements) {
-        //     element.innerHTML = todayDateString;
-        // }
-        setCards(table, new Date(), new Date());
-        // table.column(0).search('').draw();
-        convertedToChartData = changeGraph(table);
-        switch (graphFormat) {
-            case 'days':
-                createLastDaysDates(convertedToChartData);
-                break;
-            case 'weeks':
-                createLastWeeksDates(convertedToChartData);
-                break;
-            case 'months':
-                createLastMonthsDates(convertedToChartData);
-                break;
-            default:
-                createLastWeeksDates(convertedToChartData);
-                break;
-        }
-        myChartJS.data.labels = labels;
-        myChartJS.data.datasets[0].data = periodData;
-        myChartJS.update();
-        document.getElementById('period-search').value = 'Date Range';
-    });
-
-    document.getElementById('bs-clearDate').addEventListener('click', function (element) {
-        table.column(0).search('', true, false).draw(); // Clear previous search
-        document.getElementById('bs-period-search').clear;
-        endDate = 0;
-        startDate = 0;
-        document.getElementById('bs-period-search').value = 'Date Range';
-
-    });
+  
 });
