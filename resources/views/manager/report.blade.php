@@ -151,9 +151,9 @@
 
         /* Define a CSS class to apply the background image */
     </style>
-
-    <div class="container business-overview">
+    
         {{--start business overview Search --}}
+    <div class="container business-overview">
         @include('manager.downloadReportComponents.businessSummary')
     </div>
         {{--end business overview Summary --}}
