@@ -162,11 +162,11 @@ function setCards(table, startDate = 0, endDate = 0) {
 
     if(numberOfProductOutOfStock==0)
     {
-        document.getElementById('products_out_of_stock').innerHTML = numberOfProductOutOfStock + ' / ' + products.length;
+        document.getElementById('products_out_of_stock').innerHTML = numberOfProductOutOfStock + ' / ' + totalUniqueProducts;
     }
     else
     {
-        document.getElementById('products_out_of_stock').innerHTML = '<span style="color: #CA371B">' + numberOfProductOutOfStock + ' /</span> ' + products.length;
+        document.getElementById('products_out_of_stock').innerHTML = '<span style="color: #CA371B">' + numberOfProductOutOfStock + ' /</span> ' + totalUniqueProducts;
     }
    
     if(numberOfStoreExpProduct==0)
