@@ -306,7 +306,7 @@ updatePaginationButtons();
                     <tr>
                     <th class="thclass" scope="col">#</th>
                     <th class="thclass"  scope="col">Company</th>
-                    <th class="thclass"  scope="col">store</th>
+                    {{-- <th class="thclass"  scope="col">stor  e</th> --}}
                     <th class="thclass"  scope="col">Category</th>
                     <th class="thclass"  scope="col">Product Name</th>
                     <th class="thclass"  scope="col">Product Number / SKU</th>
@@ -317,19 +317,35 @@ updatePaginationButtons();
                     </tr>
                 </thead> 
                 @php
-                    $i=1;
+                    $i=1;    
+                    $uniqueProducts = [];
+
+                    
                 @endphp
                 <tbody>
                     @if($products!=null)
                     @foreach ($products as $product)
                       @if ($product->store != null)
-                          
+                      @php
+                      $companyName = $product->company->company;
+                      $productName = $product['product_name'];
+                      $uniqueKey = $companyName . '_' . $productName;
+      
+                      // Check if the combination is already listed
+                      if (!in_array($uniqueKey, $uniqueProducts)) {
+                          $uniqueProducts[] = $uniqueKey;
+                      } else {
+                          // Skip if the combination is already listed
+                          continue;
+                      }
+                  @endphp
+
                         <tr>
                             <td class="tdclass">{{ $i}}</td>
-                            <td class="tdclass">{{ $product->company->company }}</td>
-                            <td class="tdclass">{{ $product->store->name_of_store }}</td>
+                            <td class="tdclass">{{ $companyName }}</td>
+                            {{-- <td class="tdclass">{{ $product->store->name_of_store }}</td> --}}
                             <td class="tdclass">{{ $product['category']->category }}</td>
-                            <td class="tdclass">{{ $product['product_name'] }}</td>
+                            <td class="tdclass">{{ $productName }}</td>
                             <td class="tdclass">{{ $product['product_number_sku'] }}</td>
                               @php
                                 $jsonData =  $product['competitor_product_name'];
